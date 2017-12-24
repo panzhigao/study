@@ -20,6 +20,7 @@
 	<mvc:resources mapping="/static/css/**" location="/static/css/" />
 	<mvc:resources mapping="/static/js/**" location="/static/js/" />
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
+	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
 	
 	<!-- 配置velocity引擎 -->
 	<bean id="velocityConfigurer"

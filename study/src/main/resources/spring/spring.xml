@@ -20,9 +20,11 @@
 		<property name="locations">
 			<list>
 				<value>classpath:config/jdbc.properties</value>
+				<value>classpath:config/jedis.properties</value>
 			</list>
 		</property>
 	</bean>
 	
 	<import resource="classpath:spring/spring-mybatis.xml"/>
+	<import resource="classpath:spring/spring-redis.xml"/>
 </beans>

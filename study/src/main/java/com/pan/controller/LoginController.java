@@ -31,9 +31,9 @@ public class LoginController {
 	 * 跳转登录页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value={"/","index"})
+	@RequestMapping(method=RequestMethod.GET,value={"/","login"})
 	public String toLogin(){
-		return "index";
+		return "login";
 	}
 	
 	/**
@@ -55,5 +55,14 @@ public class LoginController {
 			resultMsg=ResultMsg.ok("登陆失败");
 		}
 		return resultMsg;
+	}
+	
+	/**
+	 * 登陆成功，跳转主页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/index")
+	public String toIndex(){
+		return "content/index";
 	}
 }
