@@ -22,6 +22,20 @@
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
 	
+	<!-- 引入属性文件,mvc无法引入spring容器的属性 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:config/jdbc.properties</value>
+				<value>classpath:config/jedis.properties</value>
+				<value>classpath:config/system.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- 配置velocity引擎 -->
 	<bean id="velocityConfigurer"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">

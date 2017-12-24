@@ -14,8 +14,9 @@ public interface UserService {
 	 */
 	public void saveUser(User user);
 	/**
-	 * 通过用户名查找唯一用户数据
+	 * 根据用户名查找唯一用户信息
 	 * @param username
+	 * @return
 	 */
 	public User findByUsername(String username);
 	/**
@@ -23,5 +24,5 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	public void checkLogin(User user);
+	public User checkLogin(User user);
 }

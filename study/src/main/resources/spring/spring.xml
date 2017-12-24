@@ -21,6 +21,7 @@
 			<list>
 				<value>classpath:config/jdbc.properties</value>
 				<value>classpath:config/jedis.properties</value>
+				<value>classpath:config/system.properties</value>
 			</list>
 		</property>
 	</bean>

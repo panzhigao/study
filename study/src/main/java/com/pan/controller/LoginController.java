@@ -1,17 +1,23 @@
 package com.pan.controller;
 
+import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
+import com.pan.util.CookieUtils;
+import com.pan.util.JedisUtils;
+import com.pan.util.JsonUtils;
 
 
 /**
@@ -23,6 +29,9 @@ import com.pan.service.UserService;
 public class LoginController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(LoginController.class);
+	
+	@Value("${cookie.maxAge}")
+	private int cookieMaxage;
 	
 	@Autowired
 	private UserService userService;
@@ -42,12 +51,17 @@ public class LoginController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
-	public ResultMsg doLogin(User user){
+	public ResultMsg doLogin(HttpServletRequest request, HttpServletResponse response,User user){
 		logger.info("用户登陆，用户信息为：{}",user);
 		ResultMsg resultMsg=null;
 		try {
-			userService.checkLogin(user);
+			User userInDb = userService.checkLogin(user);
 			resultMsg=ResultMsg.ok("登陆成功");
+			String token=UUID.randomUUID().toString();
+			//设置cookie过期时间
+			CookieUtils.setCookie(request, response, "TOKEN",token,cookieMaxage);
+			String json=JsonUtils.toJson(userInDb);
+			JedisUtils.setStringExpire(token, json, cookieMaxage);
 		}catch(BusinessException e){
 			resultMsg=ResultMsg.fail(e.getMessage());
 		}catch (Exception e) {

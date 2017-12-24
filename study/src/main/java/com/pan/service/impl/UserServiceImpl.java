@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
 		return this.userMapper.findByUsername(username);
 	}
 
-	public void checkLogin(User user) {
+	public User checkLogin(User user) {
 		String username=user.getUsername();
 		User userInDb = findByUsername(username);
 		if(userInDb==null){
@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService{
 			if(!validPassword){
 				throw new BusinessException("用户名或密码错误");
 			}
+			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			logger.error("验证用户和数据库密码出错",e);
 			throw new BusinessException("用户名或密码错误");
