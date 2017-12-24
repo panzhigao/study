@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Administrator
  *
  */
-public class PasswordUtil {
+public class PasswordUtils {
     private static final String HEX_NUMS_STR="0123456789ABCDEF";   
     private static final Integer SALT_LENGTH = 12;   
        

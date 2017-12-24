@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pan.entity.User;
 import com.pan.mapper.UserMapper;
 import com.pan.test.base.BaseTest;
-import com.pan.util.PasswordUtil;
+import com.pan.util.PasswordUtils;
 
 /**
  * 用户测试类
@@ -38,7 +38,7 @@ public class UserTest extends BaseTest{
 		user.setUserId("aaaa123");
 		user.setUsername("潘志高");
 		String password="123456";
-		String encryptPassword=PasswordUtil.getEncryptedPwd(password);
+		String encryptPassword=PasswordUtils.getEncryptedPwd(password);
 		user.setPassword(encryptPassword);
 		user.setCreateTime(new Date());
 		user.setStatus(User.STATUS_NORMAL);

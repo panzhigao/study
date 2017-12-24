@@ -109,7 +109,7 @@ input[type="text"] {
 	  border: none;
 	  font-weight: 100;
 	  border-bottom: 1px solid#484856;
-	  margin-top: 2em;
+/* 	  margin-top: 2em; */
 }
  input[type="password"]{
 	  width: 70%;

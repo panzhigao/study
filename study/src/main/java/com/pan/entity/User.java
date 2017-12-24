@@ -31,6 +31,10 @@ public class User extends BaseEntity{
 	 */
 	private String username;
 	/**
+	 * 昵称
+	 */
+	private String nickname;
+	/**
 	 * 用户密码
 	 */
 	private String password;
@@ -83,11 +87,18 @@ public class User extends BaseEntity{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username
-				+ ", password=" + password + ", createTime=" + createTime
-				+ ", lastLoginTime=" + lastLoginTime + ", status=" + status
-				+ "]";
+				+ ", nickname=" + nickname + ", password=" + password
+				+ ", createTime=" + createTime + ", lastLoginTime="
+				+ lastLoginTime + ", status=" + status + "]";
 	}
 }
