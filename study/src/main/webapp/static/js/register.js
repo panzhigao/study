@@ -23,6 +23,19 @@ var registerEvent = {
 						regexp : {
 							regexp : /^[a-zA-Z0-9_\.]+$/,
 							message : '用户名只能包含字母，数字，点和下划线'
+						},
+						threshold:6,
+						remote:{
+						   url: "checkUnique",
+						   type:"post",
+//				           data: function (validator) {
+//				              return {
+//				                 loginName: $("#loginName").val(),
+//				                 userId: null
+//				               };
+//				            },
+				            message: '该用户名已被注册，请使用其他用户名',
+				            delay:1000
 						}
 					}
 				},

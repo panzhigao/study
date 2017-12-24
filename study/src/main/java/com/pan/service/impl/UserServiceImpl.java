@@ -36,6 +36,12 @@ public class UserServiceImpl implements UserService{
 	private UserMapper userMapper;
 	
 	public void saveUser(User user){
+		String username=user.getUsername();
+		User checkUsername = findByUsername(username);
+		if(checkUsername!=null){
+			logger.info("用户名已注册",checkUsername);
+			throw new BusinessException("用户名已注册");
+		}
 		SimpleDateFormat sdf=new SimpleDateFormat(DATEFORMAT);
 		String dateStr=sdf.format(new Date());
 		String password=user.getPassword();
@@ -57,6 +63,31 @@ public class UserServiceImpl implements UserService{
 		} catch (UnsupportedEncodingException e) {
 			logger.error("加密用户密码错误",e);
 			throw new BusinessException("注册用户信息失败");
+		}
+	}
+
+	public User findByUsername(String username) {
+		return this.userMapper.findByUsername(username);
+	}
+
+	public void checkLogin(User user) {
+		String username=user.getUsername();
+		User userInDb = findByUsername(username);
+		if(userInDb==null){
+			throw new BusinessException("用户名或密码错误");
+		}
+		if(User.STATUS_BLOCKED.equals(userInDb.getStatus())){
+			throw new BusinessException("用户账号已锁定");
+		}
+		String passwordInDb=userInDb.getPassword();
+		try {
+			boolean validPassword = PasswordUtils.validPassword(user.getPassword(), passwordInDb);
+			if(!validPassword){
+				throw new BusinessException("用户名或密码错误");
+			}
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			logger.error("验证用户和数据库密码出错",e);
+			throw new BusinessException("用户名或密码错误");
 		}
 	}
 }

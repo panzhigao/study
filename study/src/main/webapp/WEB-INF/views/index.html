@@ -5,7 +5,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="我的学习" />
 <link href="static/css/index.css" rel='stylesheet' type='text/css' />
-<script src="static/js/jquery.min.js"></script>
+<link href="static/frame/bootstrap/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="static/frame/bootstrapValidator/bootstrapValidator.css" rel='stylesheet' type='text/css' />
+<script src="static/js/jquery.js"></script>
+<script src="static/frame/bootstrap/js/bootstrap.js"></script>
+<script src="static/frame/bootstrapValidator/bootstrapValidator.js"></script>
+<script src="static/js/index.js"></script>
 </head>
 <body>
 	<!--SIGN UP-->
@@ -20,14 +25,18 @@
 		<div class="avtar">
 			<img src="static/images/avtar.png" />
 		</div>
-		<form>
-			<input type="text" class="text" value="Username" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}">
-			<div class="key">
-				<input type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
+		<form id="loginForm">
+			<div class="form-group">
+				<input type="text" class="text" name="username" placeholder="请输入用户名">
+			</div>	
+			<div class="form-group">
+				<div class="key">
+					<input type="password" name="password" placeholder="请输入密码">
+				</div>
 			</div>
 		</form>
 		<div class="signin">
-			<input type="submit" value="Login">
+			<input type="submit" value="Login" id="doLogin">
 		</div>
 	</div>
 	<div class="copy-rights">
