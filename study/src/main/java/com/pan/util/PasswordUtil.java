@@ -123,10 +123,4 @@ public class PasswordUtil {
         //将字节数组格式加密后的口令转化为16进制字符串格式的口令   
         return byteToHexString(pwd);   
     }   
-    
-    public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String password="123456";
-		System.out.println(getEncryptedPwd(password));
-		//System.out.println(getEncryptedPwd(password));
-	}
 }

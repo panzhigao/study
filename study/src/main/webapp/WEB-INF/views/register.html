@@ -19,25 +19,22 @@ function hideURLbar(){
 </head>
 <body>
 	<!--SIGN UP-->
-	<h1>登陆页面</h1>
+	<h1>注册页</h1>
 	<div class="login-form">
 		<div class=""></div>
 		<div class="head-info">
-			<label class="lbl-1"> </label> <label class="lbl-2"> </label> <label
-				class="lbl-3"> </label>
+			<label class="lbl-1"></label>
+			<label class="lbl-2"></label>
+			<label class="lbl-3"></label>
 		</div>
 		<div class="clear"></div>
-		<div class="avtar">
-			<img src="images/avtar.png" />
-		</div>
-		<form>
-			<input type="text" class="text" value="Username" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}">
-			<div class="key">
-				<input type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
-			</div>
+		<form id="registForm">
+			<input type="text" class="text" placeholder="请设置用户名">
+			<input type="password" placeholder="请输入密码">
+			<input type="password" placeholder="再次输入密码">
 		</form>
 		<div class="signin">
-			<input type="submit" value="Login">
+			<input type="submit" value="Register">
 		</div>
 	</div>
 	<div class="copy-rights">

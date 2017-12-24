@@ -121,7 +121,7 @@ input[type="text"] {
 	  border: none;
 	  font-weight: 100;
 	  border-bottom: 1px solid#484856;
-	  margin-bottom: 3em;
+/* 	  margin-bottom: 3em; */
  }
 .key {
    background: url(../images/pass.png) no-repeat 447px 17px;
@@ -309,7 +309,7 @@ label.lbl-3 {
 		padding: 1.2em 2em .5em 2.5em;
 		font-size: 17px;
 		margin-top: .5em;
-		margin-bottom: 2em;
+/* 		margin-bottom: 2em; */
 		  background: url(../images/key.png) no-repeat 8px 23px;
 	}
 	.key {
