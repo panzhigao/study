@@ -7,8 +7,12 @@ import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pan.common.constant.MyConstant;
+import com.pan.entity.User;
 
 /**
  * 
@@ -222,12 +226,30 @@ public final class CookieUtils {
                 domainName = serverName;
             }
         }
-
         if (domainName != null && domainName.indexOf(SPECIAL_CHAR) > 0) {
             String[] ary = domainName.split("\\:");
             domainName = ary[0];
         }
         return domainName;
     }
-
+    
+    /**
+     * 获取登陆用户信息
+     * @return
+     */
+    public static User getLoginUser(HttpServletRequest request){
+    	User user=null;
+    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
+    	if(cookieValue!=null){
+    		String string = JedisUtils.getString(cookieValue);
+    		if(string!=null){
+    			try {
+					user=(User) JsonUtils.fromJson(string, User.class);
+				} catch (Exception e) {
+					logger.error("reids获取登陆用户信息失败", e);
+				}	
+    		}
+    	}
+    	return user;
+    }
 }
