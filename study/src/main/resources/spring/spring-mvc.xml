@@ -47,7 +47,9 @@
 	<!-- 配置后缀 -->
 	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="suffix" value=".html" />
-		 <property name="contentType"><value>text/html;charset=UTF-8</value></property>
+		<!-- request全局变量 -->
+		<property name="requestContextAttribute" value="rc" />
+		<property name="contentType"><value>text/html;charset=UTF-8</value></property>
 	</bean>
 
 </beans>

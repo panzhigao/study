@@ -63,7 +63,7 @@ $(function() {
 			success : function(data) {
 				if (data.code == "200") {
 					alert(data.msg);
-					location.href = "index";
+					location.href = "user/index";
 				} else {
 					alert(data.msg);
 				}

@@ -80,7 +80,7 @@ public class LoginController {
 	 * 登陆成功，跳转主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/index")
+	@RequestMapping(method=RequestMethod.GET,value="/user/index")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/index");
 		User user = CookieUtils.getLoginUser(request);
