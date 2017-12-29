@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.ArticleMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.Article">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
+    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="status"       	    property="status"          jdbcType="VARCHAR" />
+    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
+    <result column="publish_time"       property="publishTime"     jdbcType="TIMESTAMP" />
+    <result column="title"              property="title"           jdbcType="VARCHAR" />
+    <result column="content"    		property="content"         jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,content
+  </sql>
+  
+  <select id="findByArticleId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_article where article_id=#{articleId}
+  </select>
+  
+  <select id="findListByUserId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId}
+  </select>
+  
+  <insert id="saveArticle" parameterType="com.pan.entity.Article">
+  	insert into t_article (<include refid="Base_Column_List"/>) values 
+  	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
+  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR})
+  </insert>
+  
+</mapper>

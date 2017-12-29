@@ -7,10 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../docs-static/assets/ico/favicon.png">
-    <title>write a page</title>
+    <title>write an article</title>
     <!-- Bootstrap core CSS -->
     <link href="$!{rc.contextPath}/static/assets/css/bootstrap.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
     <link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="$!{rc.contextPath}/static/assets/js/hover.zoom.js"></script>
@@ -49,12 +48,15 @@
 				<p>Write your article here. Share you ideas to others <a href="http://dribbble.com/wanderingbert">David Creighton-Pester</a>.</p>
 			</div>
 		</div>
+		<div class="form-group form-group-lg">
+      		<input class="form-control" type="text" id="title" placeholder="文章标题">
+		</div>
 		<div id="div1">
-            <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+            
         </div>
         <div class="text-center row mt">
-        	<button class="btn btn-primary" id="btnPublish">发布</button>
-        	<button class="btn btn-inverse" id="btnSave">存草稿</button>
+        	<button class="btn btn-primary" id="btnPublish" onclick="saveArticle('2')">发布</button>
+        	<button class="btn btn-inverse" id="btnSave" onclick="saveArticle('1')">存草稿</button>
         </div>
 	</div>
 	
@@ -96,11 +98,44 @@
         var E = window.wangEditor;
         var editor = new E('#div1');
         editor.create();
-        $("#btnPublish").click(function(){
+  		
+        //保存文章
+        //status文章状态
+        function saveArticle(status){
         	//获取编辑框内容
         	var content=editor.$textElem.html();
-        	alert(content);
-        });
+        	if(!content){
+        		alert("请填写文章内容");
+        		return;
+        	}
+        	var title=$("#title").val();
+        	if(!title){
+        		alert("请填写文章标题");
+        		return;
+        	}
+        	$.ajax({
+        		url:"$!{rc.contextPath}/user/save_article",
+        		type:"post",
+        		dataType:"json",
+        		data : {content,content,title:title,status:status},
+        		beforeSend:function(){
+        			$("#btnPublish").attr({ disabled: "disabled" });
+        		},
+        		success:function(data){
+        			if(data.code=='200'){
+        				alert(data.msg);
+        			}else{
+        				alert(data.msg);
+        			}
+        		},
+        	    complete: function () {
+        	        $("#btnPublish").removeAttr("disabled");
+        	    },
+        		error:function(){
+        			alert("文章发布失败");
+        		}
+        	});
+        }
     </script>
     <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
   </body>

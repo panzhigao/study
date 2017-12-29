@@ -1,0 +1,120 @@
+package com.pan.entity;
+
+import java.util.Date;
+
+/**
+ * 文章实体类
+ * @author Administrator
+ *
+ */
+public class Article extends BaseEntity{
+	/**
+	 * 审核未通过
+	 */
+	public static final String STATUS_NOT_PASS="0";
+	/**
+	 * 草稿状态
+	 */
+	public static final String STATUS_SKETCH="1";
+	/**
+	 * 发布中
+	 */
+	public static final String STATUS_PUBLISHED="2";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4357328851427096260L;
+	/**
+	 * 文章id
+	 */
+	private String articleId;
+	/**
+	 * 用户id
+	 */
+	private String userId;
+	/**
+	 * 文章状态 0-审核未通过，1-草稿，2-发布中
+	 */
+	private String status;
+	/**
+	 * 修改时间
+	 */
+	private Date updateTime;
+	/**
+	 * 发布时间
+	 */
+	private Date publishTime;
+	/**
+	 * 文章标题
+	 */
+	private String title;
+	/**
+	 * 文章内容
+	 */
+	private String content;
+	
+	public String getArticleId() {
+		return articleId;
+	}
+
+	public void setArticleId(String articleId) {
+		this.articleId = articleId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(Date publishTime) {
+		this.publishTime = publishTime;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Override
+	public String toString() {
+		return "Article [articleId=" + articleId + ", userId=" + userId
+				+ ", status=" + status + ", updateTime=" + updateTime
+				+ ", publishTime=" + publishTime + ", title=" + title
+				+ ", content=" + content + ", getId()=" + getId()
+				+ ", getCreateTime()=" + getCreateTime() + "]";
+	}
+}

@@ -34,6 +34,7 @@ public class JedisUtils {
 	public static void setString(String key,String value){
 		Jedis jedis = jedisPool.getResource();
 		String set = jedis.set(key, value);
+		jedis.close();
 		System.out.println("set:"+set);
 	}
 	
@@ -49,5 +50,46 @@ public class JedisUtils {
 		}
 		Jedis jedis = jedisPool.getResource();
 		jedis.setex(key, seconds, value);
+		jedis.close();
 	}
+	
+	/**
+	 * 判断key是否存在
+	 * @param key
+	 * @return
+	 */
+	public static boolean existsKey(String key){
+		if(key==null){
+			return false;
+		}
+		Jedis jedis = jedisPool.getResource();
+		boolean flag=jedis.exists(key);
+		jedis.close();
+		return flag;
+	}
+	
+	/**
+	 * 自增key值,默认1
+	 * @param key
+	 * @return
+	 */
+	public static long increaseKey(String key){
+		Jedis jedis = jedisPool.getResource();
+		Long value = jedis.incr(key);
+		jedis.close();
+		return value;
+	} 
+	
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public static long increaseKey(String key,Long value){
+		Jedis jedis = jedisPool.getResource();
+		Long result = jedis.incrBy(key, value);
+		jedis.close();
+		return result;
+	} 
 }

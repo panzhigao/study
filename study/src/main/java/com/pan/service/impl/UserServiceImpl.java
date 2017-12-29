@@ -61,7 +61,10 @@ public class UserServiceImpl implements UserService{
 			logger.error("加密用户密码错误",e);
 			throw new BusinessException("注册用户信息失败");
 		} catch (UnsupportedEncodingException e) {
-			logger.error("加密用户密码错误",e);
+			logger.error("加密用户密码失败，不支持的编码",e);
+			throw new BusinessException("注册用户信息失败");
+		}catch (Exception e) {
+			logger.error("新增用户信息失败",e);
 			throw new BusinessException("注册用户信息失败");
 		}
 	}

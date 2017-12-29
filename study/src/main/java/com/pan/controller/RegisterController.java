@@ -52,7 +52,7 @@ public class RegisterController {
 			resultMsg=ResultMsg.ok("用户注册成功");
 		}catch(BusinessException e){
 			resultMsg=ResultMsg.fail(e.getMessage());
-		} catch (Exception e) {
+		}catch (Exception e) {
 			logger.error("注册用户失败",e);
 			resultMsg=ResultMsg.fail("注册用户失败");
 		}

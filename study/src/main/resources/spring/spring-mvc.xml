@@ -21,7 +21,8 @@
 	<mvc:resources mapping="/static/js/**" location="/static/js/" />
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
-	
+	<mvc:resources mapping="/static/error/**" location="/static/error/" />
+
 	<!-- 引入属性文件,mvc无法引入spring容器的属性 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -35,7 +36,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- 配置velocity引擎 -->
 	<bean id="velocityConfigurer"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
@@ -43,13 +44,16 @@
 			模板存放的路径 -->
 		<property name="configLocation" value="classpath:config/velocity.properties" />
 	</bean>
-	
+
 	<!-- 配置后缀 -->
-	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+	<bean id="velocityViewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="suffix" value=".html" />
 		<!-- request全局变量 -->
 		<property name="requestContextAttribute" value="rc" />
-		<property name="contentType"><value>text/html;charset=UTF-8</value></property>
+		<property name="contentType">
+			<value>text/html;charset=UTF-8</value>
+		</property>
 	</bean>
 
 </beans>

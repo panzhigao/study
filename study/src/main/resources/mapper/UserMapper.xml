@@ -14,20 +14,20 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    user_id,username,nickname,password,create_time,last_login_time,status
+    id,user_id,username,nickname,password,create_time,last_login_time,status
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
-  	select id,<include refid="Base_Column_List"/> from t_user where user_id=#{userId}
+  	select <include refid="Base_Column_List"/> from t_user where user_id=#{userId}
   </select>
   
   <select id="findByUsername" resultMap="BaseResultMap">
-  	select id,<include refid="Base_Column_List"/> from t_user where username=#{username}
+  	select <include refid="Base_Column_List"/> from t_user where username=#{username}
   </select>
   
   <insert id="saveUser" parameterType="com.pan.entity.User">
   	insert into t_user (<include refid="Base_Column_List"/>) values 
-  	(#{userId,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+  	(null,#{userId,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
   	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR})
   </insert>
   

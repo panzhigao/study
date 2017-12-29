@@ -3,7 +3,7 @@ package com.pan.entity;
 import java.util.Date;
 
 /**
- * 
+ * 用户信息实体类
  * @author Administrator
  *
  */
@@ -38,10 +38,7 @@ public class User extends BaseEntity{
 	 * 用户密码
 	 */
 	private String password;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+
 	/**
 	 * 最近登录时间
 	 */
@@ -69,12 +66,6 @@ public class User extends BaseEntity{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
 	public Date getLastLoginTime() {
 		return lastLoginTime;
 	}
@@ -98,7 +89,9 @@ public class User extends BaseEntity{
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username
 				+ ", nickname=" + nickname + ", password=" + password
-				+ ", createTime=" + createTime + ", lastLoginTime="
-				+ lastLoginTime + ", status=" + status + "]";
+				+ ", lastLoginTime=" + lastLoginTime + ", status=" + status
+				+ ", getId()=" + getId() + ", getCreateTime()="
+				+ getCreateTime() + "]";
 	}
+
 }

@@ -252,4 +252,17 @@ public final class CookieUtils {
     	}
     	return user;
     }
+    
+    /**
+     * 获取登陆用户id
+     * @return
+     */
+    public static String getLoingUserId(HttpServletRequest request){
+    	User loginUser = getLoginUser(request);
+    	String userId=null;
+    	if(loginUser!=null){
+    		userId=loginUser.getUserId();
+    	}
+    	return userId;
+    }
 }

@@ -31,7 +31,7 @@ import com.pan.util.JsonUtils;
  * 用户登录
  */
 @Controller
-public class LoginController {
+public class LoginController{
 	
 	private static final Logger logger=LoggerFactory.getLogger(LoginController.class);
 	

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pan.entity.User;
 import com.pan.mapper.UserMapper;
+import com.pan.service.UserService;
 import com.pan.test.base.BaseTest;
 import com.pan.util.PasswordUtils;
 
@@ -20,6 +21,9 @@ import com.pan.util.PasswordUtils;
 public class UserTest extends BaseTest{
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Test
 	public void test1(){
@@ -36,13 +40,15 @@ public class UserTest extends BaseTest{
 	public void test2() throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		User user=new User();
 		user.setUserId("aaaa123");
-		user.setUsername("潘志高");
+		user.setUsername("panzhigao00");
+		user.setNickname("ssss");
 		String password="123456";
 		String encryptPassword=PasswordUtils.getEncryptedPwd(password);
 		user.setPassword(encryptPassword);
 		user.setCreateTime(new Date());
 		user.setStatus(User.STATUS_NORMAL);
-		userMapper.saveUser(user);
+		//userMapper.saveUser(user);
+		userService.saveUser(user);
 	}
 	
 }
