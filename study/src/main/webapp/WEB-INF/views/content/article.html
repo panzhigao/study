@@ -30,10 +30,10 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-          	<li><a href="$!{rc.contextPath}/user/to_write">Write</a></li>
+          	 <li><a href="$!{rc.contextPath}/user/article">编写文章</a></li>
+            <li><a href="$!{rc.contextPath}/user/my_articles">我的文章</a></li>
             <li><a href="work.html">Work</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a href="blog.html">Blog</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
@@ -98,7 +98,10 @@
         var E = window.wangEditor;
         var editor = new E('#div1');
         editor.create();
-  		
+  		console.log(document.cookie);
+//   		var exp = new Date();  
+//   	    exp.setTime(exp.getTime() + 60 * 2000);
+//   		document.cookie = "pzg" + "=" + "panzhigao";
         //保存文章
         //status文章状态
         function saveArticle(status){
@@ -124,6 +127,7 @@
         		success:function(data){
         			if(data.code=='200'){
         				alert(data.msg);
+        				location.href="$!{rc.contextPath}/user/my_articles";
         			}else{
         				alert(data.msg);
         			}

@@ -66,7 +66,7 @@ public class LoginController{
 			//设置cookie过期时间
 			CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
 			String json=JsonUtils.toJson(userInDb);
-			JedisUtils.setStringExpire(token, json, cookieMaxage);
+			JedisUtils.setStringExpire(MyConstant.USE_SESSION+token, json, cookieMaxage);
 		}catch(BusinessException e){
 			resultMsg=ResultMsg.fail(e.getMessage());
 		}catch (Exception e) {
@@ -85,6 +85,7 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("content/index");
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
+		request.getSession().setAttribute("sss", "pzg");
 		return mav;
 	}
 }

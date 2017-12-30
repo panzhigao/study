@@ -1,5 +1,9 @@
 package com.pan.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -55,7 +59,7 @@ public class ArticleController {
 		try {
 			if(Article.STATUS_SKETCH.equals(article.getStatus())){
 				resultMsg=ResultMsg.ok("文章保存草稿成功");
-			}else if(Article.STATUS_PUBLISHED.equals(article.getStatus())){
+			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
 				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 			}else{
 				resultMsg=ResultMsg.fail("文章状态有误，请重新刷新页面");
@@ -71,4 +75,34 @@ public class ArticleController {
 		}
 		return resultMsg;
 	}
+	
+	/**
+	 * 跳转文章列表页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
+	public ModelAndView toArticleList(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("content/articleList");
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user", user);
+		return mav;
+	}
+	
+	/**
+	 * 跳转文章列数据
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/get_articles"})
+	@ResponseBody
+	public List<Article> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+		String loingUserId = CookieUtils.getLoingUserId(request);
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		params.put("userId", loingUserId);
+		Integer offset=(pageNo-1)*pageSize;
+		params.put("offset", offset);
+		params.put("row", pageSize);
+		List<Article> list=articleService.findByParams(params);
+		return list;
+	}
+	
 }

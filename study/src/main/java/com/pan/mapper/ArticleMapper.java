@@ -1,6 +1,8 @@
 package com.pan.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.pan.entity.Article;
 
 /**
@@ -20,10 +22,15 @@ public interface ArticleMapper {
 	 * @param userId
 	 * @return
 	 */
-	public List<Article> findByUserId(String userId);
+	public List<Article> findListByUserId(String userId);
 	/**
 	 * 保存文章信息
 	 * @param user
 	 */
 	public void saveArticle(Article article);
+	/**
+	 * 多条件查询，支持分页
+	 * @return
+	 */
+	public List<Article> findByParams(Map<String,Object> params);
 }

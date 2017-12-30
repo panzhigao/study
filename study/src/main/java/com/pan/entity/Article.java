@@ -17,9 +17,13 @@ public class Article extends BaseEntity{
 	 */
 	public static final String STATUS_SKETCH="1";
 	/**
+	 * 审核中
+	 */
+	public static final String STATUS_IN_REVIEW="2";
+	/**
 	 * 发布中
 	 */
-	public static final String STATUS_PUBLISHED="2";
+	public static final String STATUS_PUBLISHED="3";
 	/**
 	 * 
 	 */

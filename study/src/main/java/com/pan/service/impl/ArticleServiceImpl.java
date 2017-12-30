@@ -1,6 +1,8 @@
 package com.pan.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import com.pan.entity.Article;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.util.IdUtils;
+import com.pan.util.JsonUtils;
 
 /**
  * 
@@ -26,7 +29,6 @@ public class ArticleServiceImpl implements ArticleService{
 	
 	@Autowired
 	private ArticleMapper articleMapper;
-	
 	
 	public void saveArticle(Article article) {
 		if(StringUtils.isBlank(article.getUserId())){
@@ -51,4 +53,21 @@ public class ArticleServiceImpl implements ArticleService{
 		articleMapper.saveArticle(article);
 	}
 
+
+	public List<Article> findListByUserId(String userId) {
+		logger.info("用户id为:{}",userId);
+		return articleMapper.findListByUserId(userId);
+	}
+
+
+	public List<Article> findByParams(Map<String, Object> params) {
+		List<Article> list=null;
+		try {			
+			logger.info("分页查询文章参数为:{}",JsonUtils.toJson(params));
+			list=articleMapper.findByParams(params);
+		} catch (Exception e) {
+			logger.error("分页查询文章异常",e);
+		}
+		return list;
+	}
 }
