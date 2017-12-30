@@ -33,4 +33,9 @@ public interface ArticleMapper {
 	 * @return
 	 */
 	public List<Article> findByParams(Map<String,Object> params);
+	/**
+	 * 更新文章
+	 * @param article
+	 */
+	public void updateArticle(Article article);
 }

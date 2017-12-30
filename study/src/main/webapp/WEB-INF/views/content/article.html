@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../docs-static/assets/ico/favicon.png">
-    <title>write an article</title>
+    <title>WRITE AN ARTICLE</title>
     <!-- Bootstrap core CSS -->
     <link href="$!{rc.contextPath}/static/assets/css/bootstrap.css" rel="stylesheet">
     <link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-          	 <li><a href="$!{rc.contextPath}/user/article">编写文章</a></li>
+          	<li><a href="$!{rc.contextPath}/user/article">编写文章</a></li>
             <li><a href="$!{rc.contextPath}/user/my_articles">我的文章</a></li>
             <li><a href="work.html">Work</a></li>
             <li><a href="about.html">About</a></li>
@@ -45,7 +45,7 @@
 			<div class="col-lg-6 col-lg-offset-3 centered">
 				<h3>WRITE A ARTICLE</h3>
 				<hr>
-				<p>Write your article here. Share you ideas to others <a href="http://dribbble.com/wanderingbert">David Creighton-Pester</a>.</p>
+				<p>Write your article here. Share you ideas to others</p>
 			</div>
 		</div>
 		<div class="form-group form-group-lg">
@@ -56,7 +56,8 @@
         </div>
         <div class="text-center row mt">
         	<button class="btn btn-primary" id="btnPublish" onclick="saveArticle('2')">发布</button>
-        	<button class="btn btn-inverse" id="btnSave" onclick="saveArticle('1')">存草稿</button>
+        	&nbsp;&nbsp;
+        	<button class="btn btn-info" id="btnSave" onclick="saveArticle('1')">存草稿</button>
         </div>
 	</div>
 	
@@ -87,9 +88,7 @@
 					<h4>About Stanley</h4>
 					<p>This cute theme was created to showcase your work in a simple way. Use it wisely.</p>
 				</div>
-			
 			</div>
-		
 		</div>
 	</div>
 	 <!-- 引用js -->
@@ -99,9 +98,6 @@
         var editor = new E('#div1');
         editor.create();
   		console.log(document.cookie);
-//   		var exp = new Date();  
-//   	    exp.setTime(exp.getTime() + 60 * 2000);
-//   		document.cookie = "pzg" + "=" + "panzhigao";
         //保存文章
         //status文章状态
         function saveArticle(status){
@@ -122,19 +118,19 @@
         		dataType:"json",
         		data : {content,content,title:title,status:status},
         		beforeSend:function(){
-        			$("#btnPublish").attr({ disabled: "disabled" });
+        			$(".btn").attr({ disabled: "disabled" });
         		},
         		success:function(data){
         			if(data.code=='200'){
         				alert(data.msg);
-        				location.href="$!{rc.contextPath}/user/my_articles";
+        				$('.btn').attr({ disabled: "disabled" });
+        				setTimeout(function(){
+        					location.href="$!{rc.contextPath}/user/my_articles";	
+        				},100);;
         			}else{
         				alert(data.msg);
         			}
         		},
-        	    complete: function () {
-        	        $("#btnPublish").removeAttr("disabled");
-        	    },
         		error:function(){
         			alert("文章发布失败");
         		}

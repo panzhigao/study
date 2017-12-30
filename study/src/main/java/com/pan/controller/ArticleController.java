@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,17 +58,14 @@ public class ArticleController {
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
 		try {
-			if(Article.STATUS_SKETCH.equals(article.getStatus())){
-				resultMsg=ResultMsg.ok("文章保存草稿成功");
-			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
-				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
-			}else{
-				resultMsg=ResultMsg.fail("文章状态有误，请重新刷新页面");
-				return resultMsg;
-			}
 			String userId=CookieUtils.getLoingUserId(request);
 			article.setUserId(userId);
 			articleService.saveArticle(article);
+			if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+				resultMsg=ResultMsg.ok("文章保存草稿成功");
+			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
+			}
 		}catch(BusinessException e){
 			resultMsg=ResultMsg.fail(e.getMessage());
 		}catch (Exception e) {
@@ -92,7 +90,7 @@ public class ArticleController {
 	 * 跳转文章列数据
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/get_articles"})
+	@RequestMapping(method=RequestMethod.POST,value="/user/get_articles")
 	@ResponseBody
 	public List<Article> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo){
 		String loingUserId = CookieUtils.getLoingUserId(request);
@@ -105,4 +103,52 @@ public class ArticleController {
 		return list;
 	}
 	
+	/**
+	 * 跳转文章列详情页或者编辑页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/{opeate}/{articleId}")
+	@ResponseBody
+	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
+		//不存在的操作跳转登录页
+		ModelAndView mav=new ModelAndView("login");
+		if("detail".equals(opeate)){
+			mav.setViewName("content/articleDetail");
+		}else if("edit".equals(opeate)){
+			mav.setViewName("content/articleEdit");
+		}
+		String loingUserId = CookieUtils.getLoingUserId(request);
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user", user);
+		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
+		mav.addObject("article", article);
+		return mav;
+	}
+	
+
+	/**
+	 * 保存文章，文章为草稿状态
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/edit_article"})
+	@ResponseBody
+	public ResultMsg updateArticle(Article article,HttpServletRequest request){
+		logger.info("发布文章开始");
+		ResultMsg resultMsg=null;
+		try {
+			String userId=CookieUtils.getLoingUserId(request);
+			article.setUserId(userId);
+			articleService.updateArticle(article);
+			if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+				resultMsg=ResultMsg.ok("文章保存草稿成功");
+			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
+			}
+		}catch(BusinessException e){
+			resultMsg=ResultMsg.fail(e.getMessage());
+		}catch (Exception e) {
+			resultMsg=ResultMsg.fail("文章保存草稿失败");
+		}
+		return resultMsg;
+	}
 }

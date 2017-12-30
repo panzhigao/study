@@ -21,7 +21,7 @@ var registerEvent = {
 							message : '用户名长度必须在5-15之间'
 						},
 						regexp : {
-							regexp : /^[a-zA-Z0-9_\.]+$/,
+							regexp : /^[a-zA-Z0-9_\.\-]+$/,
 							message : '用户名只能包含字母，数字，点和下划线'
 						},
 						threshold:6,
@@ -136,7 +136,7 @@ $(function() {
 			success : function(data) {
 				if (data.code == "200") {
 					alert(data.msg);
-					location.href = "index";
+					location.href = "login";
 				} else {
 					alert(data.msg);
 				}

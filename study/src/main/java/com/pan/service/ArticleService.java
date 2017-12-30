@@ -29,4 +29,15 @@ public interface ArticleService {
 	 * @return
 	 */
 	public List<Article> findByParams(Map<String,Object> params);
+	/**
+	 * 获取用户的文章详细信息
+	 * @param userId
+	 * @param articleId
+	 * @return
+	 */
+	public Article getByUserIdAndArticleId(String userId,String articleId);
+	/**
+	 * 修改文章信息
+	 */
+	public void updateArticle(Article article);
 }

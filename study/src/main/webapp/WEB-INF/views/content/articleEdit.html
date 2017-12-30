@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-static/assets/ico/favicon.png">
+    <title>WRITE AN ARTICLE</title>
+    <!-- Bootstrap core CSS -->
+    <link href="$!{rc.contextPath}/static/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="$!{rc.contextPath}/static/assets/js/hover.zoom.js"></script>
+    <script src="$!{rc.contextPath}/static/assets/js/hover.zoom.conf.js"></script>
+  </head>
+  <body>
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">$!{user.nickname}</a>
+          <input id="articleId" type="hidden" value="$!{article.articleId}" />
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          	 <li><a href="$!{rc.contextPath}/user/article">编写文章</a></li>
+            <li><a href="$!{rc.contextPath}/user/my_articles">我的文章</a></li>
+            <li><a href="work.html">Work</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+	
+	<div class="container pt">
+		<div class="row mt">
+			<div class="col-lg-6 col-lg-offset-3 centered">
+				<h3>WRITE A ARTICLE</h3>
+				<hr>
+				<p>Write your article here. Share you ideas to others</p>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+      		<input class="form-control" type="text" id="title" placeholder="文章标题" value="$!{article.title}">
+		</div>
+		
+		<div id="div1">
+            $!{article.content}
+        </div>
+        
+        <div class="text-center row mt">
+        	<button class="btn btn-primary my-btn" id="btnPublish" onclick="updateArticle('2')">修改发布</button>
+        	&nbsp;&nbsp;
+        	<button class="btn btn-info my-btn" id="btnSave" onclick="updateArticle('1')">保存草稿</button>
+        	&nbsp;&nbsp;
+        	<button class="btn btn-inverse" id="btnSave" onclick="history.go(-1)">返回</button>
+        </div>
+	</div>
+	
+	
+	<!-- +++++ Footer Section +++++ -->
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+					<h4>My Bunker</h4>
+					<p>
+						Some Address 987,<br/>
+						+34 9054 5455, <br/>
+						Madrid, Spain.
+					</p>
+				</div>
+				
+				<div class="col-lg-4">
+					<h4>My Links</h4>
+					<p>
+						<a href="#">Dribbble</a><br/>
+						<a href="#">Twitter</a><br/>
+						<a href="#">Facebook</a>
+					</p>
+				</div>
+				
+				<div class="col-lg-4">
+					<h4>About Stanley</h4>
+					<p>This cute theme was created to showcase your work in a simple way. Use it wisely.</p>
+				</div>
+			
+			</div>
+		
+		</div>
+	</div>
+	 <!-- 引用js -->
+    <script type="text/javascript" src="$!{rc.contextPath}/static/frame/wangEditor/wangEditor.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor;
+        var editor = new E('#div1');
+        editor.create();
+  		console.log(document.cookie);
+
+        //保存文章
+        //status文章状态
+        function updateArticle(status){
+        	//获取编辑框内容
+        	var content=editor.$textElem.html();
+        	if(!content){
+        		alert("请填写文章内容");
+        		return;
+        	}
+        	var title=$("#title").val();
+        	if(!title){
+        		alert("请填写文章标题");
+        		return;
+        	}
+        	var articleId=$("#articleId").val();
+        	$.ajax({
+        		url:"$!{rc.contextPath}/user/edit_article",
+        		type:"post",
+        		dataType:"json",
+        		data : {content,content,title:title,status:status,articleId:articleId},
+        		beforeSend:function(){
+        			$('.my-btn').attr({ disabled: "disabled" });
+        		},
+        		success:function(data){
+        			if(data.code=='200'){
+        				alert(data.msg);
+        				$('.my-btn').attr({ disabled: "disabled" });
+        			}else{
+        				alert(data.msg);
+        				$('.my-btn').removeAttr("disabled");
+        			}
+        		},
+        		error:function(){
+        			alert("文章发布失败");
+        		}
+        	});
+        }
+    </script>
+    <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -26,22 +26,23 @@
   	select <include refid="Base_Column_List"/> from t_article 
   	<where>
   		<if test="articleId !=null and articleId!='' ">
-  			article_id=#{articleId}
+  			and article_id=#{articleId}
   		</if>
   		<if test="status !=null and status !=''">
-  			status=#{status}
+  			and status=#{status}
   		</if>
-  		<if test="user_id !=null and user_id!=''">
-  			user_id=#{userId}
+  		<if test="userId !=null and userId!=''">
+  			and user_id=#{userId}
   		</if>
   	</where>
+  	order by create_time desc
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>
   </select>
   
   <select id="findListByUserId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId}
+  	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId} order by create_time desc
   </select>
   
   <insert id="saveArticle" parameterType="com.pan.entity.Article">
@@ -50,4 +51,22 @@
   	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR})
   </insert>
   
+  <update id="updateArticle" parameterType="com.pan.entity.Article">
+  	update t_article
+  	<set>
+  		<if test="title !=null and title !=''">
+  			title=#{title,jdbcType=VARCHAR},
+  		</if>
+  		<if test="content !=null and content !=''">
+  			content=#{content,jdbcType=VARCHAR},
+  		</if>
+  		<if test="updateTime !=null ">
+  			update_time=#{updateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="status!=null and status!=''">
+  			status=#{status,jdbcType=VARCHAR},
+  		</if>
+  	</set>
+  	where article_id=#{articleId}
+  </update>
 </mapper>

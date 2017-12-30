@@ -21,7 +21,7 @@ public class Article extends BaseEntity{
 	 */
 	public static final String STATUS_IN_REVIEW="2";
 	/**
-	 * 发布中
+	 * 发布成功
 	 */
 	public static final String STATUS_PUBLISHED="3";
 	/**

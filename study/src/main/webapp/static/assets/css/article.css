@@ -1,0 +1,35 @@
+.article-status{
+	font-size:12px;
+	padding:2px 2px 0;
+	line-height: 18px;
+	color:red;
+	border: 1px solid red;
+	display:inline-block;
+}
+/*审核未通过,红色*/
+.article-status-0{
+	color:red;
+	border: 1px solid red;
+}
+.article-status-0:after{content:"审核未通过";}
+
+/*草稿*/
+.article-status-1{
+	color:#60a3f5;
+	border: 1px solid #60a3f5;
+}
+.article-status-1:after{content:"草稿";}
+
+/*审核中*/
+.article-status-2{
+	color:#f6a623;
+	border: 1px solid #f6a623;
+}
+.article-status-2:after{content:"审核中";}
+
+/*通过*/
+.article-status-3{
+	color:#15dc34;
+	border:1px solid #15dc34;
+}
+.article-status-3:after{content:"发布中";}

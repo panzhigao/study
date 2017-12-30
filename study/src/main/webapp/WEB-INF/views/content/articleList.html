@@ -7,12 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-
-    <title>STANLEY - Free Bootstrap Theme </title>
+    <title>GOOD</title>
     <!-- Bootstrap core CSS -->
     <link href="$!{rc.contextPath}/static/assets/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
+    <link href="$!{rc.contextPath}/static/assets/css/article.css" rel="stylesheet">
     <script src="$!{rc.contextPath}/static/js/util.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   </head>
@@ -44,6 +44,10 @@
 	
 	<!-- 文章列表 -->
 	<div id="articleList">
+	</div>
+	
+	<div class="container">
+		<h4 id="msg" style="text-align: center;display:block;"></h4>
 	</div>
 	
 	<div id="footer">
@@ -78,35 +82,64 @@
 		var pageNo=1;
 		var pageSize=2;
 		var page={pageNo:pageNo,pageSize:pageSize};
-		$.ajax({
-			url:"$!{rc.contextPath}/user/get_articles",
-			type:"post",
-			dataType:"json",
-			data:page,
-			success:function(data){
-				var length=data.length;
-				for(var i=0;i<length;i++){
-					var one=data[i];
-					var formatDate=new Date(one.createTime);
-					formatDate=dateFormat("yyyy-MM-dd hh:mm:ss",formatDate);
-					var artile='<div id="white">'+
-				    '<div class="container">'+
-						'<div class="row">'+
-							'<div class="col-lg-8 col-lg-offset-2">'+
-								'<p><img src="$!{rc.contextPath}/static/assets/img/user.png" width="50px" height="50px">'+
-									'<ba>&nbsp;$!{user.nickname}</ba>'+
-								'</p>'+
-								'<p><bd>'+formatDate+'</bd></p>'+
-								'<h4>'+one.title+'</h4>'+
-								'<p>'+one.content+'</p>'+
+		var hasData=true;
+		function loadData(){
+			console.log(page);
+			$.ajax({
+				url:"$!{rc.contextPath}/user/get_articles",
+				type:"post",
+				dataType:"json",
+				data:page,
+				beforeSend:function(){
+					$("#msg").html("数据加载中....");
+				},
+				success:function(data){
+					var length=data.length;
+					if(length<pageSize){
+						$("#msg").html("没有更多数据了");
+						hasData=false;
+					}else{
+						$("#msg").html("");
+						page.pageNo++;
+					}
+					for(var i=0;i<length;i++){
+						var one=data[i];
+						var formatDate=new Date(one.createTime);
+						formatDate=dateFormat("yyyy-MM-dd hh:mm:ss",formatDate);
+						var myCss="article-status-"+one.status;
+						var artile='<div id="white">'+
+					    '<div class="container">'+
+							'<div class="row">'+
+								'<div class="col-lg-8 col-lg-offset-2">'+
+									'<p><img src="$!{rc.contextPath}/static/assets/img/user.png" width="50px" height="50px">'+
+										'<ba>&nbsp;$!{user.nickname}</ba>'+
+									'</p>'+
+									'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+
+									'<h4><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+
+									'<p>'+one.content+'</p>'+
+								'</div>'+
 							'</div>'+
-						'</div>'+
-				    '</div>'+
-				'</div><hr style="width:80%;margin:auto;"/>';	
-				$("#articleList").append(artile);	
-				}	
-			}
-		});
+					    '</div>'+
+					'</div><hr style="width:80%;margin:auto;"/>';	
+					$("#articleList").append(artile);	
+					}	
+				}
+			});
+		}
+		
+		$(document).ready(function(){  
+			loadData();
+	        var range = 50;   //距下边界长度/单位px   
+	        var totalheight = 0;   
+	        var main = $("#articleList");  //主体元素  
+	        $(window).scroll(function(){  
+	            var srollPos = $(window).scrollTop();  //滚动条距顶部距离(页面超出窗口的高度)  
+	            totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+	            if(($(document).height()-range) <= totalheight&&hasData){  
+	            	loadData();
+	            }  
+	        });  
+	    });  
 	</script>
     <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
   </body>
