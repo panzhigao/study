@@ -25,11 +25,12 @@ public interface ArticleMapper {
 	public List<Article> findListByUserId(String userId);
 	/**
 	 * 保存文章信息
-	 * @param user
+	 * @param article
 	 */
 	public void saveArticle(Article article);
 	/**
-	 * 多条件查询，支持分页
+	 * 查询文章详细,支持分页
+	 * @param params
 	 * @return
 	 */
 	public List<Article> findByParams(Map<String,Object> params);

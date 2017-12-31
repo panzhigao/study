@@ -35,6 +35,7 @@
             <li><a href="work.html">Work</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="contact.html">Contact</a></li>
+            <li><a href="$!{rc.contextPath}/user/quit">退出</a></li>
           </ul>
         </div>
       </div>
@@ -110,7 +111,8 @@
         function updateArticle(status){
         	//获取编辑框内容
         	var content=editor.$textElem.html();
-        	if(!content){
+        	var text=editor.$textElem.text();
+        	if(!text){
         		alert("请填写文章内容");
         		return;
         	}
@@ -120,11 +122,13 @@
         		return;
         	}
         	var articleId=$("#articleId").val();
+        	//文章概要
+        	var outline=text.substring(0,100);
         	$.ajax({
         		url:"$!{rc.contextPath}/user/edit_article",
         		type:"post",
         		dataType:"json",
-        		data : {content,content,title:title,status:status,articleId:articleId},
+        		data : {content,content,title:title,status:status,articleId:articleId,outline:outline},
         		beforeSend:function(){
         			$('.my-btn').attr({ disabled: "disabled" });
         		},

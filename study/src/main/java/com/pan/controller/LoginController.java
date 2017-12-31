@@ -56,17 +56,18 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
-	public ResultMsg doLogin(HttpServletRequest request, HttpServletResponse response,User user){
+	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user){
 		logger.info("用户登陆，用户信息为：{}",user);
 		ResultMsg resultMsg=null;
 		try {
 			User userInDb = userService.checkLogin(user);
-			resultMsg=ResultMsg.ok("登陆成功");
+			userInDb.setPassword(null);
 			String token=UUID.randomUUID().toString();
 			//设置cookie过期时间
 			CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
 			String json=JsonUtils.toJson(userInDb);
-			JedisUtils.setStringExpire(MyConstant.USE_SESSION+token, json, cookieMaxage);
+			JedisUtils.setStringExpire(MyConstant.USER_SESSION+token, json, cookieMaxage);
+			resultMsg=ResultMsg.ok("登陆成功");
 		}catch(BusinessException e){
 			resultMsg=ResultMsg.fail(e.getMessage());
 		}catch (Exception e) {
@@ -88,4 +89,20 @@ public class LoginController{
 		request.getSession().setAttribute("sss", "pzg");
 		return mav;
 	}
+	
+	/**
+	 * 用户退出
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/quit")
+	public String quit(HttpServletRequest request,HttpServletResponse response){
+		String cookieValue = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
+		if(cookieValue!=null){
+			//立即过期redis中的session
+			JedisUtils.expire(MyConstant.USER_SESSION+cookieValue, 0);
+		}
+		CookieUtils.cleanCookies(request, response);
+		return "redirect:/login";
+	}
+	
 }

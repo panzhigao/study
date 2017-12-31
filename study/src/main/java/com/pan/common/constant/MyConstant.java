@@ -9,5 +9,5 @@ public class MyConstant {
 	
 	public static final String TOKEN="token";
 	
-	public static final String USE_SESSION="user_session:";
+	public static final String USER_SESSION="user_session:";
 }

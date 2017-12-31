@@ -103,7 +103,8 @@
         function saveArticle(status){
         	//获取编辑框内容
         	var content=editor.$textElem.html();
-        	if(!content){
+        	var text=editor.$textElem.text();
+        	if(!text){
         		alert("请填写文章内容");
         		return;
         	}
@@ -112,11 +113,13 @@
         		alert("请填写文章标题");
         		return;
         	}
+        	//文章概要
+        	var outline=text.substring(0,100);
         	$.ajax({
         		url:"$!{rc.contextPath}/user/save_article",
         		type:"post",
         		dataType:"json",
-        		data : {content,content,title:title,status:status},
+        		data : {content,content,title:title,status:status,outline:outline},
         		beforeSend:function(){
         			$(".btn").attr({ disabled: "disabled" });
         		},

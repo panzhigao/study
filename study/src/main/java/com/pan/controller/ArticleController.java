@@ -36,13 +36,17 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
+	private static final String OPERATE_EDIT="edit";
+	
+	private static final String OPERATE_DETAIL="detail";
+	
 	/**
 	 * 跳转发文页面
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article")
 	public ModelAndView writeArticle(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/article");
+		ModelAndView mav=new ModelAndView("content/articleAdd");
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
 		return mav;
@@ -87,7 +91,7 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 跳转文章列数据
+	 * 加载文章列数据，分页查询
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/get_articles")
@@ -112,9 +116,9 @@ public class ArticleController {
 	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
 		//不存在的操作跳转登录页
 		ModelAndView mav=new ModelAndView("login");
-		if("detail".equals(opeate)){
+		if(OPERATE_DETAIL.equals(opeate)){
 			mav.setViewName("content/articleDetail");
-		}else if("edit".equals(opeate)){
+		}else if(OPERATE_EDIT.equals(opeate)){
 			mav.setViewName("content/articleEdit");
 		}
 		String loingUserId = CookieUtils.getLoingUserId(request);

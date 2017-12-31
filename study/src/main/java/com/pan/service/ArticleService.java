@@ -14,8 +14,7 @@ import com.pan.entity.Article;
 public interface ArticleService {
 	/**
 	 * 保存文章
-	 * @param user
-	 * @param status 文章状态
+	 * @param article
 	 */
 	public void saveArticle(Article article);
 	/**
@@ -26,6 +25,7 @@ public interface ArticleService {
 	public List<Article> findListByUserId(String userId);
 	/**
 	 * 多条件查询，支持分页
+	 * @param params 条件有userId,articleId
 	 * @return
 	 */
 	public List<Article> findByParams(Map<String,Object> params);
@@ -38,6 +38,7 @@ public interface ArticleService {
 	public Article getByUserIdAndArticleId(String userId,String articleId);
 	/**
 	 * 修改文章信息
+	 * @param article
 	 */
 	public void updateArticle(Article article);
 }

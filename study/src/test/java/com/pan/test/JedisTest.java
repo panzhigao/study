@@ -25,6 +25,13 @@ public class JedisTest extends BaseTest{
 	
 	@Test
 	public void test3(){
-		JedisUtils.setStringExpire("p", "sssssss", 1);
+		JedisUtils.setStringExpire("p", "sssssss", 0);
+	}
+	
+	@Test
+	public void test4(){
+		//JedisUtils.setString("p", "pzgd");
+		Long expire = JedisUtils.expire("22", 300);
+		System.out.println(expire);
 	}
 }

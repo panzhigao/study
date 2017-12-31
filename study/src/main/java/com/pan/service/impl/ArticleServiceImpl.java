@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.mapper.ArticleMapper;
@@ -52,7 +54,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private void checkArticle(Article article) {
 		if (StringUtils.isBlank(article.getUserId())) {
 			logger.error("用户信息有误");
-			throw new BusinessException("用户信息有误");
+			throw new BusinessException("用户信息有误,请重新登陆");
 		}
 		if (StringUtils.isBlank(article.getTitle())) {
 			logger.error("文章标题不能为空");
@@ -60,6 +62,10 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		if (StringUtils.isBlank(article.getContent())) {
 			logger.error("文章内容不能为空");
+			throw new BusinessException("文章内容不能为空");
+		}
+		if (StringUtils.isBlank(article.getOutline())) {
+			logger.error("文章概要不能为空");
 			throw new BusinessException("文章内容不能为空");
 		}
 		if(!checkOpearteStatus(article.getStatus())){
@@ -92,6 +98,11 @@ public class ArticleServiceImpl implements ArticleService {
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
+			String userId=(String) params.get("userId");
+			if(StringUtils.isBlank(userId)){
+				logger.info("用户id有误",userId);
+				return list;
+			}
 			list = articleMapper.findByParams(params);
 		} catch (Exception e) {
 			logger.error("分页查询文章异常", e);
@@ -101,6 +112,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
+		if(StringUtils.isAllBlank(userId)||StringUtils.isBlank(articleId)){
+			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
+		}
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("userId", userId);
 		params.put("articleId", articleId);

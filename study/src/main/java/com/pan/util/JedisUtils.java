@@ -39,10 +39,10 @@ public class JedisUtils {
 	}
 	
 	/**
-	 * 过期时间不能小于0
+	 * 设置值的时候同时设置过期时间,过期时间不能小于0
 	 * @param key
 	 * @param value
-	 * @param seconds
+	 * @param seconds 
 	 */
 	public static void setStringExpire(String key,String value,int seconds){
 		if(seconds<=0){
@@ -51,6 +51,17 @@ public class JedisUtils {
 		Jedis jedis = jedisPool.getResource();
 		jedis.setex(key, seconds, value);
 		jedis.close();
+	}
+	
+	/**
+	 * 设置过期时间,当为-1时，不过期
+	 * @param key
+	 */
+	public static Long expire(String key,int seconds){
+		Jedis jedis = jedisPool.getResource();
+		Long resultCounts = jedis.expire(key,seconds);
+		jedis.close();
+		return resultCounts;
 	}
 	
 	/**
@@ -73,7 +84,7 @@ public class JedisUtils {
 	 * @param key
 	 * @return
 	 */
-	public static long increaseKey(String key){
+	public static Long increaseKey(String key){
 		Jedis jedis = jedisPool.getResource();
 		Long value = jedis.incr(key);
 		jedis.close();
@@ -86,7 +97,7 @@ public class JedisUtils {
 	 * @param value
 	 * @return
 	 */
-	public static long increaseKey(String key,Long value){
+	public static Long increaseKey(String key,Long value){
 		Jedis jedis = jedisPool.getResource();
 		Long result = jedis.incrBy(key, value);
 		jedis.close();

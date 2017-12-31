@@ -56,6 +56,10 @@ public class Article extends BaseEntity{
 	 * 文章内容
 	 */
 	private String content;
+	/**
+	 * 文章概要
+	 */
+	private String outline;
 	
 	public String getArticleId() {
 		return articleId;
@@ -112,13 +116,22 @@ public class Article extends BaseEntity{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getOutline() {
+		return outline;
+	}
+
+	public void setOutline(String outline) {
+		this.outline = outline;
+	}
 
 	@Override
 	public String toString() {
 		return "Article [articleId=" + articleId + ", userId=" + userId
 				+ ", status=" + status + ", updateTime=" + updateTime
 				+ ", publishTime=" + publishTime + ", title=" + title
-				+ ", content=" + content + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + "]";
+				+ ", content=" + content + ", outline=" + outline
+				+ ", getId()=" + getId() + ", getCreateTime()="
+				+ getCreateTime() + "]";
 	}
 }

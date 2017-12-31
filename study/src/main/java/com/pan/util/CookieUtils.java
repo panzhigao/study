@@ -135,13 +135,29 @@ public final class CookieUtils {
             String cookieValue, int cookieMaxage, String encodeString) {
         doSetCookie(request, response, cookieName, cookieValue, cookieMaxage, encodeString);
     }
-
+    
+    /**
+     * 清空所有cookie
+     * @param request
+     * @param response
+     */
+    public static void cleanCookies(HttpServletRequest request, HttpServletResponse response){
+    	 Cookie[] cookieList = request.getCookies();
+         if (cookieList == null||cookieList.length==0) {
+             return;
+         }
+         for (int i = 0; i < cookieList.length; i++) {
+        	 Cookie cookie=cookieList[i];
+        	 deleteCookie(request, response, cookie.getName());
+         }
+    }
+    
     /**
      * 删除Cookie带cookie域名
      */
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response,
             String cookieName) {
-        doSetCookie(request, response, cookieName, "", -1, false);
+        doSetCookie(request, response, cookieName, null, 0, false);
     }
 
     /**
@@ -158,9 +174,7 @@ public final class CookieUtils {
                 cookieValue = URLEncoder.encode(cookieValue, "utf-8");
             }
             Cookie cookie = new Cookie(cookieName, cookieValue);
-            if (cookieMaxage > 0){
-            	cookie.setMaxAge(cookieMaxage);            	
-            }
+            cookie.setMaxAge(cookieMaxage);            	
             //设置域名的cookie
             if (null != request){
             	cookie.setDomain(getDomainName(request));            	
@@ -241,7 +255,7 @@ public final class CookieUtils {
     	User user=null;
     	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
     	if(cookieValue!=null){
-    		String string = JedisUtils.getString(MyConstant.USE_SESSION+cookieValue);
+    		String string = JedisUtils.getString(MyConstant.USER_SESSION+cookieValue);
     		if(string!=null){
     			try {
 					user=(User) JsonUtils.fromJson(string, User.class);
