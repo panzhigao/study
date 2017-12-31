@@ -33,3 +33,15 @@
 	border:1px solid #15dc34;
 }
 .article-status-3:after{content:"发布中";}
+
+.article-msg{
+	text-align:center;
+	display:block;
+}
+
+.article-no-data{
+	text-align:center;
+	display:block;
+	margin:120px 0;
+}
+

@@ -57,7 +57,7 @@ $(function() {
 		var user = $("#loginForm").serialize();
 		$.ajax({
 			type : 'post',
-			url : '/doLogin',
+			url : 'doLogin',
 			dataType : 'json',
 			data : user,
 			success : function(data) {

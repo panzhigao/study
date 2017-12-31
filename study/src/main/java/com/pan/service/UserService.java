@@ -20,9 +20,20 @@ public interface UserService {
 	 */
 	public User findByUsername(String username);
 	/**
+	 * 根据用户Id查找唯一用户信息
+	 * @param username
+	 * @return
+	 */
+	public User findByUserid(String userId);
+	/**
 	 * 校验用户登陆
 	 * @param user
 	 * @return
 	 */
 	public User checkLogin(User user);
+	/**
+	 * 更新用户登陆时间
+	 * @param userId
+	 */
+	public void updateUserLastLoginTime(String userId);
 }

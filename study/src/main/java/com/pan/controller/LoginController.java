@@ -105,4 +105,17 @@ public class LoginController{
 		return "redirect:/login";
 	}
 	
+	/**
+	 * 跳转用户编辑个人信息页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/edit")
+	public ModelAndView toUserEditPage(HttpServletRequest request,HttpServletResponse response){
+		String loingUserId = CookieUtils.getLoingUserId(request);
+		User findByUserid = userService.findByUserid(loingUserId);
+		ModelAndView mav=new ModelAndView("content/userEdit");
+		mav.addObject("user", findByUserid);
+		return mav;
+	}
+	
 }

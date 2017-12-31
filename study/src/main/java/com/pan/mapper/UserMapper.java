@@ -25,4 +25,9 @@ public interface UserMapper {
 	 * @param user
 	 */
 	public void saveUser(User user);
+	/**
+	 * 更新用户id更新用户信息
+	 * @param user
+	 */
+	public void updateUserByUserId(User user);
 }

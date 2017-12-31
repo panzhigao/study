@@ -239,3 +239,13 @@ bt {
 	font-size: 40px;
 	color: #1abc9c;
 }
+
+.button-to-top{
+	background: url(../../images/sprites.png) no-repeat -8px -445px;
+	display:none;
+	width:35px; 
+	height:42px;
+	position:fixed;
+	right:100px;
+	bottom:220px;
+}

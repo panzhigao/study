@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
 		String username=user.getUsername();
 		User checkUsername = findByUsername(username);
 		if(checkUsername!=null){
-			logger.info("用户名已注册",checkUsername);
+			logger.info("用户名已注册{}",checkUsername);
 			throw new BusinessException("用户名已注册");
 		}
 		SimpleDateFormat sdf=new SimpleDateFormat(DATEFORMAT);
@@ -88,10 +88,23 @@ public class UserServiceImpl implements UserService{
 			if(!validPassword){
 				throw new BusinessException("用户名或密码错误");
 			}
+			updateUserLastLoginTime(userInDb.getUserId());
 			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			logger.error("验证用户和数据库密码出错",e);
 			throw new BusinessException("用户名或密码错误");
 		}
+	}
+
+	public void updateUserLastLoginTime(String userId) {
+		User user=new User();
+		user.setUserId(userId);
+		user.setLastLoginTime(new Date());
+		userMapper.updateUserByUserId(user);
+	}
+
+	public User findByUserid(String userId) {
+		logger.info("用户id:{}",userId);
+		return userMapper.findByUserId(userId);
 	}
 }

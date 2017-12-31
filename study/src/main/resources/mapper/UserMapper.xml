@@ -31,4 +31,26 @@
   	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR})
   </insert>
   
+  <update id="updateUserByUserId" parameterType="com.pan.entity.User">
+  	update t_user 
+  	<set>
+  		<if test="username !=null and username !='' ">
+  			username=#{username,jdbcType=VARCHAR},
+  		</if>
+  		<if test="nickname !=null and nickname !='' ">
+  			nickname=#{nickname,jdbcType=VARCHAR},
+  		</if>
+  		<if test="password != null and password !='' ">
+  			password=#{password,jdbcType=VARCHAR},
+  		</if>
+  		<if test="lastLoginTime != null">
+  			last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="status != null and status !=''">
+  			status=#{status,jdbcType=VARCHAR},
+  		</if>
+  	</set>
+  	where user_id=#{userId}
+  </update>
+  
 </mapper>
