@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="$!{rc.contextPath}/user/index">$!{user.nickname}</a>
+          <a class="navbar-brand" href="$!{rc.contextPath}/user/index">$!{userInfo.nickname}</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -121,8 +121,8 @@
 					    '<div class="container">'+
 							'<div class="row">'+
 								'<div class="col-lg-8 col-lg-offset-2">'+
-									'<p><img src="$!{rc.contextPath}/static/assets/img/user.png" width="50px" height="50px">'+
-										'<ba>&nbsp;$!{user.nickname}</ba>'+
+									'<p><img class="img-circle" src="#if(!$userInfo.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${userInfo.userPortrait} #end" width="50px" height="50px">'+
+										'<ba>&nbsp;&nbsp;$!{userInfo.user.nickname}</ba>'+
 									'</p>'+
 									'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+
 									'<h4><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+

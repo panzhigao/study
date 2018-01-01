@@ -41,10 +41,6 @@ public class Article extends BaseEntity{
 	 */
 	private String status;
 	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	/**
 	 * 发布时间
 	 */
 	private Date publishTime;
@@ -85,14 +81,6 @@ public class Article extends BaseEntity{
 		this.status = status;
 	}
 
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
 	public Date getPublishTime() {
 		return publishTime;
 	}
@@ -128,10 +116,10 @@ public class Article extends BaseEntity{
 	@Override
 	public String toString() {
 		return "Article [articleId=" + articleId + ", userId=" + userId
-				+ ", status=" + status + ", updateTime=" + updateTime
-				+ ", publishTime=" + publishTime + ", title=" + title
-				+ ", content=" + content + ", outline=" + outline
-				+ ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + "]";
+				+ ", status=" + status + ", publishTime=" + publishTime
+				+ ", title=" + title + ", content=" + content + ", outline="
+				+ outline + ", getId()=" + getId() + ", getCreateTime()="
+				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
+				+ "]";
 	}
 }

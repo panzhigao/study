@@ -1,6 +1,8 @@
 package com.pan.service;
 
+import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
 
 /**
  * 
@@ -26,6 +28,12 @@ public interface UserService {
 	 */
 	public User findByUserid(String userId);
 	/**
+	 * 根据手机号查找唯一用户信息
+	 * @param username
+	 * @return
+	 */
+	public User findByUserTelephone(String telephone);
+	/**
 	 * 校验用户登陆
 	 * @param user
 	 * @return
@@ -36,4 +44,13 @@ public interface UserService {
 	 * @param userId
 	 */
 	public void updateUserLastLoginTime(String userId);
+	/**
+	 * 修改用户信息
+	 */
+	public void updateUserInfo(User user,UserExtension userExtension);
+	/**
+	 * 获取用户全部信息
+	 * @return
+	 */
+	public UserInfoDTO getUserInfoByUserId(String userId);
 }

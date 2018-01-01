@@ -9,13 +9,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pan.common.exception.BusinessException;
+import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
+import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
 import com.pan.util.PasswordUtils;
@@ -34,6 +38,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private UserExtensionMapper userExtensionMapper;
 	
 	public void saveUser(User user){
 		String username=user.getUsername();
@@ -106,5 +113,50 @@ public class UserServiceImpl implements UserService{
 	public User findByUserid(String userId) {
 		logger.info("用户id:{}",userId);
 		return userMapper.findByUserId(userId);
+	}
+
+	public void updateUserInfo(User user, UserExtension userExtension) {
+		if(StringUtils.isBlank(user.getNickname())){
+			throw new BusinessException("用户昵称不能为空");
+		}
+		if(StringUtils.isBlank(user.getTelephone())){
+			throw new BusinessException("用户手机号不能为空");
+		}
+		User userInDb = findByUserTelephone(user.getTelephone());
+		if(userInDb!=null&&!StringUtils.equals(user.getUserId(),userInDb.getUserId())){
+			logger.info("该手机号已被使用：{}",user.getTelephone());
+			throw new BusinessException("该手机号已被使用，请更换手机号");
+		}
+		String userId=user.getUserId();
+		user.setUpdateTime(new Date());
+		userMapper.updateUserByUserId(user);
+		String userBrief=userExtension.getUserBrief();
+		String userPortrait=userExtension.getUserPortrait();
+		//当没用用户简介时新增，否则更新
+		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
+		UserExtension userExtensionTemp=new UserExtension();
+		userExtensionTemp.setUserId(userId);
+		userExtensionTemp.setUserBrief(userBrief);
+		userExtensionTemp.setUserPortrait(userPortrait);
+		if(userExtensionInDb!=null){
+			userExtensionTemp.setUpdateTime(new Date());
+			userExtensionMapper.updateUserExtensionByUserId(userExtensionTemp);	
+		}else{
+			userExtensionTemp.setCreateTime(new Date());
+			userExtensionMapper.saveUserExtension(userExtensionTemp);
+		}	
+		
+	}
+
+	public User findByUserTelephone(String telephone) {
+		logger.info("手机号：{}",telephone);
+		return userMapper.findByTelephone(telephone);
+	}
+
+	public UserInfoDTO getUserInfoByUserId(String userId) {
+		User user = findByUserid(userId);
+		UserExtension userExtension = userExtensionMapper.findByUserId(userId);
+		UserInfoDTO userInfoDTO=new UserInfoDTO(user,userExtension);
+		return userInfoDTO;
 	}
 }

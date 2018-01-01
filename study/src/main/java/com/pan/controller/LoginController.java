@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
+import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
@@ -61,11 +62,12 @@ public class LoginController{
 		ResultMsg resultMsg=null;
 		try {
 			User userInDb = userService.checkLogin(user);
-			userInDb.setPassword(null);
 			String token=UUID.randomUUID().toString();
 			//设置cookie过期时间
 			CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
-			String json=JsonUtils.toJson(userInDb);
+			String userId=userInDb.getUserId();
+			UserInfoDTO userInfo = userService.getUserInfoByUserId(userId);
+			String json=JsonUtils.toJson(userInfo);
 			JedisUtils.setStringExpire(MyConstant.USER_SESSION+token, json, cookieMaxage);
 			resultMsg=ResultMsg.ok("登陆成功");
 		}catch(BusinessException e){
@@ -84,9 +86,8 @@ public class LoginController{
 	@RequestMapping(method=RequestMethod.GET,value="/user/index")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/index");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
-		request.getSession().setAttribute("sss", "pzg");
+		UserInfoDTO userInfo =CookieUtils.getLoginUserInfo(request);
+		mav.addObject("userInfo",userInfo);
 		return mav;
 	}
 	
@@ -104,18 +105,4 @@ public class LoginController{
 		CookieUtils.cleanCookies(request, response);
 		return "redirect:/login";
 	}
-	
-	/**
-	 * 跳转用户编辑个人信息页面
-	 * @return
-	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/edit")
-	public ModelAndView toUserEditPage(HttpServletRequest request,HttpServletResponse response){
-		String loingUserId = CookieUtils.getLoingUserId(request);
-		User findByUserid = userService.findByUserid(loingUserId);
-		ModelAndView mav=new ModelAndView("content/userEdit");
-		mav.addObject("user", findByUserid);
-		return mav;
-	}
-	
 }

@@ -23,6 +23,10 @@ public class BaseEntity implements Serializable{
 	 * 创建时间
 	 */
 	private Date createTime;
+	/**
+	 * 更新时间
+	 */
+	private Date updateTime;
 	public Integer getId() {
 		return id;
 	}
@@ -36,10 +40,19 @@ public class BaseEntity implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+	
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 
 	@Override
 	public String toString() {
-		return "BaseEntity [id=" + id + ", createTime=" + createTime + "]";
+		return "BaseEntity [id=" + id + ", createTime=" + createTime
+				+ ", updateTime=" + updateTime + "]";
 	}
 	
 }

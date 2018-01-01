@@ -48,6 +48,10 @@ public class User extends BaseEntity{
 	 * 0禁用，1正常
 	 */
 	private String status;
+	/**
+	 * 手机号码
+	 */
+	private String telephone;
 	public String getUserId() {
 		return userId;
 	}
@@ -85,13 +89,21 @@ public class User extends BaseEntity{
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	
+	public String getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username
 				+ ", nickname=" + nickname + ", password=" + password
 				+ ", lastLoginTime=" + lastLoginTime + ", status=" + status
-				+ ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + "]";
+				+ ", telephone=" + telephone + ", getId()=" + getId()
+				+ ", getCreateTime()=" + getCreateTime() + "]";
 	}
 
 }

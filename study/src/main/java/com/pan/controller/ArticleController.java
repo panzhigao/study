@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
+import com.pan.dto.UserInfoDTO;
 import com.pan.entity.Article;
-import com.pan.entity.User;
 import com.pan.service.ArticleService;
+import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 
 /**
@@ -40,6 +40,9 @@ public class ArticleController {
 	
 	private static final String OPERATE_DETAIL="detail";
 	
+	@Autowired
+	private UserService userService;
+	
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -47,8 +50,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/articleAdd");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
+		mav.addObject("userInfo", userInfo);
 		return mav;
 	}
 	
@@ -85,8 +88,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
 	public ModelAndView toArticleList(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/articleList");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
+		mav.addObject("userInfo", userInfo);
 		return mav;
 	}
 	
@@ -122,8 +125,8 @@ public class ArticleController {
 			mav.setViewName("content/articleEdit");
 		}
 		String loingUserId = CookieUtils.getLoingUserId(request);
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
+		mav.addObject("userInfo", userInfo);
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		mav.addObject("article", article);
 		return mav;
