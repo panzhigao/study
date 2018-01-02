@@ -12,7 +12,6 @@ import com.pan.util.CookieUtils;
 public class LoginInterceptor implements HandlerInterceptor{
 
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
-		String url = request.getRequestURI(); 
 		User loginUser = CookieUtils.getLoginUser(request);
 		if(loginUser==null){
 			response.sendRedirect("/study/login");
