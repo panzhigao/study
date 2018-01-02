@@ -2,9 +2,6 @@ package com.pan.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-
-
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -15,14 +12,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.common.annotation.LoginGroup;
+import com.pan.common.annotation.RegisterGroup;
+import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.exception.BusinessException;
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
 import com.pan.util.PasswordUtils;
+import com.pan.util.ValidationUtils;
 
 /**
  * 
@@ -43,10 +43,11 @@ public class UserServiceImpl implements UserService{
 	private UserExtensionMapper userExtensionMapper;
 	
 	public void saveUser(User user){
+		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
 		String username=user.getUsername();
-		User checkUsername = findByUsername(username);
-		if(checkUsername!=null){
-			logger.info("用户名已注册{}",checkUsername);
+		User userInDb = findByUsername(username);
+		if(userInDb!=null){
+			logger.info("用户名已注册{}",userInDb);
 			throw new BusinessException("用户名已注册");
 		}
 		SimpleDateFormat sdf=new SimpleDateFormat(DATEFORMAT);
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public User checkLogin(User user) {
+		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
 		String username=user.getUsername();
 		User userInDb = findByUsername(username);
 		if(userInDb==null){
@@ -116,12 +118,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public void updateUserInfo(User user, UserExtension userExtension) {
-		if(StringUtils.isBlank(user.getNickname())){
-			throw new BusinessException("用户昵称不能为空");
-		}
-		if(StringUtils.isBlank(user.getTelephone())){
-			throw new BusinessException("用户手机号不能为空");
-		}
+		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
 		User userInDb = findByUserTelephone(user.getTelephone());
 		if(userInDb!=null&&!StringUtils.equals(user.getUserId(),userInDb.getUserId())){
 			logger.info("该手机号已被使用：{}",user.getTelephone());
@@ -131,13 +128,11 @@ public class UserServiceImpl implements UserService{
 		user.setUpdateTime(new Date());
 		userMapper.updateUserByUserId(user);
 		String userBrief=userExtension.getUserBrief();
-		String userPortrait=userExtension.getUserPortrait();
 		//当没用用户简介时新增，否则更新
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
 		UserExtension userExtensionTemp=new UserExtension();
 		userExtensionTemp.setUserId(userId);
 		userExtensionTemp.setUserBrief(userBrief);
-		userExtensionTemp.setUserPortrait(userPortrait);
 		if(userExtensionInDb!=null){
 			userExtensionTemp.setUpdateTime(new Date());
 			userExtensionMapper.updateUserExtensionByUserId(userExtensionTemp);	
@@ -153,10 +148,7 @@ public class UserServiceImpl implements UserService{
 		return userMapper.findByTelephone(telephone);
 	}
 
-	public UserInfoDTO getUserInfoByUserId(String userId) {
-		User user = findByUserid(userId);
-		UserExtension userExtension = userExtensionMapper.findByUserId(userId);
-		UserInfoDTO userInfoDTO=new UserInfoDTO(user,userExtension);
-		return userInfoDTO;
+	public UserExtension findByUserId(String userId) {
+		return userExtensionMapper.findByUserId(userId);
 	}
 }

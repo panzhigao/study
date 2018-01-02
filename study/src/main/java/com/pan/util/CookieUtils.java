@@ -3,16 +3,12 @@ package com.pan.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.pan.common.constant.MyConstant;
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 
 /**
@@ -268,26 +264,7 @@ public final class CookieUtils {
     	return user;
     }
     
-    /**
-     * 获取登陆用户详细信息
-     * @return
-     */
-    public static UserInfoDTO getLoginUserInfo(HttpServletRequest request){
-    	UserInfoDTO userInfoDTO=null;
-    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
-    	if(cookieValue!=null){
-    		String string = JedisUtils.getString(MyConstant.USER_SESSION+cookieValue);
-    		if(string!=null){
-    			try {
-    				userInfoDTO=(UserInfoDTO) JsonUtils.fromJson(string, UserInfoDTO.class);
-				} catch (Exception e) {
-					logger.error("reids获取登陆用户详细信息失败", e);
-				}	
-    		}
-    	}
-    	return userInfoDTO;
-    }
-    
+
     /**
      * 获取登陆用户id
      * @return

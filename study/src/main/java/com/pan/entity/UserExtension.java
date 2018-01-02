@@ -19,10 +19,7 @@ public class UserExtension extends BaseEntity{
 	 * 用户简介
 	 */
 	private String userBrief;
-	/**
-	 * 用户头像
-	 */
-	private String userPortrait;
+
 	
 	public String getUserId() {
 		return userId;
@@ -36,18 +33,11 @@ public class UserExtension extends BaseEntity{
 	public void setUserBrief(String userBrief) {
 		this.userBrief = userBrief;
 	}
-	
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
 	@Override
 	public String toString() {
 		return "UserExtension [userId=" + userId + ", userBrief=" + userBrief
-				+ ", userPortrait=" + userPortrait + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
+				+ ", getId()=" + getId() + ", getCreateTime()="
+				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
+				+ "]";
 	}
 }

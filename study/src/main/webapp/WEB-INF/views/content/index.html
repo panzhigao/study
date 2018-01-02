@@ -27,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html">$!{userInfo.nickname}</a>
+          <a class="navbar-brand" href="index.html">$!{user.nickname}</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -47,10 +47,10 @@
 	    <div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-lg-offset-2 centered">
-					<img class="img-circle" src="#if(!$userInfo.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${userInfo.userPortrait} #end">&nbsp;&nbsp;
+					<img class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end">&nbsp;&nbsp;
 					<button class="btn primary" onclick="location.href='$!{rc.contextPath}/user/edit'">编辑资料</button>
-					<h1>你好，$!{userInfo.nickname}</h1>
-					<p>#if(!$userInfo.userBrief) 暂无个人简介，点击编辑资料可以添加个人简介  #else ${userInfo.userBrief} #end</p>
+					<h1>你好，$!{user.nickname}</h1>
+					<p>#if(!$user.userBrief) 暂无个人简介，点击编辑资料可以添加个人简介  #else ${user.userBrief} #end</p>
 				</div>
 			</div>
 	    </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>GOOD GOOD STUDY</title>
+<title>My Blog</title>
 <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
 <link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
 <link href="$!{rc.contextPath}/static/frame/bootstrapValidator/bootstrapValidator.css" rel='stylesheet' type='text/css' />
@@ -16,7 +16,6 @@
 <script src="$!{rc.contextPath}/static/js/cropper.js"></script>
 <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
 <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
 </head>
 <body>
 	<!-- Static navbar -->
@@ -28,7 +27,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">$!{userInfo.nickname}</a>
+				<a class="navbar-brand" href="index.html">$!{user.nickname}</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -48,26 +47,26 @@
 			<div class="col-lg-8 col-lg-offset-2 centered">
 				<form class="form-horizontal" role="form" id="userForm">
 					<div class="form-group" >
-						<img id="userImg" class="img-circle" src="#if(!$userInfo.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${userInfo.userPortrait} #end" data-toggle="modal" data-target="#avatar-modal" title="点击更换头像">
+						<img id="userImg" style="cursor:pointer" class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end" data-toggle="modal" data-target="#avatar-modal" title="点击更换头像">
 						<input type="hidden" name="userPortrait" id="userPortrait">
 					</div>
 					<div class="form-group">
 						<label for="nickname" class="col-sm-2 control-label">昵称</label>
 						<div class="col-sm-8">
-							<input type="text" placeholder="请输入昵称" class="form-control" id="nickname" name="nickname" value="$!{userInfo.nickname}">
+							<input type="text" placeholder="请输入昵称" class="form-control" id="nickname" name="nickname" value="$!{user.nickname}">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="telephone" class="col-sm-2 control-label">手机号</label>
 						<div class="col-sm-8">
-							<input type="text" placeholder="请输入手机号" class="form-control" id="telephone" value="$!{userInfo.telephone}"
+							<input type="text" placeholder="请输入手机号" class="form-control" id="telephone" value="$!{user.telephone}"
 								name="telephone">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="userBrief" class="col-sm-2 control-label">个人简介</label>
 						<div class="col-sm-8">
-							<textarea style="resize: none;" placeholder="请输入个人简介" class="form-control col-lg-4" rows="5" name="userBrief">$!{userInfo.userBrief}</textarea>
+							<textarea style="resize: none;" placeholder="请输入个人简介" class="form-control col-lg-4" rows="5" name="userBrief">$!{userExtension.userBrief}</textarea>
 						</div>
 					</div>
 					<div class="form-group">

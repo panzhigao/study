@@ -3,9 +3,7 @@ package com.pan.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.Article;
+import com.pan.entity.User;
 import com.pan.service.ArticleService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
@@ -50,8 +48,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/articleAdd");
-		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
-		mav.addObject("userInfo", userInfo);
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -88,8 +86,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
 	public ModelAndView toArticleList(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/articleList");
-		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
-		mav.addObject("userInfo", userInfo);
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -125,8 +123,8 @@ public class ArticleController {
 			mav.setViewName("content/articleEdit");
 		}
 		String loingUserId = CookieUtils.getLoingUserId(request);
-		UserInfoDTO userInfo = CookieUtils.getLoginUserInfo(request);
-		mav.addObject("userInfo", userInfo);
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user", user);
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		mav.addObject("article", article);
 		return mav;

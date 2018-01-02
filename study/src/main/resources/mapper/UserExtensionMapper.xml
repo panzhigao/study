@@ -8,11 +8,10 @@
     <result column="user_brief"       	property="userBrief"       jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
-    <result column="user_portrait"      property="userPortrait"      jdbcType="TIMESTAMP" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,user_brief,create_time,update_time,user_portrait
+    id,user_id,user_brief,create_time,update_time
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -21,7 +20,7 @@
   
   <insert id="saveUserExtension" parameterType="com.pan.entity.UserExtension">
   	insert into t_user_extension (<include refid="Base_Column_List"/>) values 
-  	(null,#{userId,jdbcType=VARCHAR},#{userBrief,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR})
+  	(null,#{userId,jdbcType=VARCHAR},#{userBrief,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
   </insert>
   
   <update id="updateUserExtensionByUserId" parameterType="com.pan.entity.User">
@@ -32,9 +31,6 @@
   		</if>
   		<if test="updateTime !=null and updateTime !='' ">
   			update_time=#{updateTime,jdbcType=TIMESTAMP},
-  		</if>
-  		<if test="userPortrait !=null and userPortrait !='' ">
-  			user_portrait=#{userPortrait,jdbcType=TIMESTAMP},
   		</if>
   	</set>
   	where user_id=#{userId}

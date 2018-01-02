@@ -13,10 +13,11 @@
     <result column="status"    			property="status"          jdbcType="VARCHAR" />
     <result column="telephone"    		property="telephone"       jdbcType="VARCHAR" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
+    <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,username,nickname,password,create_time,last_login_time,status,telephone,update_time
+    id,user_id,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -34,7 +35,8 @@
   <insert id="saveUser" parameterType="com.pan.entity.User">
   	insert into t_user (<include refid="Base_Column_List"/>) values 
   	(null,#{userId,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
-  	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP})
+  	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},
+  	#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR})
   </insert>
   
   <update id="updateUserByUserId" parameterType="com.pan.entity.User">
@@ -60,6 +62,9 @@
   		</if>
   		<if test="telephone != null and telephone !=''">
   			telephone=#{telephone,jdbcType=VARCHAR},
+  		</if>
+  		<if test="userPortrait !=null and userPortrait !='' ">
+  			user_portrait=#{userPortrait,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where user_id=#{userId}

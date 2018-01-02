@@ -14,31 +14,13 @@ var loginEvent = {
 					validators : {
 						notEmpty : {
 							message : '请输入用户名'
-						},
-						stringLength : {
-							min : 5,
-							max : 15,
-							message : '用户名长度必须在5-15之间'
-						},
-						regexp : {
-							regexp : /^[a-zA-Z0-9_\.\-]+$/,
-							message : '用户名只能包含字母，数字，点和下划线'
-						},
+						}
 					}
 				},
 				"password" : {
 					validators : {
 						notEmpty : {
 							message : '请输入密码'
-						},
-						stringLength : {
-							min : 6,
-							max : 16,
-							message : '密码长度必须在6-16之间'
-						},
-						regexp : {
-							regexp : /^[a-zA-Z0-9_\.]+$/,
-							message : '用户名只能包含字母，数字，点和下划线'
 						}
 					}
 				}

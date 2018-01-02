@@ -25,7 +25,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="$!{rc.contextPath}/user/index">$!{userInfo.nickname}</a>
+          <a class="navbar-brand" href="$!{rc.contextPath}/user/index">$!{user.nickname}</a>
           <input hidden="userId" value="$!{user.userId}"/>
         </div>
         <div class="navbar-collapse collapse">
@@ -56,9 +56,9 @@
             
         </div>
         <div class="text-center row mt">
-        	<button class="btn btn-primary" id="btnPublish" onclick="saveArticle('2')">发布</button>
+        	<button class="btn btn-primary myBtn" id="btnPublish" onclick="saveArticle('2')">发布</button>
         	&nbsp;&nbsp;
-        	<button class="btn btn-info" id="btnSave" onclick="saveArticle('1')">存草稿</button>
+        	<button class="btn btn-info myBtn" id="btnSave" onclick="saveArticle('1')">存草稿</button>
         	&nbsp;&nbsp;
         	<button class="btn btn-inverse" id="btnSave" onclick="history.go(-1)">返回</button>
         </div>
@@ -124,17 +124,18 @@
         		dataType:"json",
         		data : {content,content,title:title,status:status,outline:outline},
         		beforeSend:function(){
-        			$(".btn").attr({ disabled: "disabled" });
+        			$(".myBtn").attr({ disabled: "disabled" });
         		},
         		success:function(data){
         			if(data.code=='200'){
         				alert(data.msg);
-        				$('.btn').attr({ disabled: "disabled" });
+        				$('.myBtn').attr({ disabled: "disabled" });
         				setTimeout(function(){
         					location.href="$!{rc.contextPath}/user/my_articles";	
         				},100);;
         			}else{
         				alert(data.msg);
+        				$(".myBtn").removeAttr("disabled");
         			}
         		},
         		error:function(){

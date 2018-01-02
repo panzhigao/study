@@ -44,10 +44,10 @@ public class UserInfoDTO {
 			this.username=user.getUsername();
 			this.nickname=user.getNickname();
 			this.telephone=user.getTelephone();
+			this.userPortrait=user.getUserPortrait();
 		}
 		if(userExtension!=null){
 			this.userBrief=userExtension.getUserBrief();
-			this.userPortrait=userExtension.getUserPortrait();
 		}
 	}
 

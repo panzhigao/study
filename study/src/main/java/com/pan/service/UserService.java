@@ -1,6 +1,5 @@
 package com.pan.service;
 
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 
@@ -49,8 +48,7 @@ public interface UserService {
 	 */
 	public void updateUserInfo(User user,UserExtension userExtension);
 	/**
-	 * 获取用户全部信息
-	 * @return
+	 * 查找用户其他信息
 	 */
-	public UserInfoDTO getUserInfoByUserId(String userId);
+	public  UserExtension findByUserId(String userId);
 }

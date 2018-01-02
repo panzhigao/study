@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
@@ -46,8 +44,10 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/edit")
 	public ModelAndView toUserEditPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/userEdit");
-		UserInfoDTO userInfo =CookieUtils.getLoginUserInfo(request);
-		mav.addObject("userInfo",userInfo);
+		User user = CookieUtils.getLoginUser(request);
+		UserExtension userExtension=userService.findByUserId(user.getUserId());
+		mav.addObject("user",user);
+		mav.addObject("userExtension",userExtension);
 		return mav;
 	}
 	
@@ -64,8 +64,8 @@ public class UserController {
 		try {
 			user.setUserId(userId);
 			userService.updateUserInfo(user, userExtension);
-			UserInfoDTO userInfo = userService.getUserInfoByUserId(userId);
-			String json=JsonUtils.toJson(userInfo);
+			User userT = userService.findByUserid(userId);
+			String json=JsonUtils.toJson(userT);
 			JedisUtils.setStringExpire(MyConstant.USER_SESSION+token, json, cookieMaxage);
 			resultMsg=ResultMsg.ok("修改用户信息成功");
 		}catch(BusinessException e){

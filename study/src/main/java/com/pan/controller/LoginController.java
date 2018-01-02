@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
-import com.pan.dto.UserInfoDTO;
 import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
@@ -65,9 +62,8 @@ public class LoginController{
 			String token=UUID.randomUUID().toString();
 			//设置cookie过期时间
 			CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
-			String userId=userInDb.getUserId();
-			UserInfoDTO userInfo = userService.getUserInfoByUserId(userId);
-			String json=JsonUtils.toJson(userInfo);
+			userInDb.setPassword(null);
+			String json=JsonUtils.toJson(userInDb);
 			JedisUtils.setStringExpire(MyConstant.USER_SESSION+token, json, cookieMaxage);
 			resultMsg=ResultMsg.ok("登陆成功");
 		}catch(BusinessException e){
@@ -86,8 +82,8 @@ public class LoginController{
 	@RequestMapping(method=RequestMethod.GET,value="/user/index")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/index");
-		UserInfoDTO userInfo =CookieUtils.getLoginUserInfo(request);
-		mav.addObject("userInfo",userInfo);
+		User user = CookieUtils.getLoginUser(request);
+		mav.addObject("user",user);
 		return mav;
 	}
 	
