@@ -281,6 +281,7 @@ $(function () {
         	  success:function(data){
         		  if(data.code=='200'){
         			  alert(data.msg);
+        			  location.href="$!{rc.contextPath}/user/index"
         		  }else{
         			  alert(data.msg);
         			  $('#btnSave').removeAttr("disabled");

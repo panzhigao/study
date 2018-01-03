@@ -50,7 +50,7 @@
 					<img class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end">&nbsp;&nbsp;
 					<button class="btn primary" onclick="location.href='$!{rc.contextPath}/user/edit'">编辑资料</button>
 					<h1>你好，$!{user.nickname}</h1>
-					<p>#if(!$user.userBrief) 暂无个人简介，点击编辑资料可以添加个人简介  #else ${user.userBrief} #end</p>
+					<p>#if(!$userExtension.userBrief) 暂无个人简介，点击编辑资料可以添加个人简介  #else ${user.userBrief} #end</p>
 				</div>
 			</div>
 	    </div>

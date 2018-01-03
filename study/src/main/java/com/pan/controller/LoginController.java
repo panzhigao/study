@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
@@ -84,6 +87,8 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("content/index");
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user",user);
+		UserExtension userExtension=userService.findByUserId(user.getUserId());
+		mav.addObject("userExtension",userExtension);
 		return mav;
 	}
 	
