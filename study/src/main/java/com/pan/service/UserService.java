@@ -22,13 +22,13 @@ public interface UserService {
 	public User findByUsername(String username);
 	/**
 	 * 根据用户Id查找唯一用户信息
-	 * @param username
+	 * @param userId
 	 * @return
 	 */
 	public User findByUserid(String userId);
 	/**
 	 * 根据手机号查找唯一用户信息
-	 * @param username
+	 * @param telephone
 	 * @return
 	 */
 	public User findByUserTelephone(String telephone);
@@ -45,10 +45,13 @@ public interface UserService {
 	public void updateUserLastLoginTime(String userId);
 	/**
 	 * 修改用户信息
+	 * @param userExtension
 	 */
 	public void updateUserInfo(User user,UserExtension userExtension);
 	/**
-	 * 查找用户其他信息
+	 * 根据用户id查找用户其他信息
+	 * @param userId
+	 * @return 
 	 */
-	public  UserExtension findByUserId(String userId);
+	public UserExtension findByUserId(String userId);
 }

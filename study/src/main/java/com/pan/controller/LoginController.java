@@ -58,6 +58,7 @@ public class LoginController{
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
 	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user){
+		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		ResultMsg resultMsg=null;
 		try {

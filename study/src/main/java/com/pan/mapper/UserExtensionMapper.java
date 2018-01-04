@@ -15,13 +15,13 @@ public interface UserExtensionMapper {
 	 */
 	public UserExtension findByUserId(String userId);
 	/**
-	 * 保存用户信息
-	 * @param user
+	 * 保存用户拓展信息
+	 * @param userExtension
 	 */
 	public void saveUserExtension(UserExtension userExtension);
 	/**
-	 * 更新用户id更新用户信息
-	 * @param user
+	 * 根据用户id更新用户拓展信息
+	 * @param userExtension
 	 */
 	public void updateUserExtensionByUserId(UserExtension userExtension);
 }

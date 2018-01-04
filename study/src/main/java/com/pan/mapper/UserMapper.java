@@ -16,7 +16,7 @@ public interface UserMapper {
 	public User findByUserId(String userId);
 	/**
 	 * 根据手机号查找用户信息，唯一一条用户数据
-	 * @param userId
+	 * @param telephone
 	 * @return
 	 */
 	public User findByTelephone(String telephone);

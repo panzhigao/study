@@ -9,6 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.entity.User;
 import com.pan.util.CookieUtils;
 
+/**
+ * 登陆拦截器
+ * @author Administrator
+ *
+ */
 public class LoginInterceptor implements HandlerInterceptor{
 
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {

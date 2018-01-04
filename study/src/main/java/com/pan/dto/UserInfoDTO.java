@@ -98,6 +98,14 @@ public class UserInfoDTO {
 	public void setUserPortrait(String userPortrait) {
 		this.userPortrait = userPortrait;
 	}
+
+	@Override
+	public String toString() {
+		return "UserInfoDTO [userId=" + userId + ", username=" + username
+				+ ", nickname=" + nickname + ", telephone=" + telephone
+				+ ", userBrief=" + userBrief + ", userPortrait=" + userPortrait
+				+ "]";
+	}
 	
 	
 }

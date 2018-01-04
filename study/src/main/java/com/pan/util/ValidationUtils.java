@@ -14,6 +14,11 @@ import org.apache.commons.collections.CollectionUtils;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ValidationResult;
 
+/**
+ * 校验工具
+ * @author Administrator
+ *
+ */
 public class ValidationUtils {
 	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -22,7 +27,7 @@ public class ValidationUtils {
 		Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
 		if (CollectionUtils.isNotEmpty(set)) {
 			result.setHasErrors(true);
-			Map<String, String> errorMsg = new HashMap<String, String>();
+			Map<String, String> errorMsg = new HashMap<String, String>(10);
 			for (ConstraintViolation<T> cv : set) {
 				errorMsg.put(cv.getPropertyPath().toString(), cv.getMessage());
 			}
@@ -37,7 +42,7 @@ public class ValidationUtils {
 				propertyName, Default.class);
 		if (CollectionUtils.isNotEmpty(set)) {
 			result.setHasErrors(true);
-			Map<String, String> errorMsg = new HashMap<String, String>();
+			Map<String, String> errorMsg = new HashMap<String, String>(10);
 			for (ConstraintViolation<T> cv : set) {
 				errorMsg.put(propertyName, cv.getMessage());
 			}
