@@ -26,7 +26,8 @@ public class FileUploadController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(FileUploadController.class);
 	
-	private static String fileRoot="C:\\Users\\Administrator\\Desktop\\nginx-1.13.8\\images\\";
+	//TODO 路径配到配置文件
+	private static String fileRoot="C:\\Users\\Administrator\\Desktop\\nginx-1.13.8\\myimage\\";
 	
     @RequestMapping(value="/upload",method=RequestMethod.POST)
     @ResponseBody

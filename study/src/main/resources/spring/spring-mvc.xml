@@ -16,12 +16,14 @@
 	<context:component-scan base-package="com.pan.controller" />
 
 	<mvc:annotation-driven />
+	
 	<mvc:resources mapping="/static/images/**" location="/static/images/" />
 	<mvc:resources mapping="/static/css/**" location="/static/css/" />
 	<mvc:resources mapping="/static/js/**" location="/static/js/" />
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
 	<mvc:resources mapping="/static/error/**" location="/static/error/" />
+	
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors> 
