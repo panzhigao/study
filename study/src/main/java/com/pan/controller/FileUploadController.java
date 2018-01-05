@@ -29,7 +29,7 @@ public class FileUploadController {
 	//TODO 路径配到配置文件
 	private static String fileRoot="C:\\Users\\Administrator\\Desktop\\nginx-1.13.8\\myimage\\";
 	
-    @RequestMapping(value="/upload",method=RequestMethod.POST)
+    @RequestMapping(value="/upload")
     @ResponseBody
     public ResultMsg fildUpload(@RequestParam(value="file",required=false) MultipartFile file,HttpServletRequest request)throws Exception{ 
     	logger.info("上传文件开始");
