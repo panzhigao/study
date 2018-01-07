@@ -41,38 +41,44 @@
       </div>
     </div>
 	
-	<!-- 文章列表 -->
-	<div id="articleList">
-		<ul style="color:#000;margin:20px 0;list-style: none;text-align: center;">
-			<li style="display:inline-block;">
-				<span style="display: block;padding: 4px 16px;text-decoration: none;font-size: 1em;color: #000;cursor: pointer;text-transform: capitalize;" >全部</span>
+	<!-- 分类 -->
+	<div id="">
+		<ul class="category-ul">
+			<li class="category-item selected" status="">
+				全部
 			</li>
-			<li style="display:inline-block;">
-				<span style="display: block;padding: 4px 16px;text-decoration: none;font-size: 1em;color: #000;cursor: pointer;text-transform: capitalize;" >已发表</span>
+			<li class="category-item" status="3">
+				已发表
 			</li>
-			<li style="display:inline-block;">
-				<span style="display: block;padding: 4px 16px;text-decoration: none;font-size: 1em;color: #000;cursor: pointer;text-transform: capitalize;" >未通过</span>
+			<li class="category-item" status="1">
+				草稿
 			</li>
-			<li style="display:inline-block;">
-				<span style="display: block;padding: 4px 16px;text-decoration: none;font-size: 1em;color: #000;cursor: pointer;text-transform: capitalize;" >草稿</span>
+			<li class="category-item" status="2">
+				审核中
 			</li>
-			<li style="display:inline-block;">
-				<span style="display: block;padding: 4px 16px;text-decoration: none;font-size: 1em;color: #000;cursor: pointer;text-transform: capitalize;" >审核中</span>
+			<li class="category-item" status="0">
+				未通过
 			</li>
 		</ul>
 		<hr style="width:60%;margin:auto;"/>
-		
+	</div>
+	
+	<!-- 文章列表 -->
+	<div id="articleList">
+
 	</div>
 	
 	<a href="#top" id="toTop" title="返回顶部" class="button-to-top">
 	</a>
 	
+	<!-- 加载提示 -->
 	<div class="container">
 		<h4 id="msg" class="article-msg"></h4>
 	</div>
 	
-	<div class="container" id="noDataFlag" style="display:none;">
-		<a href="$!{rc.contextPath}/user/article" class="article-no-data">您暂时没有任何文章，赶紧写一篇文章吧！！！</a>
+	<div class="container" style="height:200px;">
+		<a id="noDataFlag" href="$!{rc.contextPath}/user/article" class="article-no-data nodatamsg">您暂时没有任何文章，赶紧写一篇文章吧！！！</a>
+		<a id="noMatchDataFlag" class="article-no-data nodatamsg">没有符合条件的文章！！！</a>
 	</div>
 	
 	<div id="footer">
@@ -106,15 +112,15 @@
 	<script type="text/javascript">
 		var pageNo=1;
 		var pageSize=5;
-		var page={pageNo:pageNo,pageSize:pageSize};
+		var status="";
 		var hasData=true;
 		function loadData(){
-			console.log(page);
+			$(".nodatamsg").hide();
 			$.ajax({
 				url:"$!{rc.contextPath}/user/get_articles",
 				type:"post",
 				dataType:"json",
-				data:page,
+				data:{pageNo:pageNo,pageSize:pageSize,status:status},
 				beforeSend:function(){
 					$("#msg").html("数据加载中....");
 				},
@@ -123,13 +129,17 @@
 					var length=data.length;
 					if(length<pageSize){
 						hasData=false;
-						if(page.pageNo==1&&length==0){
-							$("#noDataFlag").show();
+						if(pageNo==1&&length==0){
+							if(status==''){								
+								$("#noDataFlag").show();
+							}else{
+								$("#noMatchDataFlag").show();
+							}
 							return;
 						}
 						$("#msg").html("没有更多数据了");
 					}else{
-						page.pageNo++;
+						pageNo++;
 					}
 					for(var i=0;i<length;i++){
 						var one=data[i];
@@ -178,6 +188,18 @@
 	            var srollPos = $(window).scrollTop();  // 滚动条距顶部距离(页面超出窗口的高度)  
 	            srollPos > 100 && !atBottom ? $('#toTop').fadeIn() : $('#toTop').fadeOut();
 	        });  
+	        
+	        //切换文章类型状态
+	        $('.category-item').click(function(obj){
+	        	$('.category-item').removeClass('selected');
+	        	$(this).addClass('selected')
+	        	pageNo=1;
+	        	hasData=true;
+	        	$("#articleList").html("");	
+	        	status=$(this).attr('status');
+	        	console.log("文章类型"+status);
+	        	loadData();
+	        });
 	    });     
 	</script>
     <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>

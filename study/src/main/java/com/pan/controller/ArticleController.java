@@ -97,13 +97,14 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/get_articles")
 	@ResponseBody
-	public List<Article> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+	public List<Article> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
 		String loingUserId = CookieUtils.getLoingUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
+		params.put("status", status);
 		List<Article> list=articleService.findByParams(params);
 		return list;
 	}
