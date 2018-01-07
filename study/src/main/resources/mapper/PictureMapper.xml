@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.PictureMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.Picture">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="picture_id"        	property="pictureId"       jdbcType="VARCHAR" />
+    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="pic_url"            property="picUrl"          jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,picture_id,user_id,create_time,pic_url
+  </sql>
+  
+  <select id="findByPictureId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
+  </select>
+  
+  <select id="findByParams" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_picture 
+  	<where>
+  		<if test="pictureId !=null and pictureId!='' ">
+  			and picture_id=#{pictureId}
+  		</if>
+  		<if test="userId !=null and userId!=''">
+  			and user_id=#{userId}
+  		</if>
+  	</where>
+  	order by create_time desc
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>
+  
+  <select id="findListByUserId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_picture where user_id=#{userId} order by create_time desc
+  </select>
+  
+  <insert id="savePicture" parameterType="com.pan.entity.Picture">
+  	insert into t_picture (<include refid="Base_Column_List"/>) values 
+  	(null,#{pictureId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{picUrl,jdbcType=VARCHAR})
+  </insert>
+  
+  <delete id="deleteByPictureId">
+  	delete from t_picture where picture_id=#{pictureId}
+  </delete>
+</mapper>

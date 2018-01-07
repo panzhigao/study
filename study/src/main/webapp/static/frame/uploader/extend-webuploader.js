@@ -148,10 +148,11 @@ jQuery(function(){
     function initServerFile(){
         if( window.webuploader.initUrl ){
             $.ajax({
-                type:'get',
+                type:'post',
                 url: window.webuploader.initUrl,
                 dataType:'json',
                 success:function(data){
+                	alert(data);
                     var len = data.length;
                     for(var i=0;i<len;i++){
                         data[i].src = "server";
@@ -407,6 +408,7 @@ jQuery(function(){
                 stats = uploader.getStats();
                 if( stats.successNum ){
                     alert('上传成功');
+                    $upload.removeClass('disabled');
                 } else {
                     state = 'done';
                     location.reload();
@@ -465,7 +467,10 @@ jQuery(function(){
         updateTotalProgress();
     });
 
-    uploader.on('uploadSuccess', function(file){
+    uploader.on('uploadSuccess', function(file,response ){
+    	console.log(response);
+    	var pic='<a href="'+response.msg+'"><li data-tags="Print Design"><img src="'+response.msg+'" alt="Illustration" /></li></a>';
+    	$('#stage').prepend(pic);
         $('#' + file.id ).find('p.state').text('已上传');
     });
 

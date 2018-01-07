@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon"
+	href="../../docs-static/assets/ico/favicon.png">
+<title>GOOD GOOD STUDY</title>
+<!-- Bootstrap core CSS -->
+<link href="$!{rc.contextPath}/static/assets/css/bootstrap.css" rel="stylesheet">
+<link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="$!{rc.contextPath}/static/frame/uploader/style.css">
+<link rel="stylesheet" type="text/css" href="$!{rc.contextPath}/static/frame/uploader/demo.css">
+<link rel="stylesheet" type="text/css" href="$!{rc.contextPath}/static/frame/uploader/webuploader.css">
+<link rel="stylesheet" type="text/css" href="$!{rc.contextPath}/static/css/myPictures.css">
+<link href="$!{rc.contextPath}/static/assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Static navbar -->
+	<div class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">$!{user.nickname}</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="$!{rc.contextPath}/user/article">编写文章</a></li>
+            		<li><a href="$!{rc.contextPath}/user/my_articles">我的文章</a></li>
+            		<li><a href="$!{rc.contextPath}/user/my_pictures">我的相册</a></li>
+            		<li><a href="about.html">About</a></li>
+            		<li><a href="contact.html">Contact</a></li>
+            		<li><a href="$!{rc.contextPath}/user/quit">退出</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="uploaderDiv" class="page-container">
+		<p>上传图片</p>
+		<div id="uploader" class="wu-example">
+			<div class="queueList">
+				<div id="dndArea" class="placeholder">
+					<div id="filePicker" class="webuploader-container">
+						<div class="webuploader-pick">点击选择图片</div>
+						<div id="rt_rt_1c33c3e2pm141sog1hvhj3b2lh1"
+							style="position: absolute; top: 0px; left: 561px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="file"
+								class="webuploader-element-invisible" multiple="multiple"
+								accept="images/*"><label
+								style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+						</div>
+					</div>
+					<p>或将照片拖到这里</p>
+				</div>
+				<ul class="filelist"></ul>
+			</div>
+			<div class="statusBar" style="display: none">
+				<div class="progress" style="display: none;">
+					<span class="text">0%</span> <span class="percentage"
+						style="width: 0%;"></span>
+				</div>
+				<div class="info">共0张(0B)，已上传0张</div>
+				<div class="btns">
+					<div id="filePicker2" class="webuploader-container">
+						<div class="webuploader-pick">继续添加</div>
+						<div id="rt_rt_1c33c3e2t1ed4s9p1rel27u1abd6"
+							style="position: absolute; top: 0px; left: 0px; width: 1px; height: 1px; overflow: hidden;">
+							<input type="file" name="file"
+								class="webuploader-element-invisible" multiple="multiple"
+								accept="images/*"><label
+								style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+						</div>
+					</div>
+					<div class="uploadBtn state-pedding">开始上传</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<a href="#top" id="toTop" title="返回顶部" class="button-to-top"></a>
+	
+	<div class="copyrights">
+		Collect from <a href="http://www.cssmoban.com/">企业网站模板</a>
+	</div>
+
+	<!-- picture list -->
+	<div class="container">
+	<section id="pictures">
+        <ul id="stage">
+            
+        </ul>
+    </section>
+	</div>
+	<div class="container">
+		<h4 id="msg" class="msg"></h4>
+	</div>
+	
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+					<h4>My Bunker</h4>
+					<p>
+						Some Address 987,<br /> +34 9054 5455, <br /> Madrid, Spain.
+					</p>
+				</div>
+
+				<div class="col-lg-4">
+					<h4>My Links</h4>
+					<p>
+						<a href="#">Dribbble</a><br /> <a href="#">Twitter</a>
+						<br/> 
+						<a href="#">Facebook</a>
+					</p>
+				</div>
+
+				<div class="col-lg-4">
+					<h4>About Stanley</h4>
+					<p>
+						This cute theme was created to showcase your work in a simple way.
+						Use it wisely.More Templates <a href="http://www.cssmoban.com/"
+							target="_blank" title="模板之家">模板之家</a> - Collect from <a
+							href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/frame/uploader/jquery-1.10.2.js"></script>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/frame/uploader/jquery.min.js"></script>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/frame/uploader/bootstrap.min.js"></script>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/frame/uploader/webuploader.min.js"></script>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/frame/uploader/extend-webuploader.js"></script>
+	<script type="text/javascript"src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		window.webuploader = {
+			config : {
+				thumbWidth : 220, //缩略图宽度，可省略，默认为110
+				thumbHeight : 220, //缩略图高度，可省略，默认为110
+				wrapId : 'uploader', //必填
+			},
+			//处理客户端新文件上传时，需要调用后台处理的地址, 必填
+			uploadUrl : '$!{rc.contextPath}/file/upload',
+			//处理客户端原有文件更新时的后台处理地址，必填
+			updateUrl : '$!{rc.contextPath}/file/upload',
+			//当客户端原有文件删除时的后台处理地址，必填
+			removeUrl : '$!{rc.contextPath}/file/upload',
+			//初始化客户端上传文件，从后台获取文件的地址, 可选，当此参数为空时，默认已上传的文件为空
+			initUrl : '$!{rc.contextPath}/file/upload',
+		}
+		var pageNo=1;
+		var pageSize=3;
+		var page={pageNo:pageNo,pageSize:pageSize};
+		var hasData=true;
+		function loadData(){
+			$.ajax({
+				url:"$!{rc.contextPath}/user/get_pictures",
+				type:"post",
+				dataType:"json",
+				data:page,
+				async:false,
+				beforeSend:function(){
+					$("#msg").html("数据加载中....");
+				},
+				success:function(data){
+					$("#msg").html("");
+					var length=data.length;
+					if(length<pageSize){
+						hasData=false;
+						if(page.pageNo==1&&length==0){
+							$("#noDataFlag").show();
+							return;
+						}
+						$("#msg").html("没有更多数据了");
+					}else{
+						page.pageNo++;
+					}
+					for(var i=0;i<length;i++){
+						var one=data[i];
+						var pic='<li data-tags="Print Design" id="'+one.pictureId+'">'+
+						        '<a href="'+one.picUrl+'" target="_blank"><img src="'+one.picUrl+'" alt="Illustration" />'+
+						        '</a>'+
+						        '<a class="pic-delete" onclick="deletePic(\''+one.pictureId+'\')" >删除</a></li>';
+						$("#stage").append(pic);	
+					}	
+				}
+			});
+		}
+		
+		function deletePic(pictureId){
+			var r=confirm("确定删除图片");
+			if(!r){
+				return;
+			}
+			$.ajax({
+				url:"$!{rc.contextPath}/user/delete_picture",
+				dataType:"json",
+				type:"post",
+				data:{pictureId:pictureId},
+				success:function(data){
+					console.log(data);
+					if(data.code=='200'){
+						alert("删除图片成功");
+						$("#"+pictureId).remove();
+					}else{
+						alert(data.msg);
+					}
+				},
+				error:function(){
+					alert("删除图片失败");
+				}
+			});
+		}
+		
+		$(function(){  
+			loadData();
+	        var range = 70;   //距下边界长度/单位px   
+	        var totalheight = 0;   
+	        var main = $("#articleList");  //主体元素  
+	        $(window).scroll(function(){  
+	            var srollPos = $(window).scrollTop();  //滚动条距顶部距离(页面超出窗口的高度)  
+	            totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+	            if(($(document).height()-range) <= totalheight&&hasData){  
+	            	loadData();
+	            }  
+	          	//是否到底部了
+	        	var atBottom=false;
+	        	var scrollTop = $(window).scrollTop();
+	        	var scrollHeight = $(document).height();
+	        	var windowHeight = $(window).height();
+	        	if(scrollTop + windowHeight == scrollHeight){
+	        	　　atBottom=true;
+	        	}
+	            var srollPos = $(window).scrollTop();  // 滚动条距顶部距离(页面超出窗口的高度)  
+	            srollPos > 100 && !atBottom ? $('#toTop').fadeIn() : $('#toTop').fadeOut();
+	        });  
+	    });
+	
+	</script>
+</body>
+</html>

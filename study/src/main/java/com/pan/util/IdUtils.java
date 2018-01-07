@@ -16,6 +16,7 @@ public class IdUtils {
 	
 	private static final String ARTICLE_KEY="article_id";
 	
+	private static final String PICTURE_KEY="picture_id";
 	/**
 	 * 创建文章id
 	 * @return
@@ -25,7 +26,7 @@ public class IdUtils {
 		try {
 			long value=0L;
 			if(!JedisUtils.existsKey(ARTICLE_KEY)){
-				//默认值10001
+				//默认值10000
 				value=JedisUtils.increaseKey(ARTICLE_KEY, 10000L);
 			}else{
 				value=JedisUtils.increaseKey(ARTICLE_KEY);
@@ -36,5 +37,27 @@ public class IdUtils {
 			throw e;
 		}
 		return articleId;
+	}
+	
+	/**
+	 * 创建文章id
+	 * @return
+	 */
+	public static String generatePictureId(){
+		String pictureId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(PICTURE_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(PICTURE_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(PICTURE_KEY);
+			}
+			pictureId="pic"+value;
+		} catch (Exception e) {
+			logger.error("生成图片id错误",e);
+			throw e;
+		}
+		return pictureId;
 	}
 }
