@@ -146,16 +146,21 @@
 						var formatDate=new Date(one.createTime);
 						formatDate=dateFormat("yyyy-MM-dd hh:mm:ss",formatDate);
 						var myCss="article-status-"+one.status;
+						var img='';
+						if(one.image){							
+							img='<a href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank"><img src="'+one.image+'" width="150px" height="100px" />';
+						}
 						var artile='<div id="white">'+
 					    '<div class="container">'+
 							'<div class="row">'+
 								'<div class="col-lg-8 col-lg-offset-2">'+
 									'<p><img class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end" width="50px" height="50px">'+
-										'<ba>&nbsp;&nbsp;$!{user.nickname}</ba>'+
+										'<ba>&nbsp;&nbsp;&nbsp;&nbsp;$!{user.nickname}</ba>'+
 									'</p>'+
-									'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+
-									'<h4><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+
-									'<p>'+one.outline+'。。。</p>'+
+									'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+img+
+									'</a>'+
+									'<h4 class="article-h4"><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+
+									'<p style="margin-top:5px">'+one.outline+'。。。</p>'+
 								'</div>'+
 							'</div>'+
 					    '</div>'+

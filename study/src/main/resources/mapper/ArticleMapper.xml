@@ -13,18 +13,38 @@
     <result column="title"              property="title"           jdbcType="VARCHAR" />
     <result column="content"    		property="content"         jdbcType="VARCHAR" />
     <result column="outline"    		property="outline"         jdbcType="VARCHAR" />
+    <result column="image"    		    property="image"           jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image
+  </sql>
+  
+  <sql id="Simple_Column_List" >
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,outline,image
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_article where article_id=#{articleId}
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap">
+  <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.pan.entity.Article">
   	select <include refid="Base_Column_List"/> from t_article 
+  	<where>
+  		<if test="articleId !=null and articleId!='' ">
+  			and article_id=#{articleId}
+  		</if>
+  		<if test="status !=null and status !=''">
+  			and status=#{status}
+  		</if>
+  		<if test="userId !=null and userId!=''">
+  			and user_id=#{userId}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="findByParams" resultMap="BaseResultMap">
+  	select <include refid="Simple_Column_List"/> from t_article 
   	<where>
   		<if test="articleId !=null and articleId!='' ">
   			and article_id=#{articleId}
@@ -49,7 +69,7 @@
   <insert id="saveArticle" parameterType="com.pan.entity.Article">
   	insert into t_article (<include refid="Base_Column_List"/>) values 
   	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR})
+  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR})
   </insert>
   
   <update id="updateArticle" parameterType="com.pan.entity.Article">
@@ -69,6 +89,9 @@
   		</if>
   		<if test="outline != null and outline !=''">
   			outline=#{outline,jdbcType=VARCHAR},
+  		</if>
+  		<if test="image != null and image !=''">
+  			image=#{image,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where article_id=#{articleId}

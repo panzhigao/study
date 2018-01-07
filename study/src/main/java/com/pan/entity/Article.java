@@ -56,6 +56,10 @@ public class Article extends BaseEntity{
 	 * 文章概要
 	 */
 	private String outline;
+	/**
+	 * 文章摘要图片
+	 */
+	private String image;
 	
 	public String getArticleId() {
 		return articleId;
@@ -113,13 +117,21 @@ public class Article extends BaseEntity{
 		this.outline = outline;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "Article [articleId=" + articleId + ", userId=" + userId
 				+ ", status=" + status + ", publishTime=" + publishTime
 				+ ", title=" + title + ", content=" + content + ", outline="
-				+ outline + ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
-				+ "]";
+				+ outline + ", image=" + image + ", getId()=" + getId()
+				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
+				+ getUpdateTime() + "]";
 	}
 }

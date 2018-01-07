@@ -469,7 +469,7 @@ jQuery(function(){
 
     uploader.on('uploadSuccess', function(file,response ){
     	console.log(response);
-    	var pic='<a href="'+response.msg+'"><li data-tags="Print Design"><img src="'+response.msg+'" alt="Illustration" /></li></a>';
+    	var pic='<a href="'+response.msg+'" target="_blank"><li data-tags="Print Design"><img src="'+response.msg+'" alt="Illustration" /></li></a>';
     	$('#stage').prepend(pic);
         $('#' + file.id ).find('p.state').text('已上传');
     });

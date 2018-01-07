@@ -100,27 +100,44 @@
 	</div>
 	 <!-- 引用js -->
     <script type="text/javascript" src="$!{rc.contextPath}/static/frame/wangEditor/wangEditor.js"></script>
+    <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         var E = window.wangEditor;
         var editor = new E('#div1');
+        editor=new wangEditor('#div1');
+        editor.customConfig.uploadImgServer="$!{rc.contextPath}/file/upload2";
+        editor.customConfig.uploadImgFileName ='file';
+        editor.customConfig.uploadImgTimeout = 3000;
+        editor.customConfig.debug = true;
         editor.create();
-  		console.log(document.cookie);
+        
 
         //保存文章
         //status文章状态
         function updateArticle(status){
         	//获取编辑框内容
+        	var hasContent=false;
         	var content=editor.$textElem.html();
         	var text=editor.$textElem.text();
-        	if(!text){
-        		alert("请填写文章内容");
-        		return;
-        	}
+        	var image='';
         	var title=$("#title").val();
+        	var imgs=$(content).find("img");
+        	if(imgs.length>0){
+        		var image=$(content).find("img")[0].src;
+        	}	
         	if(!title){
         		alert("请填写文章标题");
         		return;
         	}
+        	if(!text){
+        		if(!hasContent){
+        			alert("文章内容不能全部是图片，请填写文字内容");
+        		}else{        			
+        			alert("请填写文章内容");
+        		}
+        		return;
+        	}
+        	
         	var articleId=$("#articleId").val();
         	//文章概要
         	var outline=text.substring(0,100);
@@ -128,7 +145,7 @@
         		url:"$!{rc.contextPath}/user/edit_article",
         		type:"post",
         		dataType:"json",
-        		data : {content,content,title:title,status:status,articleId:articleId,outline:outline},
+        		data : {content,content,title:title,status:status,articleId:articleId,outline:outline,image:image},
         		beforeSend:function(){
         			$('.my-btn').attr({ disabled: "disabled" });
         		},
@@ -136,6 +153,9 @@
         			if(data.code=='200'){
         				alert(data.msg);
         				$('.my-btn').attr({ disabled: "disabled" });
+        				setTimeout(function(){
+        					location.href="$!{rc.contextPath}/user/my_articles";	
+        				},100);;
         			}else{
         				alert(data.msg);
         				$('.my-btn').removeAttr("disabled");
@@ -147,6 +167,5 @@
         	});
         }
     </script>
-    <script src="$!{rc.contextPath}/static/assets/js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -2,16 +2,13 @@ package com.pan.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.mapper.ArticleMapper;
@@ -115,10 +112,10 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isAllBlank(userId)||StringUtils.isBlank(articleId)){
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
-		Map<String, Object> params = new HashMap<String, Object>(2);
-		params.put("userId", userId);
-		params.put("articleId", articleId);
-		List<Article> list = findByParams(params);
+		Article article=new Article();
+		article.setUserId(userId);
+		article.setArticleId(articleId);
+		List<Article> list = this.articleMapper.findByCondition(article);
 		if (list.size() == 1) {
 			return list.get(0);
 		}

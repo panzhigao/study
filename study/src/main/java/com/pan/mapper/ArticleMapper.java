@@ -39,4 +39,10 @@ public interface ArticleMapper {
 	 * @param article
 	 */
 	public void updateArticle(Article article);
+	/**
+	 * 根据条条件查询，不分页
+	 * @param article
+	 * @return
+	 */
+	public List<Article> findByCondition(Article article);
 }

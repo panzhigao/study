@@ -3,7 +3,9 @@ package com.pan.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
@@ -111,16 +115,19 @@ public class ArticleController {
 	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
 		//不存在的操作跳转登录页
 		ModelAndView mav=new ModelAndView("login");
+		String loingUserId = CookieUtils.getLoingUserId(request);
+		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
+		mav.addObject("article", article);
 		if(OPERATE_DETAIL.equals(opeate)){
 			mav.setViewName("content/articleDetail");
 		}else if(OPERATE_EDIT.equals(opeate)){
+			if(article==null){
+				throw new BusinessException("文章已不存在");
+			}
 			mav.setViewName("content/articleEdit");
 		}
-		String loingUserId = CookieUtils.getLoingUserId(request);
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
-		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
-		mav.addObject("article", article);
 		return mav;
 	}
 	
@@ -132,7 +139,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value={"/user/edit_article"})
 	@ResponseBody
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
-		logger.info("发布文章开始");
+		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
 		String userId=CookieUtils.getLoingUserId(request);
 		article.setUserId(userId);
