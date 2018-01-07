@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.entity.User;
@@ -70,18 +69,11 @@ public class PicturesController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/delete_picture")
 	@ResponseBody
 	public ResultMsg deletePicture(HttpServletRequest request,String pictureId){
+		logger.info("删除图片开始");
 		String loingUserId = CookieUtils.getLoingUserId(request);
 		ResultMsg resultMsg=null;
-		try {
-			pictureService.deleteByPictureId(loingUserId, pictureId);
-			resultMsg=ResultMsg.ok("删除图片成功");
-		}catch(BusinessException e){
-			logger.error("删除图片失败",e);
-			resultMsg=ResultMsg.fail(e.getMessage());
-		}catch (Exception e) {
-			logger.error("删除图片失败",e);
-			resultMsg=ResultMsg.fail("删除图片失败");
-		}
+		pictureService.deleteByPictureId(loingUserId, pictureId);
+		resultMsg=ResultMsg.ok("删除图片成功");
 		return resultMsg;
 	}
 }

@@ -26,6 +26,8 @@
 		</property>
 	</bean>
 	
+	<bean class="com.pan.common.handler.BusinessExceptionResolver"></bean>
+	
 	<import resource="classpath:spring/spring-mybatis.xml"/>
 	<import resource="classpath:spring/spring-redis.xml"/>
 </beans>

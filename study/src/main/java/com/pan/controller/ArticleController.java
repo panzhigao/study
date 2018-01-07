@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
@@ -62,19 +61,13 @@ public class ArticleController {
 	public ResultMsg saveArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
-		try {
-			String userId=CookieUtils.getLoingUserId(request);
-			article.setUserId(userId);
-			articleService.saveArticle(article);
-			if(Article.STATUS_SKETCH.equals(article.getStatus())){				
-				resultMsg=ResultMsg.ok("文章保存草稿成功");
-			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
-				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
-			}
-		}catch(BusinessException e){
-			resultMsg=ResultMsg.fail(e.getMessage());
-		}catch (Exception e) {
-			resultMsg=ResultMsg.fail("文章保存草稿失败");
+		String userId=CookieUtils.getLoingUserId(request);
+		article.setUserId(userId);
+		articleService.saveArticle(article);
+		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+			resultMsg=ResultMsg.ok("文章保存草稿成功");
+		}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+			resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 		}
 		return resultMsg;
 	}
@@ -141,19 +134,13 @@ public class ArticleController {
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
-		try {
-			String userId=CookieUtils.getLoingUserId(request);
-			article.setUserId(userId);
-			articleService.updateArticle(article);
-			if(Article.STATUS_SKETCH.equals(article.getStatus())){				
-				resultMsg=ResultMsg.ok("文章保存草稿成功");
-			}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
-				resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
-			}
-		}catch(BusinessException e){
-			resultMsg=ResultMsg.fail(e.getMessage());
-		}catch (Exception e) {
-			resultMsg=ResultMsg.fail("文章保存草稿失败");
+		String userId=CookieUtils.getLoingUserId(request);
+		article.setUserId(userId);
+		articleService.updateArticle(article);
+		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+			resultMsg=ResultMsg.ok("文章保存草稿成功");
+		}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+			resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 		}
 		return resultMsg;
 	}
