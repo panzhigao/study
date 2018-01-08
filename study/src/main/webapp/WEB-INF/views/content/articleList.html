@@ -77,8 +77,8 @@
 	</div>
 	
 	<div class="container" style="height:200px;">
-		<a id="noDataFlag" href="$!{rc.contextPath}/user/article" class="article-no-data nodatamsg">您暂时没有任何文章，赶紧写一篇文章吧！！！</a>
-		<a id="noMatchDataFlag" class="article-no-data nodatamsg">没有符合条件的文章！！！</a>
+		<a id="noDataFlag" style="dispaly:none" href="$!{rc.contextPath}/user/article" class="article-no-data nodatamsg">您暂时没有任何文章，赶紧写一篇文章吧！！！</a>
+		<a id="noMatchDataFlag" style="dispaly:none" class="article-no-data nodatamsg">没有符合条件的文章！！！</a>
 	</div>
 	
 	<div id="footer">
@@ -111,64 +111,68 @@
 	</div>
 	<script type="text/javascript">
 		var pageNo=1;
-		var pageSize=5;
+		var pageSize=40;
 		var status="";
 		var hasData=true;
 		function loadData(){
+			$("#msg").html("数据加载中....");
 			$(".nodatamsg").hide();
-			$.ajax({
-				url:"$!{rc.contextPath}/user/get_articles",
-				type:"post",
-				dataType:"json",
-				data:{pageNo:pageNo,pageSize:pageSize,status:status},
-				beforeSend:function(){
-					$("#msg").html("数据加载中....");
-				},
-				success:function(data){
-					$("#msg").html("");
-					var length=data.length;
-					if(length<pageSize){
-						hasData=false;
-						if(pageNo==1&&length==0){
-							if(status==''){								
-								$("#noDataFlag").show();
-							}else{
-								$("#noMatchDataFlag").show();
+			setTimeout(function(){
+				$.ajax({
+					url:"$!{rc.contextPath}/user/get_articles",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{pageNo:pageNo,pageSize:pageSize,status:status},
+					beforeSend:function(){
+						
+					},
+					success:function(data){
+						$("#msg").html("");
+						var length=data.length;
+						if(length<pageSize){
+							hasData=false;
+							if(pageNo==1&&length==0){
+								if(status==''){								
+									$("#noDataFlag").show();
+								}else{
+									$("#noMatchDataFlag").show();
+								}
+								return;
 							}
-							return;
+							$("#msg").html("没有更多数据了");
+						}else{
+							pageNo++;
 						}
-						$("#msg").html("没有更多数据了");
-					}else{
-						pageNo++;
-					}
-					for(var i=0;i<length;i++){
-						var one=data[i];
-						var formatDate=new Date(one.createTime);
-						formatDate=dateFormat("yyyy-MM-dd hh:mm:ss",formatDate);
-						var myCss="article-status-"+one.status;
-						var img='';
-						if(one.image){							
-							img='<a href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank"><img src="'+one.image+'" width="150px" height="100px" />';
-						}
-						var artile='<div id="white">'+
-					    '<div class="container">'+
-							'<div class="row">'+
-								'<div class="col-lg-8 col-lg-offset-2">'+
-									'<p><img class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end" width="50px" height="50px">'+
-										'<ba>&nbsp;&nbsp;&nbsp;&nbsp;$!{user.nickname}</ba>'+
-									'</p>'+
-									'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+img+
-									'</a>'+
-									'<h4 class="article-h4"><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+
-									'<p style="margin-top:5px">'+one.outline+'。。。</p>'+
+						for(var i=0;i<length;i++){
+							var one=data[i];
+							var formatDate=new Date(one.createTime);
+							formatDate=dateFormat("yyyy-MM-dd hh:mm:ss",formatDate);
+							var myCss="article-status-"+one.status;
+							var img='';
+							if(one.image){							
+								img='<a href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank"><img src="'+one.image+'" width="150px" height="100px" />';
+							}
+							var artile='<div id="white">'+
+						    '<div class="container">'+
+								'<div class="row">'+
+									'<div class="col-lg-8 col-lg-offset-2">'+
+										'<p><img class="img-circle" src="#if(!$user.userPortrait) $!{rc.contextPath}/static/assets/img/user.png #else ${user.userPortrait} #end" width="50px" height="50px">'+
+											'<ba>&nbsp;&nbsp;&nbsp;&nbsp;$!{user.nickname}</ba>'+
+										'</p>'+
+										'<p>'+formatDate+'&nbsp;&nbsp;<span class="article-status '+myCss+'"></span></p>'+img+
+										'</a>'+
+										'<h4 class="article-h4"><a title="详细页" href="$!{rc.contextPath}/user/article/detail/'+one.articleId+'" target="_blank">'+one.title+'</a></h4>'+
+										'<p style="margin-top:5px">'+one.outline+'。。。</p>'+
+									'</div>'+
 								'</div>'+
-							'</div>'+
-					    '</div>'+
-					'</div><hr style="width:60%;margin:auto;"/>';	
-					$("#articleList").append(artile);	
-					}	
-				}
-			});
+						    '</div>'+
+						'</div><hr style="width:60%;margin:auto;"/>';	
+						$("#articleList").append(artile);	
+						}	
+					}
+				});
+			},800);
 		}
 		
 		$(function(){  
