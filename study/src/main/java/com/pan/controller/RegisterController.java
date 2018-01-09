@@ -32,7 +32,7 @@ public class RegisterController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/register")
 	public String toRegisterPage(){
-		return "register";
+		return "html/user/reg";
 	}
 	
 	/**

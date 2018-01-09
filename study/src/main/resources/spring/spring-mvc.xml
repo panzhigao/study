@@ -22,24 +22,26 @@
 	<mvc:resources mapping="/static/js/**" location="/static/js/" />
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
+	<mvc:resources mapping="/static/res/**" location="/static/res/" />
 	
 	
 	<!-- 拦截器 -->
-	<mvc:interceptors> 
-	   <mvc:interceptor> 
-	     <mvc:mapping path="/**" />
-	     <mvc:exclude-mapping path="/"/>
-	     <mvc:exclude-mapping path="/login"/>
-	     <mvc:exclude-mapping path="/doLogin"/>
-	     <mvc:exclude-mapping path="/register"/>
-	     <mvc:exclude-mapping path="/static/images/**"/>
-	     <mvc:exclude-mapping path="/static/css/**"/>
-	     <mvc:exclude-mapping path="/static/js/**"/>
-	     <mvc:exclude-mapping path="/static/frame/**"/>
-	     <mvc:exclude-mapping path="/static/assets/**"/>
-	     <bean class="com.pan.interceptor.LoginInterceptor"></bean> 
-	   </mvc:interceptor> 
-	</mvc:interceptors> 
+<!-- 	<mvc:interceptors>  -->
+<!-- 	   <mvc:interceptor>  -->
+<!-- 	     <mvc:mapping path="/**" /> -->
+<!-- 	     <mvc:exclude-mapping path="/"/> -->
+<!-- 	     <mvc:exclude-mapping path="/login"/> -->
+<!-- 	     <mvc:exclude-mapping path="/doLogin"/> -->
+<!-- 	     <mvc:exclude-mapping path="/register"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/images/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/css/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/js/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/frame/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/assets/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/res/**"/> -->
+<!-- 	     <bean class="com.pan.interceptor.LoginInterceptor"></bean>  -->
+<!-- 	   </mvc:interceptor>  -->
+<!-- 	</mvc:interceptors>  -->
 	
 	<!-- 引入属性文件,mvc无法引入spring容器的属性 -->
 	<bean id="propertyConfigurer"

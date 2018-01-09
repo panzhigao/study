@@ -44,7 +44,7 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/","login"})
 	public String toLogin(){
-		return "login";
+		return "html/user/login";
 	}
 	
 	/**
