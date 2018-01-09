@@ -252,7 +252,7 @@ public final class CookieUtils {
     	User user=null;
     	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
     	if(cookieValue!=null){
-    		String string = JedisUtils.getString(MyConstant.USER_SESSION+cookieValue);
+    		String string = JedisUtils.getString(MyConstant.USER_LOGINED+cookieValue);
     		if(string!=null){
     			try {
 					user=(User) JsonUtils.fromJson(string, User.class);

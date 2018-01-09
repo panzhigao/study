@@ -59,7 +59,7 @@ public class UserController {
 		userService.updateUserInfo(user, userExtension);
 		User userT = userService.findByUserid(userId);
 		String json=JsonUtils.toJson(userT);
-		JedisUtils.setStringExpire(MyConstant.USER_SESSION+token, json, cookieMaxage);
+		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
 		return resultMsg;
 	}
