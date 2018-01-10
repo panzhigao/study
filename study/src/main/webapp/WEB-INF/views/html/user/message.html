@@ -7,15 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="fly,layui,前端社区">
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
-  <link rel="stylesheet" href="../../res/layui/css/layui.css">
-  <link rel="stylesheet" href="../../res/css/global.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
 <body>
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
-      <img src="../../res/images/logo.png" alt="layui">
+    <a class="fly-logo" href="$!{rc.contextPath}">
+      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item layui-this">
@@ -33,10 +33,10 @@
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">贤心</cite>
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+          <img src="$!{user.userPortrait}">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -118,25 +118,25 @@
 <div class="fly-footer">
   <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
   <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划${aa}</a>
     <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
 
-<script src="../../res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
   username: '游客'
   ,uid: -1
-  ,avatar: '../../res/images/avatar/00.jpg'
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
   ,experience: 83
   ,sex: '男'
 };
 layui.config({
   version: "3.0.0"
-  ,base: '../../res/mods/'
+  ,base: '$!{rc.contextPath}/static/res/mods/'
 }).extend({
   fly: 'index'
 }).use('fly');

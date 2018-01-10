@@ -18,7 +18,7 @@
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item layui-this">
-        <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
       </li>
       <li class="layui-nav-item">
         <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
@@ -63,7 +63,7 @@
               <div class="layui-form-item">
                 <label for="L_email" class="layui-form-label">邮箱</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_email" name="email" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_email" name="email" required lay-verify="email" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
@@ -88,7 +88,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button>
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即登录</button>
                 <span style="padding-left:20px;">
                   <a href="forget.html">忘记密码？</a>
                 </span>
@@ -131,6 +131,15 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+/* layui.use('form', function(){
+	  var form = layui.form;
+	  //监听提交
+	  form.on('submit(formDemo)', function(data){
+		  alert(123);
+	    layer.msg(JSON.stringify(data.field));
+	    return false;
+	  });
+	}); */
 </script>
 </body>
 </html>

@@ -28,6 +28,8 @@ public class LoginInterceptor implements HandlerInterceptor{
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		User loginUser = CookieUtils.getLoginUser(request);
+		modelAndView.addObject("user",loginUser);
 	}
 
 	public void afterCompletion(HttpServletRequest request,

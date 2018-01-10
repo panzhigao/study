@@ -2,6 +2,11 @@ package com.pan.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
+import com.pan.util.CookieUtils;
+import com.pan.util.JedisUtils;
+import com.pan.util.VerifyCodeUtils;
 
 /**
  * 注册
@@ -31,8 +42,17 @@ public class RegisterController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/register")
-	public String toRegisterPage(){
-		return "html/user/reg";
+	public ModelAndView toRegisterPage(HttpServletRequest request,HttpServletResponse response){
+		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
+		if(cookieValue==null){
+			cookieValue=UUID.randomUUID().toString();
+			CookieUtils.setCookie(request, response, MyConstant.SESSION_ID, cookieValue);
+		}
+		String vercode=VerifyCodeUtils.generateVerifyCode(4);
+		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
+		ModelAndView mav=new ModelAndView("html/user/reg");
+		mav.addObject("vercode", vercode);
+		return mav;
 	}
 	
 	/**
