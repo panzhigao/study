@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
 	
-	public void saveUser(User user){
+	public User saveUser(User user){
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
 		String username=user.getUsername();
 		User userInDb = findByUsername(username);
@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService{
 			user.setCreateTime(new Date());
 			user.setStatus(User.STATUS_NORMAL);
 			userMapper.saveUser(user);
+			return user;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("加密用户密码错误",e);
 			throw new BusinessException("注册用户信息失败");

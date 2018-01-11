@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.JsonUtils;
 import com.pan.util.VerifyCodeUtils;
 
 /**
@@ -33,6 +35,9 @@ import com.pan.util.VerifyCodeUtils;
 public class RegisterController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(LoginController.class);
+	
+	@Value("${cookie.maxAge}")
+	private int cookieMaxage;
 	
 	@Autowired
 	private UserService userService;
@@ -56,15 +61,21 @@ public class RegisterController {
 	}
 	
 	/**
-	 * 用户注册
+	 * 用户注册操作
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doRegister")
 	@ResponseBody
-	public ResultMsg register(User user){
+	public ResultMsg register(HttpServletRequest request,HttpServletResponse response,User user){
 		logger.info("注册开始,用户信息为：{}",user);
 		ResultMsg resultMsg=null;
-		userService.saveUser(user);
+		User saveUser = userService.saveUser(user);
+		String token=UUID.randomUUID().toString();
+		//设置cookie过期时间
+		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
+		saveUser.setPassword(null);
+		String json=JsonUtils.toJson(saveUser);
+		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("用户注册成功");
 		return resultMsg;
 	}

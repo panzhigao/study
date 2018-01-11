@@ -32,7 +32,7 @@
     <ul class="layui-nav fly-nav-user">
       <!-- 未登入的状态 -->
       <li class="layui-nav-item">
-        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+        <a class="iconfont icon-touxiang layui-hide-xs" href=""></a>
       </li>
       <li class="layui-nav-item">
         <a href="$!{rc.contextPath}/login">登入</a>
@@ -54,13 +54,13 @@
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title">
-        <li><a href="login.html">登入</a></li>
+        <li><a href="$!{rc.contextPath}/login">登入</a></li>
         <li class="layui-this">注册</li>
       </ul>
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
-            <form method="post" action="doRegister">
+            <form method="post" action="$!{rc.contextPath}/doRegister">
               <div class="layui-form-item">
                 <label for="L_email" class="layui-form-label">邮箱</label>
                 <div class="layui-input-inline">
@@ -103,7 +103,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-filter="*" lay-submit lay-filter="formDemo">立即注册</button>
+                <button class="layui-btn" lay-submit lay-filter="save">立即注册</button>
               </div>
               <div class="layui-form-item fly-form-app">
                 <span>或者直接使用社交账号快捷注册</span>
@@ -129,6 +129,7 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -144,7 +145,9 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
-layui.use('form', function(){
+
+layui.use(['jquery', 'form'], function(){
+	  var $ = layui.$ ;
 	  var form = layui.form;
 	  form.verify({
 		  username: function(value, item){ //value：表单的值、item：表单的DOM对象
@@ -158,15 +161,38 @@ layui.use('form', function(){
 		      return '用户名不能全为数字';
 		    }
 		  }
-		  
 		  //我们既支持上述函数式的方式，也支持下述数组的形式
 		  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
 		  ,pass: [
 		    /^[\S]{6,12}$/
 		    ,'密码必须6到12位，且不能出现空格'
 		  ] 
-		});      
-	});
+		});   
+		form.on('submit(save)', function(data){
+			params = data.field;
+			submit($,params);
+			return false;
+		});
+});
+
+//提交
+function submit($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/doRegister",
+			type:"post",
+			data:params,
+			success:function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg);
+					setTimeout(function(){
+						location.href='$!{rc.contextPath}/user/home';
+					},1000);
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+		});
+}	
 </script>
 </body>
 </html>

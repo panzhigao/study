@@ -13,7 +13,7 @@ public interface UserService {
 	 * 保存用户信息
 	 * @param user
 	 */
-	public void saveUser(User user);
+	public User saveUser(User user);
 	/**
 	 * 根据用户名查找唯一用户信息
 	 * @param username
