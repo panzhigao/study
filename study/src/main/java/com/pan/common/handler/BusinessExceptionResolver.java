@@ -44,6 +44,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		if(isAjax(request)){
 			 try {  
 				 response.setCharacterEncoding("UTF-8");
+				 response.setContentType("application/json; charset=utf-8");  
                  PrintWriter writer = response.getWriter(); 
                  ResultMsg resultMsg=ResultMsg.fail(ex.getMessage());
                  writer.write(JsonUtils.toJson(resultMsg));
