@@ -9,6 +9,15 @@
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+  <link href="$!{rc.contextPath}/static/css/cropper.min.css" rel="stylesheet">
+  <link href="$!{rc.contextPath}/static/css/sitelogo.css" rel="stylesheet">
+  <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/cropper.js"></script>
+  <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
+  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 
@@ -102,24 +111,15 @@
             <div class="layui-form-item">
               <div class="avatar-add">
                 <p>建议尺寸168*168，支持jpg、png、gif，最大不能超过500KB</p>
-                <button type="button" class="layui-btn upload-img">
-                  <i class="layui-icon">&#xe67c;</i>上传头像
-                </button>
-                <img src="$!{user.userPortrait}">
+                <img  src="$!{user.userPortrait}" id="userImg" data-toggle="modal" data-target="#avatar-modal">
+                <input type="hidden" name="userPortrait" id="userPortrait" value="$!{user.userPortrait}">
                 <span class="loading"></span>
               </div>
             </div>
             <div class="layui-form-item">
-              <label for="L_email" class="layui-form-label">邮箱</label>
+              <label for="L_nickname" class="layui-form-label">昵称</label>
               <div class="layui-input-inline">
-                <input type="text" id="L_email" name="email" required lay-verify="email" autocomplete="off" value="" class="layui-input">
-              </div>
-              <div class="layui-form-mid layui-word-aux">如果您在邮箱已激活的情况下，变更了邮箱，需<a href="activate.html" style="font-size: 12px; color: #4f99cf;">重新验证邮箱</a>。</div>
-            </div>
-            <div class="layui-form-item">
-              <label for="L_username" class="layui-form-label">昵称</label>
-              <div class="layui-input-inline">
-                <input type="text" id="L_username" name="username" required lay-verify="required" autocomplete="off" value="" class="layui-input">
+                <input type="text" id="L_nickname" name="nickname" placeholder="请输入昵称" required lay-verify="nickname" autocomplete="off" value="$!{user.nickname}" class="layui-input">
               </div>
               <div class="layui-inline">
                 <div class="layui-input-inline">
@@ -129,19 +129,19 @@
               </div>
             </div>
             <div class="layui-form-item">
-              <label for="L_city" class="layui-form-label">城市</label>
+              <label for="L_telephone" class="layui-form-label">手机号</label>
               <div class="layui-input-inline">
-                <input type="text" id="L_city" name="city" autocomplete="off" value="" class="layui-input">
+                <input type="text" id="L_telephone" name="telephone" value="$!{user.telephone}" placeholder="请输入手机号" required lay-verify="phone" autocomplete="off" value="" class="layui-input">
               </div>
             </div>
             <div class="layui-form-item layui-form-text">
-              <label for="L_sign" class="layui-form-label">签名</label>
+              <label for="L_userBbrief" class="layui-form-label">用户简介</label>
               <div class="layui-input-block">
-                <textarea placeholder="随便写些什么刷下存在感" id="L_sign"  name="sign" autocomplete="off" class="layui-textarea" style="height: 80px;"></textarea>
+                <textarea placeholder="随便写些什么刷下存在感" id="L_userBbrief"   name="userBbrief" autocomplete="off" class="layui-textarea" style="height: 80px;">$!{userExtension.userBrief}</textarea>
               </div>
             </div>
             <div class="layui-form-item">
-              <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+              <button class="layui-btn" key="set-mine" lay-filter="confirmSet" lay-submit>确认修改</button>
             </div>
           </div>
               
@@ -167,7 +167,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+                <button class="layui-btn" key="set-mine" lay-filter="reset" lay-submit>确认修改</button>
               </div>
             </form>
           </div>
@@ -199,6 +199,68 @@
   </div>
 </div>
 
+<div style="margin-top:40px;" class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1" >
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<form class="avatar-form">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" type="button">&times;</button>
+						<h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
+					</div>
+					<div class="modal-body">
+						<div class="avatar-body">
+							<div class="avatar-upload">
+								<input class="avatar-src" name="avatar_src" type="hidden">
+								<input class="avatar-data" name="avatar_data" type="hidden">
+								<label for="avatarInput" style="line-height: 35px;">图片上传</label>
+								<button class="btn btn-danger"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
+								<span id="avatar-name"></span>
+								<input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file"></div>
+							<div class="row">
+								<div class="col-md-9">
+									<div class="avatar-wrapper"></div>
+								</div>
+								<div class="col-md-3">
+									<div class="avatar-preview preview-lg" id="imageHead"></div>
+								</div>
+							</div>
+							<div class="row avatar-btns">
+								<div class="col-md-4">
+									<div class="btn-group">
+										<button class="btn btn-danger fa fa-undo" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"> 向左旋转</button>
+									</div>
+									<div class="btn-group">
+										<button class="btn  btn-danger fa fa-repeat" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"> 向右旋转</button>
+									</div>
+								</div>
+								<div class="col-md-5" style="text-align: right;">								
+									<button class="btn btn-danger fa fa-arrows" data-method="setDragMode" data-option="move" type="button" title="移动">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn-danger fa fa-search-plus" data-method="zoom" data-option="0.1" title="放大图片">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, 0.1)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn-danger fa fa-search-minus" data-method="zoom" data-option="-0.1" title="缩小图片">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, -0.1)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn-danger fa fa-refresh" data-method="reset" title="重置图片">
+							            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;reset&quot;)" aria-describedby="tooltip866214">
+							       </button>
+						        </div>
+								<div class="col-md-3">
+									<button class="btn btn-danger btn-block avatar-save fa fa-save" type="button" data-dismiss="modal"> 保存修改</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
+	
 <div class="fly-footer">
   <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
   <p>
@@ -224,7 +286,60 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
-</script>
 
+$(".avatar-save").on("click", function() {
+	var img_lg = document.getElementById('imageHead');
+	// 截图小的显示框内的内容
+	html2canvas(img_lg, {
+		allowTaint: true,
+		taintTest: false,
+		onrendered: function(canvas) {
+			canvas.id = "mycanvas";
+			//生成base64图片数据
+			var dataUrl = canvas.toDataURL("image/jpeg");
+			var newImg = document.createElement("img");
+			newImg.src = dataUrl;
+			$("#userImg").attr('src',dataUrl);
+			$("#userPortrait").val(dataUrl); 
+		}
+	});
+})
+
+layui.use(['jquery', 'form'], function(){
+	  var $ = layui.$ ;
+	  var form = layui.form;
+	  form.verify({
+		  nickname: function(value, item){ //value：表单的值、item：表单的DOM对象
+		    if(!new RegExp("^[\\u4e00-\\u9fff\\w]{2,10}$").test(value)){
+		      return '昵称只能包含2-10位字母，数字，中文和下划线';
+		    }
+		  }
+		});   
+		form.on('submit(confirmSet)', function(data){
+			params = data.field;
+			submit($,params);
+			return false;
+		});
+});
+
+//提交
+function submit($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/doSet",
+			type:"post",
+			data:params,
+			success:function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg);
+					setTimeout(function(){
+						location.href='$!{rc.contextPath}/user/home';
+					},1000);
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+	});
+}	
+</script>
 </body>
 </html>

@@ -45,9 +45,9 @@ public class User extends BaseEntity{
 	/**
 	 * 昵称
 	 */
-	@NotEmpty(message="昵称不能为空",groups={RegisterGroup.class})
-	@Size(max=10,min=2,message="昵称长度必须在2-10之间",groups={RegisterGroup.class})
-	@Pattern(regexp="^[\\u4e00-\\u9fff\\w]{2,10}$",message="昵称只能包含字母，数字，点和下划线",groups={RegisterGroup.class})
+	@NotEmpty(message="昵称不能为空",groups={RegisterGroup.class,UserEditGroup.class})
+	@Size(max=10,min=2,message="昵称长度必须在2-10之间",groups={RegisterGroup.class,UserEditGroup.class})
+	@Pattern(regexp="^[\\u4e00-\\u9fff\\w]{2,10}$",message="昵称只能包含2-10位字母，数字，中文和下划线",groups={RegisterGroup.class,UserEditGroup.class})
 	private String nickname;
 	/**
 	 * 用户密码
