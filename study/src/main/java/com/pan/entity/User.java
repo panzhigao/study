@@ -4,9 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.UserEditGroup;
@@ -35,6 +33,10 @@ public class User extends BaseEntity{
 	 * 用户id
 	 */
 	private String userId;
+	/**
+	 * 用户性别
+	 */
+	private String sex;
 	/**
 	 * 用户名
 	 */
@@ -127,13 +129,20 @@ public class User extends BaseEntity{
 	public void setUserPortrait(String userPortrait) {
 		this.userPortrait = userPortrait;
 	}
+	
+	public String getSet() {
+		return sex;
+	}
+	public void setSet(String sex) {
+		this.sex = sex;
+	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", username=" + username
-				+ ", nickname=" + nickname + ", password=" + password
-				+ ", lastLoginTime=" + lastLoginTime + ", status=" + status
-				+ ", telephone=" + telephone + ", userPortrait=" + userPortrait
-				+ ", getId()=" + getId() + ", getCreateTime()="
+		return "User [userId=" + userId + ", sex=" + sex + ", username="
+				+ username + ", nickname=" + nickname + ", password="
+				+ password + ", lastLoginTime=" + lastLoginTime + ", status="
+				+ status + ", telephone=" + telephone + ", userPortrait="
+				+ userPortrait + ", getId()=" + getId() + ", getCreateTime()="
 				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
 				+ "]";
 	}

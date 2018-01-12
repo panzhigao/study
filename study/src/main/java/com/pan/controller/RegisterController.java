@@ -49,10 +49,6 @@ public class RegisterController {
 	@RequestMapping(method=RequestMethod.GET,value="/register")
 	public ModelAndView toRegisterPage(HttpServletRequest request,HttpServletResponse response){
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
-		if(cookieValue==null){
-			cookieValue=UUID.randomUUID().toString();
-			CookieUtils.setCookie(request, response, MyConstant.SESSION_ID, cookieValue);
-		}
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
 		ModelAndView mav=new ModelAndView("html/user/reg");

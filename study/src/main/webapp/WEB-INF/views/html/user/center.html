@@ -39,9 +39,9 @@
           <img src="$!{user.userPortrait}">
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="../user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="" style="text-align: center;">退出</a></dd>
         </dl>
@@ -53,25 +53,25 @@
 <div class="layui-container fly-marginTop fly-user-main">
   <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
     <li class="layui-nav-item">
-      <a href="home.html">
+      <a href="$!{rc.contextPath}/user/home">
         <i class="layui-icon">&#xe609;</i>
         我的主页
       </a>
     </li>
     <li class="layui-nav-item layui-this">
-      <a href="index.html">
+      <a href="$!{rc.contextPath}/user/center">
         <i class="layui-icon">&#xe612;</i>
         用户中心
       </a>
     </li>
     <li class="layui-nav-item">
-      <a href="set.html">
+      <a href="$!{rc.contextPath}/user/set">
         <i class="layui-icon">&#xe620;</i>
         基本设置
       </a>
     </li>
     <li class="layui-nav-item">
-      <a href="message.html">
+      <a href="$!{rc.contextPath}/user/message">
         <i class="layui-icon">&#xe611;</i>
         我的消息
       </a>
@@ -146,7 +146,7 @@
   </p>
 </div>
 
-<script src="../../res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -163,6 +163,5 @@ layui.config({
   fly: 'index'
 }).use('fly');
 </script>
-
 </body>
 </html>

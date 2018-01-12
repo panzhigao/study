@@ -27,6 +27,10 @@
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors> 
+	   <mvc:interceptor>
+	   	 <mvc:mapping path="/**" />
+	   	 <bean class="com.pan.interceptor.SessionInterceptor"></bean> 
+	   </mvc:interceptor>
 	   <mvc:interceptor> 
 	     <mvc:mapping path="/**" />
 	     <mvc:exclude-mapping path="/"/>

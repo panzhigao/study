@@ -1,8 +1,10 @@
 package com.pan.controller;
 
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
@@ -43,14 +46,10 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="login")
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
-		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
-		if(cookieValue==null){
-			cookieValue=UUID.randomUUID().toString();
-			CookieUtils.setCookie(request, response, MyConstant.SESSION_ID, cookieValue);
-		}
-		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
 		ModelAndView mav=new ModelAndView("html/user/login");
+		String vercode=VerifyCodeUtils.generateVerifyCode(4);
+		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
+		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
 		mav.addObject("vercode", vercode);
 		return mav;
 	}
