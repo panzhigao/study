@@ -1,7 +1,11 @@
 package com.pan.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,13 +15,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
+import com.pan.dto.PasswordDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.PasswordUtils;
+import com.pan.util.ValidationUtils;
 
 
 /**
@@ -65,5 +73,27 @@ public class UserSetController {
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
 		return resultMsg;
+	}
+	
+	/**
+	 * 修改用户密码
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/resetPassword")
+	@ResponseBody
+	public ResultMsg resetPassword(HttpServletRequest request,PasswordDTO passwordDTO) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+		ValidationUtils.validateEntity(passwordDTO);
+		if(!StringUtils.equals(passwordDTO.getNowPassword(), passwordDTO.getRePassword())){
+			throw new BusinessException("确认密码与密码不一致");
+		}
+		String userId=CookieUtils.getLoingUserId(request);
+		User userInDb = userService.findByUserid(userId);
+		boolean flag=PasswordUtils.validPassword(passwordDTO.getNowPassword(),userInDb.getPassword());
+		if(!flag){
+			throw new BusinessException("密码输入错误");
+		}
+		return ResultMsg.ok("密码修改成功");
 	}
 }

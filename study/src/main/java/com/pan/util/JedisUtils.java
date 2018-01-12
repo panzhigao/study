@@ -103,4 +103,34 @@ public class JedisUtils {
 		jedis.close();
 		return result;
 	} 
+	
+	public static Long sadd(String key, String... members) {
+		Jedis jedis = null;
+		Long res = null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.sadd(key, members);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	public static Long scard(String key) {
+		Jedis jedis = null;
+		Long res = null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.scard(key);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
 }

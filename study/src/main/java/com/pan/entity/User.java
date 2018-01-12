@@ -55,7 +55,7 @@ public class User extends BaseEntity{
 	 * 用户密码
 	 */
 	@NotEmpty(message="密码不能为空",groups={LoginGroup.class,RegisterGroup.class})
-	@Size(max=16,min=6,message="密码长度必须在6-15之间",groups={RegisterGroup.class})
+	@Size(max=12,min=6,message="密码长度必须在6-12之间",groups={RegisterGroup.class})
 	@Pattern(regexp="^[a-zA-Z0-9_\\.\\-]+$",message="密码只能包含字母，数字，点和下划线",groups={RegisterGroup.class})
 	private String password;
 
@@ -129,11 +129,10 @@ public class User extends BaseEntity{
 	public void setUserPortrait(String userPortrait) {
 		this.userPortrait = userPortrait;
 	}
-	
-	public String getSet() {
+	public String getSex() {
 		return sex;
 	}
-	public void setSet(String sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 	@Override

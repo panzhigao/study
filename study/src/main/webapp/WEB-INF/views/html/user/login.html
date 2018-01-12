@@ -88,7 +88,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-submit lay-filter="formDemo">立即登录</button>
+                <button class="layui-btn" lay-submit lay-filter="login">立即登录</button>
                 <span style="padding-left:20px;">
                   <a href="forget.html">忘记密码？</a>
                 </span>
@@ -131,15 +131,55 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
-/* layui.use('form', function(){
-	  var form = layui.form;
-	  //监听提交
-	  form.on('submit(formDemo)', function(data){
-		  alert(123);
-	    layer.msg(JSON.stringify(data.field));
-	    return false;
+
+layui.use(['jquery', 'form'], function(){
+	  var $ = layui.$ ;
+	  var form = layui.form;  
+	  form.verify({
+		  username: function(value, item){ //value：表单的值、item：表单的DOM对象
+		    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+		      return '用户名不能有特殊字符';
+		    }
+		    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+		      return '用户名首尾不能出现下划线\'_\'';
+		    }
+		    if(/^\d+\d+\d$/.test(value)){
+		      return '用户名不能全为数字';
+		    }
+		  }
+		  //我们既支持上述函数式的方式，也支持下述数组的形式
+		  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+		  ,pass: [
+		    /^[\S]{6,12}$/
+		    ,'密码必须6到12位，且不能出现空格'
+		  ] 
+		}); 
+	  form.on('submit(login)', function(data){
+			params = data.field;
+			login($,params);
+			return false;
 	  });
-	}); */
+});
+
+//提交
+function login($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/doLogin",
+			type:"post",
+			data:params,
+			success:function(data){
+				alert(data);
+				if(data.code=='200'){
+					layer.msg(data.msg);
+					setTimeout(function(){
+						location.href='$!{rc.contextPath}/user/home';
+					},1000);
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+	});
+}	
 </script>
 </body>
 </html>

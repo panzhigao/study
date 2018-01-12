@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
@@ -59,7 +61,8 @@ public class LoginController{
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
-	public String doLogin(HttpServletRequest request,HttpServletResponse response,User user){
+	@ResponseBody
+	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user){
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		User userInDb = userService.checkLogin(user);
@@ -69,7 +72,7 @@ public class LoginController{
 		userInDb.setPassword(null);
 		String json=JsonUtils.toJson(userInDb);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-		return "redirect:/user/home";
+		return ResultMsg.ok("用户注册成功");
 	}
 	
 	/**

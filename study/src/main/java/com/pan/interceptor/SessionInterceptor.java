@@ -27,9 +27,11 @@ public class SessionInterceptor implements HandlerInterceptor{
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		User loginUser = CookieUtils.getLoginUser(request);
-		if(loginUser!=null){			
-			modelAndView.addObject("user",loginUser);
+		if(modelAndView!=null){
+			User loginUser = CookieUtils.getLoginUser(request);
+			if(loginUser!=null){			
+				modelAndView.addObject("user",loginUser);
+			}
 		}
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
 		if(cookieValue==null){
