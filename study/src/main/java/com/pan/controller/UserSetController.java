@@ -85,7 +85,7 @@ public class UserSetController {
 	@ResponseBody
 	public ResultMsg resetPassword(HttpServletRequest request,PasswordDTO passwordDTO) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		ValidationUtils.validateEntity(passwordDTO);
-		if(!StringUtils.equals(passwordDTO.getNowPassword(), passwordDTO.getRePassword())){
+		if(!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())){
 			throw new BusinessException("确认密码与密码不一致");
 		}
 		String userId=CookieUtils.getLoingUserId(request);

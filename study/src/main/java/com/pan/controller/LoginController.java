@@ -48,6 +48,10 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="login")
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
+		if(CookieUtils.getLoginUser(request)!=null){
+			 ModelAndView mv = new ModelAndView("redirect:/user/home");
+			 return mv;
+		}
 		ModelAndView mav=new ModelAndView("html/user/login");
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
@@ -72,7 +76,7 @@ public class LoginController{
 		userInDb.setPassword(null);
 		String json=JsonUtils.toJson(userInDb);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-		return ResultMsg.ok("用户注册成功");
+		return ResultMsg.ok("用户登陆成功");
 	}
 	
 	/**

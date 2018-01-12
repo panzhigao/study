@@ -55,8 +55,7 @@
   <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
   <h1>
     ${user.nickname}
-    <i class="iconfont icon-nan"></i>
-    <!-- <i class="iconfont icon-nv"></i>  -->
+    <i class="iconfont #if($user.sex==0) icon-nan #else icon-nv #end"></i>
     <i class="layui-badge fly-badge-vip">VIP3</i>
     <!--
     <span style="color:#c00;">（管理员）</span>

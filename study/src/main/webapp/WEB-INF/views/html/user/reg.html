@@ -62,17 +62,12 @@
           <div class="layui-form layui-form-pane">
             <form method="post" action="$!{rc.contextPath}/doRegister">
               <div class="layui-form-item">
-                <label for="L_email" class="layui-form-label">邮箱</label>
-                <div class="layui-input-inline">
-                  <input type="text" id="L_email" name="email" required lay-verify="email" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">将会成为您唯一的登入名</div>
-              </div>
-              <div class="layui-form-item">
                 <label for="L_username" class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_username" name="username" required lay-verify="username" autocomplete="off" class="layui-input">
+                  <input type="text" onchange="checkUnique()" id="L_username" name="username" required lay-verify="username" autocomplete="off" class="layui-input">
                 </div>
+                <div class="layui-form-mid layui-word-aux">将会成为您唯一的登入名</div>
+                <span class="layui-form-mid " style="color:red;" id="msg"></span>
               </div>
               <div class="layui-form-item">
                 <label for="L_"nickname"" class="layui-form-label">昵称</label>
@@ -94,7 +89,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <label for="L_vercode" class="layui-form-label">人类验证</label>
+                <label for="L_vercode" class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
                   <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
                 </div>
@@ -129,6 +124,7 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -192,6 +188,24 @@ function submit($,params){
 			}
 	});
 }	
+
+function checkUnique(){
+	var username=$('#L_username').val()
+	if(username||username.size>=5||username.size<=15){
+		$.ajax({
+			url:"$!{rc.contextPath}/checkUnique",
+			data:{username:username},
+			type:'post',
+			success:function(data){
+				if(!data.valid){
+					$('#msg').html('改用户名已被占用，请换一个');
+				}else{
+					$('#msg').html('恭喜，改用户名可以使用');
+				}
+			}
+		});
+	}
+}
 </script>
 </body>
 </html>

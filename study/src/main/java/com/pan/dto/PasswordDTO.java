@@ -15,8 +15,8 @@ public class PasswordDTO {
 	 * 新密码
 	 */
 	@NotEmpty(message="新密码不能为空")
-	@Size(max=12,min=6,message="密码长度必须在6-12之间")
-	@Pattern(regexp="^[a-zA-Z0-9_\\-]+$",message="密码只能包含字母，数字，下划线")
+	@Size(max=12,min=6,message="新密码长度必须在6-12之间")
+	@Pattern(regexp="^[\\S]{6,12}$",message="新密码必须6到12位，且不能出现空格")
 	private String newPassword;
 	/**
 	 * 确认密码
