@@ -2,6 +2,10 @@ package com.pan.entity;
 
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+
+
 /**
  * 文章实体类
  * @author Administrator
@@ -47,10 +51,13 @@ public class Article extends BaseEntity{
 	/**
 	 * 文章标题
 	 */
+	@NotEmpty(message="文章标题不能为空")
+	@Size(max=30,min=5,message="文章标题长度必须在5-30之间")
 	private String title;
 	/**
 	 * 文章内容
 	 */
+	@NotEmpty(message="文章内容不能为空")
 	private String content;
 	/**
 	 * 文章概要

@@ -162,7 +162,6 @@ function login($,params){
 			type:"post",
 			data:params,
 			success:function(data){
-				alert(data);
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){

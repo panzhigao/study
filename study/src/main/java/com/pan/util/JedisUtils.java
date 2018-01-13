@@ -1,7 +1,11 @@
 package com.pan.util;
 
+
+import org.apache.commons.lang3.StringUtils;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * 
@@ -22,6 +26,24 @@ public class JedisUtils {
 
 	public void setJedisPool(JedisPool jedisPool) {
 		JedisUtils.jedisPool = jedisPool;
+		Jedis jedis=null;
+        try {
+        	jedis = getJedisPool().getResource();
+        } catch (JedisConnectionException e) {
+        	String message = StringUtils.trim(e.getMessage());
+        	if("Could not get a resource from the pool".equalsIgnoreCase(message)){
+        		System.out.println("++++++++++reids服务启动失败++++++++");
+        		System.out.println("++++++++++请检查你的redis服务++++++++");
+        		System.exit(0);//停止项目
+        	}
+        	throw new JedisConnectionException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally{
+        	if(jedis!=null){
+        		jedis.close();
+        	}
+        }
 	}
 
 	public static String getString(String key){

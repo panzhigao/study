@@ -48,9 +48,9 @@ public class ArticleController {
 	 * 跳转发文页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article")
+	@RequestMapping(method=RequestMethod.GET,value="/user/articleAdd")
 	public ModelAndView writeArticle(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/articleAdd");
+		ModelAndView mav=new ModelAndView("html/jie/add");
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
 		return mav;

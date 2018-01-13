@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.ValidationUtils;
 
 /**
  * 
@@ -49,22 +52,24 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param article
 	 */
 	private void checkArticle(Article article) {
-		if (StringUtils.isBlank(article.getUserId())) {
-			logger.error("用户信息有误");
-			throw new BusinessException("用户信息有误,请重新登陆");
-		}
-		if (StringUtils.isBlank(article.getTitle())) {
-			logger.error("文章标题不能为空");
-			throw new BusinessException("文章标题不能为空");
-		}
-		if (StringUtils.isBlank(article.getContent())) {
-			logger.error("文章内容不能为空");
-			throw new BusinessException("文章内容不能为空");
-		}
-		if (StringUtils.isBlank(article.getOutline())) {
-			logger.error("文章概要不能为空");
-			throw new BusinessException("文章内容不能为空");
-		}
+		//TODO 待清理
+		ValidationUtils.validateEntity(article);
+//		if (StringUtils.isBlank(article.getUserId())) {
+//			logger.error("用户信息有误");
+//			throw new BusinessException("用户信息有误,请重新登陆");
+//		}
+//		if (StringUtils.isBlank(article.getTitle())) {
+//			logger.error("文章标题不能为空");
+//			throw new BusinessException("文章标题不能为空");
+//		}
+//		if (StringUtils.isBlank(article.getContent())) {
+//			logger.error("文章内容不能为空");
+//			throw new BusinessException("文章内容不能为空");
+//		}
+//		if (StringUtils.isBlank(article.getOutline())) {
+//			logger.error("文章概要不能为空");
+//			throw new BusinessException("文章内容不能为空");
+//		}
 		if(!checkOpearteStatus(article.getStatus())){
 			logger.error("html页面被修改,方法参数错误");
 			throw new BusinessException("文章状态有误,请刷新页面");
