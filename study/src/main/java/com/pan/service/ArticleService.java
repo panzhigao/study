@@ -28,7 +28,7 @@ public interface ArticleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public List<Article> findByParams(Map<String,Object> params);
+	public Map<String,Object> findByParams(Map<String,Object> params);
 	/**
 	 * 获取用户的文章详细信息
 	 * @param userId

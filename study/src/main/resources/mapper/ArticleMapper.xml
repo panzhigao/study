@@ -62,6 +62,22 @@
   	</if>
   </select>
   
+    <select id="getCountByParams" resultType="int">
+	  	select count(0) from t_article 
+	  	<where>
+	  		<if test="articleId !=null and articleId!='' ">
+	  			and article_id=#{articleId}
+	  		</if>
+	  		<if test="status !=null and status !=''">
+	  			and status=#{status}
+	  		</if>
+	  		<if test="userId !=null and userId!=''">
+	  			and user_id=#{userId}
+	  		</if>
+	  	</where>
+    </select>
+  
+  
   <select id="findListByUserId" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId} order by create_time desc
   </select>

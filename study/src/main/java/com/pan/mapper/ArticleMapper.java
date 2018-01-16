@@ -35,6 +35,12 @@ public interface ArticleMapper {
 	 */
 	public List<Article> findByParams(Map<String,Object> params);
 	/**
+	 * 查询文章详细,支持分页
+	 * @param params
+	 * @return
+	 */
+	public int getCountByParams(Map<String,Object> params);
+	/**
 	 * 更新文章
 	 * @param article
 	 */

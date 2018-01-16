@@ -111,7 +111,7 @@
             <div class="layui-form-item">
               <div class="avatar-add">
                 <p>建议尺寸168*168，支持jpg、png、gif，最大不能超过500KB</p>
-                <img  src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end"" id="userImg" data-toggle="modal" data-target="#avatar-modal">
+                <img  src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end" title="点击更换头像" id="userImg" data-toggle="modal" data-target="#avatar-modal">
                 <input type="hidden" name="userPortrait" id="userPortrait" value="$!{user.userPortrait}">
                 <span class="loading"></span>
               </div>

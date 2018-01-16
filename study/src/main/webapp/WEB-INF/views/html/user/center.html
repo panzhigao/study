@@ -19,7 +19,7 @@
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item layui-this">
-        <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
       </li>
       <li class="layui-nav-item">
         <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
@@ -101,29 +101,7 @@
         <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
-        <div class="layui-tab-item layui-show">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>2017/3/14 上午8:30:00</i>
-              <a class="mine-edit" href="/jie/edit/8116">编辑</a>
-              <em>661阅/10答</em>
-            </li>
-          </ul>
-          <div id="LAY_page"></div>
-        </div>
+      	<table id="myArticles" lay-filter="test"></table>
         <div class="layui-tab-item">
           <ul class="mine-view jie-row">
             <li>
@@ -162,6 +140,48 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+
+//table
+layui.use('table', function(){
+	  var table = layui.table;
+	  //第一个实例
+	  table.render({
+	    //method: 'post',  
+	    elem: '#myArticles',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/get_articles', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left',templet:function(d){;return '<span>22</span>'}},
+	      {field: 'title', title: '文章标题', width:500},
+	      {field: 'status', title: '状态', width:100, sort: true,templet:
+	    	  function(d){
+	    	  	switch(d.status){
+		    	  	case '0':temp='审核未通过';break;
+		    	  	case '1':temp='草稿';break;
+		    	  	case '2':temp='审核中';break;
+		    	  	case '3':temp='发布成功';break;
+		    	  	default:temp="无状态";
+	    	  	}
+	    	  	return temp;
+	      	  }
+	       },
+	      {field: 'createTime', title: '创建时间', width:150, sort: true}
+	    ]]
+	  });
+});
+
 </script>
 </body>
 </html>

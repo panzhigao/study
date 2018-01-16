@@ -2,6 +2,7 @@ package com.pan.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,20 +97,26 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleMapper.findListByUserId(userId);
 	}
 
-	public List<Article> findByParams(Map<String, Object> params) {
+	public Map<String,Object> findByParams(Map<String, Object> params) {
+		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
 			String userId=(String) params.get("userId");
 			if(StringUtils.isBlank(userId)){
 				logger.info("用户id有误",userId);
-				return list;
+				return pageData;
 			}
 			list = articleMapper.findByParams(params);
+			pageData.put("data", list);
+			int total=articleMapper.getCountByParams(params);
+			pageData.put("total", total);
+			pageData.put("code", "200");
+			pageData.put("msg", "");
 		} catch (Exception e) {
 			logger.error("分页查询文章异常", e);
 		}
-		return list;
+		return pageData;
 	}
 
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
