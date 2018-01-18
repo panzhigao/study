@@ -155,4 +155,68 @@ public class JedisUtils {
 		}
 		return res;
 	}
+	
+	/**
+	 * 设置key的值,并返回一个旧值
+	 * 
+	 * @param key
+	 * @param value
+	 * @return 旧值 如果key不存在 则返回null
+	 */
+	public static String getset(String key, String value) {
+		Jedis jedis = null;
+		String res = null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.getSet(key, value);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	/**
+	 * 设置key value,如果key已经存在则返回0,nx==> not exist
+	 * 
+	 * @param key
+	 * @param value
+	 * @return 成功返回1 如果存在 和 发生异常 返回 0
+	 */
+	public static Long setnx(String key, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.setnx(key, value);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			return 0L;
+		} finally {
+			jedis.close();
+		}
+	}
+	
+	/**
+	 * 删除指定的key,也可以传入一个包含key的数组
+	 * 
+	 * @param keys
+	 *            一个key 也可以使 string 数组
+	 * @return 返回删除成功的个数
+	 */
+	public static Long delete(String... keys) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.del(keys);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			return 0L;
+		} finally {
+			jedis.close();
+		}
+	}
 }

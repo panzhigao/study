@@ -165,7 +165,9 @@ layui.use('table', function(){
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:500},
+	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	    	  return "<a href='$!{rc.contextPath}/user/article/detail/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
 	      {field: 'status', title: '状态', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.status){

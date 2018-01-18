@@ -115,7 +115,7 @@ public class ArticleController {
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		mav.addObject("article", article);
 		if(OPERATE_DETAIL.equals(opeate)){
-			mav.setViewName("content/articleDetail");
+			mav.setViewName("html/jie/detail");
 		}else if(OPERATE_EDIT.equals(opeate)){
 			if(article==null){
 				throw new BusinessException("文章已不存在");
