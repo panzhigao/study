@@ -45,7 +45,11 @@ public class JedisUtils {
         	}
         }
 	}
-
+	
+	public static Jedis getJedis(){
+		return jedisPool.getResource();
+	}
+	
 	public static String getString(String key){
 		Jedis jedis = jedisPool.getResource();
 		String string = jedis.get(key);

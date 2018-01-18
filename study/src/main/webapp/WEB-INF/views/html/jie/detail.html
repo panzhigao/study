@@ -52,10 +52,10 @@
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">贤心</cite>
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -141,7 +141,7 @@
           </div>
           <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
-            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="add.html">编辑此贴</a></span>
+            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
           </div>
         </div>
         <div class="detail-body photos">

@@ -120,7 +120,7 @@ public class ArticleController {
 			if(article==null){
 				throw new BusinessException("文章已不存在");
 			}
-			mav.setViewName("content/articleEdit");
+			mav.setViewName("html/jie/edit");
 		}
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
