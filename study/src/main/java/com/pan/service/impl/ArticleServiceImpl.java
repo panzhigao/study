@@ -120,10 +120,15 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
+		//TODO 修改判断
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
 		if(StringUtils.isBlank(userId)||StringUtils.isBlank(articleId)){
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
+		return getUserArticle(userId, articleId);
+	}
+	
+	private Article getUserArticle(String userId,String articleId){
 		Article article=new Article();
 		article.setUserId(userId);
 		article.setArticleId(articleId);
@@ -133,8 +138,6 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return null;
 	}
-	
-
 
 	/**
 	 * 更新文章信息 要校验当前文章是否是当前登录用户下的文章
@@ -172,7 +175,6 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 	}
 
-	@Override
 	public Article getByArticleId(String articleId) {
 		logger.info("查询文章信息,文章id为:{}",articleId);
 		Article article=new Article();
@@ -182,5 +184,21 @@ public class ArticleServiceImpl implements ArticleService {
 			return list.get(0);
 		}
 		return null;
+	}
+
+	public void deleteArticle(String articleId, String userId) {
+		if(StringUtils.isBlank(articleId)){
+			throw new BusinessException("文章id不能为空");
+		}
+		Article article = getUserArticle(userId, articleId);
+		if(article==null){
+			logger.info("根据文章id{}未查询到文章信息",articleId);
+			throw new BusinessException("文章不存在");
+		}
+		int num=this.articleMapper.deleteByUserIdAndArticleId(userId, articleId);
+		if(num!=1){
+			logger.info("删除文章失败");
+			throw new BusinessException("删除文章失败");
+		}
 	}
 }

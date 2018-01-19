@@ -13,7 +13,11 @@ public enum ResultCodeEmun {
 	/**
 	 * 操作失败码
 	 */
-	FAIL("400","操作失败");
+	FAIL("400","操作失败"),
+	/**
+	 * 图片上传成功
+	 */
+	UPLOAD_SUCCESS("0","图片上传成功");
 	
 	private String code;
 	

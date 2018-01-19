@@ -193,8 +193,8 @@ layui.use(['jquery', 'form','layedit'], function(){
 	  var layedit = layui.layedit;
 	  layedit.set({
 		  uploadImage: {
-		    url: '$!{rc.contextPath}/file/upload' //接口url
-		    ,type: 'post' //默认post
+		    url: '$!{rc.contextPath}/file/upload', //接口url
+		    type: 'post' //默认post
 		  }
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器
@@ -256,7 +256,7 @@ function publish($,params,status){
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/user/home';
+						location.href='$!{rc.contextPath}/user/center';
 					},1000);
 				}else{
 					layer.msg(data.msg);

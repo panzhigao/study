@@ -102,7 +102,7 @@
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
 	    <div class="layui-tab-item layui-show">
-	    	<table id="myArticles" lay-filter="test"></table>
+	    	<table id="myArticles" lay-filter="myTable"></table>
 	    </div>
       
       	
@@ -147,8 +147,41 @@ layui.config({
 }).use('fly');
 
 //table
-layui.use('table', function(){
+layui.use(['table','jquery'], function(){
 	  var table = layui.table;
+	  var $ = layui.$ ;
+	  //监听工具条
+	  table.on('tool(myTable)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('真的删除行么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/delete_article",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(){
+	    			alert(123);
+	    			table.reload('myArticles');
+	    		}
+	    	});  
+	        //obj.del();
+	        //layer.close(index);
+	      });
+	    } else if(obj.event === 'edit'){
+	    	 if(data.status==2){
+	    		 layer.alert('审核中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 if(data.status==3){
+	    		 layer.alert('发布中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
+	    }
+	  });
 	  //第一个实例
 	  table.render({
 	    //method: 'post',  
@@ -169,7 +202,7 @@ layui.use('table', function(){
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	      {field: 'title', title: '文章标题', width:400,templet:function(d){
 	    	  return "<a href='$!{rc.contextPath}/user/article/detail/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'status', title: '状态', width:100, sort: true,templet:
@@ -184,8 +217,14 @@ layui.use('table', function(){
 	    	  	return temp;
 	      	  }
 	       },
-	      {field: 'createTime', title: '创建时间', width:210, sort: true,templet:function(d){
+	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>';
+	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+edit+t_delete;
 	      }}
 	    ]]
 	  });

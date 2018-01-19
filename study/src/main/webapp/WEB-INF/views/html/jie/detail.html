@@ -141,7 +141,9 @@
           </div>
           <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
+            #if($article.status==0||$article.status==1)
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
+            #end
           </div>
         </div>
         <div class="detail-body photos">

@@ -3,6 +3,8 @@ package com.pan.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.pan.entity.Article;
 
 /**
@@ -51,4 +53,11 @@ public interface ArticleMapper {
 	 * @return
 	 */
 	public List<Article> findByCondition(Article article);
+	/**
+	 * 删除文章
+	 * @param userId
+	 * @param articleId
+	 * @return
+	 */
+	public int deleteByUserIdAndArticleId(@Param("userId")String userId,@Param("articleId")String articleId);
 }

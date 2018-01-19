@@ -147,4 +147,17 @@ public class ArticleController {
 		}
 		return resultMsg;
 	}
+	
+	/**
+	 * 删除文章
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/delete_article"})
+	@ResponseBody
+	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
+		logger.info("删除的文章id:{}",articleId);
+		String userId=CookieUtils.getLoingUserId(request);
+		articleService.deleteArticle(articleId, userId);
+		return ResultMsg.ok("删除文章成功");
+	}
 }

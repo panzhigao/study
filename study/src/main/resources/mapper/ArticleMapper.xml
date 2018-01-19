@@ -112,4 +112,9 @@
   	</set>
   	where article_id=#{articleId}
   </update>
+  
+  <delete id="deleteByUserIdAndArticleId">
+  	delete from t_article where user_id=#{userId} and article_id=#{articleId}
+  </delete>
+  
 </mapper>

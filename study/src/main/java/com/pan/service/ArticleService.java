@@ -48,4 +48,10 @@ public interface ArticleService {
 	 * @return
 	 */
 	public Article getByArticleId(String articleId);
+	/**
+	 * 删除文章
+	 * @param articleId
+	 * @param userId
+	 */
+	public void deleteArticle(String articleId,String userId);
 }
