@@ -121,7 +121,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
-		if(StringUtils.isAllBlank(userId)||StringUtils.isBlank(articleId)){
+		if(StringUtils.isBlank(userId)||StringUtils.isBlank(articleId)){
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
 		Article article=new Article();
@@ -170,5 +170,17 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.error("修改文章失败", e);
 			throw new BusinessException("修改文章信息失败,请稍后");
 		}
+	}
+
+	@Override
+	public Article getByArticleId(String articleId) {
+		logger.info("查询文章信息,文章id为:{}",articleId);
+		Article article=new Article();
+		article.setArticleId(articleId);
+		List<Article> list = this.articleMapper.findByCondition(article);
+		if (list.size() == 1) {
+			return list.get(0);
+		}
+		return null;
 	}
 }

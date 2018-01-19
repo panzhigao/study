@@ -76,7 +76,7 @@
     <div class="layui-form layui-form-pane">
       <div class="layui-tab layui-tab-brief" lay-filter="user">
         <ul class="layui-tab-title">
-          <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+          <li class="layui-this">编辑帖子<!-- 编辑帖子 --></li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
           <div class="layui-tab-item layui-show">
@@ -99,8 +99,8 @@
                 <div class="layui-col-md9">
                   <label for="L_title" class="layui-form-label">标题</label>
                   <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
-                    <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                    <input type="text" id="L_title" value="$!{article.title}" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="hidden" name="articleId" value="$!{article.articleId}"> 
                   </div>
                 </div>
               </div>
@@ -133,7 +133,7 @@
               </div>
               <div class="layui-form-item layui-form-text">
                 <div class="layui-input-block">
-                  <textarea id="L_content" name="content" required lay-verify="content"  placeholder="详细描述"  style="height: 260px;"></textarea>
+                  <textarea id="L_content" name="content" required lay-verify="content" placeholder="详细描述"  style="height: 260px;">$!{article.content}</textarea>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -161,8 +161,8 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-filter="publish" lay-submit>立即发布</button>
-                <button class="layui-btn" lay-filter="save" lay-submit>保存草稿</button>
+                <button class="layui-btn" lay-filter="editPublish" lay-submit>修改发布</button>
+                <button class="layui-btn" lay-filter="editSave" lay-submit>保存草稿</button>
               </div>
             </form>
           </div>
@@ -226,7 +226,7 @@ layui.use(['jquery', 'form','layedit'], function(){
 		  pass: [
 		    /^[\S]{6,12}$/
 		    ,'密码必须6到12位，且不能出现空格'
-		  ],
+		  ] ,
 		  content:function(){
 			  layedit.sync(index);
 			  var t_content=layedit.getContent(index);
@@ -235,15 +235,13 @@ layui.use(['jquery', 'form','layedit'], function(){
 			  }
 		  }
 		});   
-		form.on('submit(publish)', function(data){
+		form.on('submit(editPublish)', function(data){
 			params = data.field;
-			params = data.field;
-			params.status=1;
+			params.status=2;
 			publish($,params,2);
 			return false;
 		});
-		form.on('submit(save)', function(data){
-			layedit.sync(index);
+		form.on('submit(editSave)', function(data){
 			params = data.field;
 			params.status=1;
 			publish($,params,1);
@@ -251,21 +249,18 @@ layui.use(['jquery', 'form','layedit'], function(){
 		});
 });
 
-layui.use(['jquery', 'form'], function(){
-	  
-});
 
 //提交
 function publish($,params,status){
 		$.ajax({
-			url:"$!{rc.contextPath}/user/save_article",
+			url:"$!{rc.contextPath}/user/edit_article",
 			type:"post",
 			data:params,
 			success:function(data){
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/user/home';
+						location.href='$!{rc.contextPath}/user/article/detail/$!{article.articleId}';
 					},1000);
 				}else{
 					layer.msg(data.msg);
@@ -273,9 +268,6 @@ function publish($,params,status){
 			}
 	});
 }	
-
-
-
 </script>
 </body>
 </html>

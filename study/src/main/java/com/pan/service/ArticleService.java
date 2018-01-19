@@ -41,4 +41,11 @@ public interface ArticleService {
 	 * @param article
 	 */
 	public void updateArticle(Article article);
+	/**
+	 * 获取用户的文章详细信息
+	 * @param userId
+	 * @param articleId
+	 * @return
+	 */
+	public Article getByArticleId(String articleId);
 }
