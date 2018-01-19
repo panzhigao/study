@@ -3,12 +3,17 @@ package com.pan.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.pan.common.constant.MyConstant;
+import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 
 /**
@@ -276,5 +281,22 @@ public final class CookieUtils {
     		userId=loginUser.getUserId();
     	}
     	return userId;
+    }
+    
+    public static void validateVercode(HttpServletRequest request,String vercode){
+    	if(StringUtils.isBlank(vercode)){
+			throw new BusinessException("验证码不能为空");
+		}
+    	String cookieValue = getCookieValue(request, MyConstant.SESSION_ID);
+    	if(cookieValue==null){
+    		throw new BusinessException("验证码失效");
+    	}
+    	String redisVercode = JedisUtils.getString(MyConstant.USER_SESSION+cookieValue);
+    	if(redisVercode==null){
+    		throw new BusinessException("验证码失效");
+    	}
+    	if(!StringUtils.equalsIgnoreCase(vercode, redisVercode)){
+    		throw new BusinessException("验证码输入错误");
+    	}
     }
 }

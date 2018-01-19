@@ -1,5 +1,6 @@
 package com.pan.service;
 
+import javax.servlet.http.HttpServletRequest;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 
@@ -37,7 +38,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	public User checkLogin(User user);
+	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode);
 	/**
 	 * 更新用户登陆时间
 	 * @param userId

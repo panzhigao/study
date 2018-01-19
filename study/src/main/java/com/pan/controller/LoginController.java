@@ -55,6 +55,10 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("html/user/login");
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
+//		if(cookieValue==null){
+//			cookieValue=UUID.randomUUID().toString();
+//			CookieUtils.setCookie(request, response, MyConstant.SESSION_ID, cookieValue);
+//		}
 		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
 		mav.addObject("vercode", vercode);
 		return mav;
@@ -66,10 +70,10 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
-	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user){
+	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user,String vercode){
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
-		User userInDb = userService.checkLogin(user);
+		User userInDb = userService.checkLogin(request,user,vercode);
 		String token=UUID.randomUUID().toString();
 		//设置cookie过期时间
 		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
@@ -99,12 +103,17 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/quit")
 	public String quit(HttpServletRequest request,HttpServletResponse response){
-		String cookieValue = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
-		if(cookieValue!=null){
-			//立即过期redis中的session
-			JedisUtils.expire(MyConstant.USER_SESSION+cookieValue, 0);
+		String token = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
+		String sessionId = CookieUtils.getCookieValue(request,MyConstant.SESSION_ID);
+		if(token!=null){
+			//立即过期redis中的登录状态
+			JedisUtils.expire(MyConstant.USER_LOGINED+token, 0);
 		}
-		CookieUtils.cleanCookies(request, response);
+		if(sessionId!=null){
+			//立即过期redis中的session
+			JedisUtils.expire(MyConstant.USER_SESSION+sessionId, 0);
+		}
+		CookieUtils.deleteCookie(request, response, MyConstant.TOKEN);
 		return "redirect:/login";
 	}
 }

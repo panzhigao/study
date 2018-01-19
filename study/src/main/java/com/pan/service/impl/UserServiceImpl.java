@@ -5,13 +5,12 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.UserEditGroup;
@@ -21,6 +20,7 @@ import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
+import com.pan.util.CookieUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.ValidationUtils;
 
@@ -82,7 +82,8 @@ public class UserServiceImpl implements UserService{
 		return this.userMapper.findByUsername(username);
 	}
 
-	public User checkLogin(User user) {
+	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode) {
+		CookieUtils.validateVercode(httpRequest, vercode);
 		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
 		String username=user.getUsername();
 		User userInDb = findByUsername(username);
