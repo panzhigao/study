@@ -54,4 +54,10 @@ public interface ArticleService {
 	 * @param userId
 	 */
 	public void deleteArticle(String articleId,String userId);
+	/**
+	 * 根据查询条件查询文章条数
+	 * @param params
+	 * @return
+	 */
+	public int getCount(Map<String, Object> params);
 }

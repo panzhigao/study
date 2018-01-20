@@ -102,11 +102,6 @@ public class ArticleServiceImpl implements ArticleService {
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
-			String userId=(String) params.get("userId");
-			if(StringUtils.isBlank(userId)){
-				logger.info("用户id有误",userId);
-				return pageData;
-			}
 			list = articleMapper.findByParams(params);
 			pageData.put("data", list);
 			int total=articleMapper.getCountByParams(params);
@@ -195,10 +190,19 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.info("根据文章id{}未查询到文章信息",articleId);
 			throw new BusinessException("文章不存在");
 		}
+		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+			logger.info("审核中文章不能删除");
+			throw new BusinessException("审核中文章不能删除");
+		}
 		int num=this.articleMapper.deleteByUserIdAndArticleId(userId, articleId);
 		if(num!=1){
 			logger.info("删除文章失败");
 			throw new BusinessException("删除文章失败");
 		}
+	}
+
+	public int getCount(Map<String, Object> params) {
+		logger.info("查询文章条数条件：{}",JsonUtils.toJson(params));
+		return articleMapper.getCountByParams(params);
 	}
 }

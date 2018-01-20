@@ -90,7 +90,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/get_articles")
 	@ResponseBody
-	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
+	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
 		String loingUserId = CookieUtils.getLoingUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
@@ -159,5 +159,43 @@ public class ArticleController {
 		String userId=CookieUtils.getLoingUserId(request);
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
+	}
+	
+	/**
+	 * 跳转文章主页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/all")
+	public ModelAndView toArticleIndex(){
+		ModelAndView mav=new ModelAndView("html/jie/index");
+		return mav;
+	}
+	
+	/**
+	 * 加载文章列数据，分页查询
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
+	@ResponseBody
+	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		Integer offset=(pageNo-1)*pageSize;
+		params.put("offset", offset);
+		params.put("row", pageSize);
+		params.put("status", Article.STATUS_PUBLISHED);
+		Map<String,Object> pageData=articleService.findByParams(params);
+		return pageData;
+	}
+	
+	/**
+	 * 获取文章条数
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/get_count")
+	@ResponseBody
+	public int getCount(String status){
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		params.put("status", status);
+		return articleService.getCount(params);
 	}
 }

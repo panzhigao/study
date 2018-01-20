@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,9 +161,13 @@ layui.use(['table','jquery'], function(){
 	    		url:"$!{rc.contextPath}/user/delete_article",
 	    		type:"post",
 	    		data:{articleId:data.articleId},
-	    		success:function(){
-	    			alert(123);
-	    			table.reload('myArticles');
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				table.reload('myArticles');
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
 	    		}
 	    	});  
 	        //obj.del();
