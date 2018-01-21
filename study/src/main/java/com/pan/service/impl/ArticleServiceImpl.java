@@ -172,6 +172,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 	public Article getByArticleId(String articleId) {
 		logger.info("查询文章信息,文章id为:{}",articleId);
+		if(StringUtils.isBlank(articleId)){
+			throw new BusinessException("文章id为空");
+		}
 		Article article=new Article();
 		article.setArticleId(articleId);
 		List<Article> list = this.articleMapper.findByCondition(article);

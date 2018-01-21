@@ -32,7 +32,7 @@
     <ul class="layui-nav fly-nav-user">
       
       <!-- 未登入的状态 -->
-      <!--
+      #if(!${user})
       <li class="layui-nav-item">
         <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
       </li>
@@ -48,12 +48,12 @@
       <li class="layui-nav-item layui-hide-xs">
         <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
       </li>
-       -->
+       #else
       
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">${user.nickname}</cite>
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
           <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
@@ -66,6 +66,7 @@
           <dd><a href="" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
+      #end
     </ul>
   </div>
 </div>

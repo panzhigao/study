@@ -34,7 +34,8 @@ public class JedisUtils {
         	if("Could not get a resource from the pool".equalsIgnoreCase(message)){
         		System.out.println("++++++++++reids服务启动失败++++++++");
         		System.out.println("++++++++++请检查你的redis服务++++++++");
-        		System.exit(0);//停止项目
+        		//停止项目
+        		System.exit(0);
         	}
         	throw new JedisConnectionException(e);
         } catch (Exception e) {

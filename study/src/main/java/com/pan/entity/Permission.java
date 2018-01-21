@@ -19,7 +19,7 @@ public class Permission extends BaseEntity{
 	/**
 	 * 权限名
 	 */
-	private String permission_name;
+	private String permissionName;
 	/**
 	 * 权限路径
 	 */
@@ -30,11 +30,11 @@ public class Permission extends BaseEntity{
 	public void setPermissionId(String permissionId) {
 		this.permissionId = permissionId;
 	}
-	public String getPermission_name() {
-		return permission_name;
+	public String getPermissionName() {
+		return permissionName;
 	}
-	public void setPermission_name(String permission_name) {
-		this.permission_name = permission_name;
+	public void setPermissionName(String permissionName) {
+		this.permissionName = permissionName;
 	}
 	public String getUrl() {
 		return url;
@@ -44,11 +44,9 @@ public class Permission extends BaseEntity{
 	}
 	@Override
 	public String toString() {
-		return "Permission [permissionId=" + permissionId
-				+ ", permission_name=" + permission_name + ", url=" + url
-				+ ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
-				+ "]";
+		return "Permission [permissionId=" + permissionId + ", permissionName="
+				+ permissionName + ", url=" + url + ", getId()=" + getId()
+				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
+				+ getUpdateTime() + "]";
 	}
-	
 }

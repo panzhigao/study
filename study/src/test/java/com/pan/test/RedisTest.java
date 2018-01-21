@@ -1,5 +1,8 @@
 package com.pan.test;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import org.apache.commons.lang3.StringUtils;
 
 import redis.clients.jedis.Jedis;
@@ -17,25 +20,37 @@ public class RedisTest {
 
 	private static String ADDR_ARRAY = "127.0.0.1";
 
-	// Redis的端口号
+	/**
+	 *  Redis的端口号
+	 */
 	private static int PORT = 6379;
 
-	// 访问密码
+	/**
+	 *  访问密码
+	 */
 	private static String AUTH = "";
 
-	// 可用连接实例的最大数目，默认值为8；
-	// 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+	/**
+	 *  可用连接实例的最大数目，默认值为8；
+	 *   如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+	 */
 	private static int MAX_ACTIVE = 500;
 
-	// 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
+	/**
+	 *  控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
+	 */
 	private static int MAX_IDLE = 100;
 
-	// 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
+	/**
+	 *  等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
+	 */
 	private static int MAX_WAIT = 10 * 1000;
 
 	private static int TIMEOUT = 10 * 1000;// 超时时间
 
-	// 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
+	/**
+	 *  在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
+	 */
 	private static boolean TEST_ON_BORROW = true;
 
 	private static JedisPool jedisPool = null;
@@ -49,12 +64,12 @@ public class RedisTest {
 			config.setMaxTotal(MAX_ACTIVE);
 			config.setMaxIdle(MAX_IDLE);
 			config.setMaxWaitMillis(MAX_WAIT);
-
-			config.setTestOnBorrow(TEST_ON_BORROW);// 使用时进行扫描，确保都可用
-
-			config.setTestWhileIdle(true);// Idle时进行连接扫描
-
-			config.setTestOnReturn(true);// 还回线程池时进行扫描
+			// 使用时进行扫描，确保都可用
+			config.setTestOnBorrow(TEST_ON_BORROW);
+			// Idle时进行连接扫描
+			config.setTestWhileIdle(true);
+			// 还回线程池时进行扫描
+			config.setTestOnReturn(true);
 			//
 			// //表示idle object evitor两次扫描之间要sleep的毫秒数
 			// config.setTimeBetweenEvictionRunsMillis(30000);
@@ -173,7 +188,7 @@ public class RedisTest {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * 获取String值
 	 * 
@@ -188,16 +203,6 @@ public class RedisTest {
 	}
 	
 	public static void main(String[] args) {
-		for(int j=0;j<30;j++){
-			new Thread(new Runnable() {
-				public void run() {
-					Jedis jedis=getJedis();
-					for(int i=0;i<100;i++){
-						jedis.incr("ppp");	
-					}
-					System.out.println("end");
-				}
-			}).start();
-		}
+
 	}
 }

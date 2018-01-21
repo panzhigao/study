@@ -83,7 +83,7 @@ public class FileUploadController {
                  picture.setCreateTime(new Date());
                  pictureService.savePicture(picture);
                  logger.info("图片输出路径:{}",PIC_BASE+path); 
-                 Map<String,Object> data=new HashMap<String, Object>();
+                 Map<String,Object> data=new HashMap<String, Object>(5);
                  data.put("src", PIC_BASE+path);
                  resultMsg=ResultMsg.build(ResultCodeEmun.UPLOAD_SUCCESS,ResultCodeEmun.UPLOAD_SUCCESS.getMsg(),data);
 			} catch (Exception e) {

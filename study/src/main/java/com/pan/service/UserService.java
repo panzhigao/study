@@ -13,6 +13,7 @@ public interface UserService {
 	/**
 	 * 保存用户信息
 	 * @param user
+	 * @return
 	 */
 	public User saveUser(User user);
 	/**
@@ -35,7 +36,9 @@ public interface UserService {
 	public User findByUserTelephone(String telephone);
 	/**
 	 * 校验用户登陆
+	 * @param httpRequest
 	 * @param user
+	 * @param vercode
 	 * @return
 	 */
 	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode);

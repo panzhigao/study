@@ -14,14 +14,17 @@
     <result column="content"    		property="content"         jdbcType="VARCHAR" />
     <result column="outline"    		property="outline"         jdbcType="VARCHAR" />
     <result column="image"    		    property="image"           jdbcType="VARCHAR" />
+    <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
+    <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image
   </sql>
   
+  <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,outline,image
+    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,image
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
@@ -44,16 +47,17 @@
   </select>
   
   <select id="findByParams" resultMap="BaseResultMap">
-  	select <include refid="Simple_Column_List"/> from t_article 
+  	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
+  	on a.user_id=u.user_id 
   	<where>
   		<if test="articleId !=null and articleId!='' ">
-  			and article_id=#{articleId}
+  			and a.article_id=#{articleId}
   		</if>
   		<if test="status !=null and status !=''">
-  			and status=#{status}
+  			and a.status=#{status}
   		</if>
   		<if test="userId !=null and userId!=''">
-  			and user_id=#{userId}
+  			and a.user_id=#{userId}
   		</if>
   	</where>
   	order by create_time desc

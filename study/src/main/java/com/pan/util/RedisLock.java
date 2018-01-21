@@ -27,7 +27,7 @@ public class RedisLock {
 
     private static final int MILLIS_NANO_TIME = 100000000;//　1纳秒=0.000001 毫秒
 
-    private static final Random random = new Random();
+    private static Random random = new Random();
 
     public RedisLock(String lockKey) {
         this.lockKey = lockKey + "_lock";
@@ -67,15 +67,7 @@ public class RedisLock {
         }
         return false;
     }
-    
-    public synchronized boolean onceLock() throws InterruptedException {
-        if (this.setNX(lockKey, "ssssss")) {
-            this.locked = true;
-            return true;
-         }
-        return false;
-    }
-    
+        
     public synchronized void unlock() {
         if (locked) {
         	System.out.println("dellockKey");

@@ -111,8 +111,7 @@ public class ArticleController {
 	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
 		//不存在的操作跳转登录页
 		ModelAndView mav=new ModelAndView("login");
-		String loingUserId = CookieUtils.getLoingUserId(request);
-		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
+		Article article=articleService.getByArticleId(articleId);
 		mav.addObject("article", article);
 		if(OPERATE_DETAIL.equals(opeate)){
 			mav.setViewName("html/jie/detail");
@@ -122,8 +121,10 @@ public class ArticleController {
 			}
 			mav.setViewName("html/jie/edit");
 		}
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		User articleUser=userService.findByUserid(article.getUserId());
+		User loginUser = CookieUtils.getLoginUser(request);
+		mav.addObject("user", loginUser);
+		mav.addObject("articleUser", articleUser);
 		return mav;
 	}
 	
