@@ -75,5 +75,18 @@ CREATE TABLE
         create_time DATETIME NOT NULL,
         PRIMARY KEY (id)
     )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;    
+    ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+    
+CREATE TABLE
+    t_comment
+    (
+        id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+        comment_id VARCHAR(64) NOT NULL,
+        user_id VARCHAR(64) NOT NULL,
+        article_id VARCHAR(64) NOT NULL,
+        comment_content VARCHAR(300) NOT NULL,
+        reply_to_user_id VARCHAR(64) COMMENT '回复评论者的userId',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论信息';  
     

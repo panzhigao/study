@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.CommentMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.Comment">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="comment_id"       	property="commentId"       jdbcType="VARCHAR" />
+    <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
+    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="comment_content"    property="commentContent"  jdbcType="VARCHAR" />
+    <result column="reply_to_user_id"   property="replyToUserId"   jdbcType="VARCHAR" />
+    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,comment_id,article_id,user_id,comment_content,reply_to_user_id,create_time
+  </sql>
+  
+  <insert id="addComment">
+  	insert into t_comment (<include refid="Base_Column_List"/>) values (null,#{commentId,jdbcType=VARCHAR})
+  </insert>
+   
+  <select id="">
+  
+  </select> 
+</mapper>

@@ -29,7 +29,7 @@ public class Comment extends BaseEntity{
 	/**
 	 * 接收回复的评论用户
 	 */
-	private String applyToUserId;
+	private String replyToUserId;
 	public String getCommentId() {
 		return commentId;
 	}
@@ -54,17 +54,17 @@ public class Comment extends BaseEntity{
 	public void setCommentContent(String commentContent) {
 		this.commentContent = commentContent;
 	}
-	public String getApplyToUserId() {
-		return applyToUserId;
+	public String getReplyToUserId() {
+		return replyToUserId;
 	}
-	public void setApplyToUserId(String applyToUserId) {
-		this.applyToUserId = applyToUserId;
+	public void setReplyToUserId(String replyToUserId) {
+		this.replyToUserId = replyToUserId;
 	}
 	@Override
 	public String toString() {
 		return "Comment [commentId=" + commentId + ", userId=" + userId
 				+ ", articleId=" + articleId + ", commentContent="
-				+ commentContent + ", applyToUserId=" + applyToUserId
+				+ commentContent + ", replyToUserId=" + replyToUserId
 				+ ", getId()=" + getId() + ", getCreateTime()="
 				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
 				+ "]";
