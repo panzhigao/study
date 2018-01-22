@@ -166,7 +166,7 @@ public class ArticleController {
 	 * 跳转文章主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/all")
+	@RequestMapping(method=RequestMethod.GET,value="/article/index")
 	public ModelAndView toArticleIndex(){
 		ModelAndView mav=new ModelAndView("html/jie/index");
 		return mav;

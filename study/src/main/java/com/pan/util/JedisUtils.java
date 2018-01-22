@@ -23,7 +23,9 @@ public class JedisUtils {
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
-
+	
+	private static final String REDIS_ERROR="Could not get a resource from the pool";
+	
 	public void setJedisPool(JedisPool jedisPool) {
 		JedisUtils.jedisPool = jedisPool;
 		Jedis jedis=null;
@@ -31,7 +33,7 @@ public class JedisUtils {
         	jedis = getJedisPool().getResource();
         } catch (JedisConnectionException e) {
         	String message = StringUtils.trim(e.getMessage());
-        	if("Could not get a resource from the pool".equalsIgnoreCase(message)){
+        	if(REDIS_ERROR.equalsIgnoreCase(message)){
         		System.out.println("++++++++++reids服务启动失败++++++++");
         		System.out.println("++++++++++请检查你的redis服务++++++++");
         		//停止项目

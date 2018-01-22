@@ -83,16 +83,18 @@
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       
       <!-- 用户登入后显示 -->
+      #if($user)
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../user/index.html">我发表的贴</a></li> 
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../user/index.html#collection">我收藏的贴</a></li> 
+      #end
     </ul> 
     
     <div class="fly-column-right layui-hide-xs"> 
-      <span class="fly-search"><i class="layui-icon"></i></span> 
-      <a href="add.html" class="layui-btn">发表新帖</a> 
+      <span class="fly-search"><i class="layui-icon"></i></span> 
+      <a href="$!{rc.contextPath}/user/articleAdd" class="layui-btn">发表新帖</a> 
     </div> 
     <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
-      <a href="add.html" class="layui-btn">发表新帖</a> 
+      <a href="$!{rc.contextPath}/user/articleAdd" class="layui-btn">发表新帖</a> 
     </div> 
   </div>
 </div>
@@ -278,7 +280,7 @@ function getData($,obj){
  				var article=articles[i];
  				var one='<li>'+
  	            '<a href="user/home.html" class="fly-avatar">'+
- 	              '<img src="'+article.userPortrait+'" alt="贤心">'+
+ 	              '<img src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
  	            '</a>'+
  	            '<h2>'+
  	              '<a class="layui-badge">分享</a>'+
@@ -288,7 +290,7 @@ function getData($,obj){
  	              '<a href="user/home.html" link>'+
  	                '<cite>'+article.nickname+'</cite>'+
  	              '</a>'+
- 	              '<span>'+dateFormat('yyyy-MM-dd hh:mm:ss',new Date(article.createTime))+'</span>'+
+ 	              '<span>'+tranTime(article.createTime)+'</span>'+
  	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
  	              '<span class="fly-list-nums">'+
  	                '<i class="iconfont icon-pinglun1" title="回答"></i> 66'+

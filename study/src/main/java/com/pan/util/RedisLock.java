@@ -24,8 +24,11 @@ public class RedisLock {
     private int timeoutMillis = 10 * 1000;
 
     private volatile boolean locked = false;
-
-    private static final int MILLIS_NANO_TIME = 100000000;//　1纳秒=0.000001 毫秒
+    
+    /**
+     * 1纳秒=0.000001 毫秒
+     */
+    private static final int MILLIS_NANO_TIME = 100000000;
 
     private static Random random = new Random();
 

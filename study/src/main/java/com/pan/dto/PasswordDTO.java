@@ -4,7 +4,11 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
-
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class PasswordDTO {
 	/**
 	 * 当前密码

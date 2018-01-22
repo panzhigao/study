@@ -1,5 +1,10 @@
 package com.pan.entity;
 
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class UserRole extends BaseEntity{
 
 	/**

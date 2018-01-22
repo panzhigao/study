@@ -16,3 +16,34 @@ function dateFormat(fmt,date)
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
 } 
+
+//fromTime 为时间戳
+function tranTime(fromTime){
+	var nowTime=Math.round(new Date()/1000);    
+    var tempTime = nowTime - fromTime/1000;    
+    var str="";	
+    if (tempTime < 60){
+        str = '刚刚';
+    }else if(tempTime <60*60)
+	{
+        var min = Math.floor(tempTime/60);
+        str = min+'分钟前';
+    }else if(tempTime < 60 * 60 * 24)
+	{
+        var h = Math.floor(tempTime/(60*60));
+        str = h+'小时前 ';
+    }
+	else if(tempTime < 60 * 60 * 24 * 3)
+	{
+        var d = Math.floor(tempTime/(60*60*24));
+        var time=dateFormat('hh:mm:ss',new Date(fromTime));
+        if(d==1){
+        	str = '昨天 '+time;        	
+        }else{        	
+        	str = '前天 '+time;
+        }
+    }else{
+        str = dateFormat('yyyy-MM-dd hh:mm:ss',new Date(fromTime));
+    }
+    return str;
+}
