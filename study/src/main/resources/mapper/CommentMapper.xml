@@ -17,7 +17,8 @@
   </sql>
   
   <insert id="addComment">
-  	insert into t_comment (<include refid="Base_Column_List"/>) values (null,#{commentId,jdbcType=VARCHAR})
+  	insert into t_comment (<include refid="Base_Column_List"/>) values (null,#{commentId,jdbcType=VARCHAR},#{articleId,jdbcType=VARCHAR}
+  	,#{userId,jdbcType=VARCHAR},#{commentContent,jdbcType=VARCHAR},#{replyToUserId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
   </insert>
    
   <select id="">
