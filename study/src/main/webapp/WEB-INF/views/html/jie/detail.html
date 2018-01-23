@@ -133,7 +133,7 @@
             <img src="$!{articleUser.userPortrait}" alt="$!{articleUser.nickname}">
           </a>
           <div class="fly-detail-user">
-            <a href="../user/home.html" class="fly-link">
+            <a href="$!{rc.contextPath}/user/home" class="fly-link">
               <cite>$!{articleUser.nickname}</cite>
               <i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>
               <i class="layui-badge fly-badge-vip">VIP3</i>
@@ -394,12 +394,13 @@ function loadComments($,articleId){
 function sendComment($,params){
 		$.ajax({
 			url:"$!{rc.contextPath}/api/comment",
-			type:"get",
+			type:"post",
 			data:params,
 			success:function(result){
 				if(result.code=='200'){
 					layer.msg(result.msg);
 					addComment($,result.data);	
+					$('#L_content').val('');
 				}else{
 					layer.msg(result.msg);
 				}

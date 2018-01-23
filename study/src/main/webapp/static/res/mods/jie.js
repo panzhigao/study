@@ -204,7 +204,7 @@ layui.define('fly', function(exports){
       });
     }
     ,del: function(li){ //删除
-      layer.confirm('确认删除该回答么22？', function(index){
+      layer.confirm('确认删除该回复？', function(index){
         layer.close(index);
 //        fly.json('/study/api/deleteComment/', {
 //        	commentId: li.data('id')

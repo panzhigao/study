@@ -32,7 +32,6 @@ public class CommentServiceImpl implements CommentService{
 	/**
 	 * 添加评论
 	 */
-	@Override
 	public Comment addComment(Comment comment) {
 		ValidationUtils.validateEntity(comment);
 		comment.setCommentId(IdUtils.generateCommentId());
@@ -46,12 +45,10 @@ public class CommentServiceImpl implements CommentService{
 	 * @param articleId
 	 * @return
 	 */
-	@Override
 	public List<Comment> loadComments(String articleId){
 		return commentMapper.findByArticleId(articleId);
 	}
 
-	@Override
 	public void deleteByCommentId(String commentId,String userId) {
 		logger.info("评论id:{}",commentId);
 		Comment comment = commentMapper.findByCommentId(commentId);

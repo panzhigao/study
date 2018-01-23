@@ -27,7 +27,7 @@ public class CommontController {
 	 * 评论
 	 * @return
 	 */
-	@RequestMapping("/comment")
+	@RequestMapping(value="/comment",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg comment(HttpServletRequest request,Comment comment){
 		String loingUserId = CookieUtils.getLoingUserId(request);
