@@ -193,7 +193,7 @@ layui.use(['jquery', 'form','layedit'], function(){
 	  var layedit = layui.layedit;
 	  layedit.set({
 		  uploadImage: {
-		    url: '$!{rc.contextPath}/file/upload', //接口url
+		    url: '$!{rc.contextPath}/api/upload', //接口url
 		    type: 'post' //默认post
 		  }
 	   });
@@ -228,26 +228,21 @@ layui.use(['jquery', 'form','layedit'], function(){
 		});   
 		form.on('submit(publish)', function(data){
 			params = data.field;
-			params = data.field;
 			params.status=1;
-			publish($,params,2);
+			publish($,params);
 			return false;
 		});
 		form.on('submit(save)', function(data){
 			layedit.sync(index);
 			params = data.field;
 			params.status=1;
-			publish($,params,1);
+			publish($,params);
 			return false;
 		});
 });
 
-layui.use(['jquery', 'form'], function(){
-	  
-});
-
 //提交
-function publish($,params,status){
+function publish($,params){
 		$.ajax({
 			url:"$!{rc.contextPath}/user/save_article",
 			type:"post",

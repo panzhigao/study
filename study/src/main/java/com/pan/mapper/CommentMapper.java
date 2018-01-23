@@ -1,11 +1,8 @@
 package com.pan.mapper;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.pan.entity.Article;
+import com.pan.entity.Comment;
 
 /**
  * 
@@ -14,4 +11,11 @@ import com.pan.entity.Article;
  */
 public interface CommentMapper {
 	
+	public void addComment(Comment comment);
+	
+	public List<Comment> findByArticleId(String articleId);
+	
+	public Comment findByCommentId(String commentId);
+	
+	public void deleteByCommentId(String commentId);
 }

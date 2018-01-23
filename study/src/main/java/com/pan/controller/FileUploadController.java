@@ -39,7 +39,7 @@ import com.pan.util.IdUtils;
  *
  */
 @Controller  
-@RequestMapping("/file")  
+@RequestMapping("/api")  
 public class FileUploadController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(FileUploadController.class);

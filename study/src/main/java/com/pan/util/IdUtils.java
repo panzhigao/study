@@ -17,6 +17,9 @@ public class IdUtils {
 	private static final String ARTICLE_KEY="article_id";
 	
 	private static final String PICTURE_KEY="picture_id";
+	
+	private static final String COMMENT_KEY="comment_id";
+	
 	/**
 	 * 创建文章id
 	 * @return
@@ -54,6 +57,28 @@ public class IdUtils {
 				value=JedisUtils.increaseKey(PICTURE_KEY);
 			}
 			pictureId="pic"+value;
+		} catch (Exception e) {
+			logger.error("生成图片id错误",e);
+			throw e;
+		}
+		return pictureId;
+	}
+	
+	/**
+	 * 创建评论id
+	 * @return
+	 */
+	public static String generateCommentId(){
+		String pictureId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(COMMENT_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(COMMENT_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(COMMENT_KEY);
+			}
+			pictureId="c"+value;
 		} catch (Exception e) {
 			logger.error("生成图片id错误",e);
 			throw e;

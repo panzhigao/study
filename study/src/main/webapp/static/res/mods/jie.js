@@ -38,7 +38,7 @@ layui.define('fly', function(exports){
   });
 
   //提交回答
-  fly.form['/jie/reply/'] = function(data, required){
+  fly.form['/study/api/comment'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
         <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
@@ -204,28 +204,48 @@ layui.define('fly', function(exports){
       });
     }
     ,del: function(li){ //删除
-      layer.confirm('确认删除该回答么？', function(index){
+      layer.confirm('确认删除该回答么22？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-delete/', {
-          id: li.data('id')
-        }, function(res){
-          if(res.status === 0){
-            var count = dom.jiedaCount.text()|0;
-            dom.jiedaCount.html(--count);
-            li.remove();
-            //如果删除了最佳答案
-            if(li.hasClass('jieda-daan')){
-              $('.jie-status').removeClass('jie-status-ok').text('求解中');
-            }
-          } else {
-            layer.msg(res.msg);
-          }
+//        fly.json('/study/api/deleteComment/', {
+//        	commentId: li.data('id')
+//        }, function(res){
+//        	alert(res.code);
+//          if(res.code == '200'){
+//            var count = dom.jiedaCount.text()|0;
+//            dom.jiedaCount.html(--count);
+//            li.remove();
+//            //如果删除了最佳答案
+//            if(li.hasClass('jieda-daan')){
+//              $('.jie-status').removeClass('jie-status-ok').text('求解中');
+//            }
+//          } else {
+//        	  alert("222");
+//            //layer.msg(res.msg);
+//          }
+//        });
+        $.ajax({
+        	url:'/study/api/deleteComment/',
+        	data:{commentId: li.data('id')},
+        	type:'post',
+        	success:function(res){
+              if(res.code == '200'){
+              var count = dom.jiedaCount.text()|0;
+              dom.jiedaCount.html(--count);
+              li.remove();
+              //如果删除了最佳答案
+               if(li.hasClass('jieda-daan')){
+                $('.jie-status').removeClass('jie-status-ok').text('求解中');
+               }
+        	 }else {
+           	  layer.msg(res.msg);
+             }
+           }
         });
       });    
     }
   };
 
-  $('.jieda-reply span').on('click', function(){
+  $('body').on('click','.jieda-reply span', function(){
     var othis = $(this), type = othis.attr('type');
     gather.jiedaActive[type].call(this, othis.parents('li'));
   });

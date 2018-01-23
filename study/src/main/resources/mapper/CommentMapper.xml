@@ -10,18 +10,29 @@
     <result column="comment_content"    property="commentContent"  jdbcType="VARCHAR" />
     <result column="reply_to_user_id"   property="replyToUserId"   jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
+    <result column="nickname"           property="nickname"        jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     id,comment_id,article_id,user_id,comment_content,reply_to_user_id,create_time
   </sql>
   
-  <insert id="addComment">
+  <insert id="addComment" parameterType="com.pan.entity.Comment">
   	insert into t_comment (<include refid="Base_Column_List"/>) values (null,#{commentId,jdbcType=VARCHAR},#{articleId,jdbcType=VARCHAR}
   	,#{userId,jdbcType=VARCHAR},#{commentContent,jdbcType=VARCHAR},#{replyToUserId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
   </insert>
    
-  <select id="">
-  
+  <select id="findByArticleId" resultMap="BaseResultMap">
+  	select c.id,comment_id,c.article_id,c.user_id,comment_content,reply_to_user_id,c.create_time,u.user_portrait,u.nickname from t_comment c join t_user u on c.user_id=u.user_id where article_id=#{articleId}
   </select> 
+  
+  <select id="findByCommentId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_comment where comment_id=#{commentId}
+  </select> 
+  
+  <delete id="deleteByCommentId">
+  	delete from t_comment where comment_id=#{commentId}
+  </delete>
+  
 </mapper>
