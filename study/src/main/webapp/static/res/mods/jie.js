@@ -233,7 +233,7 @@ layui.define('fly', function(exports){
 //          }
 //        });
         $.ajax({
-        	url:'/study/api/deleteComment/',
+        	url:'/study/api/user/deleteComment/',
         	data:{commentId: li.data('id')},
         	type:'post',
         	success:function(res){
