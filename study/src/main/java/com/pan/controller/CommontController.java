@@ -27,7 +27,7 @@ public class CommontController {
 	 * 评论
 	 * @return
 	 */
-	@RequestMapping(value="/comment",method=RequestMethod.POST)
+	@RequestMapping(value="/user/comment",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg comment(HttpServletRequest request,Comment comment){
 		String loingUserId = CookieUtils.getLoingUserId(request);
@@ -40,13 +40,15 @@ public class CommontController {
 	}
 	
 	/**
-	 * 评论
+	 * 加载评论信息
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/loadComments")
 	@ResponseBody
-	public ResultMsg loadComments(String articleId){
-		List<Comment> comments = commentService.loadComments(articleId);
+	public ResultMsg loadComments(HttpServletRequest request,String articleId){
+		//TODO 分页
+		String loingUserId = CookieUtils.getLoingUserId(request);
+		List<Comment> comments = commentService.loadComments(loingUserId,articleId);
 		return ResultMsg.ok("获取评论信息成功",comments);
 	}
 	
@@ -54,7 +56,7 @@ public class CommontController {
 	 * 评论
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/deleteComment")
+	@RequestMapping(method=RequestMethod.POST,value="/user/deleteComment")
 	@ResponseBody
 	public ResultMsg deleteComments(HttpServletRequest request,String commentId){
 		String loingUserId = CookieUtils.getLoingUserId(request);

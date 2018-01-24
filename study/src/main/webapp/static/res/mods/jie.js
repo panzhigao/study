@@ -139,17 +139,26 @@ layui.define('fly', function(exports){
   gather.jiedaActive = {
     zan: function(li){ //赞
       var othis = $(this), ok = othis.hasClass('zanok');
-      fly.json('/api/jieda-zan/', {
-        ok: ok
-        ,id: li.data('id')
-      }, function(res){
-        if(res.status === 0){
-          var zans = othis.find('em').html()|0;
-          othis[ok ? 'removeClass' : 'addClass']('zanok');
-          othis.find('em').html(ok ? (--zans) : (++zans));
-        } else {
-          layer.msg(res.msg);
-        }
+      if(ok){
+    	  layer.msg('您已赞过');
+    	  return;
+      }
+      $.ajax({
+    	  url:'/study/api/praise/',
+    	  data:{commentId: li.data('id')},
+    	  type:'post',
+    	  success:function(res){
+	        if(res.code === '200'){
+	            var zans = othis.find('em').html()|0;
+	            othis['addClass']('zanok');
+	            othis.find('em').html(++zans);
+	         } else {
+	            layer.msg(res.msg);
+	         }
+    	  },
+    	  error:function(){
+    		  layer.msg("未知错误");
+    	  }
       });
     }
     ,reply: function(li){ //回复

@@ -2,7 +2,9 @@ package com.pan.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.service.ArticleService;
+import com.pan.service.CommentService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 
@@ -40,6 +44,8 @@ public class ArticleController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CommentService commentService;
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -115,6 +121,8 @@ public class ArticleController {
 		mav.addObject("article", article);
 		if(OPERATE_DETAIL.equals(opeate)){
 			mav.setViewName("html/jie/detail");
+			int commentCount=commentService.getCommnetCount(articleId);
+			mav.addObject("commentCount",commentCount);
 		}else if(OPERATE_EDIT.equals(opeate)){
 			if(article==null){
 				throw new BusinessException("文章已不存在");

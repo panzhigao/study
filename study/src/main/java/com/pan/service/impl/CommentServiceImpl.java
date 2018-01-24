@@ -45,8 +45,11 @@ public class CommentServiceImpl implements CommentService{
 	 * @param articleId
 	 * @return
 	 */
-	public List<Comment> loadComments(String articleId){
-		return commentMapper.findByArticleId(articleId);
+	public List<Comment> loadComments(String userId,String articleId){
+		Comment comment=new Comment();
+		comment.setUserId(userId);
+		comment.setArticleId(articleId);
+		return commentMapper.findByArticleId(comment);
 	}
 
 	public void deleteByCommentId(String commentId,String userId) {
@@ -59,5 +62,11 @@ public class CommentServiceImpl implements CommentService{
 			throw new BusinessException("评论不属于当前登录用户");
 		}
 		commentMapper.deleteByCommentId(commentId);
+	}
+
+	@Override
+	public int getCommnetCount(String articleId) {
+		int total=commentMapper.countComment(articleId);
+		return total;
 	}
 }

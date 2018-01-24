@@ -2,6 +2,8 @@ package com.pan.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.pan.util.JsonUtils;
+
 /**
  * 评论
  * @author panzhigao-wb
@@ -43,6 +45,15 @@ public class Comment extends BaseEntity{
 	 * 用户名
 	 */
 	private String nickname;
+	/**
+	 * 是否已点赞
+	 */
+	private String isChecked;
+	/**
+	 * 赞的数目,默认0
+	 */
+	private Integer praiseCounts=0;
+	
 	public String getCommentId() {
 		return commentId;
 	}
@@ -87,14 +98,22 @@ public class Comment extends BaseEntity{
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	
+	public String getIsChecked() {
+		return isChecked;
+	}
+	public void setIsChecked(String isChecked) {
+		this.isChecked = isChecked;
+	}
+	
+	public Integer getPraiseCounts() {
+		return praiseCounts;
+	}
+	public void setPraiseCounts(Integer praiseCounts) {
+		this.praiseCounts = praiseCounts;
+	}
 	@Override
 	public String toString() {
-		return "Comment [commentId=" + commentId + ", userId=" + userId
-				+ ", articleId=" + articleId + ", commentContent="
-				+ commentContent + ", replyToUserId=" + replyToUserId
-				+ ", userPortrait=" + userPortrait + ", nickname=" + nickname
-				+ ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
-				+ "]";
+		return JsonUtils.toJson(this);
 	}
 }

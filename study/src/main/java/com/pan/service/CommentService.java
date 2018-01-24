@@ -19,10 +19,16 @@ public interface CommentService {
 	 * @param articleId
 	 * @return
 	 */
-	public List<Comment> loadComments(String articleId);
+	public List<Comment> loadComments(String userId,String articleId);
 	/**
 	 * 删除评论
 	 * @param commentId
 	 */
 	public void deleteByCommentId(String commentId,String userId);
+	/**
+	 * 统计文章评论数
+	 * @param articleId
+	 * @return
+	 */
+	public int getCommnetCount(String articleId);
 }
