@@ -52,7 +52,7 @@
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">$!{user.nickname}</cite>
+          <cite class="layui-hide-xs" id="nickname">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
           <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
@@ -125,7 +125,7 @@
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i><span id="commentCount">$!{commentCount}</span></a>
-            <i class="iconfont" title="人气">&#xe60b;</i> <span id="viewCount">99999</span>
+            <i class="iconfont" title="人气">&#xe60b;</i> <span id="viewCount">$!{viewCount}</span>
           </span>
         </div>
         <div class="detail-about">

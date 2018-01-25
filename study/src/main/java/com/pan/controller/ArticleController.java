@@ -23,6 +23,7 @@ import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
+import com.pan.util.JedisUtils;
 
 /**
  * 用户创作
@@ -126,6 +127,8 @@ public class ArticleController {
 			mav.setViewName("html/jie/detail");
 			int commentCount=commentService.getCommnetCount(articleId);
 			mav.addObject("commentCount",commentCount);
+			long viewCount=JedisUtils.increaseKey("article:"+articleId);
+			mav.addObject("viewCount",viewCount);
 		}else if(OPERATE_EDIT.equals(opeate)){
 			mav.setViewName("html/jie/edit");
 		}
