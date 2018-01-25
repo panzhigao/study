@@ -62,7 +62,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		// 向前台返回错误信息
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("message", businessException.getMessage());
-		modelAndView.setViewName("error/404");
+		modelAndView.setViewName("html/error/500");
 		return modelAndView;
 
 	}
