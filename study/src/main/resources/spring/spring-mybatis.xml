@@ -60,6 +60,7 @@
 			<tx:method name="load*" />
 			<tx:method name="init*" />
 			<tx:method name="check*" />
+			<tx:method name="remove*" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>

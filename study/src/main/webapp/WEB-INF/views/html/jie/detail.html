@@ -114,7 +114,7 @@
           <span class="layui-badge layui-bg-black">置顶</span>
           <span class="layui-badge layui-bg-red">精帖</span>
           
-          <div class="fly-admin-box" data-id="123">
+          <div class="fly-admin-box" data-id="$!{article.articleId}">
 <!--             <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span> -->
             
             <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span> 
@@ -124,8 +124,8 @@
             <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
           </div>
           <span class="fly-list-nums"> 
-            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i><span id="jiedaCount">$!{commentCount}</span></a>
-            <i class="iconfont" title="人气">&#xe60b;</i> 99999
+            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i><span id="commentCount">$!{commentCount}</span></a>
+            <i class="iconfont" title="人气">&#xe60b;</i> <span id="viewCount">99999</span>
           </span>
         </div>
         <div class="detail-about">
@@ -144,7 +144,7 @@
             <span>$!date.format('yyyy-MM-dd',${article.createTime})</span>
             #end
           </div>
-          <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+          <div class="detail-hits" id="LAY_jieAdmin" data-id="$!{article.articleId}">
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
             #if($user.userId==$article.userId&&($article.status==0||$article.status==1))
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
@@ -401,6 +401,8 @@ function sendComment($,params){
 					layer.msg(result.msg);
 					addComment($,result.data);	
 					$('#L_content').val('');
+					var count = $('#commentCount').html()|0;
+					$('#commentCount').html(++count);
 				}else{
 					layer.msg(result.msg);
 				}

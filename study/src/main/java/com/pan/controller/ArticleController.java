@@ -118,15 +118,15 @@ public class ArticleController {
 		//不存在的操作跳转登录页
 		ModelAndView mav=new ModelAndView("login");
 		Article article=articleService.getByArticleId(articleId);
+		if(article==null){
+			throw new BusinessException("文章已不存在");
+		}
 		mav.addObject("article", article);
 		if(OPERATE_DETAIL.equals(opeate)){
 			mav.setViewName("html/jie/detail");
 			int commentCount=commentService.getCommnetCount(articleId);
 			mav.addObject("commentCount",commentCount);
 		}else if(OPERATE_EDIT.equals(opeate)){
-			if(article==null){
-				throw new BusinessException("文章已不存在");
-			}
 			mav.setViewName("html/jie/edit");
 		}
 		User articleUser=userService.findByUserid(article.getUserId());

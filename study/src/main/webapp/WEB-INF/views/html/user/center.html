@@ -99,34 +99,34 @@
     -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span>$!{myCounts}</span>）</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
+        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'>$!{collectionCounts}</span>）</li>
       </ul>
       
-      
-	  	
+      	  	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-	    <div class="layui-tab-content">
-       <span class="layui-breadcrumb" lay-separator="|">
-  		<a href="javascript:;" class="category-item selected" status="">全部</a>
-  		<a href="javascript:;" class="category-item" status="3">已发表</a>
-  		<a href="javascript:;" class="category-item" status="0">未通过</a>
-  		<a href="javascript:;" class="category-item" status="1">草稿</a>
-  		<a href="javascript:;" class="category-item" status="2">审核中</a>
-		</span>
-	  </div>
+		    <div class="layui-tab-content">
+		       <span class="layui-breadcrumb" lay-separator="|">
+		  		<a href="javascript:;" class="category-item selected" status="">全部</a>
+		  		<a href="javascript:;" class="category-item" status="3">已发表</a>
+		  		<a href="javascript:;" class="category-item" status="0">未通过</a>
+		  		<a href="javascript:;" class="category-item" status="1">草稿</a>
+		  		<a href="javascript:;" class="category-item" status="2">审核中</a>
+				</span>
+		    </div>
 	    	<table id="myArticles" lay-filter="myTable"></table>
 	    </div>
       
       	
         <div class="layui-tab-item">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>收藏于23小时前</i>  </li>
-          </ul>
-          <div id="LAY_page1"></div>
+          <table id="myCollections" lay-filter="myCollections"></table>
+<!--           <ul class="mine-view jie-row"> -->
+<!--             <li> -->
+<!--               <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a> -->
+<!--               <i>收藏于23小时前</i>  </li> -->
+<!--           </ul> -->
+<!--           <div id="LAY_page1"></div> -->
         </div>
       </div>
     </div>
@@ -170,7 +170,7 @@ layui.use(['table','jquery'], function(){
 	    if(obj.event === 'detail'){
 	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
 	    } else if(obj.event === 'del'){
-	      layer.confirm('真的删除行么', function(index){
+	      layer.confirm('确定删除该文章么', function(index){
 	        layer.close(index);
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/delete_article",
@@ -179,7 +179,10 @@ layui.use(['table','jquery'], function(){
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
-	    				table.reload('myArticles');
+	    				//table.reload('myArticles');
+	    				reload('articlesTab');
+	    				var counts=$('#articleCounts').html()|0;
+	    				$('#articleCounts').html(--counts);
 	    			}else{	    				
 	    				layer.alert(data.msg);
 	    			}
@@ -202,7 +205,7 @@ layui.use(['table','jquery'], function(){
 	  });
 	  //第一个实例
 	  table.render({
-		id: 'my',  
+		id: 'articlesTab',  
 	    //method: 'post',  
 	    elem: '#myArticles',
 	    height: 500,
@@ -250,9 +253,9 @@ layui.use(['table','jquery'], function(){
 	  
 	  
 	  var status='';
-	  function reload(){
+	  function reload(tableId){
 		 //执行重载
-		 table.reload('my', {
+		 table.reload(tableId, {
 		 page: {curr: 1},
 		 where: {status:status}
 		 }); 
@@ -263,7 +266,70 @@ layui.use(['table','jquery'], function(){
 	  	$('.category-item').removeClass('selected');
 	  	$(this).addClass('selected');
 	  	status=$(this).attr('status');
-	  	reload();
+	  	reload('articlesTab');
+	  });	
+	  
+	  
+	  //监听工具条
+	  table.on('tool(myCollections)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('确定删除该收藏么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/collection/remove",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				reload('collectionsTab');
+	    				var counts=$('#collectionCounts').html()|0;
+	    				$('#collectionCounts').html(--counts);
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	      });
+	    }
+	  });
+	 
+	  //收藏
+	  table.render({
+		id: 'collectionsTab',  
+	    //method: 'post',  
+	    elem: '#myCollections',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/collection/get_collections', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/user/article/detail/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'createTime', title: '收藏时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+t_delete;
+	      }}
+	    ]]
 	  });	  
 });
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.service.ArticleService;
+import com.pan.service.CollectionService;
 import com.pan.util.CookieUtils;
 
 /**
@@ -25,6 +26,9 @@ public class UserCenterController {
 	@Autowired
 	private ArticleService articleService;
 	
+	@Autowired
+	private CollectionService collectionService;
+	
 	/**
 	 * 登陆成功，跳转用户设置页面
 	 * @return
@@ -34,9 +38,11 @@ public class UserCenterController {
 		String loingUserId = CookieUtils.getLoingUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
 		params.put("userId", loingUserId);
-		int count=articleService.getCount(params);
+		int articleCounts=articleService.getCount(params);
+		int collectionCounts = collectionService.getCount(params);
 		ModelAndView mav=new ModelAndView("html/user/center");
-		mav.addObject("myCounts", count);
+		mav.addObject("articleCounts", articleCounts);
+		mav.addObject("collectionCounts", collectionCounts);
 		return mav;
 	}
 }

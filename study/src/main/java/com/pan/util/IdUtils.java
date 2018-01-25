@@ -22,6 +22,8 @@ public class IdUtils {
 	
 	private static final String PRAISE_KEY="praise_id";
 	
+	private static final String COLLECTION_KEY="collection_id";
+	
 	/**
 	 * 创建文章id
 	 * @return
@@ -89,7 +91,7 @@ public class IdUtils {
 	}
 	
 	/**
-	 * 创建评论id
+	 * 创建赞id
 	 * @return
 	 */
 	public static String generatePraiseId(){
@@ -105,6 +107,28 @@ public class IdUtils {
 			praiseId="z"+value;
 		} catch (Exception e) {
 			logger.error("生成赞id错误",e);
+			throw e;
+		}
+		return praiseId;
+	}
+	
+	/**
+	 * 创建赞id
+	 * @return
+	 */
+	public static String generateCollectionId(){
+		String praiseId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(COLLECTION_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(COLLECTION_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(COLLECTION_KEY);
+			}
+			praiseId="collect"+value;
+		} catch (Exception e) {
+			logger.error("生成收藏id错误",e);
 			throw e;
 		}
 		return praiseId;

@@ -90,3 +90,12 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论信息';  
     
+CREATE TABLE `t_collection` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `collection_id` varchar(64) NOT NULL COMMENT '收藏id',
+  `user_id` varchar(64) NOT NULL,
+  `article_id` varchar(64) NOT NULL,
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`article_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;    
