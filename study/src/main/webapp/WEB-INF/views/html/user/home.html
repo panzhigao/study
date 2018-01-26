@@ -13,7 +13,7 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="$!{rc.contextPath}/">
       <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
@@ -59,7 +59,7 @@
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="" style="text-align: center;">退出</a></dd>
         </dl>
@@ -104,45 +104,9 @@
   <div class="layui-row layui-col-space15">
     <div class="layui-col-md6 fly-home-jie">
       <div class="fly-panel">
-        <h3 class="fly-panel-title"> ${user.nickname} 最近的提问</h3>
+        <h3 class="fly-panel-title"> ${user.nickname} 最近的文章</h3>
         <ul class="jie-row">
-          <li>
-            <span class="fly-jing">精</span>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>刚刚</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>1天前</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>2017-10-30</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>1天前</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>1天前</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>1天前</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <li>
-            <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-            <i>1天前</i>
-            <em class="layui-hide-xs">1136阅/27答</em>
-          </li>
-          <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有发表任何求解</i></div> -->
+          <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;display:none;"><i style="font-size:14px;">没有发表任何文章</i></div>
         </ul>
       </div>
     </div>
@@ -191,6 +155,7 @@ full: true
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -206,6 +171,36 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+var pageNo=1;
+var pageSize=10;
+var userId='$!{u.userId}';
+layui.use(['laypage', 'layer','jquery'], function(){
+	var $ = layui.$ ;
+	getData($);
+	
+})
+function getData($){
+	$.ajax({
+		url:'$!{rc.contextPath}/article/get_articles',
+		type:'get',
+		data:{pageNo:pageNo,pageSize:pageSize,userId:userId},
+		success:function(res){
+			var length=res.data.length;
+			if(length==0){
+				$('.fly-none').show();
+			}
+			for(var i=0;i<length;i++){
+				var one=res.data[i];
+				var info='<li>'+
+	            '<a href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
+	            '<i>'+tranTime(one.createTime)+'</i>'+
+	            '<em class="layui-hide-xs">1136阅/27答</em>'+
+	          '</li>';
+				$('.jie-row').append(info);
+			}
+		}
+	});
+}
 </script>
 
 </body>

@@ -20,6 +20,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.service.ArticleService;
+import com.pan.service.CollectionService;
 import com.pan.service.CommentService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
@@ -43,6 +44,9 @@ public class ArticleController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private CollectionService collectionService;
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -81,9 +85,14 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
 	public ModelAndView toArticleList(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/articleList");
-//		User user = CookieUtils.getLoginUser(request);
-//		mav.addObject("user", user);
+		String loingUserId = CookieUtils.getLoginUserId(request);
+		Map<String,Object> params=new HashMap<String, Object>(2);
+		params.put("userId", loingUserId);
+		int articleCounts=articleService.getCount(params);
+		int collectionCounts = collectionService.getCount(params);
+		ModelAndView mav=new ModelAndView("html/user/article");
+		mav.addObject("articleCounts", articleCounts);
+		mav.addObject("collectionCounts", collectionCounts);
 		return mav;
 	}
 	
@@ -196,16 +205,17 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 加载文章列数据，分页查询
+	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
 	@ResponseBody
-	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String userId){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
+		params.put("userId", userId);
 		params.put("status", Article.STATUS_PUBLISHED);
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
