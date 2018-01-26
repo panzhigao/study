@@ -112,11 +112,11 @@
           <a href="">已结</a>
           <span class="fly-mid"></span>
           <a href="">精华</a>
-          <span class="fly-filter-right layui-hide-xs">
-            <a href="" class="layui-this">按最新</a>
-            <span class="fly-mid"></span>
-            <a href="">按热议</a>
-          </span>
+<!--           <span class="fly-filter-right layui-hide-xs"> -->
+<!--             <a href="" class="layui-this">按最新</a> -->
+<!--             <span class="fly-mid"></span> -->
+<!--             <a href="">按热议</a> -->
+<!--           </span> -->
         </div>
 		
 		<!-- 文章列表 -->
@@ -279,12 +279,12 @@ function getData($,obj){
  			for(var i=0;i<length;i++){
  				var article=articles[i];
  				var one='<li>'+
- 	            '<a href="user/home.html" class="fly-avatar">'+
+ 	            '<a href="$!{rc.contextPath}/u/'+article.userId+'" class="fly-avatar">'+
  	              '<img src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
  	            '</a>'+
  	            '<h2>'+
  	              '<a class="layui-badge">分享</a>'+
- 	              '<a href="$!{rc.contextPath}/user/article/detail/'+article.articleId+'">'+article.title+'</a>'+
+ 	              '<a href="$!{rc.contextPath}/u/article/'+article.articleId+'">'+article.title+'</a>'+
  	            '</h2>'+
  	            '<div class="fly-list-info">'+
  	              '<a href="user/home.html" link>'+

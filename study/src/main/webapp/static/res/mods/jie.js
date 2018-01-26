@@ -187,7 +187,7 @@ layui.define('fly', function(exports){
     	  return;
       }
       $.ajax({
-    	  url:'/study/api/praise/',
+    	  url:'/study/api/user/praise/',
     	  data:{commentId: li.data('id')},
     	  type:'post',
     	  success:function(res){

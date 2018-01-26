@@ -1,13 +1,16 @@
 package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
@@ -39,9 +42,27 @@ public class UserController {
 	public ModelAndView toUserEditPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/userEdit");
 		User user = CookieUtils.getLoginUser(request);
-		UserExtension userExtension=userService.findByUserId(user.getUserId());
+		UserExtension userExtension=userService.findExtensionByUserId(user.getUserId());
 		mav.addObject("user",user);
 		mav.addObject("userExtension",userExtension);
+		return mav;
+	}
+	
+	/**
+	 * 登陆成功，跳转用户home页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/u/{userId}")
+	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")String userId){
+		ModelAndView mav=new ModelAndView("html/user/home");
+		//登录用户信息
+//		User user = CookieUtils.getLoginUser(request);
+//		mav.addObject("user",user);
+		//用户信息
+		User u = userService.findByUserId(userId);
+		UserExtension userExtension=userService.findExtensionByUserId(u.getUserId());
+		mav.addObject("u",u);
+		mav.addObject("uExtension",userExtension);
 		return mav;
 	}
 	
@@ -53,11 +74,11 @@ public class UserController {
 	@ResponseBody
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		String userId = CookieUtils.getLoingUserId(request);
+		String userId = CookieUtils.getLoginUserId(request);
 		String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
-		User userT = userService.findByUserid(userId);
+		User userT = userService.findByUserId(userId);
 		String json=JsonUtils.toJson(userT);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");

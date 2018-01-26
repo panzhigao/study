@@ -225,7 +225,7 @@ layui.use(['table','jquery'], function(){
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:400,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/user/article/detail/"+d.articleId+"'>"+d.title+"</a>";
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'status', title: '状态', width:100, sort: true,templet:
 	    	  function(d){
@@ -319,7 +319,7 @@ layui.use(['table','jquery'], function(){
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/user/article/detail/"+d.articleId+"'>"+d.title+"</a>";
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'createTime', title: '收藏时间', width:150, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));

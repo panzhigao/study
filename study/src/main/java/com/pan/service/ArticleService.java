@@ -60,4 +60,11 @@ public interface ArticleService {
 	 * @return
 	 */
 	public int getCount(Map<String, Object> params);
+	/**
+	 * 根据文章id和状态查找唯一文章信息
+	 * @param articleId
+	 * @param status
+	 * @return
+	 */
+	public Article findByArticleIdAndStatus(String articleId,String status);
 }

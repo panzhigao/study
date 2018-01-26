@@ -161,14 +161,14 @@ function login($,params){
 			url:"$!{rc.contextPath}/doLogin",
 			type:"post",
 			data:params,
-			success:function(data){
-				if(data.code=='200'){
-					layer.msg(data.msg);
+			success:function(res){
+				if(res.code=='200'){
+					layer.msg(res.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/user/home';
+						location.href='$!{rc.contextPath}/u/'+res.data;
 					},1000);
 				}else{
-					layer.msg(data.msg);
+					layer.msg(res.msg);
 				}
 			}
 	});

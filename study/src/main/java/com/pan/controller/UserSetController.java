@@ -47,15 +47,15 @@ public class UserSetController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/set")
-	public ModelAndView toIndex(HttpServletRequest request){
+	public ModelAndView toSetPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/set");
 		User user = CookieUtils.getLoginUser(request);
-		UserExtension userExtension=userService.findByUserId(user.getUserId());
+		UserExtension userExtension=userService.findExtensionByUserId(user.getUserId());
 		mav.addObject("user",user);
 		mav.addObject("userExtension",userExtension);
 		return mav;
 	}
-	
+		
 	/**
 	 * 修改个人信息
 	 * @return
@@ -64,11 +64,11 @@ public class UserSetController {
 	@ResponseBody
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		String userId = CookieUtils.getLoingUserId(request);
+		String userId = CookieUtils.getLoginUserId(request);
 		String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
-		User userT = userService.findByUserid(userId);
+		User userT = userService.findByUserId(userId);
 		String json=JsonUtils.toJson(userT);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
@@ -88,8 +88,8 @@ public class UserSetController {
 		if(!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())){
 			throw new BusinessException("确认密码与密码不一致");
 		}
-		String userId=CookieUtils.getLoingUserId(request);
-		User userInDb = userService.findByUserid(userId);
+		String userId=CookieUtils.getLoginUserId(request);
+		User userInDb = userService.findByUserId(userId);
 		boolean flag=PasswordUtils.validPassword(passwordDTO.getNowPassword(),userInDb.getPassword());
 		if(!flag){
 			throw new BusinessException("密码输入错误");

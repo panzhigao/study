@@ -29,32 +29,52 @@
     </ul>
     
     <ul class="layui-nav fly-nav-user">
-      <!-- 登入后的状态 -->
+            <!-- 未登入的状态 -->
+      #if(!${user})
       <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="$!{rc.contextPath}/user/home">
-          <cite class="layui-hide-xs"> ${user.nickname}</cite>
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="$!{rc.contextPath}/login">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="$!{rc.contextPath}/register">注册</a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+      </li>
+      
+      <!-- 登入后的状态 -->
+      #else
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end" alt="默认头像">
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
+          <dd><a href="" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
+      #end
     </ul>
   </div>
 </div>
 
 <div class="fly-home fly-panel" style="background-image: url();">
-  <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end" alt="默认头像">
+  <img src="#if(!$u.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${u.userPortrait} #end" alt="默认头像">
   <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
   <h1>
-    ${user.nickname}
-    <i class="iconfont #if($user.sex==0) icon-nan #else icon-nv #end"></i>
+    $!{u.nickname}
+    <i class="iconfont #if($u.sex==0) icon-nan #else icon-nv #end"></i>
     <i class="layui-badge fly-badge-vip">VIP3</i>
     <!--
     <span style="color:#c00;">（管理员）</span>

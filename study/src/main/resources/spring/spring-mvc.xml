@@ -32,7 +32,8 @@
 	   	 <bean class="com.pan.interceptor.SessionInterceptor"></bean> 
 	   </mvc:interceptor>
 	   <mvc:interceptor> 
-	     <mvc:mapping path="/user/*" />
+	     <mvc:mapping path="/user/**" />
+	     <mvc:mapping path="/api/user/**" />
 	     <mvc:exclude-mapping path="/"/>
 	     <mvc:exclude-mapping path="/login"/>
 	     <mvc:exclude-mapping path="/doLogin"/>

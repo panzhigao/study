@@ -27,7 +27,7 @@ public interface UserService {
 	 * @param userId
 	 * @return
 	 */
-	public User findByUserid(String userId);
+	public User findByUserId(String userId);
 	/**
 	 * 根据手机号查找唯一用户信息
 	 * @param telephone
@@ -57,5 +57,5 @@ public interface UserService {
 	 * @param userId
 	 * @return 
 	 */
-	public UserExtension findByUserId(String userId);
+	public UserExtension findExtensionByUserId(String userId);
 }

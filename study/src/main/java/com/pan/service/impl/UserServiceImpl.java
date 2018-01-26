@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService{
 		userMapper.updateUserByUserId(user);
 	}
 
-	public User findByUserid(String userId) {
+	public User findByUserId(String userId) {
 		logger.info("用户id:{}",userId);
 		return userMapper.findByUserId(userId);
 	}
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService{
 		return userMapper.findByTelephone(telephone);
 	}
 
-	public UserExtension findByUserId(String userId) {
+	public UserExtension findExtensionByUserId(String userId) {
 		return userExtensionMapper.findByUserId(userId);
 	}
 }

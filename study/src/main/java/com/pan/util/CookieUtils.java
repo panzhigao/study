@@ -274,7 +274,7 @@ public final class CookieUtils {
      * 获取登陆用户id
      * @return
      */
-    public static String getLoingUserId(HttpServletRequest request){
+    public static String getLoginUserId(HttpServletRequest request){
     	User loginUser = getLoginUser(request);
     	String userId=null;
     	if(loginUser!=null){

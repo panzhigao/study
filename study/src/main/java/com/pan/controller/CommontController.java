@@ -30,7 +30,7 @@ public class CommontController {
 	@RequestMapping(value="/user/comment",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg comment(HttpServletRequest request,Comment comment){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		comment.setUserId(loingUserId);
 		Comment addComment = commentService.addComment(comment);
 		User loginUser = CookieUtils.getLoginUser(request);
@@ -47,7 +47,7 @@ public class CommontController {
 	@ResponseBody
 	public ResultMsg loadComments(HttpServletRequest request,String articleId){
 		//TODO 分页
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		List<Comment> comments = commentService.loadComments(loingUserId,articleId);
 		return ResultMsg.ok("获取评论信息成功",comments);
 	}
@@ -59,7 +59,7 @@ public class CommontController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/deleteComment")
 	@ResponseBody
 	public ResultMsg deleteComments(HttpServletRequest request,String commentId){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		commentService.deleteByCommentId(commentId, loingUserId);
 		return ResultMsg.ok("删除评论成功");
 	}

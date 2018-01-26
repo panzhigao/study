@@ -1,10 +1,8 @@
 package com.pan.controller;
 
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
-import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
@@ -80,23 +76,9 @@ public class LoginController{
 		userInDb.setPassword(null);
 		String json=JsonUtils.toJson(userInDb);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-		return ResultMsg.ok("用户登陆成功");
+		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}
-	
-	/**
-	 * 登陆成功，跳转用户home页
-	 * @return
-	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/home")
-	public ModelAndView toIndex(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("html/user/home");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user",user);
-		UserExtension userExtension=userService.findByUserId(user.getUserId());
-		mav.addObject("userExtension",userExtension);
-		return mav;
-	}
-	
+		
 	/**
 	 * 用户退出
 	 * @return

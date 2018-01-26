@@ -21,7 +21,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,collection_id,article_id,user_id,create_time
+    id,collection_id,article_id,user_id,create_time,title
   </sql>
   
    <select id="findUserCollection" resultMap="BaseResultMap">
@@ -29,7 +29,7 @@
   </select>
 
   <select id="findByParams" resultMap="CollectionMap">
-  	select a.id,a.collection_id,a.article_id,a.user_id,a.create_time,b.title from t_collection a left join t_article b on a.article_id=b.article_id
+  	select a.id,a.collection_id,a.article_id,a.user_id,a.create_time,a.title from t_collection a 
   	<where>
   		<if test="userId !=null and userId !=''">
   			and a.user_id=#{userId}
@@ -54,7 +54,7 @@
     </select>
    
   <insert id="addCollection" parameterType="com.pan.entity.Collection">
-  	insert into t_collection (<include refid="Base_Column_List"/>) values (null,#{collectionId},#{articleId},#{userId},#{createTime})
+  	insert into t_collection (<include refid="Base_Column_List"/>) values (null,#{collectionId,jdbcType=VARCHAR},#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deleteByUserIdAndArticleId">

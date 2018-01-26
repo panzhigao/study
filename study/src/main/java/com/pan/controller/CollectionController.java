@@ -30,7 +30,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/add")
 	@ResponseBody
 	public ResultMsg addCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Collection collection=new Collection();
 		collection.setArticleId(articleId);
 		collection.setUserId(loingUserId);
@@ -45,7 +45,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/remove")
 	@ResponseBody
 	public ResultMsg removeCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		collectionService.removeCollection(loingUserId, articleId);
 		return ResultMsg.ok("取消收藏成功");
 	}
@@ -57,7 +57,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/collection/find")
 	@ResponseBody
 	public ResultMsg findCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Collection collection = collectionService.findUserCollection(loingUserId, articleId);
 		if(collection!=null){
 			return ResultMsg.ok("已收藏",true);
@@ -72,7 +72,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
 	public Map<String,Object> getUserCollectionList(HttpServletRequest request,Integer pageSize,Integer pageNo){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;

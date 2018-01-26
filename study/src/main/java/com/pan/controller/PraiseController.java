@@ -19,13 +19,13 @@ public class PraiseController {
 	private PraiseService PraiseService;
 	
 	/**
-	 * 评论
+	 * 点赞
 	 * @return
 	 */
-	@RequestMapping(value="/praise",method=RequestMethod.POST)
+	@RequestMapping(value="/user/praise",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg praise(HttpServletRequest request,String commentId){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Praise praise=new Praise();
 		praise.setUserId(loingUserId);
 		praise.setCommentId(commentId);

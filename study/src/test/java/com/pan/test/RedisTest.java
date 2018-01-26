@@ -1,10 +1,6 @@
 package com.pan.test;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import org.apache.commons.lang3.StringUtils;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;

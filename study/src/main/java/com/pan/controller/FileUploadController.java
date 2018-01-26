@@ -75,7 +75,7 @@ public class FileUploadController {
             File destFile=new File(pictureDir+path); 
             file.transferTo(destFile);  
             Picture picture=new Picture();
-            String userId=CookieUtils.getLoingUserId(request);
+            String userId=CookieUtils.getLoginUserId(request);
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
@@ -141,7 +141,7 @@ public class FileUploadController {
 							}
 							try {
 								Picture picture=new Picture();
-					            String userId=CookieUtils.getLoingUserId(request);
+					            String userId=CookieUtils.getLoginUserId(request);
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPicUrl(PIC_BASE+destFileName);

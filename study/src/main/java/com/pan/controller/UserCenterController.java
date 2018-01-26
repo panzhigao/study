@@ -35,7 +35,7 @@ public class UserCenterController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/center")
 	public ModelAndView toIndex(HttpServletRequest request){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
 		params.put("userId", loingUserId);
 		int articleCounts=articleService.getCount(params);

@@ -151,10 +151,10 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.error("当前文章处于审核状态,不可修改", articleInDb);
 			throw new BusinessException("当前文章处于审核状态,不可修改");
 		}
-		if(Article.STATUS_PUBLISHED.equals(articleInDb.getStatus())){
-			logger.error("当前文章处于发布状态,不可修改", articleInDb);
-			throw new BusinessException("当前文章处于发布状态,不可修改");
-		}
+//		if(Article.STATUS_PUBLISHED.equals(articleInDb.getStatus())){
+//			logger.error("当前文章处于发布状态,不可修改", articleInDb);
+//			throw new BusinessException("当前文章处于发布状态,不可修改");
+//		}
 		String userIdInDb = articleInDb.getUserId();
 		// 判断当前文章是当前登录用户下的文章
 		if (!StringUtils.equals(article.getUserId(), userIdInDb)) {
@@ -207,5 +207,17 @@ public class ArticleServiceImpl implements ArticleService {
 	public int getCount(Map<String, Object> params) {
 		logger.info("查询文章条数条件：{}",JsonUtils.toJson(params));
 		return articleMapper.getCountByParams(params);
+	}
+
+	@Override
+	public Article findByArticleIdAndStatus(String articleId, String status) {
+	    Article article=new Article();
+	    article.setArticleId(articleId);
+	    article.setStatus(status);
+	    List<Article> list = articleMapper.findByCondition(article);
+	    if(list.size()==1){
+	    	return list.get(0);
+	    }
+		return null;
 	}
 }

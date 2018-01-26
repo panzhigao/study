@@ -52,7 +52,7 @@ public class PicturesController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/get_pictures")
 	@ResponseBody
 	public List<Picture> getPictureList(HttpServletRequest request,Integer pageSize,Integer pageNo){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(3);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;
@@ -70,7 +70,7 @@ public class PicturesController {
 	@ResponseBody
 	public ResultMsg deletePicture(HttpServletRequest request,String pictureId){
 		logger.info("删除图片开始");
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		ResultMsg resultMsg=null;
 		pictureService.deleteByPictureId(loingUserId, pictureId);
 		resultMsg=ResultMsg.ok("删除图片成功");

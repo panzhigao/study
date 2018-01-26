@@ -66,6 +66,7 @@ public class CollectionServiceImpl implements CollectionService {
 			return;
 		}
 		collection.setCreateTime(new Date());
+		collection.setTitle(articleInDb.getTitle());
 		collection.setCollectionId(IdUtils.generateCollectionId());
 		collectionMapper.addCollection(collection);
 	}

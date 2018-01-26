@@ -38,10 +38,6 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-	private static final String OPERATE_EDIT="edit";
-	
-	private static final String OPERATE_DETAIL="detail";
-	
 	@Autowired
 	private UserService userService;
 	
@@ -68,7 +64,7 @@ public class ArticleController {
 	public ResultMsg saveArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoingUserId(request);
+		String userId=CookieUtils.getLoginUserId(request);
 		article.setUserId(userId);
 		articleService.saveArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
@@ -86,8 +82,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
 	public ModelAndView toArticleList(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/articleList");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+//		User user = CookieUtils.getLoginUser(request);
+//		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -98,7 +94,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/get_articles")
 	@ResponseBody
 	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;
@@ -113,29 +109,45 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article/{opeate}/{articleId}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId}")
 	@ResponseBody
-	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
-		//不存在的操作跳转登录页
-		ModelAndView mav=new ModelAndView("login");
-		Article article=articleService.getByArticleId(articleId);
+	public ModelAndView toArticleDetailPage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+		//不存在抛出异常
+		ModelAndView mav=new ModelAndView("html/jie/detail");
+		String loginUserId = CookieUtils.getLoginUserId(request);
+		String status=Article.STATUS_PUBLISHED;
+		Article article=articleService.findByArticleIdAndStatus(articleId,status);
+		//登录状态
+		if(loginUserId!=null&&article==null){
+			article=articleService.getByUserIdAndArticleId(loginUserId, articleId);
+		}
 		if(article==null){
-			throw new BusinessException("文章已不存在");
+			throw new BusinessException("文章不存在");
 		}
 		mav.addObject("article", article);
-		if(OPERATE_DETAIL.equals(opeate)){
-			mav.setViewName("html/jie/detail");
-			int commentCount=commentService.getCommnetCount(articleId);
-			mav.addObject("commentCount",commentCount);
-			long viewCount=JedisUtils.increaseKey("article:"+articleId);
-			mav.addObject("viewCount",viewCount);
-		}else if(OPERATE_EDIT.equals(opeate)){
-			mav.setViewName("html/jie/edit");
-		}
-		User articleUser=userService.findByUserid(article.getUserId());
-		User loginUser = CookieUtils.getLoginUser(request);
-		mav.addObject("user", loginUser);
+		int commentCount=commentService.getCommnetCount(articleId);
+		long viewCount=JedisUtils.increaseKey("article:"+articleId);
+		mav.addObject("commentCount",commentCount);
+		mav.addObject("viewCount",viewCount);
+		User articleUser=userService.findByUserId(article.getUserId());
 		mav.addObject("articleUser", articleUser);
+		return mav;
+	}
+	
+	/**
+	 * 跳转文章列详情页或者编辑页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
+	@ResponseBody
+	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+		ModelAndView mav=new ModelAndView("html/jie/edit");
+		String loingUserId = CookieUtils.getLoginUserId(request);
+		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
+		if(article==null){
+			throw new BusinessException("文章不存在");
+		}
+		mav.addObject("article", article);
 		return mav;
 	}
 	
@@ -149,7 +161,7 @@ public class ArticleController {
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoingUserId(request);
+		String userId=CookieUtils.getLoginUserId(request);
 		article.setUserId(userId);
 		articleService.updateArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
@@ -168,7 +180,7 @@ public class ArticleController {
 	@ResponseBody
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
-		String userId=CookieUtils.getLoingUserId(request);
+		String userId=CookieUtils.getLoginUserId(request);
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
 	}
