@@ -58,4 +58,15 @@ public interface UserService {
 	 * @return 
 	 */
 	public UserExtension findExtensionByUserId(String userId);
+	/**
+	 * 发送手机验证码
+	 * @param telephone
+	 */
+	public String sendValidationCode(User user);
+	/**
+	 * 校验手机和验证码
+	 * @param user
+	 * @param code 验证码
+	 */
+	public void bindTelephone(User user,String code);
 }

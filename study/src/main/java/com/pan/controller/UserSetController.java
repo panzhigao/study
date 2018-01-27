@@ -96,4 +96,34 @@ public class UserSetController {
 		}
 		return ResultMsg.ok("密码修改成功");
 	}
+	
+	/**
+	 * 发送验证码
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/sendValidationCode")
+	@ResponseBody
+	public ResultMsg sendValidationCode(HttpServletRequest request,String telephone){
+		User user=new User();
+		user.setTelephone(telephone);
+		String sendValidationCode = userService.sendValidationCode(user);
+		return ResultMsg.ok("发送验证码成功",sendValidationCode);
+	}
+	
+	/**
+	 * 确认绑定手机
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/confirmBind")
+	@ResponseBody
+	public ResultMsg confirmBind(HttpServletRequest request,String telephone,String code){
+		String loginUserId = CookieUtils.getLoginUserId(request);
+		User user=new User();
+		user.setUserId(loginUserId);
+		user.setTelephone(telephone);
+		userService.bindTelephone(user, code);
+		return ResultMsg.ok("绑定手机成功");
+	}
 }

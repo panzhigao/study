@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
+import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
@@ -21,8 +22,10 @@ import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
+import com.pan.util.JedisUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.util.VerifyCodeUtils;
 
 /**
  * 
@@ -121,11 +124,6 @@ public class UserServiceImpl implements UserService{
 
 	public void updateUserInfo(User user, UserExtension userExtension) {
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
-		User userInDb = findByUserTelephone(user.getTelephone());
-		if(userInDb!=null&&!StringUtils.equals(user.getUserId(),userInDb.getUserId())){
-			logger.info("该手机号已被使用：{}",user.getTelephone());
-			throw new BusinessException("该手机号已被使用，请更换手机号");
-		}
 		String userId=user.getUserId();
 		user.setUpdateTime(new Date());
 		userMapper.updateUserByUserId(user);
@@ -142,7 +140,6 @@ public class UserServiceImpl implements UserService{
 			userExtensionTemp.setCreateTime(new Date());
 			userExtensionMapper.saveUserExtension(userExtensionTemp);
 		}	
-		
 	}
 
 	public User findByUserTelephone(String telephone) {
@@ -152,5 +149,37 @@ public class UserServiceImpl implements UserService{
 
 	public UserExtension findExtensionByUserId(String userId) {
 		return userExtensionMapper.findByUserId(userId);
+	}
+
+	@Override
+	public String sendValidationCode(User user) {
+		ValidationUtils.validateEntityWithGroups(user,TelephoneBindGroup.class);
+		//校验手机号是否被占用
+		User userInDb = findByUserTelephone(user.getTelephone());
+		if(userInDb!=null){
+			logger.info("该手机号已被使用：{}",user.getTelephone());
+			throw new BusinessException("该手机号已被使用，请更换手机号");
+		}
+		//生成验证码
+		String generateVerifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		//验证码5分钟后过期
+		JedisUtils.setStringExpire(user.getTelephone(),generateVerifyCode,300);
+		return generateVerifyCode;
+	}
+
+	@Override
+	public void bindTelephone(User user,String code) {
+		ValidationUtils.validateEntityWithGroups(user,TelephoneBindGroup.class);
+		//redis中存的验证码
+		String redisCode = JedisUtils.getString(user.getTelephone());
+		if(redisCode==null){
+			throw new BusinessException("验证码有误，请重新发送");
+		}
+		if(!StringUtils.equals(redisCode,code)){
+			throw new BusinessException("验证码有误");
+		}
+		user.setUpdateTime(new Date());
+		userMapper.updateUserByUserId(user);
+		JedisUtils.existsKey(redisCode);
 	}
 }

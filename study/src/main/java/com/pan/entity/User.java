@@ -4,9 +4,12 @@ import java.util.Date;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
+import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
 
 /**
@@ -23,7 +26,6 @@ public class User extends BaseEntity{
 	 * 正常状态
 	 */
 	public static final String STATUS_NORMAL="1";
-
 	/**
 	 * 
 	 */
@@ -71,8 +73,8 @@ public class User extends BaseEntity{
 	/**
 	 * 手机号码
 	 */
-	@NotEmpty(message="手机号不能为空",groups={UserEditGroup.class})
-	@Pattern(regexp="^1[3|5|8]{1}[0-9]{9}$",message="请输入正确的手机号码",groups={UserEditGroup.class})
+	@NotEmpty(message="手机号不能为空",groups={TelephoneBindGroup.class})
+	@Pattern(regexp="^1[3|5|8]{1}[0-9]{9}$",message="请输入正确的手机号码",groups={TelephoneBindGroup.class})
 	private String telephone;
 	/**
 	 * 用户头像
