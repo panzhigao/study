@@ -45,7 +45,7 @@
           <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -280,7 +280,7 @@ layui.use(['table','jquery'], function(){
 	  table.on('tool(myCollections)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'detail'){
-	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
+	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
 	    } else if(obj.event === 'del'){
 	      layer.confirm('确定删除该收藏么', function(index){
 	        layer.close(index);

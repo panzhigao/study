@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
@@ -49,17 +50,17 @@ public class UserController {
 	}
 	
 	/**
-	 * 登陆成功，跳转用户home页
+	 * 跳转用户主页
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/u/{userId}")
 	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")String userId){
 		ModelAndView mav=new ModelAndView("html/user/home");
-		//登录用户信息
-//		User user = CookieUtils.getLoginUser(request);
-//		mav.addObject("user",user);
 		//用户信息
 		User u = userService.findByUserId(userId);
+		if(u==null){
+			throw new BusinessException("用户不存在");
+		}
 		UserExtension userExtension=userService.findExtensionByUserId(u.getUserId());
 		mav.addObject("u",u);
 		mav.addObject("uExtension",userExtension);

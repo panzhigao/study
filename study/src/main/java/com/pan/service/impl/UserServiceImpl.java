@@ -5,12 +5,15 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
@@ -24,6 +27,7 @@ import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.PasswordUtils;
+import com.pan.util.RegexUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -89,7 +93,13 @@ public class UserServiceImpl implements UserService{
 		CookieUtils.validateVercode(httpRequest, vercode);
 		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
 		String username=user.getUsername();
-		User userInDb = findByUsername(username);
+		User userInDb=null;
+		//手机号登陆
+		if(RegexUtils.checkTelephone(username)){
+			userInDb = findByUserTelephone(username);
+		}else{
+			userInDb = findByUsername(username);
+		}
 		if(userInDb==null){
 			throw new BusinessException("用户名或密码错误");
 		}

@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.pan.common.annotation.CheckUsernameGroup;
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
@@ -42,9 +43,9 @@ public class User extends BaseEntity{
 	/**
 	 * 用户名
 	 */
-	@NotEmpty(message="用户名不能为空",groups={LoginGroup.class,RegisterGroup.class})
-	@Size(max=15,min=5,message="用户名长度必须在5-15之间",groups={RegisterGroup.class})
-	@Pattern(regexp="^[a-zA-Z0-9_\\.\\-]+$",message="用户名只能包含字母，数字，点和下划线",groups={RegisterGroup.class})
+	@NotEmpty(message="用户名不能为空",groups={LoginGroup.class,RegisterGroup.class,CheckUsernameGroup.class})
+	@Size(max=15,min=5,message="用户名长度必须在5-15之间",groups={RegisterGroup.class,CheckUsernameGroup.class})
+	@Pattern(regexp="^(?![0-9]+$)([a-zA-Z0-9_\\.\\-]+$)",message="用户名只能包含字母，数字，点和下划线,且不能全为数字",groups={RegisterGroup.class,CheckUsernameGroup.class})
 	private String username;
 	/**
 	 * 昵称

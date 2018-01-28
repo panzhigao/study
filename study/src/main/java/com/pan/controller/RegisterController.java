@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pan.common.annotation.CheckUsernameGroup;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
 
 /**
@@ -88,12 +91,22 @@ public class RegisterController {
 	@ResponseBody
 	public Map<String,Object> checkUnique(String username){
 		logger.info("校验用户名是否已注册：{}",username);
-		Map<String,Object> resultMap=new HashMap<String, Object>(1);
+		User checkUser=new User();
+		checkUser.setUsername(username);
+		Map<String,Object> resultMap=new HashMap<String, Object>(2);
+		try {
+			ValidationUtils.validateEntityWithGroups(checkUser, CheckUsernameGroup.class);
+		} catch (BusinessException e) {
+			resultMap.put("valid", false);
+			resultMap.put("msg", e.getMessage());
+			return resultMap;
+		}
 		User user = userService.findByUsername(username);
 		if(user==null){
 			resultMap.put("valid", true);
 		}else{
 			resultMap.put("valid", false);
+			resultMap.put("msg", "该用户名已被占用，请换一个");
 		}
 		return resultMap;
 	}

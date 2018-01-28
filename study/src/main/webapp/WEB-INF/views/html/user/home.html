@@ -61,7 +61,7 @@
           <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
       #end
@@ -91,7 +91,7 @@
     <i class="iconfont icon-chengshi"></i><span>来自杭州</span>
   </p>
 
-  <p class="fly-home-sign">$!{uExtension.userBrief}</p>
+  <p class="fly-home-sign">#if($!{uExtension.userBrief}) $!{uExtension.userBrief} #else 暂无简介 #end</p>
 
   <div class="fly-sns" data-user="">
     <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>
@@ -104,7 +104,7 @@
   <div class="layui-row layui-col-space15">
     <div class="layui-col-md6 fly-home-jie">
       <div class="fly-panel">
-        <h3 class="fly-panel-title"> ${user.nickname} 最近的文章</h3>
+        <h3 class="fly-panel-title"> $!{u.nickname} 最近的文章</h3>
         <ul class="jie-row">
           <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;display:none;"><i style="font-size:14px;">没有发表任何文章</i></div>
         </ul>
@@ -113,7 +113,7 @@
     
     <div class="layui-col-md6 fly-home-da">
       <div class="fly-panel">
-        <h3 class="fly-panel-title"> ${user.nickname} 最近的回答</h3>
+        <h3 class="fly-panel-title"> $!{u.nickname} 最近的回答</h3>
         <ul class="home-jieda">
           <li>
           <p>

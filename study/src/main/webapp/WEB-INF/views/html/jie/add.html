@@ -228,7 +228,7 @@ layui.use(['jquery', 'form','layedit'], function(){
 		});   
 		form.on('submit(publish)', function(data){
 			params = data.field;
-			params.status=1;
+			params.status=2;
 			publish($,params);
 			return false;
 		});
@@ -247,6 +247,9 @@ function publish($,params){
 			url:"$!{rc.contextPath}/user/save_article",
 			type:"post",
 			data:params,
+			beforeSend:function(){
+				$('.layui-btn').addClass('layui-btn-disabled');
+			},
 			success:function(data){
 				if(data.code=='200'){
 					layer.msg(data.msg);
@@ -255,7 +258,12 @@ function publish($,params){
 					},1000);
 				}else{
 					layer.msg(data.msg);
+					$('.layui-btn').remove('layui-btn-disabled');
 				}
+			},
+			error:function(){
+				layer.msg('保存文章失败');
+				$('.layui-btn').remove('layui-btn-disabled');
 			}
 	});
 }	

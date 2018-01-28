@@ -91,7 +91,7 @@
               <div class="layui-form-item">
                 <label for="L_vercode" class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">
                   <span style="color: #c00;">$!{vercode}</span>
@@ -168,7 +168,7 @@ function submit($,params){
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/user/home';
+						location.href='$!{rc.contextPath}/user/set';
 					},1000);
 				}else{
 					layer.msg(data.msg);
@@ -186,7 +186,7 @@ function checkUnique(){
 			type:'post',
 			success:function(data){
 				if(!data.valid){
-					$('#msg').html('改用户名已被占用，请换一个');
+					$('#msg').html(data.msg);
 				}else{
 					$('#msg').html('恭喜，改用户名可以使用');
 				}
