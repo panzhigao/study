@@ -162,13 +162,20 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public String sendValidationCode(User user) {
+	public String sendValidationCode(User user,String operateType) {
 		ValidationUtils.validateEntityWithGroups(user,TelephoneBindGroup.class);
 		//校验手机号是否被占用
 		User userInDb = findByUserTelephone(user.getTelephone());
-		if(userInDb!=null){
-			logger.info("该手机号已被使用：{}",user.getTelephone());
-			throw new BusinessException("该手机号已被使用，请更换手机号");
+		if("set".equals(operateType)){
+			if(userInDb!=null){
+				logger.info("该手机号已被使用：{}",user.getTelephone());
+				throw new BusinessException("该手机号已被使用，请更换手机号");
+			}
+		}else if("findPassword".equals(operateType)){
+			if(userInDb==null){
+				logger.info("该手机号未注册：{}",user.getTelephone());
+				throw new BusinessException("该手机号未注册");
+			}
 		}
 		//生成验证码
 		String generateVerifyCode = VerifyCodeUtils.generateVerifyCode(4);

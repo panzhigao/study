@@ -35,6 +35,7 @@
 	     <mvc:mapping path="/user/**" />
 	     <mvc:mapping path="/api/user/**" />
 	     <mvc:exclude-mapping path="/"/>
+	     <mvc:exclude-mapping path="/forget"/>
 	     <mvc:exclude-mapping path="/login"/>
 	     <mvc:exclude-mapping path="/doLogin"/>
 	     <mvc:exclude-mapping path="/register"/>

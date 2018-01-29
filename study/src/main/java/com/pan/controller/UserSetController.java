@@ -98,17 +98,15 @@ public class UserSetController {
 	}
 	
 	/**
-	 * 发送验证码
+	 * 发送验证码,用于绑定手机号
 	 * @return
-	 * @throws UnsupportedEncodingException 
-	 * @throws NoSuchAlgorithmException 
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/sendValidationCode")
 	@ResponseBody
 	public ResultMsg sendValidationCode(HttpServletRequest request,String telephone){
 		User user=new User();
 		user.setTelephone(telephone);
-		String sendValidationCode = userService.sendValidationCode(user);
+		String sendValidationCode = userService.sendValidationCode(user,"set");
 		return ResultMsg.ok("发送验证码成功",sendValidationCode);
 	}
 	

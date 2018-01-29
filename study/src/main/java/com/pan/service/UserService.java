@@ -62,7 +62,7 @@ public interface UserService {
 	 * 发送手机验证码
 	 * @param telephone
 	 */
-	public String sendValidationCode(User user);
+	public String sendValidationCode(User user,String operateType);
 	/**
 	 * 校验手机和验证码
 	 * @param user
