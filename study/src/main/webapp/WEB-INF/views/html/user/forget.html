@@ -116,7 +116,7 @@
               <div class="layui-form-item">
                 <label for="L_newPassword" class="layui-form-label">新密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_newPassword" name="telephone" required lay-verify="pass" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                  <input type="password" id="L_newPassword" name="newPassword" required lay-verify="pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
@@ -160,12 +160,14 @@ layui.config({
 }).use('fly');
 layui.use(['jquery', 'form'], function(){
 	  var $ = layui.$ ;
-	  var form = layui.form;   
+	  var form = layui.form;  
+	    //修改密码
 		form.on('submit(findPassword)', function(data){
 			params = data.field;
-			editUser($,params);
+			resetPassword($,params);
 			return false;
 		});
+		//发送验证码
 		$('#sendCode').click(function(){
 		   var tel=$('#L_telephone').val();
 		   if(!tel){
@@ -196,6 +198,28 @@ function send($,tel){
 	});
 }
 
+//发送验证码
+function resetPassword($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/resetPassword",
+			type:"post",
+			data:params,
+			beforeSend:function(){
+				$('#sendCode').addClass('layui-btn-disabled');
+			},
+			success:function(res){
+				if(res.code=='200'){
+					layer.alert("修改密码成功", {icon: 6});
+					setTimeout(function(){
+						location.href="$!{rc.contextPath}/login";						
+					},2000);
+				}else{
+					layer.msg(res.msg);
+				}
+				$('#sendCode').removeClass('layui-btn-disabled');
+			}
+	});
+}
 </script>
 </body>
 </html>

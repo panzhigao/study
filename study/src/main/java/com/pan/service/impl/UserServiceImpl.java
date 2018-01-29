@@ -199,4 +199,10 @@ public class UserServiceImpl implements UserService{
 		userMapper.updateUserByUserId(user);
 		JedisUtils.existsKey(redisCode);
 	}
+
+	@Override
+	public void updateUserByUserId(User user) {
+		user.setUpdateTime(new Date());
+		userMapper.updateUserByUserId(user);
+	}
 }

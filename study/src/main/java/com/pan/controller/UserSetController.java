@@ -94,6 +94,8 @@ public class UserSetController {
 		if(!flag){
 			throw new BusinessException("密码输入错误");
 		}
+		userInDb.setPassword(PasswordUtils.getEncryptedPwd(passwordDTO.getNewPassword()));
+		userService.updateUserByUserId(userInDb);
 		return ResultMsg.ok("密码修改成功");
 	}
 	

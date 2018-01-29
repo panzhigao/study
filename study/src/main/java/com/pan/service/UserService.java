@@ -69,4 +69,10 @@ public interface UserService {
 	 * @param code 验证码
 	 */
 	public void bindTelephone(User user,String code);
+	/**
+	 * 更新用户信息
+	 * @param user
+	 * @return
+	 */
+	public void updateUserByUserId(User user);
 }

@@ -16,6 +16,7 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
+import com.pan.service.CommentService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
@@ -33,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	private ArticleMapper articleMapper;
 	
+	@Autowired
+	private CommentService commentService;
 	
 	/**
 	 * 校验当前操作码状态是否正常
@@ -103,6 +106,10 @@ public class ArticleServiceImpl implements ArticleService {
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
 			list = articleMapper.findByParams(params);
+			for(Article article:list){
+				int commentCount=commentService.getCommnetCount(article.getArticleId());
+				article.setCommentCount(commentCount);
+			}
 			pageData.put("data", list);
 			int total=articleMapper.getCountByParams(params);
 			pageData.put("total", total);

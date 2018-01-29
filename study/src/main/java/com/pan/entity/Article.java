@@ -3,7 +3,10 @@ package com.pan.entity;
 import java.util.Date;
 
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.pan.util.JsonUtils;
 
 
 /**
@@ -75,6 +78,10 @@ public class Article extends BaseEntity{
 	 * 用户头像
 	 */
 	private String userPortrait;
+	/**
+	 * 评论数
+	 */
+	private int commentCount;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -154,15 +161,17 @@ public class Article extends BaseEntity{
 	public void setUserPortrait(String userPortrait) {
 		this.userPortrait = userPortrait;
 	}
+	
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
 
 	@Override
 	public String toString() {
-		return "Article [articleId=" + articleId + ", userId=" + userId
-				+ ", status=" + status + ", publishTime=" + publishTime
-				+ ", title=" + title + ", content=" + content + ", outline="
-				+ outline + ", image=" + image + ", nickname=" + nickname
-				+ ", userPortrait=" + userPortrait + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
+		return JsonUtils.toJson(this);
 	}
 }
