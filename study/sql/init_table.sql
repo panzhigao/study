@@ -22,7 +22,7 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
     
- CREATE TABLE
+CREATE TABLE
     t_article
     (
         id INT(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -36,10 +36,11 @@ CREATE TABLE
         content text NOT NULL COMMENT '文章内容',
         outline VARCHAR(300) COMMENT '文章概要',
         image VARCHAR(100),
+        comment_count INT DEFAULT '0' COMMENT '评论数',
         PRIMARY KEY (id),
         CONSTRAINT article_id UNIQUE (article_id)
     )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
  
 CREATE TABLE
     t_picture

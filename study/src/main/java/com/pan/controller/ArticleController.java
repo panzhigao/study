@@ -134,10 +134,8 @@ public class ArticleController {
 			throw new BusinessException("文章不存在");
 		}
 		mav.addObject("article", article);
-		int commentCount=commentService.getCommnetCount(articleId);
-		long viewCount=JedisUtils.increaseKey("article:"+articleId);
-		mav.addObject("commentCount",commentCount);
-		mav.addObject("viewCount",viewCount);
+		long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
+		mav.addObject("viewCount",viewCount+article.getViewCount());
 		User articleUser=userService.findByUserId(article.getUserId());
 		mav.addObject("articleUser", articleUser);
 		return mav;

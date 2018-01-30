@@ -46,7 +46,7 @@ public interface ArticleMapper {
 	 * 更新文章
 	 * @param article
 	 */
-	public void updateArticle(Article article);
+	public int updateArticle(Article article);
 	/**
 	 * 根据条条件查询，不分页
 	 * @param article

@@ -14,6 +14,7 @@ import com.pan.entity.Comment;
 import com.pan.mapper.CommentMapper;
 import com.pan.service.CommentService;
 import com.pan.util.IdUtils;
+import com.pan.util.JedisUtils;
 import com.pan.util.ValidationUtils;
 
 /**
@@ -38,6 +39,7 @@ public class CommentServiceImpl implements CommentService{
 		comment.setCommentId(IdUtils.generateCommentId());
 		comment.setCreateTime(new Date());
 		commentMapper.addComment(comment);	
+		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		return comment;
 	}
 	
@@ -65,6 +67,7 @@ public class CommentServiceImpl implements CommentService{
 			throw new BusinessException("评论不属于当前登录用户");
 		}
 		commentMapper.deleteByCommentId(commentId);
+		JedisUtils.decreaseKey("comment_count:"+comment.getArticleId());
 	}
 
 	@Override

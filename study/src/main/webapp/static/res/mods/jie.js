@@ -16,7 +16,7 @@ layui.define('fly', function(exports){
   var gather = {}, dom = {
     jieda: $('#jieda')
     ,content: $('#L_content')
-    ,jiedaCount: $('#jiedaCount')
+    ,jiedaCount: $('#commentCount')
   };
 
   //监听专栏选择
@@ -287,6 +287,10 @@ layui.define('fly', function(exports){
               //如果删除了最佳答案
                if(li.hasClass('jieda-daan')){
                 $('.jie-status').removeClass('jie-status-ok').text('求解中');
+               }
+               //所有评论都删除了
+               if(count==0){
+            	   $('.fly-none').show();
                }
         	 }else {
            	  layer.msg(res.msg);

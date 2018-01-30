@@ -106,10 +106,6 @@ public class ArticleServiceImpl implements ArticleService {
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
 			list = articleMapper.findByParams(params);
-			for(Article article:list){
-				int commentCount=commentService.getCommnetCount(article.getArticleId());
-				article.setCommentCount(commentCount);
-			}
 			pageData.put("data", list);
 			int total=articleMapper.getCountByParams(params);
 			pageData.put("total", total);
@@ -226,5 +222,22 @@ public class ArticleServiceImpl implements ArticleService {
 	    	return list.get(0);
 	    }
 		return null;
+	}
+
+	@Override
+	public int updateArticleCommentCount(String articleId,
+			Integer commentCount) {
+		Article article=new Article();
+		article.setArticleId(articleId);
+		article.setCommentCount(commentCount);
+		return articleMapper.updateArticle(article);
+	}
+
+	@Override
+	public int updateArticleViewCount(String articleId, Integer viewCount) {
+		Article article=new Article();
+		article.setArticleId(articleId);
+		article.setViewCount(viewCount);
+		return articleMapper.updateArticle(article);
 	}
 }

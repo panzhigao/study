@@ -81,7 +81,11 @@ public class Article extends BaseEntity{
 	/**
 	 * 评论数
 	 */
-	private int commentCount;
+	private Integer commentCount;
+	/**
+	 * 阅读次数
+	 */
+	private Integer viewCount;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -162,12 +166,19 @@ public class Article extends BaseEntity{
 		this.userPortrait = userPortrait;
 	}
 	
-	public int getCommentCount() {
+	public Integer getCommentCount() {
 		return commentCount;
 	}
 
-	public void setCommentCount(int commentCount) {
+	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+	
+	public Integer getViewCount() {
+		return viewCount;
+	}
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
 	}
 
 	@Override

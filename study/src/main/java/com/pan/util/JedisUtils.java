@@ -1,6 +1,8 @@
 package com.pan.util;
 
 
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 
 import redis.clients.jedis.Jedis;
@@ -133,6 +135,31 @@ public class JedisUtils {
 		return result;
 	} 
 	
+	/**
+	 * 自减
+	 * @param key
+	 * @return
+	 */
+	public static Long decreaseKey(String key){
+		Jedis jedis = jedisPool.getResource();
+		Long value = jedis.decr(key);
+		jedis.close();
+		return value;
+	} 
+	
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public static Long decreaseKey(String key,Long value){
+		Jedis jedis = jedisPool.getResource();
+		Long result = jedis.decrBy(key, value);
+		jedis.close();
+		return result;
+	} 
+	
 	public static Long sadd(String key, String... members) {
 		Jedis jedis = null;
 		Long res = null;
@@ -225,5 +252,26 @@ public class JedisUtils {
 		} finally {
 			jedis.close();
 		}
+	}
+	
+	/**
+	 * 返回满足pattern表达式的所有key keys(*) 返回所有的key
+	 * 
+	 * @param pattern
+	 * @return
+	 */
+	public static Set<String> keys(String pattern) {
+		Jedis jedis = null;
+		Set<String> res = null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.keys(pattern);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
 	}
 }

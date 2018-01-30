@@ -3,6 +3,8 @@ package com.pan.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.pan.entity.Article;
 
 
@@ -67,4 +69,15 @@ public interface ArticleService {
 	 * @return
 	 */
 	public Article findByArticleIdAndStatus(String articleId,String status);
+	/**
+	 * 更新文章评论
+	 * @param articleId
+	 * @param commentCount
+	 */
+	public int updateArticleCommentCount(@Param("articleId")String articleId,@Param("commentCount")Integer commentCount);
+	/**
+	 * 更新文章阅读数
+	 * @return
+	 */
+	public int updateArticleViewCount(@Param("articleId")String articleId,@Param("viewCount")Integer viewCount);
 }

@@ -55,7 +55,7 @@
           <cite class="layui-hide-xs" id="nickname">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
+          <img  src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -123,13 +123,13 @@
             <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
           </div>
           <span class="fly-list-nums"> 
-            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i><span id="commentCount">$!{commentCount}</span></a>
-            <i class="iconfont" title="人气">&#xe60b;</i> <span id="viewCount">$!{viewCount}</span>
+            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i><span id="commentCount">$!{article.commentCount}</span></a>
+            <i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">$!{viewCount}</span>
           </span>
         </div>
         <div class="detail-about">
           <a class="fly-avatar" href="$!{rc.contextPath}/u/$!{article.userId}">
-            <img src="$!{articleUser.userPortrait}" alt="$!{articleUser.nickname}">
+            <img style="border-radius:50%;" src="$!{articleUser.userPortrait}" alt="$!{articleUser.nickname}">
           </a>
           <div class="fly-detail-user">
             <a href="$!{rc.contextPath}/u/$!{article.userId}" class="fly-link">
@@ -345,11 +345,11 @@ function addComment($,comment){
 	var isMeArticle=comment.userId==articleUserId?'<span>(楼主)</span>':'';
 	var commentPart = '<li data-id="'+comment.commentId+'">'+
     '<div class="detail-about detail-about-reply">'+
-      '<a class="fly-avatar" href="" target="_blank">'+
-        '<img src="'+comment.userPortrait+'" alt="'+comment.nickname+'">'+
+      '<a class="fly-avatar" href="$!{rc.contextPath}/u/'+comment.userId+'" target="_blank">'+
+        '<img style="border-radius:50%;" src="'+comment.userPortrait+'" alt="'+comment.nickname+'">'+
       '</a>'+
       '<div class="fly-detail-user">'+
-        '<a href="" target="_blank" class="fly-link">'+
+        '<a href="$!{rc.contextPath}/u/'+comment.userId+'" target="_blank" class="fly-link">'+
           '<cite>'+comment.nickname+'</cite>'+
         '</a>'+isMeArticle+
       '</div>'+

@@ -18,7 +18,7 @@ import com.pan.util.CookieUtils;
 
 @Controller
 @RequestMapping("/api")
-public class CommontController {
+public class CommentController {
 	
 	@Autowired
 	private CommentService commentService;
