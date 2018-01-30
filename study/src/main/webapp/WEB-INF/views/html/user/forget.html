@@ -105,7 +105,7 @@
                 <div class="layui-input-inline">
                   <input type="text" id="L_telephone" name="telephone" required lay-verify="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
                 </div>
-                <span id="sendCode" class="layui-btn">获取短信验证码</span>
+                <button id="sendCode" class="layui-btn">获取短信验证码</button>
               </div>
               <div class="layui-form-item">
                 <label for="L_vercode" class="layui-form-label">短信验证码</label>
@@ -178,6 +178,9 @@ layui.use(['jquery', 'form'], function(){
 		});
 });
 
+
+var countdown=5; 
+
 //发送验证码
 function send($,tel){
 		$.ajax({
@@ -186,16 +189,36 @@ function send($,tel){
 			data:{telephone:tel},
 			beforeSend:function(){
 				$('#sendCode').addClass('layui-btn-disabled');
+				$('#sendCode').attr("disabled", true);
 			},
 			success:function(res){
 				if(res.code=='200'){
 					layer.alert("验证码为："+res.data, {icon: 6});
+					settime($);
 				}else{
 					layer.msg(res.msg);
+					$('#sendCode').removeClass('layui-btn-disabled');
+					$('#sendCode').removeAttr("disabled");
 				}
-				$('#sendCode').removeClass('layui-btn-disabled');
 			}
 	});
+}
+
+function settime($) { //发送验证码倒计时
+    if (countdown == 0) { 
+    	$('#sendCode').removeClass('layui-btn-disabled');
+    	$('#sendCode').removeAttr("disabled");
+    	$('#sendCode').html("获取短信验证码");
+        countdown = 5; 
+        return;
+    } else { 
+    	$('#sendCode').html(countdown+"秒后可再次发送验证码");
+        countdown--; 
+    } 
+	setTimeout(function() { 
+    		settime($);
+    	}
+    ,1000) 
 }
 
 //发送验证码

@@ -249,6 +249,7 @@ function publish($,params){
 			data:params,
 			beforeSend:function(){
 				$('.layui-btn').addClass('layui-btn-disabled');
+				$('.layui-btn').attr("disabled", true);
 			},
 			success:function(data){
 				if(data.code=='200'){
@@ -259,6 +260,7 @@ function publish($,params){
 				}else{
 					layer.msg(data.msg);
 					$('.layui-btn').remove('layui-btn-disabled');
+					$('.layui-btn').removeAttr("disabled");
 				}
 			},
 			error:function(){
