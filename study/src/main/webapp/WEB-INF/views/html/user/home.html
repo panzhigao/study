@@ -192,9 +192,9 @@ function getData($){
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
 				var info='<li>'+
-	            '<a href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
+	            '<a target="_blank" href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
 	            '<i>'+tranTime(one.createTime)+'</i>'+
-	            '<em class="layui-hide-xs">1136阅/27答</em>'+
+	            '<em class="layui-hide-xs">'+one.viewCount+'阅/'+one.commentCount+'评论</em>'+
 	          '</li>';
 				$('.jie-row').append(info);
 			}

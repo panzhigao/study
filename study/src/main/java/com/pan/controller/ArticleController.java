@@ -102,7 +102,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/get_articles")
 	@ResponseBody
-	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
+	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status,String isHot){
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
@@ -110,6 +110,7 @@ public class ArticleController {
 		params.put("offset", offset);
 		params.put("row", pageSize);
 		params.put("status", status);
+		params.put("isHot", isHot);
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
 	}
@@ -208,13 +209,14 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
 	@ResponseBody
-	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String userId){
+	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String userId,String isHot){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
 		params.put("userId", userId);
 		params.put("status", Article.STATUS_PUBLISHED);
+		params.put("isHot", isHot);
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
 	}
