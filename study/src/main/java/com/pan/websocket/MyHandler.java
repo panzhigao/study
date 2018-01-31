@@ -14,12 +14,12 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @Service
 public class MyHandler extends TextWebSocketHandler{
     //在线用户列表
-    private static final Map<String, WebSocketSession> users;
+    private static final Map<String, WebSocketSession> USERS;
     //用户标识
     private static final String USER_ID = "userId";
 
     static {
-        users = new HashMap<>();
+        USERS = new HashMap<>();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MyHandler extends TextWebSocketHandler{
         System.out.println(userId);
         //userId=4;
         if (userId != null) {
-            users.put(userId, session);
+            USERS.put(userId, session);
             session.sendMessage(new TextMessage("成功建立socket连接"));
             System.out.println(userId);
             System.out.println(session);
@@ -54,10 +54,10 @@ public class MyHandler extends TextWebSocketHandler{
      * @return
      */
     public boolean sendMessageToUser(String clientId, TextMessage message) {
-        if (users.get(clientId) == null) {
+        if (USERS.get(clientId) == null) {
         	return false;
         }
-        WebSocketSession session = users.get(clientId);
+        WebSocketSession session = USERS.get(clientId);
         System.out.println("sendMessage:" + session);
         if (!session.isOpen()) {
         	return false;
@@ -78,11 +78,11 @@ public class MyHandler extends TextWebSocketHandler{
      */
     public boolean sendMessageToAllUsers(TextMessage message) {
         boolean allSendSuccess = true;
-        Set<String> userIds = users.keySet();
+        Set<String> userIds = USERS.keySet();
         WebSocketSession session = null;
         for (String userId : userIds) {
             try {
-                session = users.get(userId);
+                session = USERS.get(userId);
                 if (session.isOpen()) {
                     session.sendMessage(message);
                 }
@@ -102,13 +102,13 @@ public class MyHandler extends TextWebSocketHandler{
             session.close();
         }
         System.out.println("连接出错");
-        users.remove(getClientId(session));
+        USERS.remove(getClientId(session));
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("连接已关闭：" + status);
-        users.remove(getClientId(session));
+        USERS.remove(getClientId(session));
     }
 
     @Override

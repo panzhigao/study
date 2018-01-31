@@ -16,7 +16,7 @@ import com.pan.util.CookieUtils;
 public class PraiseController {
 	
 	@Autowired
-	private PraiseService PraiseService;
+	private PraiseService praiseService;
 	
 	/**
 	 * 点赞
@@ -29,7 +29,7 @@ public class PraiseController {
 		Praise praise=new Praise();
 		praise.setUserId(loingUserId);
 		praise.setCommentId(commentId);
-		PraiseService.addPraise(praise);
+		praiseService.addPraise(praise);
 		return ResultMsg.ok("点赞成功");
 	}
 }

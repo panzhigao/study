@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class RegexUtils {
 	
-	public static final String telephoneRegex="^1[3|5|8]{1}[0-9]{9}$";
+	public static final String TELEPHONE_REGEX="^1[3|5|8]{1}[0-9]{9}$";
 	
 	public static boolean check(String obj,String regex){
 		if(obj==null){
@@ -25,7 +25,7 @@ public class RegexUtils {
 	}
 	
 	public static boolean checkTelephone(String str){
-		return check(str, telephoneRegex);
+		return check(str, TELEPHONE_REGEX);
 	}
 	
 	 public static void main( String args[] ){
