@@ -105,9 +105,12 @@ public class ArticleServiceImpl implements ArticleService {
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
-			list = articleMapper.findByParams(params);
-			pageData.put("data", list);
 			int total=articleMapper.getCountByParams(params);
+			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
+			if(total>0){				
+				list = articleMapper.findByParams(params);
+			}
+			pageData.put("data", list);
 			pageData.put("total", total);
 			pageData.put("code", "200");
 			pageData.put("msg", "");
