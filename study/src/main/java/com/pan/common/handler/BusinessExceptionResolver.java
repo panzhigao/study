@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
+import com.pan.util.CookieUtils;
 import com.pan.util.JsonUtils;
 
 /**
@@ -42,21 +43,28 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 			businessException = new BusinessException("系统未知错误");
 		}
 		if(isAjax(request)){
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json; charset=utf-8");  
+            PrintWriter writer= null;
 			 try {  
-				 response.setCharacterEncoding("UTF-8");
-                 PrintWriter writer = response.getWriter(); 
-                 ResultMsg resultMsg=ResultMsg.fail(ex.getMessage());
+				 writer=response.getWriter(); 
+                 ResultMsg resultMsg=ResultMsg.fail(businessException.getMessage());
                  writer.write(JsonUtils.toJson(resultMsg));
                  writer.flush();  
              } catch (IOException e) {  
                  e.printStackTrace();  
-             }  
+             } finally{
+            	 if(writer!=null){
+            		 writer.close();
+            	 }
+             }
              return null;  
 		}
 		// 向前台返回错误信息
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("message", businessException.getMessage());
-		modelAndView.setViewName("error/404");
+		modelAndView.addObject("user", CookieUtils.getLoginUser(request));
+		modelAndView.setViewName("html/error/500");
 		return modelAndView;
 
 	}

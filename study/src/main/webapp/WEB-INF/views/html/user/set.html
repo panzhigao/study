@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>帐号设置</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+  <link href="$!{rc.contextPath}/static/css/cropper.min.css" rel="stylesheet">
+  <link href="$!{rc.contextPath}/static/css/sitelogo.css" rel="stylesheet">
+  <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/cropper.js"></script>
+  <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
+  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="$!{rc.contextPath}">
+      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end"">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/u/$!{user.userId}">
+        <i class="layui-icon">&#xe609;</i>
+        我的主页
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/center">
+        <i class="layui-icon">&#xe612;</i>
+        用户中心
+      </a>
+    </li>
+    <li class="layui-nav-item layui-this">
+      <a href="$!{rc.contextPath}/user/set">
+        <i class="layui-icon">&#xe620;</i>
+        基本设置
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/my_articles">
+        <i class="layui-icon">&#xe621;</i>
+        我的文章
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/message">
+        <i class="layui-icon">&#xe611;</i>
+        我的消息
+      </a>
+    </li>
+  </ul>
+
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li class="layui-this" lay-id="info">我的资料</li>
+        <li lay-id="pass">密码修改</li>
+        <li lay-id="bind">帐号绑定</li>
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
+        <div class="layui-form layui-form-pane layui-tab-item layui-show">
+          <form method="post">
+            <div class="layui-form-item">
+              <div class="avatar-add">
+                <p>建议尺寸168*168，支持jpg、png、gif，最大不能超过500KB</p>
+                <img  style="cursor:pointer"  src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end" title="点击更换头像" id="userImg" data-toggle="modal" data-target="#avatar-modal">
+                <input type="hidden" name="userPortrait" id="userPortrait" value="$!{user.userPortrait}">
+                <span class="loading"></span>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label for="L_nickname" class="layui-form-label">昵称</label>
+              <div class="layui-input-inline">
+                <input type="text" id="L_nickname" name="nickname" placeholder="请输入昵称" required lay-verify="nickname" autocomplete="off" value="$!{user.nickname}" class="layui-input">
+              </div>
+              <div class="layui-inline">
+                <div class="layui-input-inline">
+                  <input type="radio" name="sex" value="0" #if($user.sex=='0')checked #end title="男">
+                  <input type="radio" name="sex" value="1" #if($user.sex=='1')checked #end title="女">
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label for="L_userBbrief" class="layui-form-label">用户简介</label>
+              <div class="layui-input-block">
+                <textarea placeholder="随便写些什么刷下存在感" id="L_userBbrief"   name="userBrief" autocomplete="off" class="layui-textarea" style="height: 80px;">$!{userExtension.userBrief}</textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <button class="layui-btn" key="set-mine" lay-filter="confirmUserSet" lay-submit>确认修改</button>
+            </div>
+          </div>
+              
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <form action="/user/repass" method="post">
+              <div class="layui-form-item">
+                <label for="L_nowpass" class="layui-form-label">当前密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_nowpass" name="nowPassword" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">新密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_pass" name="newPassword" required lay-verify="pass" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">6到12个字符</div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_repass" name="rePassword" required lay-verify="repass" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <button class="layui-btn" key="set-mine" lay-filter="reset" lay-submit>确认修改</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="layui-form layui-form-pane layui-tab-item">
+          	#if($user.telephone)
+          	<div class="layui-form-item">
+                <label for="L_nowpass" class="layui-form-label"><i class="layui-icon">&#xe63b;</i>手机号</label>
+                <div class="layui-input-inline">
+                  <input type="text" disabled="disabled" id="bind_telephone" value="$!{user.telephone}" name="telephone" placeholder="请输入手机号" required lay-verify="phone" autocomplete="off" class="layui-input">
+                </div>
+                 <div class="layui-form-mid layui-word-aux">已绑定，可用手机号登陆</div>
+             </div>
+             #else
+            <form id="bindForm" action="/user/confirmBind" method="post">
+          	<div class="layui-form-item">
+                <label for="L_nowpass" class="layui-form-label"><i class="layui-icon">&#xe63b;</i>手机号</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="bind_telephone" name="telephone" placeholder="请输入手机号" required lay-verify="phone" autocomplete="off" class="layui-input">
+                </div>
+                  <span id="sendCode" class="layui-btn">获取短信验证码</span>
+             </div>
+             <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">验证码</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_code" name="code" placeholder="请输入验证码" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+             </div>
+              <div class="layui-form-item">
+                <button id="confirmBind" class="layui-btn" key="set-mine" lay-filter="confirmBind" lay-submit>确认绑定</button>
+              </div>
+             </form>
+          	 #end
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:40px;" class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1" >
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<form class="avatar-form">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" type="button">&times;</button>
+						<h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
+					</div>
+					<div class="modal-body">
+						<div class="avatar-body">
+							<div class="avatar-upload">
+								<input class="avatar-src" name="avatar_src" type="hidden">
+								<input class="avatar-data" name="avatar_data" type="hidden">
+								<label for="avatarInput" style="line-height: 35px;">图片上传</label>
+								<button class="btn btn btn-primary"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
+								<span id="avatar-name"></span>
+								<input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file"></div>
+							<div class="row">
+								<div class="col-md-9">
+									<div class="avatar-wrapper"></div>
+								</div>
+								<div class="col-md-3">
+									<div class="avatar-preview preview-lg" id="imageHead"></div>
+								</div>
+							</div>
+							<div class="row avatar-btns">
+								<div class="col-md-4">
+									<div class="btn-group">
+										<button class="btn btn btn-primary fa fa-undo" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"> 向左旋转</button>
+									</div>
+									<div class="btn-group">
+										<button class="btn  btn btn-primary fa fa-repeat" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"> 向右旋转</button>
+									</div>
+								</div>
+								<div class="col-md-5" style="text-align: right;">								
+									<button class="btn btn btn-primary fa fa-arrows" data-method="setDragMode" data-option="move" type="button" title="移动">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn btn-primary fa fa-search-plus" data-method="zoom" data-option="0.1" title="放大图片">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, 0.1)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn btn-primary fa fa-search-minus" data-method="zoom" data-option="-0.1" title="缩小图片">
+						            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, -0.1)">
+						            </span>
+						          </button>
+						          <button type="button" class="btn btn btn-primary fa fa-refresh" data-method="reset" title="重置图片">
+							            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;reset&quot;)" aria-describedby="tooltip866214">
+							       </button>
+						        </div>
+								<div class="col-md-3">
+									<button class="btn btn btn-primary btn-block avatar-save fa fa-save" type="button" data-dismiss="modal"> 保存修改</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
+	
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script>
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "2.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+$(".avatar-save").on("click", function() {
+	var img_lg = document.getElementById('imageHead');
+	// 截图小的显示框内的内容
+	html2canvas(img_lg, {
+		allowTaint: true,
+		taintTest: false,
+		onrendered: function(canvas) {
+			canvas.id = "mycanvas";
+			//生成base64图片数据
+			var dataUrl = canvas.toDataURL("image/jpeg");
+			var newImg = document.createElement("img");
+			newImg.src = dataUrl;
+			$("#userImg").attr('src',dataUrl);
+			$("#userPortrait").val(dataUrl); 
+		}
+	});
+})
+
+layui.use(['jquery', 'form'], function(){
+	  var $ = layui.$ ;
+	  var form = layui.form;
+	  form.verify({
+		  nickname: function(value, item){ //value：表单的值、item：表单的DOM对象
+		    if(!new RegExp("^[\\u4e00-\\u9fff\\w]{2,10}$").test(value)){
+		      return '昵称只能包含2-10位字母，数字，中文和下划线';
+		    }
+		  },
+		  pass: [/^[\S]{6,12}$/ ,'密码必须6到12位，且不能出现空格'],
+		  repass:function(value) {
+			  if(value != $("#L_pass").val()){
+				  $("#L_repass").val("");
+				  return '确认密码与密码不一致';
+			   }
+		  }
+		});   
+		form.on('submit(confirmUserSet)', function(data){
+			params = data.field;
+			editUser($,params);
+			return false;
+		});
+		form.on('submit(reset)',function(data){
+			params=data.field;
+			resetPassword($,params);
+			return false;
+		});
+/* 		form.on('submit(send)',function(data){
+			params=data.field;
+			send($,params);
+			return false;
+		}); */
+		form.on('submit(confirmBind)',function(data){
+			params=data.field;
+			confirmBind($,params);
+			return false;
+		});confirmBind
+		$('#sendCode').click(function(){
+		   var tel=$('#bind_telephone').val();
+		   if(!tel){
+			   layer.msg('请输入手机号');
+			   return;
+		   }
+		   send($,tel);
+		});
+});
+
+//提交修改用户信息
+function editUser($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/doSet",
+			type:"post",
+			data:params,
+			success:function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg);
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+	});
+}	
+
+//提交修改用户密码
+function resetPassword($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/resetPassword",
+			type:"post",
+			data:params,
+			success:function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg);
+					setTimeout(function(){
+						location.href='$!{rc.contextPath}/user/set';
+					},1000);
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+	});
+}
+
+//发送验证码
+function send($,tel){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/sendValidationCode",
+			type:"post",
+			data:{telephone:tel},
+			beforeSend:function(){
+				$('#sendCode').addClass('layui-btn-disabled');
+			},
+			success:function(res){
+				if(res.code=='200'){
+					layer.alert("验证码为："+res.data, {icon: 6});
+				}else{
+					layer.msg(res.msg);
+				}
+				$('#sendCode').removeClass('layui-btn-disabled');
+			}
+	});
+}
+
+//确认绑定
+function confirmBind($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/confirmBind",
+			type:"post",
+			data:params,
+			beforeSend:function(){
+				$('#confirmBind').addClass('layui-btn-disabled');
+			},
+			success:function(res){
+				if(res.code=='200'){
+					layer.alert("绑定成功", {icon: 6});
+					$('#bindForm')[0].reset();
+				}else{
+					layer.msg(res.msg);
+				}
+				$('#confirmBind').removeClass('layui-btn-disabled');
+			}
+	});
+}
+</script>
+</body>
+</html>

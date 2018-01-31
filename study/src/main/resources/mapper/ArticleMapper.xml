@@ -14,14 +14,19 @@
     <result column="content"    		property="content"         jdbcType="VARCHAR" />
     <result column="outline"    		property="outline"         jdbcType="VARCHAR" />
     <result column="image"    		    property="image"           jdbcType="VARCHAR" />
+    <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
+    <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
+    <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
+    <result column="view_count"         property="viewCount"       jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image,comment_count,view_count
   </sql>
   
+  <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,outline,image
+    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,image,comment_count,view_count
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
@@ -44,23 +49,47 @@
   </select>
   
   <select id="findByParams" resultMap="BaseResultMap">
-  	select <include refid="Simple_Column_List"/> from t_article 
-  	<where>
+  	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
+  	on a.user_id=u.user_id 
+  	<where> 
   		<if test="articleId !=null and articleId!='' ">
-  			and article_id=#{articleId}
+  			and a.article_id=#{articleId}
   		</if>
   		<if test="status !=null and status !=''">
-  			and status=#{status}
+  			and a.status=#{status}
   		</if>
   		<if test="userId !=null and userId!=''">
-  			and user_id=#{userId}
+  			and a.user_id=#{userId}
   		</if>
   	</where>
-  	order by create_time desc
+  	<choose>
+  		<when  test="isHot !=null and isHot !=''">
+  			order by comment_count desc,view_count desc
+  		</when >
+  		<otherwise>
+  			order by create_time desc
+  		</otherwise>
+  	</choose>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>
   </select>
+  
+    <select id="getCountByParams" resultType="int">
+	  	select count(0) from t_article 
+	  	<where>
+	  		<if test="articleId !=null and articleId!='' ">
+	  			and article_id=#{articleId}
+	  		</if>
+	  		<if test="status !=null and status !=''">
+	  			and status=#{status}
+	  		</if>
+	  		<if test="userId !=null and userId!=''">
+	  			and user_id=#{userId}
+	  		</if>
+	  	</where>
+    </select>
+  
   
   <select id="findListByUserId" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId} order by create_time desc
@@ -69,7 +98,7 @@
   <insert id="saveArticle" parameterType="com.pan.entity.Article">
   	insert into t_article (<include refid="Base_Column_List"/>) values 
   	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR})
+  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0)
   </insert>
   
   <update id="updateArticle" parameterType="com.pan.entity.Article">
@@ -93,7 +122,18 @@
   		<if test="image != null and image !=''">
   			image=#{image,jdbcType=VARCHAR},
   		</if>
+  		<if test="commentCount != null and commentCount !=''">
+  			comment_count=comment_count+#{commentCount},
+  		</if>
+  		<if test="viewCount != null and viewCount !=''">
+  			view_count=view_count+#{viewCount},
+  		</if>
   	</set>
   	where article_id=#{articleId}
   </update>
+  
+  <delete id="deleteByUserIdAndArticleId">
+  	delete from t_article where user_id=#{userId} and article_id=#{articleId}
+  </delete>
+  
 </mapper>

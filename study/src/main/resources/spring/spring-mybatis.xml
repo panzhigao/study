@@ -10,6 +10,7 @@
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	<!-- 自动扫描(自动注入) -->
 	<context:component-scan base-package="com.pan.service" />
+	<context:component-scan base-package="com.pan.websocket" />
 
 	<!-- 配置数据源 -->
 	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
@@ -60,6 +61,8 @@
 			<tx:method name="load*" />
 			<tx:method name="init*" />
 			<tx:method name="check*" />
+			<tx:method name="remove*" />
+			<tx:method name="bind*" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>

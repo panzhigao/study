@@ -3,6 +3,8 @@ package com.pan.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.pan.entity.Article;
 
 
@@ -28,7 +30,7 @@ public interface ArticleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public List<Article> findByParams(Map<String,Object> params);
+	public Map<String,Object> findByParams(Map<String,Object> params);
 	/**
 	 * 获取用户的文章详细信息
 	 * @param userId
@@ -41,4 +43,41 @@ public interface ArticleService {
 	 * @param article
 	 */
 	public void updateArticle(Article article);
+	/**
+	 * 获取用户的文章详细信息
+	 * @param userId
+	 * @param articleId
+	 * @return
+	 */
+	public Article getByArticleId(String articleId);
+	/**
+	 * 删除文章
+	 * @param articleId
+	 * @param userId
+	 */
+	public void deleteArticle(String articleId,String userId);
+	/**
+	 * 根据查询条件查询文章条数
+	 * @param params
+	 * @return
+	 */
+	public int getCount(Map<String, Object> params);
+	/**
+	 * 根据文章id和状态查找唯一文章信息
+	 * @param articleId
+	 * @param status
+	 * @return
+	 */
+	public Article findByArticleIdAndStatus(String articleId,String status);
+	/**
+	 * 更新文章评论
+	 * @param articleId
+	 * @param commentCount
+	 */
+	public int updateArticleCommentCount(@Param("articleId")String articleId,@Param("commentCount")Integer commentCount);
+	/**
+	 * 更新文章阅读数
+	 * @return
+	 */
+	public int updateArticleViewCount(@Param("articleId")String articleId,@Param("viewCount")Integer viewCount);
 }

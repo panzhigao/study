@@ -26,8 +26,14 @@
 		</property>
 	</bean>
 	
+	
+	<bean class="com.pan.util.MessageUtils">
+		<property name="myHandler" ref="myHandler"/>
+	</bean>
+	
 	<bean class="com.pan.common.handler.BusinessExceptionResolver"></bean>
 	
 	<import resource="classpath:spring/spring-mybatis.xml"/>
 	<import resource="classpath:spring/spring-redis.xml"/>
+	<import resource="classpath:spring/spring-task.xml"/>
 </beans>

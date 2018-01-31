@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>发表问题 编辑问题 公用</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="$!{rc.contextPath}">
+      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      
+      <!-- 未登入的状态 -->
+      <!--
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="user/login.html">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="user/reg.html">注册</a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+      </li>
+       -->
+      
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">${user.nickname}</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel" pad20 style="padding-top: 5px;">
+    <!--<div class="fly-none">没有权限</div>-->
+    <div class="layui-form layui-form-pane">
+      <div class="layui-tab layui-tab-brief" lay-filter="user">
+        <ul class="layui-tab-title">
+          <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+        </ul>
+        <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+          <div class="layui-tab-item layui-show">
+            <form action="" method="post">
+              <div class="layui-row layui-col-space15 layui-form-item">
+<!--                 <div class="layui-col-md3"> -->
+<!--                   <label class="layui-form-label">所在专栏</label> -->
+<!--                   <div class="layui-input-block"> -->
+<!--                     <select lay-verify="required" name="class" lay-filter="column">  -->
+<!--                       <option></option>  -->
+<!--                       <option value="0">提问</option>  -->
+<!--                       <option value="99">分享</option>  -->
+<!--                       <option value="100">讨论</option>  -->
+<!--                       <option value="101">建议</option>  -->
+<!--                       <option value="168">公告</option>  -->
+<!--                       <option value="169">动态</option>  -->
+<!--                     </select> -->
+<!--                   </div> -->
+<!--                 </div> -->
+                <div class="layui-col-md9">
+                  <label for="L_title" class="layui-form-label">标题</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                  </div>
+                </div>
+              </div>
+              <div class="layui-row layui-col-space15 layui-form-item layui-hide" id="LAY_quiz">
+                <div class="layui-col-md3">
+                  <label class="layui-form-label">所属产品</label>
+                  <div class="layui-input-block">
+                    <select name="project">
+                      <option></option>
+                      <option value="layui">layui</option>
+                      <option value="独立版layer">独立版layer</option>
+                      <option value="独立版layDate">独立版layDate</option>
+                      <option value="LayIM">LayIM</option>
+                      <option value="Fly社区模板">Fly社区模板</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="layui-col-md3">
+                  <label class="layui-form-label" for="L_version">版本号</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="L_version" value="" name="version" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div class="layui-col-md6">
+                  <label class="layui-form-label" for="L_browser">浏览器</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="L_browser"  value="" name="browser" placeholder="浏览器名称及版本，如：IE 11" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+              </div>
+              <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
+                  <textarea id="L_content" name="content" required lay-verify="content"  placeholder="详细描述"  style="height: 260px;"></textarea>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label">悬赏飞吻</label>
+                  <div class="layui-input-inline" style="width: 190px;">
+                    <select name="experience">
+                      <option value="20">20</option>
+                      <option value="30">30</option>
+                      <option value="50">50</option>
+                      <option value="60">60</option>
+                      <option value="80">80</option>
+                    </select>
+                  </div>
+                  <div class="layui-form-mid layui-word-aux">发表后无法更改飞吻</div>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="publish" lay-submit>立即发布</button>
+                <button class="layui-btn" lay-filter="save" lay-submit>保存草稿</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script>
+layui.cache.page = 'jie';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+layui.use(['jquery', 'form','layedit'], function(){
+	  var layedit = layui.layedit;
+	  layedit.set({
+		  uploadImage: {
+		    url: '$!{rc.contextPath}/api/upload', //接口url
+		    type: 'post' //默认post
+		  }
+	   });
+	  var index=layedit.build('L_content'); //建立编辑器
+	  var $ = layui.$ ;
+	  var form = layui.form;
+	  form.verify({
+		  username: function(value, item){ //value：表单的值、item：表单的DOM对象
+		    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+		      return '用户名不能有特殊字符';
+		    }
+		    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+		      return '用户名首尾不能出现下划线\'_\'';
+		    }
+		    if(/^\d+\d+\d$/.test(value)){
+		      return '用户名不能全为数字';
+		    }
+		  },
+		  //我们既支持上述函数式的方式，也支持下述数组的形式
+		  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+		  pass: [
+		    /^[\S]{6,12}$/
+		    ,'密码必须6到12位，且不能出现空格'
+		  ],
+		  content:function(){
+			  layedit.sync(index);
+			  var t_content=layedit.getContent(index);
+			  if(!t_content){
+				  return '文章内容不能为空';
+			  }
+		  }
+		});   
+		form.on('submit(publish)', function(data){
+			params = data.field;
+			params.status=2;
+			publish($,params);
+			return false;
+		});
+		form.on('submit(save)', function(data){
+			layedit.sync(index);
+			params = data.field;
+			params.status=1;
+			publish($,params);
+			return false;
+		});
+});
+
+//提交
+function publish($,params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/save_article",
+			type:"post",
+			data:params,
+			beforeSend:function(){
+				$('.layui-btn').addClass('layui-btn-disabled');
+				$('.layui-btn').attr("disabled", true);
+			},
+			success:function(data){
+				if(data.code=='200'){
+					layer.msg(data.msg);
+					setTimeout(function(){
+						location.href='$!{rc.contextPath}/user/center';
+					},1000);
+				}else{
+					layer.msg(data.msg);
+					$('.layui-btn').remove('layui-btn-disabled');
+					$('.layui-btn').removeAttr("disabled");
+				}
+			},
+			error:function(){
+				layer.msg('保存文章失败');
+				$('.layui-btn').remove('layui-btn-disabled');
+				$('.layui-btn').removeAttr("disabled");
+			}
+	});
+}	
+
+
+
+</script>
+</body>
+</html>

@@ -1,7 +1,6 @@
 package com.pan.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +20,11 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.service.ArticleService;
+import com.pan.service.CollectionService;
+import com.pan.service.CommentService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
+import com.pan.util.JedisUtils;
 
 /**
  * 用户创作
@@ -37,20 +39,21 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-	private static final String OPERATE_EDIT="edit";
-	
-	private static final String OPERATE_DETAIL="detail";
-	
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CommentService commentService;
+	
+	@Autowired
+	private CollectionService collectionService;
 	/**
 	 * 跳转发文页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article")
+	@RequestMapping(method=RequestMethod.GET,value="/user/articleAdd")
 	public ModelAndView writeArticle(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/articleAdd");
+		ModelAndView mav=new ModelAndView("html/jie/add");
 		User user = CookieUtils.getLoginUser(request);
 		mav.addObject("user", user);
 		return mav;
@@ -65,7 +68,7 @@ public class ArticleController {
 	public ResultMsg saveArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoingUserId(request);
+		String userId=CookieUtils.getLoginUserId(request);
 		article.setUserId(userId);
 		articleService.saveArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
@@ -82,9 +85,14 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
 	public ModelAndView toArticleList(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/articleList");
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		String loingUserId = CookieUtils.getLoginUserId(request);
+		Map<String,Object> params=new HashMap<String, Object>(2);
+		params.put("userId", loingUserId);
+		int articleCounts=articleService.getCount(params);
+		int collectionCounts = collectionService.getCount(params);
+		ModelAndView mav=new ModelAndView("html/user/article");
+		mav.addObject("articleCounts", articleCounts);
+		mav.addObject("collectionCounts", collectionCounts);
 		return mav;
 	}
 	
@@ -92,42 +100,62 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/get_articles")
+	@RequestMapping(method=RequestMethod.GET,value="/user/get_articles")
 	@ResponseBody
-	public List<Article> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
-		String loingUserId = CookieUtils.getLoingUserId(request);
+	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status,String isHot){
+		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
 		params.put("status", status);
-		List<Article> list=articleService.findByParams(params);
-		return list;
+		params.put("isHot", isHot);
+		Map<String,Object> pageData=articleService.findByParams(params);
+		return pageData;
 	}
 	
 	/**
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article/{opeate}/{articleId}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId}")
 	@ResponseBody
-	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("opeate")String opeate,@PathVariable("articleId")String articleId){
-		//不存在的操作跳转登录页
-		ModelAndView mav=new ModelAndView("login");
-		String loingUserId = CookieUtils.getLoingUserId(request);
-		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
-		mav.addObject("article", article);
-		if(OPERATE_DETAIL.equals(opeate)){
-			mav.setViewName("content/articleDetail");
-		}else if(OPERATE_EDIT.equals(opeate)){
-			if(article==null){
-				throw new BusinessException("文章已不存在");
-			}
-			mav.setViewName("content/articleEdit");
+	public ModelAndView toArticleDetailPage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+		//不存在抛出异常
+		ModelAndView mav=new ModelAndView("html/jie/detail");
+		String loginUserId = CookieUtils.getLoginUserId(request);
+		String status=Article.STATUS_PUBLISHED;
+		Article article=articleService.findByArticleIdAndStatus(articleId,status);
+		//登录状态
+		if(loginUserId!=null&&article==null){
+			article=articleService.getByUserIdAndArticleId(loginUserId, articleId);
 		}
-		User user = CookieUtils.getLoginUser(request);
-		mav.addObject("user", user);
+		if(article==null){
+			throw new BusinessException("文章不存在");
+		}
+		mav.addObject("article", article);
+		long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
+		mav.addObject("viewCount",viewCount+article.getViewCount());
+		User articleUser=userService.findByUserId(article.getUserId());
+		mav.addObject("articleUser", articleUser);
+		return mav;
+	}
+	
+	/**
+	 * 跳转文章列详情页或者编辑页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
+	@ResponseBody
+	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+		ModelAndView mav=new ModelAndView("html/jie/edit");
+		String loingUserId = CookieUtils.getLoginUserId(request);
+		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
+		if(article==null){
+			throw new BusinessException("文章不存在");
+		}
+		mav.addObject("article", article);
 		return mav;
 	}
 	
@@ -141,7 +169,7 @@ public class ArticleController {
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoingUserId(request);
+		String userId=CookieUtils.getLoginUserId(request);
 		article.setUserId(userId);
 		articleService.updateArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
@@ -150,5 +178,58 @@ public class ArticleController {
 			resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 		}
 		return resultMsg;
+	}
+	
+	/**
+	 * 删除文章
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/delete_article"})
+	@ResponseBody
+	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
+		logger.info("删除的文章id:{}",articleId);
+		String userId=CookieUtils.getLoginUserId(request);
+		articleService.deleteArticle(articleId, userId);
+		return ResultMsg.ok("删除文章成功");
+	}
+	
+	/**
+	 * 跳转文章主页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/index")
+	public ModelAndView toArticleIndex(){
+		ModelAndView mav=new ModelAndView("html/jie/index");
+		return mav;
+	}
+	
+	/**
+	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
+	@ResponseBody
+	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String userId,String isHot){
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		Integer offset=(pageNo-1)*pageSize;
+		params.put("offset", offset);
+		params.put("row", pageSize);
+		params.put("userId", userId);
+		params.put("status", Article.STATUS_PUBLISHED);
+		params.put("isHot", isHot);
+		Map<String,Object> pageData=articleService.findByParams(params);
+		return pageData;
+	}
+	
+	/**
+	 * 获取文章条数
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/article/get_count")
+	@ResponseBody
+	public int getCount(String status){
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		params.put("status", status);
+		return articleService.getCount(params);
 	}
 }

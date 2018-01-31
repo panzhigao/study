@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <style type="text/css">
+  	.selected {color:#5FB878 !important;}
+  </style>
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="$!{rc.contextPath}">
+      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/u/$!{user.userId}">
+        <i class="layui-icon">&#xe609;</i>
+        我的主页
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/center">
+        <i class="layui-icon">&#xe612;</i>
+        用户中心
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/set">
+        <i class="layui-icon">&#xe620;</i>
+        基本设置
+      </a>
+    </li>
+    <li class="layui-nav-item layui-this">
+      <a href="$!{rc.contextPath}/user/message">
+        <i class="layui-icon">&#xe621;</i>
+        我的文章
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/message">
+        <i class="layui-icon">&#xe611;</i>
+        我的消息
+      </a>
+    </li>
+  </ul>
+
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <!--
+    <div class="fly-msg" style="margin-top: 15px;">
+      您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
+    </div>
+    -->
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
+        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'>$!{collectionCounts}</span>）</li>
+      </ul>
+      
+      	  	
+      <div class="layui-tab-content" style="padding:0;">
+	    <div class="layui-tab-item layui-show">
+		    <div class="layui-tab-content">
+		       <span class="layui-breadcrumb" lay-separator="|">
+		  		<a href="javascript:;" class="category-item selected" status="">全部</a>
+		  		<a href="javascript:;" class="category-item" status="3">已发表</a>
+		  		<a href="javascript:;" class="category-item" status="0">未通过</a>
+		  		<a href="javascript:;" class="category-item" status="1">草稿</a>
+		  		<a href="javascript:;" class="category-item" status="2">审核中</a>
+				</span>
+		    </div>
+	    	<table id="myArticles" lay-filter="myTable"></table>
+	    </div>
+      
+      	
+        <div class="layui-tab-item">
+          <table id="myCollections" lay-filter="myCollections"></table>
+<!--           <ul class="mine-view jie-row"> -->
+<!--             <li> -->
+<!--               <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a> -->
+<!--               <i>收藏于23小时前</i>  </li> -->
+<!--           </ul> -->
+<!--           <div id="LAY_page1"></div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script>
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+//table
+layui.use(['table','jquery'], function(){
+	  var table = layui.table;
+	  var $ = layui.$ ;
+	  //监听工具条
+	  table.on('tool(myTable)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('确定删除该文章么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/delete_article",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				//table.reload('myArticles');
+	    				reload('articlesTab');
+	    				var counts=$('#articleCounts').html()|0;
+	    				$('#articleCounts').html(--counts);
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	        //obj.del();
+	        //layer.close(index);
+	      });
+	    } else if(obj.event === 'edit'){
+	    	 if(data.status==2){
+	    		 layer.alert('审核中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 if(data.status==3){
+	    		 layer.alert('发布中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
+	    }
+	  });
+	  //第一个实例
+	  table.render({
+		id: 'articlesTab',  
+	    //method: 'post',  
+	    elem: '#myArticles',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/get_articles', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '文章标题', width:400,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'status', title: '状态', width:100, sort: true,templet:
+	    	  function(d){
+	    	  	switch(d.status){
+		    	  	case '0':temp='审核未通过';break;
+		    	  	case '1':temp='草稿';break;
+		    	  	case '2':temp='审核中';break;
+		    	  	case '3':temp='发布成功';break;
+		    	  	default:temp="无状态";
+	    	  	}
+	    	  	return temp;
+	      	  }
+	       },
+	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+edit+t_delete;
+	      }}
+	    ]]
+	  });
+	  
+	  
+	  var status='';
+	  function reload(tableId){
+		 //执行重载
+		 table.reload(tableId, {
+		 page: {curr: 1},
+		 where: {status:status}
+		 }); 
+	  }
+	  
+	  //切换文章类型状态
+	  $('.category-item').click(function(obj){
+	  	$('.category-item').removeClass('selected');
+	  	$(this).addClass('selected');
+	  	var temp=$(this).attr('status');
+	  	if(status!=temp){
+	  		status=temp;
+	  	}else{
+	  		return;
+	  	}
+	  	reload('articlesTab');
+	  });	
+	  
+	  
+	  //监听工具条
+	  table.on('tool(myCollections)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('确定删除该收藏么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/collection/remove",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				reload('collectionsTab');
+	    				var counts=$('#collectionCounts').html()|0;
+	    				$('#collectionCounts').html(--counts);
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	      });
+	    }
+	  });
+	 
+	  //收藏
+	  table.render({
+		id: 'collectionsTab',  
+	    //method: 'post',  
+	    elem: '#myCollections',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/collection/get_collections', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'createTime', title: '收藏时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+t_delete;
+	      }}
+	    ]]
+	  });	  
+});
+</script>
+</body>
+</html>

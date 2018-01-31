@@ -1,5 +1,6 @@
 package com.pan.service;
 
+import javax.servlet.http.HttpServletRequest;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 
@@ -12,8 +13,9 @@ public interface UserService {
 	/**
 	 * 保存用户信息
 	 * @param user
+	 * @return
 	 */
-	public void saveUser(User user);
+	public User saveUser(User user);
 	/**
 	 * 根据用户名查找唯一用户信息
 	 * @param username
@@ -25,7 +27,7 @@ public interface UserService {
 	 * @param userId
 	 * @return
 	 */
-	public User findByUserid(String userId);
+	public User findByUserId(String userId);
 	/**
 	 * 根据手机号查找唯一用户信息
 	 * @param telephone
@@ -34,10 +36,12 @@ public interface UserService {
 	public User findByUserTelephone(String telephone);
 	/**
 	 * 校验用户登陆
+	 * @param httpRequest
 	 * @param user
+	 * @param vercode
 	 * @return
 	 */
-	public User checkLogin(User user);
+	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode);
 	/**
 	 * 更新用户登陆时间
 	 * @param userId
@@ -53,5 +57,22 @@ public interface UserService {
 	 * @param userId
 	 * @return 
 	 */
-	public UserExtension findByUserId(String userId);
+	public UserExtension findExtensionByUserId(String userId);
+	/**
+	 * 发送手机验证码
+	 * @param telephone
+	 */
+	public String sendValidationCode(User user,String operateType);
+	/**
+	 * 校验手机和验证码
+	 * @param user
+	 * @param code 验证码
+	 */
+	public void bindTelephone(User user,String code);
+	/**
+	 * 更新用户信息
+	 * @param user
+	 * @return
+	 */
+	public void updateUserByUserId(User user);
 }

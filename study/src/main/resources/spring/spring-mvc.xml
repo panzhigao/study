@@ -22,21 +22,31 @@
 	<mvc:resources mapping="/static/js/**" location="/static/js/" />
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
+	<mvc:resources mapping="/static/res/**" location="/static/res/" />
 	
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors> 
+	   <mvc:interceptor>
+	   	 <mvc:mapping path="/**" />
+	   	 <bean class="com.pan.interceptor.SessionInterceptor"></bean> 
+	   </mvc:interceptor>
 	   <mvc:interceptor> 
-	     <mvc:mapping path="/**" />
+	     <mvc:mapping path="/user/**" />
+	     <mvc:mapping path="/api/user/**" />
 	     <mvc:exclude-mapping path="/"/>
+	     <mvc:exclude-mapping path="/forget"/>
 	     <mvc:exclude-mapping path="/login"/>
 	     <mvc:exclude-mapping path="/doLogin"/>
 	     <mvc:exclude-mapping path="/register"/>
+	     <mvc:exclude-mapping path="/doRegister"/>
+	     <mvc:exclude-mapping path="/checkUnique"/>
 	     <mvc:exclude-mapping path="/static/images/**"/>
 	     <mvc:exclude-mapping path="/static/css/**"/>
 	     <mvc:exclude-mapping path="/static/js/**"/>
 	     <mvc:exclude-mapping path="/static/frame/**"/>
 	     <mvc:exclude-mapping path="/static/assets/**"/>
+	     <mvc:exclude-mapping path="/static/res/**"/>
 	     <bean class="com.pan.interceptor.LoginInterceptor"></bean> 
 	   </mvc:interceptor> 
 	</mvc:interceptors> 

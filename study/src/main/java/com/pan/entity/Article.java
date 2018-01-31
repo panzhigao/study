@@ -2,6 +2,13 @@ package com.pan.entity;
 
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.pan.util.JsonUtils;
+
+
 /**
  * 文章实体类
  * @author Administrator
@@ -47,10 +54,13 @@ public class Article extends BaseEntity{
 	/**
 	 * 文章标题
 	 */
+	@NotEmpty(message="文章标题不能为空")
+	@Size(max=30,min=5,message="文章标题长度必须在5-30之间")
 	private String title;
 	/**
 	 * 文章内容
 	 */
+	@NotEmpty(message="文章内容不能为空")
 	private String content;
 	/**
 	 * 文章概要
@@ -60,7 +70,22 @@ public class Article extends BaseEntity{
 	 * 文章摘要图片
 	 */
 	private String image;
-	
+	/**
+	 * 用户昵称
+	 */
+	private String nickname;
+	/**
+	 * 用户头像
+	 */
+	private String userPortrait;
+	/**
+	 * 评论数
+	 */
+	private Integer commentCount;
+	/**
+	 * 阅读次数
+	 */
+	private Integer viewCount;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -124,14 +149,40 @@ public class Article extends BaseEntity{
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getUserPortrait() {
+		return userPortrait;
+	}
+
+	public void setUserPortrait(String userPortrait) {
+		this.userPortrait = userPortrait;
+	}
+	
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
+	}
+	
+	public Integer getViewCount() {
+		return viewCount;
+	}
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
+	}
 
 	@Override
 	public String toString() {
-		return "Article [articleId=" + articleId + ", userId=" + userId
-				+ ", status=" + status + ", publishTime=" + publishTime
-				+ ", title=" + title + ", content=" + content + ", outline="
-				+ outline + ", image=" + image + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
+		return JsonUtils.toJson(this);
 	}
 }

@@ -5,6 +5,7 @@
   <resultMap id="BaseResultMap" type="com.pan.entity.User">
     <id     column="id"             	property="id"              jdbcType="INTEGER" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="sex"        	    property="sex"             jdbcType="VARCHAR" />
     <result column="username"       	property="username"        jdbcType="VARCHAR" />
     <result column="nickname"       	property="nickname"        jdbcType="VARCHAR" />
     <result column="password"           property="password"        jdbcType="VARCHAR" />
@@ -17,7 +18,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait
+    id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -34,7 +35,7 @@
   
   <insert id="saveUser" parameterType="com.pan.entity.User">
   	insert into t_user (<include refid="Base_Column_List"/>) values 
-  	(null,#{userId,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+  	(null,#{userId,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
   	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},
   	#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR})
   </insert>
@@ -65,6 +66,9 @@
   		</if>
   		<if test="userPortrait !=null and userPortrait !='' ">
   			user_portrait=#{userPortrait,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sex !=null and sex !='' ">
+  			sex=#{sex,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where user_id=#{userId}

@@ -81,10 +81,8 @@ public class PasswordUtils {
         if (Arrays.equals(digest, digestInDb)) {   
             //口令正确返回口令匹配消息   
             return true;   
-        } else {   
-            //口令不正确返回口令不匹配消息   
-            return false;   
-        }   
+        }
+        return false;
     }   
   
     /**  

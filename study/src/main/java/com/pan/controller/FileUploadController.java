@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
@@ -35,7 +39,7 @@ import com.pan.util.IdUtils;
  *
  */
 @Controller  
-@RequestMapping("/file")  
+@RequestMapping("/api")  
 public class FileUploadController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(FileUploadController.class);
@@ -71,7 +75,7 @@ public class FileUploadController {
             File destFile=new File(pictureDir+path); 
             file.transferTo(destFile);  
             Picture picture=new Picture();
-            String userId=CookieUtils.getLoingUserId(request);
+            String userId=CookieUtils.getLoginUserId(request);
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
@@ -79,7 +83,9 @@ public class FileUploadController {
                  picture.setCreateTime(new Date());
                  pictureService.savePicture(picture);
                  logger.info("图片输出路径:{}",PIC_BASE+path); 
-                 resultMsg=ResultMsg.ok(PIC_BASE+path);
+                 Map<String,Object> data=new HashMap<String, Object>(5);
+                 data.put("src", PIC_BASE+path);
+                 resultMsg=ResultMsg.build(ResultCodeEmun.UPLOAD_SUCCESS,ResultCodeEmun.UPLOAD_SUCCESS.getMsg(),data);
 			} catch (Exception e) {
 				logger.error("保存图片信息失败",e);
 				resultMsg=ResultMsg.fail("保存图片信息失败");
@@ -135,7 +141,7 @@ public class FileUploadController {
 							}
 							try {
 								Picture picture=new Picture();
-					            String userId=CookieUtils.getLoingUserId(request);
+					            String userId=CookieUtils.getLoginUserId(request);
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPicUrl(PIC_BASE+destFileName);

@@ -1,6 +1,10 @@
 package com.pan.entity;
 
-
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class RolePermission extends BaseEntity{
 
 	/**
