@@ -1,3 +1,4 @@
+/*用户表*/
 CREATE TABLE `t_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(64) NOT NULL,
