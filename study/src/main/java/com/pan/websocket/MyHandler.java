@@ -54,10 +54,14 @@ public class MyHandler extends TextWebSocketHandler{
      * @return
      */
     public boolean sendMessageToUser(String clientId, TextMessage message) {
-        if (users.get(clientId) == null) return false;
+        if (users.get(clientId) == null) {
+        	return false;
+        }
         WebSocketSession session = users.get(clientId);
         System.out.println("sendMessage:" + session);
-        if (!session.isOpen()) return false;
+        if (!session.isOpen()) {
+        	return false;
+        }
         try {
             session.sendMessage(message);
         } catch (IOException e) {
