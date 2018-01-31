@@ -271,7 +271,12 @@ layui.use(['table','jquery'], function(){
 	  $('.category-item').click(function(obj){
 	  	$('.category-item').removeClass('selected');
 	  	$(this).addClass('selected');
-	  	status=$(this).attr('status');
+	  	var temp=$(this).attr('status');
+	  	if(status!=temp){
+	  		status=temp;
+	  	}else{
+	  		return;
+	  	}
 	  	reload('articlesTab');
 	  });	
 	  

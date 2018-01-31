@@ -266,6 +266,7 @@ function publish($,params){
 			error:function(){
 				layer.msg('保存文章失败');
 				$('.layui-btn').remove('layui-btn-disabled');
+				$('.layui-btn').removeAttr("disabled");
 			}
 	});
 }	

@@ -76,6 +76,8 @@ public class LoginController{
 		userInDb.setPassword(null);
 		String json=JsonUtils.toJson(userInDb);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
+		//用户登录成功，将用户session添加到redis集合中
+		request.getSession().setAttribute("userId", userInDb.getUserId());
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}
 		

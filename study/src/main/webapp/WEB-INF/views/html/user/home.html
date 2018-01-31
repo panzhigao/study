@@ -177,6 +177,21 @@ var userId='$!{u.userId}';
 layui.use(['laypage', 'layer','jquery'], function(){
 	var $ = layui.$ ;
 	getData($);
+	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
+	
+	ws.onopen = function () {
+	   console.log("websocket连接成功");
+	   ws.send("{}");
+	}
+	ws.onclose = function () {
+	   console.log("websocket连接断开");
+	}
+
+	ws.onmessage = function (msg) {
+      alert(msg.data);		
+	  console.log("服务器传来消息："+msg.data);
+	}
+	
 	
 })
 function getData($){
@@ -192,7 +207,7 @@ function getData($){
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
 				var info='<li>'+
-	            '<a target="_blank" href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
+	            '<a style="max-width: 60%;" target="_blank" href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
 	            '<i>'+tranTime(one.createTime)+'</i>'+
 	            '<em class="layui-hide-xs">'+one.viewCount+'阅/'+one.commentCount+'评论</em>'+
 	          '</li>';
@@ -202,6 +217,5 @@ function getData($){
 	});
 }
 </script>
-
 </body>
 </html>
