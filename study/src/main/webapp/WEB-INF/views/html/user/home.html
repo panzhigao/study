@@ -29,7 +29,7 @@
     </ul>
     
     <ul class="layui-nav fly-nav-user">
-            <!-- 未登入的状态 -->
+      <!-- 未登入的状态 -->
       #if(!${user})
       <li class="layui-nav-item">
         <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
@@ -49,6 +49,9 @@
       
       <!-- 登入后的状态 -->
       #else
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<i>消息<span class="layui-badge" id="messageCount">0</span></i>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -188,7 +191,9 @@ layui.use(['laypage', 'layer','jquery'], function(){
 	}
 
 	ws.onmessage = function (msg) {
-      alert(msg.data);		
+      //alert(msg.data);	
+      var count=$("#messageCount").html()|0;
+      $("#messageCount").html(++count);
 	  console.log("服务器传来消息："+msg.data);
 	}
 	
