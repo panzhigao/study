@@ -180,7 +180,7 @@ var userId='$!{u.userId}';
 layui.use(['laypage', 'layer','jquery'], function(){
 	var $ = layui.$ ;
 	getData($);
-	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
+	var ws = new WebSocket("ws://www.pan.com:8080/study/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");

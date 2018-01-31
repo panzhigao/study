@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,6 +14,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Service
 public class MyHandler extends TextWebSocketHandler{
+	
+	private static final Logger logger = LoggerFactory.getLogger(MyHandler.class);
     //在线用户列表
     private static final Map<String, WebSocketSession> USERS;
     //用户标识
@@ -24,27 +27,24 @@ public class MyHandler extends TextWebSocketHandler{
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("成功建立连接");
+        logger.info("成功建立连接");
         String userId = getClientId(session);
-        System.out.println(userId);
+        logger.info("userId:{}",userId);
         //userId=4;
         if (userId != null) {
             USERS.put(userId, session);
-            session.sendMessage(new TextMessage("成功建立socket连接"));
-            System.out.println(userId);
-            System.out.println(session);
         }
     }
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        System.out.println(message.getPayload());
-        TextMessage message1 = new TextMessage("server:"+message);
-        try {
-            session.sendMessage(message1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        logger.info(message.getPayload());
+//        TextMessage message1 = new TextMessage("server:"+message);
+//        try {
+//            session.sendMessage(message1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -58,7 +58,7 @@ public class MyHandler extends TextWebSocketHandler{
         	return false;
         }
         WebSocketSession session = USERS.get(clientId);
-        System.out.println("sendMessage:" + session);
+        logger.info("sendMessage:" + session);
         if (!session.isOpen()) {
         	return false;
         }
@@ -91,7 +91,6 @@ public class MyHandler extends TextWebSocketHandler{
                 allSendSuccess = false;
             }
         }
-
         return  allSendSuccess;
     }
 
@@ -101,13 +100,13 @@ public class MyHandler extends TextWebSocketHandler{
         if (session.isOpen()) {
             session.close();
         }
-        System.out.println("连接出错");
+        logger.error("连接出错");
         USERS.remove(getClientId(session));
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("连接已关闭：" + status);
+    	logger.info("连接已关闭：" + status);
         USERS.remove(getClientId(session));
     }
 
@@ -124,7 +123,7 @@ public class MyHandler extends TextWebSocketHandler{
     private String getClientId(WebSocketSession session) {
         try {
             String userId =(String) session.getAttributes().get(USER_ID);
-            System.out.println("获取用户标识:"+userId);
+            logger.info("获取用户标识:"+userId);
             return userId;
         } catch (Exception e) {
             return null;

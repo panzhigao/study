@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 import com.pan.service.ArticleService;
 import com.pan.util.JedisUtils;
 
+/**
+ * 
+ * @author Administrator
+ *
+ */
 @Component
 public class OperateCountTask {
 	

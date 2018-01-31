@@ -7,13 +7,19 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/**
+ * 
+ * @author Administrator
+ *
+ */
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer{
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		 registry.addHandler(myHandler(), "/myHandler").addInterceptors(new WebSocketInterceptor());
+		 registry.addHandler(myHandler(), "/myHandler").addInterceptors(new WebSocketInterceptor())
+		 .setAllowedOrigins("http://www.pan.com");
 	}
 	
     @Bean

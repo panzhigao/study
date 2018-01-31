@@ -6,6 +6,11 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
+/**
+ * 
+ * @author Administrator
+ *
+ */
 public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
 
 	@Override

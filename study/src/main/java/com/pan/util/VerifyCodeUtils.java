@@ -2,6 +2,11 @@ package com.pan.util;
 
 import java.util.Random;
 
+/**
+ * 验证码工具类
+ * @author Administrator
+ *
+ */
 public class VerifyCodeUtils {
 	
 	/**

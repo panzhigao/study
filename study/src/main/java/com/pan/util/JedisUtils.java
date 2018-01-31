@@ -274,4 +274,40 @@ public class JedisUtils {
 		}
 		return res;
 	}
+	
+	/**
+	 * 设置key value,如果key已经存在则返回0,nx==> not exist
+	 * 
+	 * @param key
+	 * @param value
+	 * @return 成功返回1 如果存在 和 发生异常 返回 0
+	 */
+	public static Long setnx(byte[] key, byte[] value) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.setnx(key, value);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			return 0L;
+		} finally {
+			jedis.close();
+		}
+	}
+	
+	public static byte[] get(byte[] key){
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.get(key);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			return null;
+		} finally {
+			jedis.close();
+		}
+	}
+	
 }

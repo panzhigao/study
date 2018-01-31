@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
@@ -298,5 +300,10 @@ public final class CookieUtils {
     	if(!StringUtils.equalsIgnoreCase(vercode, redisVercode)){
     		throw new BusinessException("验证码输入错误");
     	}
+    }
+    
+    public static String getLoginUserId(){
+    	HttpServletRequest requset = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	return getLoginUserId(requset);
     }
 }

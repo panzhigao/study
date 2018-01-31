@@ -37,7 +37,11 @@
 		<description>spring监听器</description>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	
+	<listener>
+       <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
 	<servlet>
 		<description>spring mvc servlet</description>
 		<servlet-name>springMvc</servlet-name>

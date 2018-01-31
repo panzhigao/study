@@ -31,6 +31,9 @@ public class SessionInterceptor implements HandlerInterceptor{
 			User loginUser = CookieUtils.getLoginUser(request);
 			if(loginUser!=null){			
 				modelAndView.addObject("user",loginUser);
+				if(request.getSession().getAttribute("userId")==null){					
+					request.getSession().setAttribute("userId", loginUser.getUserId());
+				}
 			}
 		}
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
