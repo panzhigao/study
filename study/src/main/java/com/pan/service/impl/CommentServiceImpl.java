@@ -9,12 +9,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
+import com.pan.entity.Article;
 import com.pan.entity.Comment;
+import com.pan.entity.Message;
+import com.pan.entity.User;
 import com.pan.mapper.CommentMapper;
+import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
+import com.pan.service.MessageService;
+import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.MessageUtils;
 import com.pan.util.ValidationUtils;
 
 /**
@@ -30,16 +38,47 @@ public class CommentServiceImpl implements CommentService{
 	@Autowired
 	private CommentMapper commentMapper;
 	
+	@Autowired
+	private MessageService messageService;
+	
+	@Autowired
+	private ArticleService articleService;
+	
+	@Autowired
+	private UserService userService;
 	/**
 	 * 添加评论
 	 */
 	@Override
 	public Comment addComment(Comment comment) {
 		ValidationUtils.validateEntity(comment);
+		String articleId=comment.getArticleId();
+		Article articleInDb = articleService.getByArticleId(articleId);
+		if(articleInDb==null){
+			throw new BusinessException("文章不存在");
+		}
+		User userInDb = userService.findByUserId(comment.getUserId());
+		Message message=new Message();
+		if(userInDb!=null){
+			message.setSenderName(userInDb.getNickname());
+		}
 		comment.setCommentId(IdUtils.generateCommentId());
 		comment.setCreateTime(new Date());
-		commentMapper.addComment(comment);	
+		commentMapper.addComment(comment);
+		message.setMessageId(IdUtils.generateMessageId());
+		message.setMessageType(MyConstant.MESSAGE_TYPE_COMMENT);
+		message.setStatus(MyConstant.MESSAGE_NOT_READED);
+		message.setSenderUserId(comment.getUserId());
+		message.setSenderName(userInDb.getNickname());
+		message.setContentId(comment.getArticleId());
+		message.setContentName(articleInDb.getTitle());
+		message.setReceiverUserId(articleInDb.getUserId());
+		message.setCreateTime(new Date());
+		message.setCommentContent(comment.getCommentContent());
+		messageService.addMessage(message);
 		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
+		String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
+		MessageUtils.sendToUser(articleInDb.getUserId(), messageStr);
 		return comment;
 	}
 	

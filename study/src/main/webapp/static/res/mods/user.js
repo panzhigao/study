@@ -343,16 +343,23 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     //删除全部
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
-      layer.confirm('确定清空吗？', function(index){
-        fly.json('/message/remove/', {
-          all: true
-        }, function(res){
-          if(res.status === 0){
-            layer.close(index);
-            othis.addClass('layui-hide');
-            delEnd(true);
-          }
-        });
+      layer.confirm('确定全部置为已读么？', function(index){
+    	$.post('/study/message/clean',{all:true},function(res){
+    		if(res.code =='200'){
+                layer.close(index);
+                othis.addClass('layui-hide');
+              }
+    	}); 
+    	    
+//        fly.json('/message/remove/', {
+//          all: true
+//        }, function(res){
+//          if(res.status === 0){
+//            layer.close(index);
+//            othis.addClass('layui-hide');
+//            delEnd(true);
+//          }
+//        });
       });
     });
 

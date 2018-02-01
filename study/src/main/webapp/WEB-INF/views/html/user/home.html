@@ -50,7 +50,7 @@
       <!-- 登入后的状态 -->
       #else
       <li class="layui-nav-item" style="margin-right:30px;">
-    	<i>消息<span class="layui-badge" id="messageCount">0</span></i>
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
   	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
@@ -180,7 +180,10 @@ var userId='$!{u.userId}';
 layui.use(['laypage', 'layer','jquery'], function(){
 	var $ = layui.$ ;
 	getData($);
-	var ws = new WebSocket("ws://www.pan.com:8080/study/myHandler")
+	#if(${user})
+	$.post('$!{rc.contextPath}/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
+	
+	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
@@ -190,13 +193,12 @@ layui.use(['laypage', 'layer','jquery'], function(){
 	   console.log("websocket连接断开");
 	}
 
-	ws.onmessage = function (msg) {
-      //alert(msg.data);	
+	ws.onmessage = function (msg) {	
       var count=$("#messageCount").html()|0;
       $("#messageCount").html(++count);
 	  console.log("服务器传来消息："+msg.data);
 	}
-	
+	#end
 	
 })
 function getData($){

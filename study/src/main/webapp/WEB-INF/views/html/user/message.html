@@ -98,20 +98,8 @@
 	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
 	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
 	    <div  id="LAY_minemsg" style="margin-top: 10px;">
-        <!--<div class="fly-none">您暂时没有最新消息</div>-->
+        <div class="fly-none" style="display:none;">您暂时没有最新消息</div>
         <ul class="mine-msg">
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              <a href="/jump?username=Absolutely" target="_blank"><cite>Absolutely</cite></a>回答了您的求解<a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669"><cite>layui后台框架</cite></a>
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              系统消息：欢迎使用 layui
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
         </ul>
       </div>
 	  </div>
@@ -130,6 +118,7 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -144,8 +133,39 @@ layui.config({
   ,base: '$!{rc.contextPath}/static/res/mods/'
 }).extend({
   fly: 'index'
-}).use('fly');
-</script>
+}).use(['fly'],function(){
+	var $ = layui.$;
+	loadMessages($);
+});
 
+function loadMessages($){
+	$.ajax({
+		url:"$!{rc.contextPath}/user/message/load",
+		type:"post",
+		success:function(result){
+			if(result.code=='200'){
+				var data=result.data;
+				var length=data.length;
+				if(length==0){
+					$('.fly-none').show();
+					return;
+				}
+				for(var i=0;i<length;i++){
+					var message=data[i];
+			          var one='<cite style="color:black;">'+message.commentContent+'</cite><li data-id="123">'+
+			            '<blockquote class="layui-elem-quote">'+
+			              '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'"><cite>'+message.contentName+'</cite></a>'+
+			            '</blockquote>'+
+			            '<p><span>'+tranTime(message.createTime)+'</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>'+
+			         '</li>';
+					$('.mine-msg').append(one);
+				}
+			}else{
+				layer.msg("加载消息失败");
+			}
+		}
+	});
+}
+</script>
 </body>
 </html>

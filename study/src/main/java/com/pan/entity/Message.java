@@ -18,6 +18,10 @@ public class Message extends BaseEntity{
 	 */
 	private String messageId;
 	/**
+	 * 消息状态 0-未读 1-已读
+	 */
+	private String status;
+	/**
 	 * 消息接收者id
 	 */
 	private String receiverUserId;
@@ -41,6 +45,10 @@ public class Message extends BaseEntity{
 	 * 内容名称
 	 */
 	private String contentName;
+	/**
+	 * 评论内容
+	 */
+	private String commentContent;
 	public String getMessageId() {
 		return messageId;
 	}
@@ -82,6 +90,18 @@ public class Message extends BaseEntity{
 	}
 	public void setContentName(String contentName) {
 		this.contentName = contentName;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
 	}
 	@Override
 	public String toString() {

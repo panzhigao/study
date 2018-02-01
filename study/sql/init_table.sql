@@ -119,3 +119,22 @@ CREATE TABLE
         CONSTRAINT message_id UNIQUE (message_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息表';
+    
+CREATE TABLE
+    t_message
+    (
+        id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+        message_id VARCHAR(64) NOT NULL COMMENT '消息id',
+        status CHAR(1) DEFAULT '0' NOT NULL COMMENT '0-未读 1-已读',
+        receiver_user_id VARCHAR(64) NOT NULL COMMENT '接收者id',
+        sender_name VARCHAR(64) NOT NULL,
+        sender_user_id VARCHAR(64) NOT NULL COMMENT '发送消息者id',
+        message_type CHAR(1) NOT NULL COMMENT '消息类别 1-评论 2-点赞 3-系统消息',
+        content_id VARCHAR(64),
+        content_name VARCHAR(64) COMMENT '内容名称',
+        create_time DATETIME NOT NULL,
+        comment_content VARCHAR(300) COMMENT '评论内容',
+        PRIMARY KEY (id),
+        CONSTRAINT message_id UNIQUE (message_id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息通知表';  

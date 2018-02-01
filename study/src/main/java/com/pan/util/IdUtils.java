@@ -24,6 +24,8 @@ public class IdUtils {
 	
 	private static final String COLLECTION_KEY="collection_id";
 	
+	private static final String MESSAGE_KEY="message_id";
+	
 	/**
 	 * 创建文章id
 	 * @return
@@ -132,5 +134,27 @@ public class IdUtils {
 			throw e;
 		}
 		return praiseId;
+	}
+	
+	/**
+	 * 创建消息id
+	 * @return
+	 */
+	public static String generateMessageId(){
+		String messageId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(MESSAGE_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(MESSAGE_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(MESSAGE_KEY);
+			}
+			messageId="m"+value;
+		} catch (Exception e) {
+			logger.error("生成消息id错误",e);
+			throw e;
+		}
+		return messageId;
 	}
 }

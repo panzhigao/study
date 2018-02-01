@@ -14,4 +14,25 @@ public class MyConstant {
 	public static final String USER_LOGINED="user_login:";
 	
 	public static final String USER_SESSION="user_session:";
+	
+	/**
+	 * 消息已读
+	 */
+	public static final String MESSAGE_READED="1";
+	/**
+	 * 消息未读
+	 */
+	public static final String MESSAGE_NOT_READED="0";
+	/**
+	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 */
+	public static final String MESSAGE_TYPE_COMMENT="1";
+	/**
+	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 */
+	public static final String MESSAGE_TYPE_PRAISE="2";
+	/**
+	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 */
+	public static final String MESSAGE_TYPE_SYSTEM="3";
 }

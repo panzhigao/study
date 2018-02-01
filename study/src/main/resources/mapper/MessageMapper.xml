@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.MessageMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.Message">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="message_id"        	property="messageId"       jdbcType="VARCHAR" />
+    <result column="status"        	    property="status"          jdbcType="VARCHAR" />
+    <result column="receiver_user_id"   property="receiverUserId"  jdbcType="VARCHAR" />
+    <result column="sender_name"        property="senderName"      jdbcType="VARCHAR" />
+    <result column="sender_user_id"     property="senderUserId"    jdbcType="VARCHAR" />
+    <result column="message_type"       property="messageType"     jdbcType="VARCHAR" />
+    <result column="content_id"         property="contentId"       jdbcType="VARCHAR" />
+    <result column="content_name"    	property="contentName"     jdbcType="VARCHAR" />
+    <result column="create_time"    	property="createTime"      jdbcType="TIMESTAMP"/>
+    <result column="comment_content"    property="commentContent"      jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,message_id,status,receiver_user_id,sender_name,sender_user_id,message_type,content_id,content_name,create_time,comment_content
+  </sql>
+    
+  <!-- 查询用户的所有消息 -->  
+  <select id="findByReceiverUserId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_message where receiver_user_id=#{receiverUserId} order by create_time desc
+  </select>
+  
+  <insert id="addMessage" parameterType="com.pan.entity.Message">
+  	insert into t_message (<include refid="Base_Column_List"/>) values 
+  	(null,#{messageId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{receiverUserId,jdbcType=VARCHAR},#{senderName,jdbcType=VARCHAR},
+  	#{senderUserId,jdbcType=VARCHAR},#{messageType,jdbcType=VARCHAR},#{contentId,jdbcType=VARCHAR},#{contentName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{commentContent,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <!-- 查询所有未读消息条数 -->
+  <select id="countMessage" resultType="int">
+  	select count(0) from t_message where receiver_user_id=#{receiverUserId} and status=#{status}
+  </select>
+  
+</mapper>
