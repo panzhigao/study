@@ -183,7 +183,7 @@ layui.use(['laypage', 'layer','jquery'], function(){
 	#if(${user})
 	$.post('$!{rc.contextPath}/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
+	var ws = new WebSocket("ws://www.pan.com:8080/study/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");

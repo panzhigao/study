@@ -29,4 +29,11 @@ public interface MessageMapper {
 	 * @return
 	 */
 	public int countMessage(@Param("receiverUserId")String receiverUserId,@Param("status")String status);
+	/**
+	 * 消息标记为已读
+	 * @param receiverUserId
+	 * @param messageId
+	 * @return
+	 */
+	public int cleanMessage(@Param("receiverUserId")String receiverUserId,@Param("messageId")String messageId);
 }

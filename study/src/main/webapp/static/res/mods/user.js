@@ -329,26 +329,47 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
-      var othis = $(this).parents('li'), id = othis.data('id');
-      fly.json('/message/remove/', {
-        id: id
-      }, function(res){
-        if(res.status === 0){
-          othis.remove();
-          delEnd();
-        }
-      });
+      var othis = $(this).parents('li'), messageId = othis.data('messageid');
+	  	$.post('/study/user/message/clean',{messageId: messageId},function(res){
+			if(res.code =='200'){
+	            //layer.close(index);
+	            //othis.addClass('layui-hide');
+	            othis.find('.fly-delete').remove();
+	            othis.find('.readed').show();
+	            //全部已读，将全部已读按钮移除
+	            if($('.fly-delete').length==0){
+					$('#LAY_delallmsg').remove();
+				}
+	            
+	        }else{
+	        	layer.msg(res.msg);
+	        }
+		});
+      
+//      fly.json('/study/user/message/clean', {
+//        messageId: messageId
+//      }, function(res){
+//        if(res.status =='200'){
+//          othis.remove();
+//          delEnd();
+//        }
+//      });
+      
     });
 
-    //删除全部
+    //全部已读
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定全部置为已读么？', function(index){
-    	$.post('/study/message/clean',{all:true},function(res){
+    	$.post('/study/user/message/clean',{all:true},function(res){
     		if(res.code =='200'){
                 layer.close(index);
                 othis.addClass('layui-hide');
-              }
+                $('.fly-delete').remove();
+                $('.readed').show();
+            }else{
+            	layer.msg(res.msg);
+            }
     	}); 
     	    
 //        fly.json('/message/remove/', {

@@ -27,4 +27,6 @@ public interface MessageService {
 	 * @return
 	 */
 	public int countMessage(String userId,String status);
+	
+	public int cleanMessage(String userId,String messageId);
 }

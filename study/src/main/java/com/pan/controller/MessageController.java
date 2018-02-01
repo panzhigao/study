@@ -49,4 +49,12 @@ public class MessageController {
 		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
 		return ResultMsg.ok("统计成功", count);
 	}
+	
+	@RequestMapping(method=RequestMethod.POST,value="/user/message/clean")
+	@ResponseBody
+	public ResultMsg cleanMessage(String messageId){
+		String loginUserId = CookieUtils.getLoginUserId();
+		int count=messageService.cleanMessage(loginUserId, messageId);
+		return ResultMsg.ok("消息置为已读成功", count);
+	}
 }

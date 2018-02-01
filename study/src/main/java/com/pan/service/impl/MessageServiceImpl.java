@@ -47,4 +47,9 @@ public class MessageServiceImpl implements MessageService {
 	public int countMessage(String userId, String status) {
 		return messageMapper.countMessage(userId, status);
 	}
+
+	@Override
+	public int cleanMessage(String userId, String messageId) {
+		return messageMapper.cleanMessage(userId, messageId);
+	}
 }

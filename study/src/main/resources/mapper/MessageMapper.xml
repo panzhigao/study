@@ -36,4 +36,17 @@
   	select count(0) from t_message where receiver_user_id=#{receiverUserId} and status=#{status}
   </select>
   
+  <!-- 消息标为已读 -->
+  <update id="cleanMessage">
+  	update t_message set status=1
+  	<where>
+  		<if test="receiverUserId !=null and receiverUserId !=''">
+  		 and receiver_user_id=#{receiverUserId}
+  		</if>
+  		<if test="messageId !=null and messageId !=''">
+  		 and message_id=#{messageId}
+  		</if>
+  	</where>
+  </update>
+  
 </mapper>
