@@ -340,7 +340,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 	            if($('.fly-delete').length==0){
 					$('#LAY_delallmsg').remove();
 				}
-	            
+	            var count=$('#messageCount').html();
+	            $('#messageCount').html(--count);
 	        }else{
 	        	layer.msg(res.msg);
 	        }
@@ -367,6 +368,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
                 othis.addClass('layui-hide');
                 $('.fly-delete').remove();
                 $('.readed').show();
+                $('#messageCount').html(0);
             }else{
             	layer.msg(res.msg);
             }

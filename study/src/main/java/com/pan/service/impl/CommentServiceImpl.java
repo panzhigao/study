@@ -61,6 +61,9 @@ public class CommentServiceImpl implements CommentService{
 		comment.setCreateTime(new Date());
 		//新增评论
 		commentMapper.addComment(comment);
+		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
+		
+		//发送消息
 		//当文章用户评论自己的文章时，不发送消息
 		if(StringUtils.equals(articleInDb.getUserId(),comment.getUserId())){
 			return comment;
@@ -81,7 +84,6 @@ public class CommentServiceImpl implements CommentService{
 		message.setCreateTime(new Date());
 		message.setCommentContent(comment.getCommentContent());
 		messageService.addMessage(message);
-		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
 		MessageUtils.sendToUser(articleInDb.getUserId(), messageStr);
 		return comment;

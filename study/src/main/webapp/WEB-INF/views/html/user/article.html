@@ -33,6 +33,9 @@
     
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -127,12 +130,6 @@
       	
         <div class="layui-tab-item">
           <table id="myCollections" lay-filter="myCollections"></table>
-<!--           <ul class="mine-view jie-row"> -->
-<!--             <li> -->
-<!--               <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a> -->
-<!--               <i>收藏于23小时前</i>  </li> -->
-<!--           </ul> -->
-<!--           <div id="LAY_page1"></div> -->
         </div>
       </div>
     </div>
@@ -150,6 +147,7 @@
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -194,8 +192,6 @@ layui.use(['table','jquery'], function(){
 	    			}
 	    		}
 	    	});  
-	        //obj.del();
-	        //layer.close(index);
 	      });
 	    } else if(obj.event === 'edit'){
 	    	 if(data.status==2){
@@ -341,7 +337,13 @@ layui.use(['table','jquery'], function(){
 	    	  return detail+t_delete;
 	      }}
 	    ]]
-	  });	  
+	  });	
+	  
+	  //消息读取
+	  #if(${user})
+	  websocketConnect();
+	  #end
+	  
 });
 </script>
 </body>

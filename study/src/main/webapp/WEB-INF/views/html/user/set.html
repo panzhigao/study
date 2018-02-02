@@ -39,6 +39,9 @@
     
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -279,6 +282,8 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -340,11 +345,6 @@ layui.use(['jquery', 'form'], function(){
 			resetPassword($,params);
 			return false;
 		});
-/* 		form.on('submit(send)',function(data){
-			params=data.field;
-			send($,params);
-			return false;
-		}); */
 		form.on('submit(confirmBind)',function(data){
 			params=data.field;
 			confirmBind($,params);
@@ -358,6 +358,9 @@ layui.use(['jquery', 'form'], function(){
 		   }
 		   send($,tel);
 		});
+		#if(${user})
+		websocketConnect();
+		#end
 });
 
 //提交修改用户信息

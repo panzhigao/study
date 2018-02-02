@@ -47,3 +47,23 @@ function tranTime(fromTime){
     }
     return str;
 }
+
+function websocketConnect(){
+	$.post('/study/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
+	
+	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
+	
+	ws.onopen = function () {
+	   console.log("websocket连接成功");
+	   ws.send("{}");
+	}
+	ws.onclose = function () {
+	   console.log("websocket连接断开");
+	}
+
+	ws.onmessage = function (msg) {	
+      var count=$("#messageCount").html()|0;
+      $("#messageCount").html(++count);
+	  console.log("服务器传来消息："+msg.data);
+	}
+}

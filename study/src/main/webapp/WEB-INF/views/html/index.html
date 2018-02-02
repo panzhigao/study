@@ -41,14 +41,11 @@
       <li class="layui-nav-item">
         <a href="$!{rc.contextPath}/register">注册</a>
       </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
-      </li>
-      <li class="layui-nav-item layui-hide-xs">
-        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
-      </li>
       #else
       <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -792,6 +789,8 @@
 </div>
  
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = '';
 layui.cache.user = {
@@ -807,9 +806,10 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+//消息读取
+#if(${user})
+websocketConnect();
+#end
 </script>
-
-<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));</script>
-
 </body>
 </html>

@@ -50,6 +50,9 @@
       #else
       
       <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs" id="nickname">$!{user.nickname}</cite>
@@ -263,6 +266,7 @@
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'jie';
 layui.cache.user = {
@@ -278,13 +282,17 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use(['fly', 'face','jie'], function(){
-  var $ = layui.$;
   var form = layui.form;
   var articleId='${article.articleId}';
-  loadComments($,articleId);
+  loadComments(articleId);
+  
+  #if(${user})
+  websocketConnect();
+  #end
+  
   form.on('submit(comment)', function(data){
 		params = data.field;
-		sendComment($,params);
+		sendComment(params);
 		return false;
    });
 });
@@ -292,7 +300,7 @@ layui.config({
 var userId="$!{user.userId}";
 var articleUserId="$!{article.userId}";
 
-function loadComments($,articleId){
+function loadComments(articleId){
 	$.ajax({
 		url:"$!{rc.contextPath}/api/loadComments",
 		type:"post",
@@ -306,7 +314,7 @@ function loadComments($,articleId){
 					return;
 				}
 				for(var i=0;i<length;i++){
-					addComment($,data[i]);
+					addComment(data[i]);
 				}
 			}else{
 				layer.msg("加载评论失败");
@@ -316,7 +324,7 @@ function loadComments($,articleId){
 }
 
 //提交
-function sendComment($,params){
+function sendComment(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/api/user/comment",
 			type:"post",
@@ -325,7 +333,7 @@ function sendComment($,params){
 				if(result.code=='200'){
 					$('.fly-none').hide();
 					layer.msg(result.msg);
-					addComment($,result.data);	
+					addComment(result.data);	
 					$('#L_content').val('');
 					var count = $('#commentCount').html()|0;
 					$('#commentCount').html(++count);
@@ -336,7 +344,7 @@ function sendComment($,params){
 	});
 }
 
-function addComment($,comment){
+function addComment(comment){
 	var adminPart='<div class="jieda-admin">'+
 	  '<span type="edit">编辑</span>'+
 	  '<span type="del">删除</span>'+

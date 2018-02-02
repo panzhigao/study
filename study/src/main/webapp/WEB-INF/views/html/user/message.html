@@ -30,6 +30,9 @@
     
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -119,6 +122,7 @@
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -136,6 +140,10 @@ layui.config({
 }).use(['fly'],function(){
 	var $ = layui.$;
 	loadMessages($);
+	
+	#if(${user})
+	websocketConnect();
+	#end
 });
 
 function loadMessages($){

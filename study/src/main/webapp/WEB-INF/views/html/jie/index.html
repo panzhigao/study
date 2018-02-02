@@ -50,6 +50,9 @@
       
       <!-- 登入后的状态 -->
       #else
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -217,6 +220,7 @@
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'jie';
 layui.cache.user = {
@@ -236,14 +240,18 @@ layui.config({
 var isHot='';
 layui.use(['laypage', 'layer','jquery'], function(){
 	var laypage = layui.laypage;
-	var $ = layui.$ ;
-	getCount($);
+	//消息读取
+	#if(${user})
+	websocketConnect();
+	#end
+	
+	getCount();
 	laypage.render({
 	    elem: 'myPage',
 	    curr: 1,
 	    count:$('#count').val(),
 	    jump: function(obj){
-	    	getData($,obj)
+	    	getData(obj);
 	      }
 	  });
 	  
@@ -257,14 +265,14 @@ layui.use(['laypage', 'layer','jquery'], function(){
 		    curr: 1,
 		    count:$('#count').val(),
 		    jump: function(obj){
-		    	getData($,obj)
+		    	getData(obj);
 		      }
 		  });
 	  });
 	  
 });
 
-function getCount($){
+function getCount(){
 	$.ajax({
 		url:"$!{rc.contextPath}/article/get_count",
 		type:"get",
@@ -276,7 +284,7 @@ function getCount($){
 	});	
 }
 
-function getData($,obj){
+function getData(obj){
  	$.ajax({
  		url:"$!{rc.contextPath}/article/get_articles",
  		type:"get",
