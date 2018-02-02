@@ -88,7 +88,10 @@ CREATE TABLE
         article_id VARCHAR(64) NOT NULL,
         comment_content VARCHAR(300) NOT NULL,
         reply_to_user_id VARCHAR(64) COMMENT '回复评论者的userId',
-        PRIMARY KEY (id)
+        create_time DATETIME NOT NULL,
+        praise_counts INT(10) unsigned DEFAULT '0' COMMENT '赞的数目',
+        PRIMARY KEY (id),
+        CONSTRAINT comment_id UNIQUE (comment_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论信息';  
     

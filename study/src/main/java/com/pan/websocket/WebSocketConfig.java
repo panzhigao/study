@@ -18,8 +18,8 @@ public class WebSocketConfig implements WebSocketConfigurer{
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		 registry.addHandler(myHandler(), "/myHandler").addInterceptors(new WebSocketInterceptor())
-		 .setAllowedOrigins("http://www.pan.com");
+		 registry.addHandler(myHandler(), "/myHandler").addInterceptors(new WebSocketInterceptor());
+		 //.setAllowedOrigins("http://www.pan.com");
 	}
 	
     @Bean

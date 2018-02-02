@@ -57,14 +57,19 @@ public class CommentServiceImpl implements CommentService{
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}
+		comment.setCommentId(IdUtils.generateCommentId());
+		comment.setCreateTime(new Date());
+		//新增评论
+		commentMapper.addComment(comment);
+		//当文章用户评论自己的文章时，不发送消息
+		if(StringUtils.equals(articleInDb.getUserId(),comment.getUserId())){
+			return comment;
+		}
 		User userInDb = userService.findByUserId(comment.getUserId());
 		Message message=new Message();
 		if(userInDb!=null){
 			message.setSenderName(userInDb.getNickname());
 		}
-		comment.setCommentId(IdUtils.generateCommentId());
-		comment.setCreateTime(new Date());
-		commentMapper.addComment(comment);
 		message.setMessageId(IdUtils.generateMessageId());
 		message.setMessageType(MyConstant.MESSAGE_TYPE_COMMENT);
 		message.setStatus(MyConstant.MESSAGE_NOT_READED);
