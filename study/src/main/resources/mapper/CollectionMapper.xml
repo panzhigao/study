@@ -8,7 +8,7 @@
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
-    <result column="title"      property="title"/>
+    <result column="title"              property="title"           jdbcType="VARCHAR"/>
   </resultMap>
   
   <resultMap id="CollectionMap" type="com.pan.entity.Collection">

@@ -8,6 +8,9 @@
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
+  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
+  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <style type="text/css">
   	.selected {color:#5FB878 !important;}
   </style>
@@ -84,6 +87,15 @@
         我的消息
       </a>
     </li>
+    <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">权限管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">权限列表</a></dd>
+            <dd><a href="javascript:;">角色管理</a></dd>
+            <dd><a href="javascript:;">角色分配</a></dd>
+            <dd><a href="">超链接</a></dd>
+          </dl>
+     </li>
   </ul>
 
   <div class="site-tree-mobile layui-hide">
@@ -98,42 +110,26 @@
   
   
   <div class="fly-panel fly-panel-user" pad20>
-    <!--
-    <div class="fly-msg" style="margin-top: 15px;">
-      您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
-    </div>
-    -->
-    <div class="layui-tab layui-tab-brief" lay-filter="user">
-      <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'>$!{collectionCounts}</span>）</li>
-      </ul>
-      
-      	  	
+    <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		    <div class="layui-tab-content">
-		       <span class="layui-breadcrumb" lay-separator="|">
-		  		<a href="javascript:;" class="category-item selected" status="">全部</a>
-		  		<a href="javascript:;" class="category-item" status="3">已发表</a>
-		  		<a href="javascript:;" class="category-item" status="0">未通过</a>
-		  		<a href="javascript:;" class="category-item" status="1">草稿</a>
-		  		<a href="javascript:;" class="category-item" status="2">审核中</a>
-				</span>
-		    </div>
-	    	<table id="myArticles" lay-filter="myTable"></table>
+		   权限名称：
+	    <div class="layui-inline">
+	    <input placeholder="请输入权限名称" class="layui-input" name="permissionName" id="demoReload" autocomplete="off">
+	    </div>
+	    
+	    <button class="layui-btn" data-type="reload">搜索</button>
+	    
+	    <div class="layui-btn-group">
+	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">增加</button>
+ 		 	<button class="layui-btn">编辑</button>
+  		 	<button class="layui-btn layui-btn-danger">删除</button>
+  		</div>
+  		
+	    <table id="myArticles" lay-filter="myTable"></table>
+	    
 	    </div>
       
-      	
-        <div class="layui-tab-item">
-          <table id="myCollections" lay-filter="myCollections"></table>
-<!--           <ul class="mine-view jie-row"> -->
-<!--             <li> -->
-<!--               <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a> -->
-<!--               <i>收藏于23小时前</i>  </li> -->
-<!--           </ul> -->
-<!--           <div id="LAY_page1"></div> -->
-        </div>
       </div>
     </div>
   </div>
@@ -146,6 +142,39 @@
     <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" style="margin-top:100px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加权限</h4>
+            </div>
+                                    
+            <div class="modal-body">
+            	<div class="layui-form-item">
+    				
+    				<div class="">
+    				    <h4> 权限名称:</h4>
+      					<input type="text" id="permissionName" name="permissionName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+    				</div>
+    				<div class="">
+    				    <h4> 权限URL地址:</h4>
+      					<input type="text" id="url" name="url"  placeholder="请输入权限URL地址" autocomplete="off" class="layui-input">
+    				</div>
+    				
+  				</div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="addPermission">新增</button>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -170,6 +199,31 @@ layui.config({
 layui.use(['table','jquery'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ ;
+	  $('#addPermission').click(function(){
+		 var permissionName=$('#permissionName').val();
+		 if(!permissionName){
+			 layer.msg('权限名称不能为空');
+		 }
+		 var url=$('#url').val();
+		 if(!url){
+			 layer.msg('权限url地址不能为空');
+		 }
+		 $.ajax({
+			 url:'$!{rc.contextPath}/permission/add',
+			 type:'post',
+			 data:{permissionName:permissionName,url:url},
+			 success:function(res){
+				 if(res.code=='200'){
+					 layer.msg('新增权限成功');
+				 }else{
+					 alert.msg(res.msg);
+				 }
+			 }
+		 }); 
+		  
+	  });
+	  
+	  
 	  //监听工具条
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
@@ -256,87 +310,7 @@ layui.use(['table','jquery'], function(){
 	      }}
 	    ]]
 	  });
-	  
-	  
-	  var status='';
-	  function reload(tableId){
-		 //执行重载
-		 table.reload(tableId, {
-		 page: {curr: 1},
-		 where: {status:status}
-		 }); 
-	  }
-	  
-	  //切换文章类型状态
-	  $('.category-item').click(function(obj){
-	  	$('.category-item').removeClass('selected');
-	  	$(this).addClass('selected');
-	  	status=$(this).attr('status');
-	  	reload('articlesTab');
-	  });	
-	  
-	  
-	  //监听工具条
-	  table.on('tool(myCollections)', function(obj){
-	    var data = obj.data;
-	    if(obj.event === 'detail'){
-	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
-	    } else if(obj.event === 'del'){
-	      layer.confirm('确定删除该收藏么', function(index){
-	        layer.close(index);
-	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/collection/remove",
-	    		type:"post",
-	    		data:{articleId:data.articleId},
-	    		success:function(data){
-	    			if(data.code=='200'){
-	    				layer.alert(data.msg);
-	    				reload('collectionsTab');
-	    				var counts=$('#collectionCounts').html()|0;
-	    				$('#collectionCounts').html(--counts);
-	    			}else{	    				
-	    				layer.alert(data.msg);
-	    			}
-	    		}
-	    	});  
-	      });
-	    }
-	  });
-	 
-	  //收藏
-	  table.render({
-		id: 'collectionsTab',  
-	    //method: 'post',  
-	    elem: '#myCollections',
-	    height: 500,
-	    request: {
-	    	pageName: 'pageNo', //页码的参数名称，默认：page
-	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
-	    },
-	    response: {
-	    	//statusName: 'status', //数据状态的字段名称，默认：code
-	        statusCode: 200, //成功的状态码，默认：0
-	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
-	        countName: 'total', //数据总数的字段名称，默认：count
-	        dataName: 'data' //数据列表的字段名称，默认：data
-	    },
-	    url: '$!{rc.contextPath}/user/collection/get_collections', //数据接口
-	    page: true ,//开启分页
-	    cols: [[ //表头
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:500,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
-	      }},
-	      {field: 'createTime', title: '收藏时间', width:150, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
-	      }},
-	      {title:'操作',width:160,templet:function(row){
-	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return detail+t_delete;
-	      }}
-	    ]]
-	  });	  
+	  	
 });
 
 
