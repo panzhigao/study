@@ -1,6 +1,8 @@
 package com.pan.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -81,5 +83,22 @@ public class MessageController {
 		article.setUserId(userId);
 		articleService.saveSystemMessage(article);
 		return ResultMsg.ok("消息发布成功");
+	}
+	
+	/**
+	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/message/get_messages")
+	@ResponseBody
+	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
+		Map<String,Object> params=new HashMap<String, Object>(5);
+		Integer offset=(pageNo-1)*pageSize;
+		params.put("offset", offset);
+		params.put("row", pageSize);
+		params.put("status", Article.STATUS_PUBLISHED);
+		params.put("type", "2");
+		Map<String,Object> pageData=articleService.findByParams(params);
+		return pageData;
 	}
 }

@@ -2,9 +2,7 @@ package com.pan.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -112,6 +109,7 @@ public class ArticleController {
 		params.put("row", pageSize);
 		params.put("status", status);
 		params.put("isHot", isHot);
+		params.put("type", "1");
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
 	}
@@ -210,7 +208,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
 	@ResponseBody
-	public Map<String,Object> getArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String userId,String isHot){
+	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
@@ -218,6 +216,7 @@ public class ArticleController {
 		params.put("userId", userId);
 		params.put("status", Article.STATUS_PUBLISHED);
 		params.put("isHot", isHot);
+		params.put("type", "1");
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
 	}

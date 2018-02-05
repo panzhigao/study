@@ -26,6 +26,8 @@ public class IdUtils {
 	
 	private static final String MESSAGE_KEY="message_id";
 	
+	private static final String PERMISSION_KEY="permission_id";
+	
 	/**
 	 * 创建文章id
 	 * @return
@@ -156,5 +158,27 @@ public class IdUtils {
 			throw e;
 		}
 		return messageId;
+	}
+	
+	/**
+	 * 创建权限id
+	 * @return
+	 */
+	public static String generatePermissionId(){
+		String permissionId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(PERMISSION_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(PERMISSION_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(PERMISSION_KEY);
+			}
+			permissionId="p"+value;
+		} catch (Exception e) {
+			logger.error("生成权限id错误",e);
+			throw e;
+		}
+		return permissionId;
 	}
 }

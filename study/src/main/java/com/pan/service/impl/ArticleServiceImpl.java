@@ -154,14 +154,14 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.error("根据文章id未查询到数据,articleId:{}", articleId);
 			throw new BusinessException("修改文章信息有误，文章已不存在");
 		}
-		if(Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())){
-			logger.error("当前文章处于审核状态,不可修改", articleInDb);
-			throw new BusinessException("当前文章处于审核状态,不可修改");
+		if(Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())){
+			logger.error("当前文章处于发布状态,不可修改", articleInDb);
+			throw new BusinessException("当前文章处于发布状态,不可修改");
 		}
-//		if(Article.STATUS_PUBLISHED.equals(articleInDb.getStatus())){
-//			logger.error("当前文章处于发布状态,不可修改", articleInDb);
-//			throw new BusinessException("当前文章处于发布状态,不可修改");
-//		}
+		if(Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())){
+			logger.error("系统消息不可修改", articleInDb);
+			throw new BusinessException("系统消息不可修改");
+		}
 		String userIdInDb = articleInDb.getUserId();
 		// 判断当前文章是当前登录用户下的文章
 		if (!StringUtils.equals(article.getUserId(), userIdInDb)) {

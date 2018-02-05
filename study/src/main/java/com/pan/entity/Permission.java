@@ -1,5 +1,7 @@
 package com.pan.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 权限实体类
  * @author Administrator
@@ -19,10 +21,12 @@ public class Permission extends BaseEntity{
 	/**
 	 * 权限名
 	 */
+	@NotEmpty(message="权限名不能为空")
 	private String permissionName;
 	/**
 	 * 权限路径
 	 */
+	@NotEmpty(message="权限路径url不能为空")
 	private String url;
 	public String getPermissionId() {
 		return permissionId;

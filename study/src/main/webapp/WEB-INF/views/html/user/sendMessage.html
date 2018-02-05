@@ -125,11 +125,11 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
         <li class="layui-this" lay-id="sendMessage">发送消息</li>
-        <li class="" lay-id="info">消息历史</li>
+        <li class="" lay-id="history">消息历史</li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
-          <form method="post">
+          <form method="post" id="myForm">
             <div class="layui-form-item layui-form-text">
               <label for="L_title" class="layui-form-label">标题</label>
               <div class="layui-input-block">
@@ -146,7 +146,7 @@
           </div>
           
         <div class="layui-tab-item">
-          <table id="myCollections" lay-filter="myCollections"></table>
+          <table id="systemMessageTab" lay-filter="systemMessageTab"></table>
         </div>
       </div>
         
@@ -183,8 +183,9 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
-layui.use(['jquery', 'form'], function(){
+layui.use(['table','jquery', 'form'], function(){
 	  var $ = layui.$ ;
+	  var table = layui.table;
 	  var form = layui.form;
   	  form.on('submit(confirmSend)', function(data){
 			params = data.field;
@@ -192,12 +193,42 @@ layui.use(['jquery', 'form'], function(){
 			return false;
 	  });
   	  
+  	  //消息历史
+	  table.render({
+		id: 'systemMessageTab',  
+	    method: 'post',  
+	    elem: '#systemMessageTab',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/message/get_messages', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '消息ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '消息标题', width:600,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'createTime', title: '发送时间', width:250, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }}
+	    ]]
+	  });	
+  	  
 	  #if(${user})
 	  websocketConnect();
 	  #end
 });
 
-//发送验证码
+//发送消息
 function sendMessage(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/user/message/send",
@@ -209,10 +240,11 @@ function sendMessage(params){
 			success:function(res){
 				if(res.code=='200'){
 					layer.msg(res.msg);
+					$('#myForm')[0].reset();
 				}else{
 					layer.msg(res.msg);
-					$('#sendBtn').removeClass('layui-btn-disabled');
 				}
+				$('#sendBtn').removeClass('layui-btn-disabled');
 			}
 	});
 }

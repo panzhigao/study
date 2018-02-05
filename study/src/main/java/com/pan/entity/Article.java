@@ -32,6 +32,14 @@ public class Article extends BaseEntity{
 	 */
 	public static final String STATUS_PUBLISHED="3";
 	/**
+	 * 文章类型 1-文章 2-系统消息
+	 */
+	public static final String TYPE_ARTICLE="1";
+	/**
+	 * 文章类型 1-文章 2-系统消息
+	 */
+	public static final String TYPE_SYSTEM_MESSAGE="2";
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4357328851427096260L;
