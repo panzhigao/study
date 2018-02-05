@@ -80,4 +80,9 @@ public interface ArticleService {
 	 * @return
 	 */
 	public int updateArticleViewCount(@Param("articleId")String articleId,@Param("viewCount")Integer viewCount);
+	/**
+	 * 保存系统消息
+	 * @param article
+	 */
+	public void saveSystemMessage(Article article);
 }

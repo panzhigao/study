@@ -88,6 +88,7 @@ public class ArticleController {
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
 		params.put("userId", loingUserId);
+		params.put("type", "1");
 		int articleCounts=articleService.getCount(params);
 		int collectionCounts = collectionService.getCount(params);
 		ModelAndView mav=new ModelAndView("html/user/article");

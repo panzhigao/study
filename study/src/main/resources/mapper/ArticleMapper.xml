@@ -18,15 +18,16 @@
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
     <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
     <result column="view_count"         property="viewCount"       jdbcType="INTEGER" />
+    <result column="type"               property="type"            jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image,comment_count,view_count
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image,comment_count,view_count,type
   </sql>
   
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,image,comment_count,view_count
+    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,image,comment_count,view_count,type
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
@@ -42,8 +43,11 @@
   		<if test="status !=null and status !=''">
   			and status=#{status}
   		</if>
-  		<if test="userId !=null and userId!=''">
+  		<if test="userId !=null and userId !=''">
   			and user_id=#{userId}
+  		</if>
+  		<if test="type !=null and type !=''">
+  			and type=#{type}
   		</if>
   	</where>
   </select>
@@ -60,6 +64,9 @@
   		</if>
   		<if test="userId !=null and userId!=''">
   			and a.user_id=#{userId}
+  		</if>
+  		<if test="type !=null and type !=''">
+  			and a.type=#{type}
   		</if>
   	</where>
   	<choose>
@@ -87,6 +94,9 @@
 	  		<if test="userId !=null and userId!=''">
 	  			and user_id=#{userId}
 	  		</if>
+	  		<if test="type !=null and type !=''">
+  				and type=#{type}
+  		</if>
 	  	</where>
     </select>
   
@@ -98,7 +108,7 @@
   <insert id="saveArticle" parameterType="com.pan.entity.Article">
   	insert into t_article (<include refid="Base_Column_List"/>) values 
   	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0)
+  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0,#{type,jdbcType=VARCHAR})
   </insert>
   
   <update id="updateArticle" parameterType="com.pan.entity.Article">

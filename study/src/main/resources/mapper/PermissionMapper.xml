@@ -14,15 +14,12 @@
     id,permission_id,permission_name,url,create_time
   </sql>
   
-  <select id="findByParams" resultMap="CollectionMap">
-  	select a.id,a.collection_id,a.article_id,a.user_id,a.create_time,a.title from t_collection a 
+  <select id="findByParams" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
   	<where>
-  		<if test="userId !=null and userId !=''">
-  			and a.user_id=#{userId}
-  		</if>
-  		<if test="articleId !=null and articleId !=''">
-  			and a.article_id=#{articleId}
-  		</if>
+  		<if test="permissionName !=null and permissionName !=''">
+	  			and permission_name like CONCAT('%','${permissionName}','%')
+	  		</if>
   	</where>
   	order by create_time desc
   	<if test="offset!=null and row !=null">
@@ -33,7 +30,7 @@
     <select id="getCountByParams" resultType="int">
 	  	select count(0) from t_permission 
 	  	<where>
-	  		<if test="permissionName !=null and permissionName''">
+	  		<if test="permissionName !=null and permissionName !=''">
 	  			and permission_name like CONCAT('%','${permissionName}','%')
 	  		</if>
 	  	</where>

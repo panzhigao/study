@@ -92,6 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		article.setCreateTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
+		article.setType("1");
 		articleMapper.saveArticle(article);
 	}
 
@@ -242,5 +243,15 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setArticleId(articleId);
 		article.setViewCount(viewCount);
 		return articleMapper.updateArticle(article);
+	}
+
+	@Override
+	public void saveSystemMessage(Article article) {
+		ValidationUtils.validateEntity(article);
+		article.setStatus(Article.STATUS_PUBLISHED);
+		article.setCreateTime(new Date());
+		article.setArticleId(IdUtils.generateArticleId());
+		article.setType("2");
+		articleMapper.saveArticle(article);
 	}
 }

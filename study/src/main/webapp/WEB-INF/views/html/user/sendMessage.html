@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>帐号设置</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+  <link href="$!{rc.contextPath}/static/css/cropper.min.css" rel="stylesheet">
+  <link href="$!{rc.contextPath}/static/css/sitelogo.css" rel="stylesheet">
+  <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/cropper.js"></script>
+  <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
+  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="$!{rc.contextPath}">
+      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">$!{user.nickname}</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end"">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/u/$!{user.userId}">
+        <i class="layui-icon">&#xe609;</i>
+        我的主页
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/center">
+        <i class="layui-icon">&#xe612;</i>
+        用户中心
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/set">
+        <i class="layui-icon">&#xe620;</i>
+        基本设置
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/my_articles">
+        <i class="layui-icon">&#xe621;</i>
+        我的文章
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/message">
+        <i class="layui-icon">&#xe611;</i>
+        我的消息
+      </a>
+    </li>
+        <li class="layui-nav-item">
+          <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;" style="margin-left:45px;">权限列表</a></dd>
+            <dd><a href="javascript:;" style="margin-left:45px;">角色管理</a></dd>
+            <dd><a href="javascript:;" style="margin-left:45px;">角色分配</a></dd>
+            <dd><a href="" style="margin-left:45px;">超链接</a></dd>
+          </dl>
+     </li>
+     <li class="layui-nav-item layui-this">
+      <a href="$!{rc.contextPath}/user/systemMessage">
+        <i class="layui-icon">&#xe63a;</i>
+        发送消息
+      </a>
+    </li>
+  </ul>
+
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li class="layui-this" lay-id="sendMessage">发送消息</li>
+        <li class="" lay-id="info">消息历史</li>
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
+        <div class="layui-form layui-form-pane layui-tab-item layui-show">
+          <form method="post">
+            <div class="layui-form-item layui-form-text">
+              <label for="L_title" class="layui-form-label">标题</label>
+              <div class="layui-input-block">
+                  <input type="text" placeholder="系统消息标题" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+              <label for="L_userBbrief" class="layui-form-label">系统消息内容</label>
+              <div class="layui-input-block">
+                 <textarea placeholder="系统消息内容" id="L_content"   name="content" autocomplete="off" class="layui-textarea" style="height: 80px;"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <button class="layui-btn" id="sendBtn" key="set-mine" lay-filter="confirmSend" lay-submit>确认发送</button>
+            </div>
+          </div>
+          
+        <div class="layui-tab-item">
+          <table id="myCollections" lay-filter="myCollections"></table>
+        </div>
+      </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
+<script>
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "2.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+layui.use(['jquery', 'form'], function(){
+	  var $ = layui.$ ;
+	  var form = layui.form;
+  	  form.on('submit(confirmSend)', function(data){
+			params = data.field;
+			sendMessage(params);
+			return false;
+	  });
+  	  
+	  #if(${user})
+	  websocketConnect();
+	  #end
+});
+
+//发送验证码
+function sendMessage(params){
+		$.ajax({
+			url:"$!{rc.contextPath}/user/message/send",
+			type:"post",
+			data:params,
+			beforeSend:function(){
+				$('#sendBtn').addClass('layui-btn-disabled');
+			},
+			success:function(res){
+				if(res.code=='200'){
+					layer.msg(res.msg);
+				}else{
+					layer.msg(res.msg);
+					$('#sendBtn').removeClass('layui-btn-disabled');
+				}
+			}
+	});
+}
+
+</script>
+</body>
+</html>

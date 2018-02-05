@@ -86,6 +86,11 @@ public class Article extends BaseEntity{
 	 * 阅读次数
 	 */
 	private Integer viewCount;
+	/**
+	 * 文章类型
+	 * 1-文章 2-系统消息
+	 */
+	private String type;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -179,6 +184,14 @@ public class Article extends BaseEntity{
 	}
 	public void setViewCount(Integer viewCount) {
 		this.viewCount = viewCount;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override

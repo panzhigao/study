@@ -38,6 +38,8 @@ CREATE TABLE
         outline VARCHAR(300) COMMENT '文章概要',
         image VARCHAR(100),
         comment_count INT DEFAULT '0' COMMENT '评论数',
+        view_count INT DEFAULT '0' COMMENT '阅读次数',
+        type CHAR(1) DEFAULT '1' COMMENT '1-文章 2-系统消息',
         PRIMARY KEY (id),
         CONSTRAINT article_id UNIQUE (article_id)
     )
