@@ -32,11 +32,12 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/get_permissions")
 	@ResponseBody
-	public Map<String,Object> loadPermissions(Integer pageSize,Integer pageNo){
+	public Map<String,Object> loadPermissions(Integer pageSize,Integer pageNo,String permissionName){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
+		params.put("permissionName", permissionName);
 		Map<String,Object> pageData=permissionService.findByParams(params);
 		return pageData;
 	}

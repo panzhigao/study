@@ -115,7 +115,7 @@
           #if($!article.status=='1')<span class="layui-badge" style="background-color: #999;">草稿</span> #end
           #if($!article.status=='0')<span class="layui-badge" style="background-color: #999;">审核未通过</span>#end
           #if($!article.status=='2')<span class="layui-badge layui-bg-black">审核中</span>#end
-          <span class="layui-badge layui-bg-red">精帖</span>
+          #if($article.type==2)<span class="layui-badge layui-bg-red">系统消息</span>#end
           
           <div class="fly-admin-box" data-id="$!{article.articleId}">
             
@@ -146,18 +146,21 @@
             <span>$!date.format('yyyy-MM-dd',${article.createTime})</span>
             #end
           </div>
+          #if($article.type==1)
           <div class="detail-hits" id="LAY_jieAdmin" data-id="$!{article.articleId}">
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
             #if($user.userId==$article.userId&&$article.status!=2)
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
             #end
           </div>
+          #end
         </div>
         <div class="detail-body photos">
  			<p>$!{article.content}</p>
         </div>
       </div>
-
+		
+	  #if($article.type==1)	
       <div class="fly-panel detail-box" id="flyReply">
       	<a name="comment"></a>
         <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
@@ -186,6 +189,7 @@
           </form>
         </div>
       </div>
+      #end
     </div>
     <div class="layui-col-md4">
       <dl class="fly-panel fly-list-one">

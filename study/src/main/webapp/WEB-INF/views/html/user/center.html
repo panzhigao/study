@@ -121,18 +121,16 @@
 	    <div class="layui-tab-item layui-show">
 		   权限名称：
 	    <div class="layui-inline">
-	    <input placeholder="请输入权限名称" class="layui-input" name="permissionName" id="demoReload" autocomplete="off">
+	    	<input placeholder="请输入权限名称" class="layui-input" name="permissionName" id="permissionName" autocomplete="off">
 	    </div>
 	    
-	    <button class="layui-btn" data-type="reload">搜索</button>
+	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    
 	    <div class="layui-btn-group">
 	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">增加</button>
- 		 	<button class="layui-btn">编辑</button>
-  		 	<button class="layui-btn layui-btn-danger">删除</button>
   		</div>
   		
-	    <table id="myArticles" lay-filter="myTable"></table>
+	    <table id="permissionTable" lay-filter="permissionTab"></table>
 	    
 	    </div>
       
@@ -151,7 +149,7 @@
 </div>
 
 <!-- 模态框（Modal） -->
-<div class="modal fade" style="margin-top:100px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div  class="modal fade" style="margin-top:100px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -204,7 +202,23 @@ layui.config({
 //table
 layui.use(['table','jquery'], function(){
 	  var table = layui.table;
-	  var $ = layui.$ ;
+	  var $ = layui.$ , active = {
+	    reload: function(){
+	        var permissionName = $('#permissionName');
+	        //执行重载
+	        table.reload('tab', {
+	          page: {
+	            curr: 1 //重新从第 1 页开始
+	          }
+	          ,where: {
+	            key: {
+	              permissionName: permissionName.val()
+	            }
+	          }
+	        });
+	      }
+	    };
+	  
 	  $('#addPermission').click(function(){
 		 var permissionName=$('#permissionName').val();
 		 if(!permissionName){
@@ -215,47 +229,44 @@ layui.use(['table','jquery'], function(){
 			 layer.msg('权限url地址不能为空');
 		 }
 		 $.ajax({
-			 url:'$!{rc.contextPath}/permission/add',
+			 url:'$!{rc.contextPath}/user/permission/add',
 			 type:'post',
 			 data:{permissionName:permissionName,url:url},
 			 success:function(res){
 				 if(res.code=='200'){
 					 layer.msg('新增权限成功');
+					 $('#permissionName').val("");
+					 $('#url').val("");
+					 $('#myModal').modal('hide');
+					 table.reload('tab');
 				 }else{
-					 alert.msg(res.msg);
+					 layer.msg(res.msg);
 				 }
 			 }
 		 }); 
-		  
 	  });
 	  
 	  
+	  
 	  //监听工具条
-	  table.on('tool(myTable)', function(obj){
+	  table.on('tool(permissionTab)', function(obj){
 	    var data = obj.data;
-	    if(obj.event === 'detail'){
-	      location.href="$!{rc.contextPath}/user/article/detail/"+data.articleId;	
-	    } else if(obj.event === 'del'){
-	      layer.confirm('确定删除该文章么', function(index){
+	     if(obj.event === 'del'){
+	      layer.confirm('确定删除该权限么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/delete_article",
+	    		url:"$!{rc.contextPath}/user/permission/delete",
 	    		type:"post",
-	    		data:{articleId:data.articleId},
+	    		data:{permissionId:data.permissionId},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
-	    				//table.reload('myArticles');
-	    				reload('articlesTab');
-	    				var counts=$('#articleCounts').html()|0;
-	    				$('#articleCounts').html(--counts);
+	    				table.reload('tab');
 	    			}else{	    				
 	    				layer.alert(data.msg);
 	    			}
 	    		}
 	    	});  
-	        //obj.del();
-	        //layer.close(index);
 	      });
 	    } else if(obj.event === 'edit'){
 	    	 if(data.status==2){
@@ -269,11 +280,12 @@ layui.use(['table','jquery'], function(){
 	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
 	    }
 	  });
+	  
 	  //第一个实例
 	  table.render({
-		id: 'articlesTab',  
-	    //method: 'post',  
-	    elem: '#myArticles',
+		id: 'tab',  
+	    method: 'post',  
+	    elem: '#permissionTable',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -286,40 +298,27 @@ layui.use(['table','jquery'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/get_articles', //数据接口
+	    url: '$!{rc.contextPath}/user/permission/get_permissions', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:400,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
-	      }},
-	      {field: 'status', title: '状态', width:100, sort: true,templet:
-	    	  function(d){
-	    	  	switch(d.status){
-		    	  	case '0':temp='审核未通过';break;
-		    	  	case '1':temp='草稿';break;
-		    	  	case '2':temp='审核中';break;
-		    	  	case '3':temp='发布成功';break;
-		    	  	default:temp="无状态";
-	    	  	}
-	    	  	return temp;
-	      	  }
-	       },
-	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
+	      {field: 'permissionId', title: '权限ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'permissionName', title: '权限名称', width:150},
+	      {field: 'url', title: '权限url', width:350, sort: true},
+	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
-	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return detail+edit+t_delete;
+	    	  return t_delete;
 	      }}
 	    ]]
 	  });
-	  	
+	  
+	  $('#search').on('click', function(){
+		   var type = $(this).data('type');
+		   active[type] ? active[type].call(this) : '';
+	  });
 });
-
-
 
 </script>
 </body>

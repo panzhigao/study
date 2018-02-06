@@ -15,7 +15,7 @@
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/>
+  	select <include refid="Base_Column_List"/> from t_permission
   	<where>
   		<if test="permissionName !=null and permissionName !=''">
 	  			and permission_name like CONCAT('%','${permissionName}','%')
@@ -39,4 +39,8 @@
   <insert id="addPermission" parameterType="com.pan.entity.Collection">
   	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
   </insert>
+  
+  <delete id="deletePermission">
+  	delete from t_permission where permission_id=#{permissionId}
+  </delete>
 </mapper>

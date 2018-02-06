@@ -143,3 +143,14 @@ CREATE TABLE
         CONSTRAINT message_id UNIQUE (message_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息通知表';  
+    
+CREATE TABLE `t_permission` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` varchar(64) NOT NULL,
+  `permission_name` varchar(64) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `permission_id` (`permission_id`),
+  KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表'    
