@@ -69,15 +69,26 @@ public class MessageController {
 		return ResultMsg.ok("消息置为已读成功", count);
 	}
 	
+	/**
+	 * 跳转发送消息页面
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemMessage")
 	public ModelAndView toSendMessageIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/sendMessage");
 		return mav;
 	}
 	
+	/**
+	 * 发送系统消息
+	 * @param article
+	 * @param messageId
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/send")
 	@ResponseBody
-	public ResultMsg sendMessage(Article article,String messageId){
+	public ResultMsg sendMessage(Article article){
 		logger.info("发布消息开始");
 		String userId=CookieUtils.getLoginUserId();
 		article.setUserId(userId);

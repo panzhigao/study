@@ -12,13 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
+import com.pan.entity.Message;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.MessageUtils;
 import com.pan.util.ValidationUtils;
 
 /**
@@ -251,7 +254,12 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setStatus(Article.STATUS_PUBLISHED);
 		article.setCreateTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		article.setType("2");
+		article.setType("2");//系统消息文章
+		Message message=new Message();
+		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
+		message.setContentName(article.getTitle());
+		message.setCommentContent(article.getContent());
+		MessageUtils.sendToAllUser(JsonUtils.toJson(message));
 		articleMapper.saveArticle(article);
 	}
 }

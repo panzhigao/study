@@ -22,6 +22,7 @@ import com.pan.service.MessageService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.ValidationUtils;
 
@@ -84,8 +85,8 @@ public class CommentServiceImpl implements CommentService{
 		message.setCreateTime(new Date());
 		message.setCommentContent(comment.getCommentContent());
 		messageService.addMessage(message);
-		String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
-		MessageUtils.sendToUser(articleInDb.getUserId(), messageStr);
+		//String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
+		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
 		return comment;
 	}
 	

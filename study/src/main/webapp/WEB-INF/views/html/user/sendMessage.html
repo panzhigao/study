@@ -93,21 +93,20 @@
         我的消息
       </a>
     </li>
-        <li class="layui-nav-item">
-          <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
-          <dl class="layui-nav-child">
-            <dd><a href="javascript:;" style="margin-left:45px;">权限列表</a></dd>
-            <dd><a href="javascript:;" style="margin-left:45px;">角色管理</a></dd>
-            <dd><a href="javascript:;" style="margin-left:45px;">角色分配</a></dd>
-            <dd><a href="" style="margin-left:45px;">超链接</a></dd>
-          </dl>
-     </li>
-     <li class="layui-nav-item layui-this">
+    <li class="layui-nav-item layui-this">
       <a href="$!{rc.contextPath}/user/systemMessage">
         <i class="layui-icon">&#xe63a;</i>
         发送消息
       </a>
     </li>
+    <li class="layui-nav-item">
+        <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
+        <dl class="layui-nav-child">
+            <dd><a href="$!{rc.contextPath}/user/permission" style="padding-left:55px;">权限列表</a></dd>
+            <dd><a href="javascript:;" style="padding-left:55px;">角色管理</a></dd>
+            <dd><a href="javascript:;" style="padding-left:55px;">角色分配</a></dd>
+        </dl>
+     </li>
   </ul>
 
   <div class="site-tree-mobile layui-hide">
@@ -130,20 +129,26 @@
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
           <form method="post" id="myForm">
-            <div class="layui-form-item layui-form-text">
-              <label for="L_title" class="layui-form-label">标题</label>
-              <div class="layui-input-block">
-                  <input type="text" placeholder="系统消息标题" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+            <div class="layui-row layui-col-space15 layui-form-item">
+                <div class="layui-col-md9">
+                  <label for="L_title" class="layui-form-label">标题</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
               </div>
-              <label for="L_userBbrief" class="layui-form-label">系统消息内容</label>
-              <div class="layui-input-block">
-                 <textarea placeholder="系统消息内容" id="L_content"   name="content" autocomplete="off" class="layui-textarea" style="height: 80px;"></textarea>
+            <div class="layui-form-item layui-form-text">
+              <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
+                  <textarea id="L_content" name="content" required lay-verify="content"  placeholder="详细描述"  style="height: 260px;"></textarea>
+                </div>
               </div>
             </div>
             <div class="layui-form-item">
               <button class="layui-btn" id="sendBtn" key="set-mine" lay-filter="confirmSend" lay-submit>确认发送</button>
             </div>
-          </div>
+            </form>
+        </div>
           
         <div class="layui-tab-item">
           <table id="systemMessageTab" lay-filter="systemMessageTab"></table>
@@ -183,8 +188,10 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
-layui.use(['table','jquery', 'form'], function(){
+layui.use(['table','jquery', 'form','layedit'], function(){
 	  var $ = layui.$ ;
+	  var layedit = layui.layedit;
+	  var index=layedit.build('L_content'); //建立编辑器
 	  var table = layui.table;
 	  var form = layui.form;
   	  form.on('submit(confirmSend)', function(data){

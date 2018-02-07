@@ -51,7 +51,7 @@ function tranTime(fromTime){
 function websocketConnect(){
 	$.post('/study/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
+	var ws = new WebSocket("ws://www.pan.com:8080/study/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
@@ -65,5 +65,27 @@ function websocketConnect(){
       var count=$("#messageCount").html()|0;
       $("#messageCount").html(++count);
 	  console.log("服务器传来消息："+msg.data);
+	  var message=JSON.parse(msg.data);
+	  //系统消息
+	  if(message&&message.messageType==3){
+		  showMessage(message);
+	  }
 	}
+}
+
+function showMessage(message){
+	//示范一个公告层
+	layer.open({
+	  type: 1
+	  ,title: false //不显示标题栏
+	  ,closeBtn: false
+	  ,area: '400px;'
+	  ,shade: 0.8
+	  ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+	  ,resize: false
+	  ,btn: ['朕知道了']
+	  ,btnAlign: 'c'
+	  ,moveType: 1 //拖拽模式，0或者1
+	  ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><h3>'+message.contentName+'</h3><br>'+message.commentContent+'</div>'
+	});
 }

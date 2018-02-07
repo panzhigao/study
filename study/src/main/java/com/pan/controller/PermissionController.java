@@ -23,6 +23,11 @@ public class PermissionController {
 	@Autowired
 	private PermissionService permissionService;
 	
+	@RequestMapping(method=RequestMethod.GET,value="/user/permission")
+	public String toPermissionPage(){
+		return "html/user/permission";
+	}
+	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/add")
 	@ResponseBody
 	public ResultMsg addPermission(Permission permission){

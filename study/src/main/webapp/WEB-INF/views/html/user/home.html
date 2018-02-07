@@ -178,8 +178,9 @@ layui.use(['laypage', 'layer','jquery'], function(){
 	#if(${user})
 	websocketConnect();
 	#end
-	
 })
+
+
 function getData($){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/get_articles',
