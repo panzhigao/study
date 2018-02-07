@@ -72,7 +72,7 @@ public class MyHandler extends TextWebSocketHandler{
     }
 
     /**
-     * 广播信息
+     * 广播信息到所有用户
      * @param message
      * @return
      */
@@ -93,7 +93,32 @@ public class MyHandler extends TextWebSocketHandler{
         }
         return  allSendSuccess;
     }
-
+    
+    /**
+     * 广播信息到所有用户，指定用户除外
+     * @param message
+     * @return
+     */
+    public boolean sendMessageToAllUsersWithException(TextMessage message,Set<String> userIdSet) {
+        boolean allSendSuccess = true;
+        Set<String> userIds = USERS.keySet();
+        WebSocketSession session = null;
+        for (String userId : userIds) {
+        	if(userIdSet.contains(userId)){
+        		continue;
+        	}
+            try {
+                session = USERS.get(userId);
+                if (session.isOpen()) {
+                    session.sendMessage(message);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                allSendSuccess = false;
+            }
+        }
+        return  allSendSuccess;
+    }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {

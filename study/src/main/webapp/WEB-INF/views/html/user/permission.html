@@ -36,6 +36,9 @@
     
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
+       <li class="layui-nav-item" style="margin-right:30px;">
+    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
@@ -243,8 +246,6 @@ layui.use(['table','jquery'], function(){
 		 }); 
 	  });
 	  
-	  
-	  
 	  //监听工具条
 	  table.on('tool(permissionTab)', function(obj){
 	    var data = obj.data;
@@ -315,6 +316,11 @@ layui.use(['table','jquery'], function(){
 		   var type = $(this).data('type');
 		   active[type] ? active[type].call(this) : '';
 	  });
+	  
+	  //消息读取
+	  #if(${user})
+	  websocketConnect();
+	  #end
 });
 
 </script>

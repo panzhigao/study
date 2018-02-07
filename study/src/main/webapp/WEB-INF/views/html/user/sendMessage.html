@@ -138,11 +138,9 @@
                 </div>
               </div>
             <div class="layui-form-item layui-form-text">
-              <div class="layui-form-item layui-form-text">
                 <div class="layui-input-block">
                   <textarea id="L_content" name="content" required lay-verify="content"  placeholder="详细描述"  style="height: 260px;"></textarea>
                 </div>
-              </div>
             </div>
             <div class="layui-form-item">
               <button class="layui-btn" id="sendBtn" key="set-mine" lay-filter="confirmSend" lay-submit>确认发送</button>
@@ -194,6 +192,15 @@ layui.use(['table','jquery', 'form','layedit'], function(){
 	  var index=layedit.build('L_content'); //建立编辑器
 	  var table = layui.table;
 	  var form = layui.form;
+	  form.verify({
+		  content:function(){
+			  layedit.sync(index);
+			  var t_content=layedit.getContent(index);
+			  if(!t_content){
+				  return '文章内容不能为空';
+			  }
+		  }
+		});
   	  form.on('submit(confirmSend)', function(data){
 			params = data.field;
 			sendMessage(params);
@@ -248,6 +255,9 @@ function sendMessage(params){
 				if(res.code=='200'){
 					layer.msg(res.msg);
 					$('#myForm')[0].reset();
+					setTimeout(function(){
+						location.reload();
+					},1000);
 				}else{
 					layer.msg(res.msg);
 				}

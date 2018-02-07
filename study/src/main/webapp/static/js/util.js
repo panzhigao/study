@@ -62,13 +62,14 @@ function websocketConnect(){
 	}
 
 	ws.onmessage = function (msg) {	
-      var count=$("#messageCount").html()|0;
-      $("#messageCount").html(++count);
 	  console.log("服务器传来消息："+msg.data);
 	  var message=JSON.parse(msg.data);
 	  //系统消息
 	  if(message&&message.messageType==3){
 		  showMessage(message);
+	  }else{//个人消息树增加
+		  var count=$("#messageCount").html()|0;
+	      $("#messageCount").html(++count);
 	  }
 	}
 }

@@ -3,8 +3,10 @@ package com.pan.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import com.pan.entity.Message;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
+import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -259,7 +262,10 @@ public class ArticleServiceImpl implements ArticleService {
 		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
-		MessageUtils.sendToAllUser(JsonUtils.toJson(message));
+		String loginUserId = CookieUtils.getLoginUserId();
+		Set<String> set=new HashSet<String>();
+		set.add(loginUserId);
+		MessageUtils.sendMessageToAllUsersWithException(JsonUtils.toJson(message), set);
 		articleMapper.saveArticle(article);
 	}
 }
