@@ -227,9 +227,10 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/get_count")
 	@ResponseBody
-	public int getCount(String status){
+	public int getCount(String status,String type){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		params.put("status", status);
+		params.put("type", type);
 		return articleService.getCount(params);
 	}
 }

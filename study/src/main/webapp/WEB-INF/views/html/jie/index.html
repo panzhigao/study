@@ -277,7 +277,7 @@ function getCount(){
 		url:"$!{rc.contextPath}/article/get_count",
 		type:"get",
 		async:false,
-		data:{status:3},
+		data:{status:3,type:1},
 		success:function(data){
 			$('#count').val(data);
 		}
