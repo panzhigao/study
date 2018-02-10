@@ -64,6 +64,8 @@
 			<tx:method name="remove*" />
 			<tx:method name="bind*" />
 			<tx:method name="clean*" />
+			<tx:method name="pass*" />
+			<tx:method name="notPass*" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>

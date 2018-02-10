@@ -85,4 +85,12 @@ public interface ArticleService {
 	 * @param article
 	 */
 	public void saveSystemMessage(Article article);
+	/**
+	 * 审核通过文章
+	 */
+	public void passArticle(String articleId);
+	/**
+	 * 审核未通过文章
+	 */
+	public void notPassArticle(String articleId);
 }

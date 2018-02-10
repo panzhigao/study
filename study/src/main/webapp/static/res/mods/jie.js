@@ -149,7 +149,7 @@ layui.define('fly', function(exports){
   var asyncRender = function(){
     var div = $('.fly-admin-box'),login=$('#nickname'), jieAdmin = $('#LAY_jieAdmin');
     //查询帖子是否收藏
-    if(login[0]){
+    if(login[0]&&jieAdmin[0]){
     	$.ajax({
     		url:'/study/collection/find/',
     		data:{articleId: div.data('id')},

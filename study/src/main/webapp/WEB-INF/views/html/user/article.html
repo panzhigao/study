@@ -64,19 +64,13 @@
       </a>
     </li>
     <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/center">
-        <i class="layui-icon">&#xe612;</i>
-        用户中心
-      </a>
-    </li>
-    <li class="layui-nav-item">
       <a href="$!{rc.contextPath}/user/set">
         <i class="layui-icon">&#xe620;</i>
         基本设置
       </a>
     </li>
     <li class="layui-nav-item layui-this">
-      <a href="$!{rc.contextPath}/user/message">
+      <a href="$!{rc.contextPath}/user/my_articles">
         <i class="layui-icon">&#xe621;</i>
         我的文章
       </a>
@@ -85,6 +79,12 @@
       <a href="$!{rc.contextPath}/user/message">
         <i class="layui-icon">&#xe611;</i>
         我的消息
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="$!{rc.contextPath}/user/check">
+        <i class="layui-icon">&#xe612;</i>
+       审核文章
       </a>
     </li>
     <li class="layui-nav-item">
@@ -115,11 +115,6 @@
   
   
   <div class="fly-panel fly-panel-user" pad20>
-    <!--
-    <div class="fly-msg" style="margin-top: 15px;">
-      您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
-    </div>
-    -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>

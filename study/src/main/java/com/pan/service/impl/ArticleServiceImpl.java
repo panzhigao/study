@@ -268,4 +268,38 @@ public class ArticleServiceImpl implements ArticleService {
 		MessageUtils.sendMessageToAllUsersWithException(JsonUtils.toJson(message), set);
 		articleMapper.saveArticle(article);
 	}
+
+	/**
+	 * 审核通过文章
+	 */
+	@Override
+	public void passArticle(String articleId) {
+		Article article = articleMapper.findByArticleId(articleId);
+		if(article==null){
+			throw new BusinessException("文章不存在");
+		}
+		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+			throw new BusinessException("文章状态不为审核中");
+		}
+		article.setStatus(Article.STATUS_PUBLISHED);
+		article.setPublishTime(new Date());
+		articleMapper.updateArticle(article);
+	}
+	
+	/**
+	 * 文章未通过审核
+	 */
+	@Override
+	public void notPassArticle(String articleId) {
+		// TODO 审核未通过发送消息 记录原因
+		Article article = articleMapper.findByArticleId(articleId);
+		if(article==null){
+			throw new BusinessException("文章不存在");
+		}
+		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+			throw new BusinessException("文章状态不为审核中");
+		}
+		article.setStatus(Article.STATUS_NOT_PASS);
+		articleMapper.updateArticle(article);
+	}
 }

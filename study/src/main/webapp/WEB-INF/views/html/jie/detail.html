@@ -146,8 +146,9 @@
             <span>$!date.format('yyyy-MM-dd',${article.createTime})</span>
             #end
           </div>
+          
           #if($article.type==1)
-          <div class="detail-hits" id="LAY_jieAdmin" data-id="$!{article.articleId}">
+          <div class="detail-hits" data-id="$!{article.articleId}"  id="#if($article.status==3)LAY_jieAdmin#end"  >
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
             #if($user.userId==$article.userId&&$article.status!=2)
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
@@ -160,7 +161,7 @@
         </div>
       </div>
 		
-	  #if($article.type==1)	
+	  #if($article.type==1&&$article.status==3)	
       <div class="fly-panel detail-box" id="flyReply">
       	<a name="comment"></a>
         <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">

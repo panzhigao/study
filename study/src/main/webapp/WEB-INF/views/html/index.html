@@ -593,27 +593,8 @@
     <div class="layui-col-md4">
 
       <div class="fly-panel">
-        <h3 class="fly-panel-title">温馨通道</h3>
-        <ul class="fly-panel-main fly-list-static">
-          <li>
-            <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-          </li>
-          <li>
-            <a href="http://fly.layui.com/jie/5366/" target="_blank">
-              layui 常见问题的处理和实用干货集锦
-            </a>
-          </li>
-          <li>
-            <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-          </li>
-          <li>
-            <a href="http://fly.layui.com/jie/5366/" target="_blank">
-              layui 常见问题的处理和实用干货集锦
-            </a>
-          </li>
-          <li>
-            <a href="http://fly.layui.com/jie/4281/" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-          </li>
+        <h3 class="fly-panel-title">系统公告</h3>
+        <ul class="fly-panel-main fly-list-static" id="sysMessage">
         </ul>
       </div>
 
@@ -805,11 +786,34 @@ layui.config({
   ,base: '$!{rc.contextPath}/static/res/mods/' //这里实际使用时，建议改成绝对路径
 }).extend({
   fly: 'index'
-}).use('fly');
+}).use('fly',function(){
+	loadSystemMessage();
+});
 //消息读取
 #if(${user})
 websocketConnect();
 #end
+//加载系统公告
+function loadSystemMessage(){
+	$.ajax({
+		url:'$!{rc.contextPath}/article/get_articles',
+		type:'get',
+		data:{type:2,pageSize:5,pageNo:1},
+		success:function(res){
+			if(res.code=='200'){
+				var articles=res.data;
+				var length=articles.length;
+				for(var i=0;i<length;i++){
+					var article=articles[i];
+	 				var one='<li>'+
+	 		        '<a href="$!{rc.contextPath}/article/'+article.articleId+'" target="_blank">'+article.title+'</a>'+
+	 		        '</li>';
+					$('#sysMessage').append(one);
+				}
+			}
+		}
+	});
+}
 </script>
 </body>
 </html>

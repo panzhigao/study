@@ -71,8 +71,11 @@
   	</where>
   	<choose>
   		<when  test="isHot !=null and isHot !=''">
-  			order by comment_count desc,view_count desc
+  			order by comment_count desc,view_count desc,publish_time desc
   		</when >
+  		<when test="orderCondition !=null and orderCondition !=''">
+  			order by ${orderCondition}
+  		</when>
   		<otherwise>
   			order by create_time desc
   		</otherwise>
@@ -122,6 +125,9 @@
   		</if>
   		<if test="updateTime !=null ">
   			update_time=#{updateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="publishTime !=null ">
+  			publish_time=#{publishTime,jdbcType=TIMESTAMP},
   		</if>
   		<if test="status!=null and status!=''">
   			status=#{status,jdbcType=VARCHAR},
