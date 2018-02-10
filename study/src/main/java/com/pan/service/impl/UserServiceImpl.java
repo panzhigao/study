@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.pan.common.annotation.LoginGroup;
@@ -25,6 +26,7 @@ import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
+import com.pan.util.ImageUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.RegexUtils;
@@ -42,6 +44,14 @@ public class UserServiceImpl implements UserService{
 	private static final Logger logger=LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	private static final String DATEFORMAT="yyyyMMdd";
+	
+	private static final String PIC_BASE="http://www.pan.com/myimage/"; 
+	
+	/**
+	 * 图片保存路径
+	 */
+	@Value("${picture.dir}")
+	private String pictureDir;
 	
 	@Autowired
 	private UserMapper userMapper;
@@ -136,6 +146,17 @@ public class UserServiceImpl implements UserService{
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
 		String userId=user.getUserId();
 		user.setUpdateTime(new Date());
+		if(StringUtils.isNotBlank(user.getUserPortrait())){
+			String temp=user.getUserPortrait();
+			temp=temp.replace("data:image/jpeg;base64,", "");
+			String generateImage = ImageUtils.GenerateImage(temp, pictureDir);
+			if(generateImage!=null){
+				String newPortrait=PIC_BASE+generateImage;
+				user.setUserPortrait(newPortrait);
+			}else{
+				user.setUserPortrait(null);
+			}
+		}
 		userMapper.updateUserByUserId(user);
 		String userBrief=userExtension.getUserBrief();
 		//当没用用户简介时新增，否则更新

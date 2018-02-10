@@ -3,7 +3,6 @@ package com.pan.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pan.service.impl.ArticleServiceImpl;
 
 /**
  * id生成工具类
@@ -12,7 +11,7 @@ import com.pan.service.impl.ArticleServiceImpl;
  */
 public class IdUtils {
 	
-	private static final Logger logger=LoggerFactory.getLogger(ArticleServiceImpl.class);
+	private static final Logger logger=LoggerFactory.getLogger(IdUtils.class);
 	
 	private static final String ARTICLE_KEY="article_id";
 	

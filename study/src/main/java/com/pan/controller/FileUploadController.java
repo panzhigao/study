@@ -47,7 +47,6 @@ public class FileUploadController {
 	@Autowired
 	private PictureService pictureService;
 	
-	//TODO 路径配到配置文件
 	/**
 	 * 图片保存路径
 	 */
