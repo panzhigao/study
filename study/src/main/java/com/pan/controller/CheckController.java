@@ -74,8 +74,8 @@ public class CheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/notPass")
 	@ResponseBody
-	public ResultMsg articleNotPass(String articleId){
-		articleService.notPassArticle(articleId);
+	public ResultMsg articleNotPass(String articleId,String reason){
+		articleService.notPassArticle(articleId,reason);
 		return ResultMsg.ok("文章未通过审核");
 	}
 }

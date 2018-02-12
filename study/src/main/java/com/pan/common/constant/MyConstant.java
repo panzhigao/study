@@ -24,15 +24,15 @@ public class MyConstant {
 	 */
 	public static final String MESSAGE_NOT_READED="0";
 	/**
-	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 * 消息类型 1-评论 2-系统消息 3-公告
 	 */
 	public static final String MESSAGE_TYPE_COMMENT="1";
 	/**
-	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 * 消息类型 1-评论 2-系统消息3-公告
 	 */
-	public static final String MESSAGE_TYPE_PRAISE="2";
+	public static final String MESSAGE_TYPE_SYSTEM="2";
 	/**
-	 * 消息类型 1-评论 2-点赞 3-系统通知
+	 * 消息类型 1-评论 2-系统消息 3-公告
 	 */
-	public static final String MESSAGE_TYPE_SYSTEM="3";
+	public static final String MESSAGE_TYPE_NOTICE="3";
 }

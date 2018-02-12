@@ -21,6 +21,7 @@ import com.pan.entity.Message;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
+import com.pan.service.MessageService;
 import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
@@ -42,6 +43,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	/**
 	 * 校验当前操作码状态是否正常
@@ -259,7 +263,7 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setArticleId(IdUtils.generateArticleId());
 		article.setType("2");//系统消息文章
 		Message message=new Message();
-		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
+		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
 		String loginUserId = CookieUtils.getLoginUserId();
@@ -290,8 +294,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 文章未通过审核
 	 */
 	@Override
-	public void notPassArticle(String articleId) {
-		// TODO 审核未通过发送消息 记录原因
+	public Message notPassArticle(String articleId,String reason) {
 		Article article = articleMapper.findByArticleId(articleId);
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -301,5 +304,19 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		article.setStatus(Article.STATUS_NOT_PASS);
 		articleMapper.updateArticle(article);
+		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
+		//发送消息
+		Message message=new Message();
+		message.setMessageId(IdUtils.generateMessageId());
+		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
+		message.setStatus(MyConstant.MESSAGE_NOT_READED);
+		message.setContentId(article.getArticleId());
+		message.setContentName(article.getTitle());
+		message.setReceiverUserId(article.getUserId());
+		message.setCreateTime(new Date());
+		message.setCommentContent(reason);
+		messageService.addMessage(message);
+		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
+		return message;
 	}
 }

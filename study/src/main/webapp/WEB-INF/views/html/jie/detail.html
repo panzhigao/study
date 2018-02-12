@@ -150,7 +150,7 @@
           #if($article.type==1)
           <div class="detail-hits" data-id="$!{article.articleId}"  id="#if($article.status==3)LAY_jieAdmin#end"  >
             <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>  
-            #if($user.userId==$article.userId&&$article.status!=2)
+            #if($user.userId==$article.userId&&($article.status==0||$article.status==1))
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="$!{rc.contextPath}/user/article/edit/${article.articleId}">编辑此贴</a></span>
             #end
           </div>

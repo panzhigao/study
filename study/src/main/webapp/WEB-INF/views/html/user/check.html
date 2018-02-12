@@ -167,26 +167,28 @@ layui.use(['table','jquery'], function(){
 	    var data = obj.data;
 	    if(obj.event === 'detail'){
 	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
-	    } else if(obj.event === 'del'){
-	      layer.confirm('确定不通过该文章么', function(index){
-	        layer.close(index);
-	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/check/notPass",
-	    		type:"post",
-	    		data:{articleId:data.articleId},
-	    		success:function(data){
-	    			if(data.code=='200'){
-	    				layer.alert(data.msg);
-	    				table.reload('articlesTab');
-	    				var counts=$('#articleCounts').html()|0;
-	    				$('#articleCounts').html(--counts);
-	    			}else{	    				
-	    				layer.alert(data.msg);
-	    			}
-	    		}
-	    	});  
-	      });
-	    } else if(obj.event === 'pass'){
+	    } else if(obj.event === 'notPass'){
+    	  layer.prompt({title: '请输入未审核通过原因，并确认', formType: 2}, function(reason, index){
+    		  layer.close(index);
+    		  //layer.msg('您输入的原因'+reason);
+    		  //return;
+    		  $.ajax({
+  	    		url:"$!{rc.contextPath}/user/check/notPass",
+  	    		type:"post",
+  	    		data:{articleId:data.articleId,reason:reason},
+  	    		success:function(data){
+  	    			if(data.code=='200'){
+  	    				layer.alert(data.msg);
+  	    				table.reload('articlesTab');
+  	    				var counts=$('#articleCounts').html()|0;
+  	    				$('#articleCounts').html(--counts);
+  	    			}else{	    				
+  	    				layer.alert(data.msg);
+  	    			}
+  	    		}
+  	    	});
+    	  });
+	    }else if(obj.event === 'pass'){
 	    	layer.confirm('确定通过该文章么?', function(index){
 	    		layer.close(index);
 	    		$.ajax({
@@ -249,7 +251,7 @@ layui.use(['table','jquery'], function(){
 	      {title:'操作',width:160,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="pass">通过</a>';
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">未通过</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="notPass">未通过</a>';
 	    	  return detail+edit+t_delete;
 	      }}
 	    ]]
