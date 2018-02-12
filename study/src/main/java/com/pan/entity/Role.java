@@ -1,5 +1,7 @@
 package com.pan.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 
  * @author panzhigao-wb
@@ -18,6 +20,7 @@ public class Role extends BaseEntity{
 	/**
 	 * 角色名称
 	 */
+	@NotEmpty(message="角色名称不能为空")
 	private String roleName;
 	public String getRoleId() {
 		return roleId;

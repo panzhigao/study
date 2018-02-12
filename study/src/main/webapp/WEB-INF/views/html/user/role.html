@@ -99,8 +99,8 @@
     <li class="layui-nav-item layui-nav-itemed">
           <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">权限列表</a></dd>
-            <dd><a href="$!{rc.contextPath}/user/role" style="padding-left:55px;">角色管理</a></dd>
+            <dd><a href="$!{rc.contextPath}/user/permission"  style="padding-left:55px;">权限列表</a></dd>
+            <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">角色管理</a></dd>
             <dd><a href="javascript:;" style="padding-left:55px;">角色分配</a></dd>
           </dl>
      </li>
@@ -121,9 +121,9 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		   权限名称：
+		   角色名称：
 	    <div class="layui-inline">
-	    	<input placeholder="请输入权限名称" class="layui-input" name="permissionName" id="permissionNameInput" autocomplete="off">
+	    	<input placeholder="请输入权限名称" class="layui-input" name="roleName" id="roleNameInput" autocomplete="off">
 	    </div>
 	    
 	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
@@ -132,7 +132,7 @@
 	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">增加</button>
   		</div>
   		
-	    <table id="permissionTable" lay-filter="permissionTab"></table>
+	    <table id="roleTable" lay-filter="roleTab"></table>
 	    
 	    </div>
       
@@ -163,20 +163,15 @@
             	<div class="layui-form-item">
     				
     				<div class="">
-    				    <h4> 权限名称:</h4>
-      					<input type="text" id="permissionName" name="permissionName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
-    				</div>
-    				<div class="">
-    				    <h4> 权限URL地址:</h4>
-      					<input type="text" id="url" name="url"  placeholder="请输入权限URL地址" autocomplete="off" class="layui-input">
-    				</div>
-    				
+    				    <h4> 角色名称:</h4>
+      					<input type="text" id="roleName" name="roleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+    				</div>		
   				</div>
             </div>
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="addPermission">新增</button>
+                <button type="button" class="btn btn-primary" id="addRole">新增</button>
             </div>
             
         </div><!-- /.modal-content -->
@@ -206,39 +201,33 @@ layui.use(['table','jquery'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ , active = {
 	    reload: function(){
-	        var permissionNameInput = $('#permissionNameInput');
+	        var roleNameInput = $('#roleNameInput');
 	        //执行重载
 	        table.reload('tab', {
 	          page: {
 	            curr: 1 //重新从第 1 页开始
 	          }
 	          ,where: {
-	        	  permissionName: permissionNameInput.val(),
+	        	  roleName: roleNameInput.val(),
 	          }
 	        });
 	      }
 	    };
 	  
-	  $('#addPermission').click(function(){
-		 var permissionName=$('#permissionName').val();
-		 if(!permissionName){
+	  $('#addRole').click(function(){
+		 var roleName=$('#roleName').val();
+		 if(!roleName){
 			 layer.msg('权限名称不能为空');
 			 return;
 		 }
-		 var url=$('#url').val();
-		 if(!url){
-			 layer.msg('权限url地址不能为空');
-			 return;
-		 }
 		 $.ajax({
-			 url:'$!{rc.contextPath}/user/permission/add',
+			 url:'$!{rc.contextPath}/user/role/add',
 			 type:'post',
-			 data:{permissionName:permissionName,url:url},
+			 data:{roleName:roleName},
 			 success:function(res){
 				 if(res.code=='200'){
-					 layer.msg('新增权限成功');
-					 $('#permissionName').val("");
-					 $('#url').val("");
+					 layer.msg('新增角色成功');
+					 $('#roleName').val("");
 					 $('#myModal').modal('hide');
 					 table.reload('tab');
 				 }else{
@@ -249,15 +238,15 @@ layui.use(['table','jquery'], function(){
 	  });
 	  
 	  //监听工具条
-	  table.on('tool(permissionTab)', function(obj){
+	  table.on('tool(roleTab)', function(obj){
 	    var data = obj.data;
 	     if(obj.event === 'del'){
-	      layer.confirm('确定删除该权限么', function(index){
+	      layer.confirm('确定删除该角色么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/permission/delete",
+	    		url:"$!{rc.contextPath}/user/role/delete",
 	    		type:"post",
-	    		data:{permissionId:data.permissionId},
+	    		data:{roleId:data.roleId},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -268,16 +257,6 @@ layui.use(['table','jquery'], function(){
 	    		}
 	    	});  
 	      });
-	    } else if(obj.event === 'edit'){
-	    	 if(data.status==2){
-	    		 layer.alert('审核中文章不能编辑');
-	    		 return;
-	    	 }
-	    	 if(data.status==3){
-	    		 layer.alert('发布中文章不能编辑');
-	    		 return;
-	    	 }
-	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
 	    }
 	  });
 	  
@@ -285,7 +264,7 @@ layui.use(['table','jquery'], function(){
 	  table.render({
 		id: 'tab',  
 	    method: 'post',  
-	    elem: '#permissionTable',
+	    elem: '#roleTable',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -298,12 +277,11 @@ layui.use(['table','jquery'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/permission/get_permissions', //数据接口
+	    url: '$!{rc.contextPath}/user/role/get_roles', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'permissionId', title: '权限ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'permissionName', title: '权限名称', width:150},
-	      {field: 'url', title: '权限url', width:350, sort: true},
+	      {field: 'roleId', title: '角色ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'roleName', title: '角色名称', width:450},
 	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},

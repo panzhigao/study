@@ -27,6 +27,8 @@ public class IdUtils {
 	
 	private static final String PERMISSION_KEY="permission_id";
 	
+	private static final String ROLE_KEY="role_id";
+	
 	/**
 	 * 创建文章id
 	 * @return
@@ -179,5 +181,27 @@ public class IdUtils {
 			throw e;
 		}
 		return permissionId;
+	}
+	
+	/**
+	 * 创建角色id
+	 * @return
+	 */
+	public static String generateRoleId(){
+		String roleId=null;
+		try {
+			long value=0L;
+			if(!JedisUtils.existsKey(ROLE_KEY)){
+				//默认值10000
+				value=JedisUtils.increaseKey(ROLE_KEY, 10000L);
+			}else{
+				value=JedisUtils.increaseKey(ROLE_KEY);
+			}
+			roleId="r"+value;
+		} catch (Exception e) {
+			logger.error("生成角色id错误",e);
+			throw e;
+		}
+		return roleId;
 	}
 }
