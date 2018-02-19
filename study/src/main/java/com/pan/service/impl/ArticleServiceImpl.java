@@ -260,8 +260,9 @@ public class ArticleServiceImpl implements ArticleService {
 		ValidationUtils.validateEntity(article);
 		article.setStatus(Article.STATUS_PUBLISHED);
 		article.setCreateTime(new Date());
+		article.setPublishTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		article.setType("2");//系统消息文章
+		article.setType(Article.TYPE_SYSTEM_MESSAGE);//系统消息文章
 		Message message=new Message();
 		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());
