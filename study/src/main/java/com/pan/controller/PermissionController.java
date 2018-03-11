@@ -1,6 +1,7 @@
 package com.pan.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.pan.common.vo.ResultMsg;
+import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.service.PermissionService;
 
@@ -37,14 +40,8 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/get_permissions")
 	@ResponseBody
-	public Map<String,Object> loadPermissions(Integer pageSize,Integer pageNo,String permissionName){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		params.put("permissionName", permissionName);
-		Map<String,Object> pageData=permissionService.findByParams(params);
-		return pageData;
+	public List<TreeNode> loadPermissions(Integer pageSize,Integer pageNo,String permissionName){
+		return permissionService.getTreeData();
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/delete")

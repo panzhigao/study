@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.mapper.PermissionMapper;
 import com.pan.service.PermissionService;
@@ -65,5 +66,19 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public void deletePermission(String permissionId) {
 		permissionMapper.deletePermission(permissionId);
+	}
+
+	@Override
+	public List<TreeNode> getTreeData() {
+		List<Permission> list = this.permissionMapper.findAll();
+		List<TreeNode> nodes=new ArrayList<TreeNode>();
+		for (Permission permission : list) {
+			TreeNode treeNode=new TreeNode();
+			treeNode.setId(permission.getPermissionId());
+			treeNode.setPid(permission.getPid());
+			treeNode.setName(permission.getPermissionName());
+			nodes.add(treeNode);
+		}
+		return TreeNode.buildTree(nodes);
 	}
 }

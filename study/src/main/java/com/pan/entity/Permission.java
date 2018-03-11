@@ -28,6 +28,10 @@ public class Permission extends BaseEntity{
 	 */
 	@NotEmpty(message="权限路径url不能为空")
 	private String url;
+	/**
+	 * 父级pid
+	 */
+	private String pid;
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -46,11 +50,16 @@ public class Permission extends BaseEntity{
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public String getPid() {
+		return pid;
+	}
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
-				+ permissionName + ", url=" + url + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
+				+ permissionName + ", url=" + url + ", pid=" + pid + "]";
 	}
 }

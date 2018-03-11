@@ -11,6 +11,9 @@
   <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
   <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
   <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="$!{rc.contextPath}/static/ztree/js/jquery-1.4.4.min.js"></script> 
+  <script type="text/javascript" src="$!{rc.contextPath}/static/ztree/js/jquery.ztree.core.js"></script> 
   <style type="text/css">
   	.selected {color:#5FB878 !important;}
   </style>
@@ -135,7 +138,8 @@
 	    <table id="permissionTable" lay-filter="permissionTab"></table>
 	    
 	    </div>
-      
+	    
+      	<div id="demo"></div>
       </div>
     </div>
   </div>
@@ -201,8 +205,21 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
+var layout = [
+              { name: '菜单名称', treeNodes: true, headerClass: 'value_col', colClass: 'value_col', style: 'width: 60%' },
+              {
+                  name: '操作',
+                  headerClass: 'value_col',
+                  colClass: 'value_col',
+                  style: 'width: 20%',
+                  render: function(row) {
+                      return '<a class="layui-btn layui-btn-sm layui-btn-danger" onclick="del(' + row.id + ')"><i class="layui-icon">&#xe640;</i> 删除</a>'; //列渲染
+                  }
+              },
+    	  ];
+
 //table
-layui.use(['table','jquery'], function(){
+layui.use(['table','jquery','tree'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ , active = {
 	    reload: function(){
@@ -323,7 +340,27 @@ layui.use(['table','jquery'], function(){
 	  #if(${user})
 	  websocketConnect();
 	  #end
+	  
+	  loadTree();
 });
+
+function loadTree(){
+	$.ajax({
+		url:"$!{rc.contextPath}/user/permission/get_permissions",
+		type:"post",
+		data:{},
+		success:function(data){
+			console.log(data);
+			layui.treeGird({
+		        elem: '#demo', //传入元素选择器
+		        check: 'checkbox', 
+		        nodes: data,
+		        layout: layout
+		    });
+		}
+	});
+
+}
 
 </script>
 </body>

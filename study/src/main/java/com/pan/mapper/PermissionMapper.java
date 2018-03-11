@@ -33,4 +33,9 @@ public interface PermissionMapper {
 	 * @param articleId
 	 */
 	public void deletePermission(String permissionId);
+	/**
+	 * 查找所有权限
+	 * @return
+	 */
+	public List<Permission> findAll();
 }

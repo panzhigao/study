@@ -23,7 +23,7 @@
 	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
 	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
 	<mvc:resources mapping="/static/res/**" location="/static/res/" />
-	
+	<mvc:resources mapping="/static/ztree/**" location="/static/ztree/" />
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors> 

@@ -8,10 +8,11 @@
     <result column="permission_name"    property="permissionName"  jdbcType="VARCHAR" />
     <result column="url"        	    property="url"             jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="pid"                property="pid"             jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,permission_id,permission_name,url,create_time
+    id,permission_id,permission_name,url,create_time,pid
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
@@ -37,10 +38,14 @@
     </select>
    
   <insert id="addPermission" parameterType="com.pan.entity.Collection">
-  	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+  	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pid,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deletePermission">
   	delete from t_permission where permission_id=#{permissionId}
   </delete>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+ 	select <include refid="Base_Column_List"/> from t_permission
+  </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.pan.service;
 
+import java.util.List;
 import java.util.Map;
 
+import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 
 /**
@@ -25,4 +27,9 @@ public interface PermissionService {
 	 * @param permissionId
 	 */
 	public void deletePermission(String permissionId);
+	/**
+	 * 获取所有权限
+	 * @return
+	 */
+	public List<TreeNode> getTreeData();
 }
