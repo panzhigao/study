@@ -54,7 +54,7 @@ public class PermissionController {
 	
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/get_role_tree")
 	@ResponseBody
-	public List<RoleTree> loadRoleTree(Integer pageSize,Integer pageNo,String permissionName){
+	public List<RoleTree> loadRoleTree(String roleId){
 		return permissionService.getRoleTreeData();
 	}
 }

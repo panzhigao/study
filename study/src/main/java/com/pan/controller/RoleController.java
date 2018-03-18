@@ -2,11 +2,14 @@ package com.pan.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
 import com.pan.service.RoleService;
@@ -59,8 +62,8 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_permission")
 	@ResponseBody
-	public ResultMsg allocatePermission(String roleId,String[] permissions){
-		
-		return null;
+	public ResultMsg allocatePermission(String roleId,@RequestParam(value = "permissions[]")String[] permissions){
+		roleService.allocatePermissionToRole(roleId, permissions);
+		return ResultMsg.ok("分配角色权限成功");
 	}
 }

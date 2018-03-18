@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Role;
+import com.pan.entity.RolePermission;
 import com.pan.mapper.RoleMapper;
 import com.pan.service.RoleService;
 import com.pan.util.IdUtils;
@@ -68,8 +69,15 @@ public class RoleServiceImpl implements RoleService{
 		if(role==null){
 			throw new BusinessException("该角色不存在");
 		}
-		
-		
+		List<RolePermission> list=new ArrayList<RolePermission>();
+		for (String string : permissions) {
+			RolePermission rolePermission=new RolePermission();
+			rolePermission.setPermissionId(string);
+			rolePermission.setRoleId(roleId);
+			rolePermission.setCreateTime(new Date());
+			list.add(rolePermission);
+		}
+		roleMapper.addRolePermission(list);
 	}
 
 	@Override

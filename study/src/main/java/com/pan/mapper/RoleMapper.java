@@ -2,7 +2,9 @@ package com.pan.mapper;
 
 import java.util.List;
 import java.util.Map;
+
 import com.pan.entity.Role;
+import com.pan.entity.RolePermission;
 
 /**
  * 
@@ -33,4 +35,10 @@ public interface RoleMapper {
 	 * @param articleId
 	 */
 	public void deleteRole(String roleId);
+	/**
+	 * 新增权限
+	 * @param roleId
+	 * @param permissions
+	 */
+	public void addRolePermission(List<RolePermission> list);
 }

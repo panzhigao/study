@@ -70,7 +70,10 @@ layuiXtree.prototype.Loading = function (options) {
 
     //如果是字符串url，进行异步加载
     var obj = new XMLHttpRequest();
-    obj.open('get', options.data, true);
+    var roleId=options.roleId;
+    var url=options.data+"?roleId="+roleId;
+    //TODO 修改成可配参数
+    obj.open('get', url, true);
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200 || obj.status == 304) { //回调成功
             _this._dataJson = eval('(' + obj.responseText + ')'); //将返回的数据转为json

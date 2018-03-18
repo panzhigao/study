@@ -18,7 +18,10 @@
   	<where>
   		<if test="roleName !=null and roleName !=''">
 	  			and role_name like CONCAT('%','${roleName}','%')
-	  		</if>
+	  	</if>
+	  	<if test="roleId !=null and roleId !=''">
+	  			and role_id=#{roleId}
+	  	</if>
   	</where>
   	order by create_time desc
   	<if test="offset!=null and row !=null">
@@ -35,11 +38,18 @@
 	  	</where>
     </select>
    
-  <insert id="addRole" parameterType="com.pan.entity.Collection">
+  <insert id="addRole" parameterType="com.pan.entity.Role">
   	insert into t_role (<include refid="Base_Column_List"/>) values (null,#{roleId,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
   </insert>
   
   <delete id="deleteRole">
   	delete from t_role where role_id=#{roleId}
   </delete>
+  
+  <insert id="addRolePermission" parameterType="java.util.List">
+  	insert into t_role_permission (role_id,permission_id,create_time) values
+  	<foreach collection="list" item="item" separator="," close=";">  	
+  		  (#{item.roleId,jdbcType=VARCHAR},#{item.permissionId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
+  	</foreach>
+  </insert>
 </mapper>
