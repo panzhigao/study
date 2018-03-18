@@ -11,9 +11,6 @@
   <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
   <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
   <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="$!{rc.contextPath}/static/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-  <script type="text/javascript" src="$!{rc.contextPath}/static/ztree/js/jquery-1.4.4.min.js"></script> 
-  <script type="text/javascript" src="$!{rc.contextPath}/static/ztree/js/jquery.ztree.core.js"></script> 
   <style type="text/css">
   	.selected {color:#5FB878 !important;}
   </style>
@@ -124,22 +121,14 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		   权限名称：
-	    <div class="layui-inline">
-	    	<input placeholder="请输入权限名称" class="layui-input" name="permissionName" id="permissionNameInput" autocomplete="off">
-	    </div>
-	    
-	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    
 	    <div class="layui-btn-group">
-	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">增加</button>
+	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal"><i class="layui-icon">&#xe608;</i> 增加</button>
   		</div>
   		
-	    <table id="permissionTable" lay-filter="permissionTab"></table>
-	    
 	    </div>
 	    
-      	<div id="demo"></div>
+      	<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
       </div>
     </div>
   </div>
@@ -158,11 +147,11 @@
 <div  class="modal fade" style="margin-top:100px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <input type="hidden" id="selectPId"/>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">添加权限</h4>
             </div>
-                                    
             <div class="modal-body">
             	<div class="layui-form-item">
     				
@@ -183,8 +172,8 @@
                 <button type="button" class="btn btn-primary" id="addPermission">新增</button>
             </div>
             
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -205,37 +194,16 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
-var layout = [
-              { name: '菜单名称', treeNodes: true, headerClass: 'value_col', colClass: 'value_col', style: 'width: 60%' },
-              {
-                  name: '操作',
-                  headerClass: 'value_col',
-                  colClass: 'value_col',
-                  style: 'width: 20%',
-                  render: function(row) {
-                      return '<a class="layui-btn layui-btn-sm layui-btn-danger" onclick="del(' + row.id + ')"><i class="layui-icon">&#xe640;</i> 删除</a>'; //列渲染
-                  }
-              },
-    	  ];
 
+
+var treeTable;
 //table
-layui.use(['table','jquery','tree'], function(){
-	  var table = layui.table;
-	  var $ = layui.$ , active = {
-	    reload: function(){
-	        var permissionNameInput = $('#permissionNameInput');
-	        //执行重载
-	        table.reload('tab', {
-	          page: {
-	            curr: 1 //重新从第 1 页开始
-	          }
-	          ,where: {
-	        	  permissionName: permissionNameInput.val(),
-	          }
-	        });
-	      }
-	    };
-	  
+layui.use(['table','jquery','treeGrid'], function(){
+	  $('#add').click(function(){
+		  $('#selectPId').val('');
+	  });
+	  var treeGrid = layui.treeGrid; 
+	  var table=layui.table;
 	  $('#addPermission').click(function(){
 		 var permissionName=$('#permissionName').val();
 		 if(!permissionName){
@@ -250,14 +218,14 @@ layui.use(['table','jquery','tree'], function(){
 		 $.ajax({
 			 url:'$!{rc.contextPath}/user/permission/add',
 			 type:'post',
-			 data:{permissionName:permissionName,url:url},
+			 data:{permissionName:permissionName,url:url,pId:$('#selectPId').val()},
 			 success:function(res){
 				 if(res.code=='200'){
 					 layer.msg('新增权限成功');
 					 $('#permissionName').val("");
 					 $('#url').val("");
 					 $('#myModal').modal('hide');
-					 table.reload('tab');
+					 treeTable.reload();
 				 }else{
 					 layer.msg(res.msg);
 				 }
@@ -265,103 +233,58 @@ layui.use(['table','jquery','tree'], function(){
 		 }); 
 	  });
 	  
-	  //监听工具条
-	  table.on('tool(permissionTab)', function(obj){
-	    var data = obj.data;
-	     if(obj.event === 'del'){
-	      layer.confirm('确定删除该权限么', function(index){
-	        layer.close(index);
-	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/permission/delete",
-	    		type:"post",
-	    		data:{permissionId:data.permissionId},
-	    		success:function(data){
-	    			if(data.code=='200'){
-	    				layer.alert(data.msg);
-	    				table.reload('tab');
-	    			}else{	    				
-	    				layer.alert(data.msg);
-	    			}
-	    		}
-	    	});  
-	      });
-	    } else if(obj.event === 'edit'){
-	    	 if(data.status==2){
-	    		 layer.alert('审核中文章不能编辑');
-	    		 return;
-	    	 }
-	    	 if(data.status==3){
-	    		 layer.alert('发布中文章不能编辑');
-	    		 return;
-	    	 }
-	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
-	    }
-	  });
-	  
-	  //第一个实例
-	  table.render({
-		id: 'tab',  
-	    method: 'post',  
-	    elem: '#permissionTable',
-	    height: 500,
-	    request: {
-	    	pageName: 'pageNo', //页码的参数名称，默认：page
-	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
-	    },
-	    response: {
-	    	//statusName: 'status', //数据状态的字段名称，默认：code
-	        statusCode: 200, //成功的状态码，默认：0
-	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
-	        countName: 'total', //数据总数的字段名称，默认：count
-	        dataName: 'data' //数据列表的字段名称，默认：data
-	    },
-	    url: '$!{rc.contextPath}/user/permission/get_permissions', //数据接口
-	    page: true ,//开启分页
-	    cols: [[ //表头
-	      {field: 'permissionId', title: '权限ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'permissionName', title: '权限名称', width:150},
-	      {field: 'url', title: '权限url', width:350, sort: true},
-	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
-	      }},
-	      {title:'操作',width:160,templet:function(row){
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return t_delete;
-	      }}
-	    ]]
-	  });
-	  
-	  $('#search').on('click', function(){
-		   var type = $(this).data('type');
-		   active[type] ? active[type].call(this) : '';
-	  });
-	  
+	      
 	  //消息读取
 	  #if(${user})
 	  websocketConnect();
 	  #end
 	  
-	  loadTree();
+	  treeTable =treeGrid.render({
+		  id: 'tab', 
+          elem: '#treeTable',
+          url:'$!{rc.contextPath}/user/permission/get_permissions',
+          cellMinWidth: 100,
+          alias: 'changyong',
+          treeId:'id',//树形id字段名称
+          treeUpId:'pId',//树形父id字段名称
+          treeShowName:'name',//以树形式显示的字段
+          method: 'post',
+          cols: [[
+              {field:'id', width:'100', title: 'id'},
+              {field:'name', edit:'text',width:'100', title: '权限名'},
+              {field:'url', edit:'text',width:'300', title: '权限url'},
+              {field:'pId', width:'100', title: 'pId'},
+              {field:'ids',width:'250', title: '编辑',templet:function(row){
+            	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub(\''+row.id+'\')">新增子权限</a>';
+    	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteNode(\''+row.id+'\')">删除</a>';
+    	    	  return t_delete+add;
+    	      }}
+          ]],
+          page:false
+      });  
 });
 
-function loadTree(){
-	$.ajax({
-		url:"$!{rc.contextPath}/user/permission/get_permissions",
-		type:"post",
-		data:{},
-		success:function(data){
-			console.log(data);
-			layui.treeGird({
-		        elem: '#demo', //传入元素选择器
-		        check: 'checkbox', 
-		        nodes: data,
-		        layout: layout
-		    });
-		}
-	});
-
+function deleteNode(id){
+	 $.ajax({
+		 url:'$!{rc.contextPath}/user/permission/delete',
+		 type:'post',
+		 data:{permissionId:id},
+		 success:function(res){
+			 if(res.code=='200'){
+				 layer.msg('删除权限成功');
+				 treeTable.reload();
+			 }else{
+				 layer.msg(res.msg);
+			 }
+		 }
+	 }); 
+	
 }
 
+function addSub(pId){
+	$('#selectPId').val(pId);
+	$('#myModal').modal('show');
+}
 </script>
 </body>
 </html>

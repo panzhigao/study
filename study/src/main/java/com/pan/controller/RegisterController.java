@@ -58,6 +58,7 @@ public class RegisterController {
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
+		JedisUtils.setStringExpire(MyConstant.USER_SESSION+cookieValue, vercode, 3600);
 		ModelAndView mav=new ModelAndView("html/user/reg");
 		mav.addObject("vercode", vercode);
 		return mav;

@@ -17,8 +17,11 @@ public enum ResultCodeEmun {
 	/**
 	 * 图片上传成功
 	 */
-	UPLOAD_SUCCESS("0","图片上传成功");
-	
+	UPLOAD_SUCCESS("0","图片上传成功"),
+	/**
+	 * 
+	 */
+	SUCCESS("0","操作成功！");
 	private String code;
 	
 	private String msg;

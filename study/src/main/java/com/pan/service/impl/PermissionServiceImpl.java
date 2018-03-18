@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.dto.RoleTree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.mapper.PermissionMapper;
@@ -37,6 +39,9 @@ public class PermissionServiceImpl implements PermissionService {
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
+		if(StringUtils.isBlank(permission.getPId())){
+			permission.setPId("0");
+		}
 		permission.setCreateTime(new Date());
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
@@ -75,10 +80,27 @@ public class PermissionServiceImpl implements PermissionService {
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
 			treeNode.setId(permission.getPermissionId());
-			treeNode.setPid(permission.getPid());
+			treeNode.setpId(permission.getPId());
 			treeNode.setName(permission.getPermissionName());
+			treeNode.setUrl(permission.getUrl());
+			//treeNode.setData(permission.getUrl());
 			nodes.add(treeNode);
 		}
-		return TreeNode.buildTree(nodes);
+		return nodes;
+	}
+
+	@Override
+	public List<RoleTree> getRoleTreeData() {
+		List<Permission> list = this.permissionMapper.findAll();
+		List<RoleTree> nodes=new ArrayList<RoleTree>(20);
+		for (Permission permission : list) {
+			RoleTree roleTree=new RoleTree();
+			roleTree.setTitle(permission.getPermissionName());
+			roleTree.setValue(permission.getPermissionId());
+			roleTree.setId(permission.getPermissionId());
+			roleTree.setpId(permission.getPId());
+			nodes.add(roleTree);
+		}
+		return RoleTree.buildTree(nodes);
 	}
 }

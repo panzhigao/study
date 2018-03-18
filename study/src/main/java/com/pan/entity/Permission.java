@@ -31,7 +31,7 @@ public class Permission extends BaseEntity{
 	/**
 	 * 父级pid
 	 */
-	private String pid;
+	private String pId="0";
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -51,15 +51,15 @@ public class Permission extends BaseEntity{
 		this.url = url;
 	}
 	
-	public String getPid() {
-		return pid;
+	public String getPId() {
+		return pId;
 	}
-	public void setPid(String pid) {
-		this.pid = pid;
+	public void setPId(String pId) {
+		this.pId = pId;
 	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
-				+ permissionName + ", url=" + url + ", pid=" + pid + "]";
+				+ permissionName + ", url=" + url + ", pId=" + pId + "]";
 	}
 }

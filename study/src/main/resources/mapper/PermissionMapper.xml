@@ -8,7 +8,7 @@
     <result column="permission_name"    property="permissionName"  jdbcType="VARCHAR" />
     <result column="url"        	    property="url"             jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
-    <result column="pid"                property="pid"             jdbcType="VARCHAR" />
+    <result column="pid"                property="pId"             jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -38,7 +38,7 @@
     </select>
    
   <insert id="addPermission" parameterType="com.pan.entity.Collection">
-  	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pid,jdbcType=VARCHAR})
+  	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pId,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deletePermission">

@@ -133,7 +133,7 @@
   		</div>
   		
 	    <table id="roleTable" lay-filter="roleTab"></table>
-	    
+	        
 	    </div>
       
       </div>
@@ -161,7 +161,6 @@
                                     
             <div class="modal-body">
             	<div class="layui-form-item">
-    				
     				<div class="">
     				    <h4> 角色名称:</h4>
       					<input type="text" id="roleName" name="roleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
@@ -178,8 +177,32 @@
     </div><!-- /.modal -->
 </div>
 
+<!-- 模态框-权限树 -->
+<div  class="modal fade" style="margin-top:100px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        	<input type="hidden" id="selectedRoleId"/>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">分配权限</h4>
+            </div>
+                                    
+            <form class="layui-form">
+      	  		<div id="xtree3" style="margin:auto;width:400px;padding: 10px 0 25px 5px;"></div>
+			</form>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/res/layui-xtree/layui-xtree.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -195,9 +218,10 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+var xtree3;
 
 //table
-layui.use(['table','jquery'], function(){
+layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ , active = {
 	    reload: function(){
@@ -257,6 +281,9 @@ layui.use(['table','jquery'], function(){
 	    		}
 	    	});  
 	      });
+	    }else if(obj.event==='allocate'){
+	    	$('#myTree').modal('show');
+	    	$('#selectedRoleId').val(data.roleId);
 	    }
 	  });
 	  
@@ -286,8 +313,9 @@ layui.use(['table','jquery'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){
+	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return t_delete;
+	    	  return allocate+t_delete;
 	      }}
 	    ]]
 	  });
@@ -301,7 +329,81 @@ layui.use(['table','jquery'], function(){
 	  #if(${user})
 	  websocketConnect();
 	  #end
+	  
+	  var form = layui.form;
+
+//       //1、最基础的用法 - 直接绑定json
+//       var xtree1 = new layuiXtree({
+//           elem: 'xtree3'   //(必填) 放置xtree的容器，样式参照 .xtree_contianer
+//           , form: form     //(必填) layui 的 from
+//           , data: json     //(必填) json数据
+//       });
+/*
+      //2、最基础的用法 - 异步加载
+      var xtree2 = new layuiXtree({
+          elem: 'xtree2'                  //(必填) 放置xtree的容器，样式参照 .xtree_contianer
+          , form: form                    //(必填) layui 的 from
+          , data: 'server/xtreedata.ashx' //(必填) 数据接口，需要返回以上结构的json字符串
+      });*/
+
+      
+      //3、最完整的参数用法
+       xtree3= new layuiXtree({
+          elem: 'xtree3'                  //必填三兄弟之老大
+          ,method: 'post'
+          , form: form                    //必填三兄弟之这才是真老大
+          , data: '$!{rc.contextPath}/user/permission/get_role_tree' //必填三兄弟之这也算是老大
+          , isopen: false  //加载完毕后的展开状态，默认值：true
+          , ckall: true    //启用全选功能，默认值：false
+          , ckallback: function () { } //全选框状态改变后执行的回调函数
+          , icon: {        //三种图标样式，更改几个都可以，用的是layui的图标
+              open: "&#xe7a0;"       //节点打开的图标
+              , close: "&#xe622;"    //节点关闭的图标
+              , end: "&#xe621;"      //末尾节点的图标
+          }
+          , color: {       //三种图标颜色，独立配色，更改几个都可以
+              open: "#EE9A00"        //节点图标打开的颜色
+              , close: "#EEC591"     //节点图标关闭的颜色
+              , end: "#828282"       //末级节点图标的颜色
+          }
+          , click: function (data) {  //节点选中状态改变事件监听，全选框有自己的监听事件
+              console.log(data.elem); //得到checkbox原始DOM对象
+              console.log(data.elem.checked); //开关是否开启，true或者false
+              console.log(data.value); //开关value值，也可以通过data.elem.value得到
+              console.log(data.othis); //得到美化后的DOM对象
+          }
+      });
+	  
+	  $('#btnSave').click(function(){
+		  var selectedRoleId=$('#selectedRoleId').val();
+		  if(!selectedRoleId){
+			  layer.alert('未选择角色');
+			  return;
+		  }
+		  var oCks = xtree3.GetChecked(); //这是方法
+		  var arr=[];
+          for (var i = 0; i < oCks.length; i++) {
+              arr.push(oCks[i].value);
+          }
+          var permissions = JSON.stringify(arr);
+          $.ajax({
+        	  url:'$!{rc.contextPath}/user/role/allocate_permission',
+        	  data:{roleId:selectedRoleId,permissions:permissions},
+        	  dataType:'json',
+        	  type:'post',
+        	  success:function(res){
+        		  if(res.code=='200'){
+	    				layer.alert(res.msg);
+	    				$('#myTree').modal('hide');
+	    			}else{	    				
+	    				layer.alert(res.msg);
+	    			}
+        	  }
+          
+          });
+	  });
 });
+
 
 </script>
 </body>

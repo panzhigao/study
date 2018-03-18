@@ -24,4 +24,16 @@ public interface RoleService {
 	 * @param permissionId
 	 */
 	public void deleteRole(String roleId);
+	/**
+	 * 为角色分配权限
+	 * @param roleId
+	 * @param permissions
+	 */
+	public void allocatePermissionToRole(String roleId,String[] permissions);
+	/**
+	 * 查找唯一角色
+	 * @param roleId
+	 * @return
+	 */
+	public Role findByRoleId(String roleId);
 }

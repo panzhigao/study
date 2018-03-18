@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pan.common.exception.BusinessException;
 import com.pan.entity.Role;
 import com.pan.mapper.RoleMapper;
 import com.pan.service.RoleService;
@@ -59,6 +60,27 @@ public class RoleServiceImpl implements RoleService{
 	@Override
 	public void deleteRole(String roleId) {
 		roleMapper.deleteRole(roleId);
+	}
+
+	@Override
+	public void allocatePermissionToRole(String roleId, String[] permissions) {
+		Role role = findByRoleId(roleId);
+		if(role==null){
+			throw new BusinessException("该角色不存在");
+		}
+		
+		
+	}
+
+	@Override
+	public Role findByRoleId(String roleId) {
+		Map<String,Object> params=new HashMap<String, Object>();
+		params.put("roleId", roleId);
+		List<Role> list = roleMapper.findByParams(params);
+		if(list.size()==1){
+			return list.get(0);
+		}
+		return null;
 	}
 
 }

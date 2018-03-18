@@ -52,4 +52,15 @@ public class RoleController {
 		roleService.deleteRole(roleId);
 		return ResultMsg.ok("删除角色成功");
 	}
+	
+	/**
+	 * 为角色分配权限
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_permission")
+	@ResponseBody
+	public ResultMsg allocatePermission(String roleId,String[] permissions){
+		
+		return null;
+	}
 }
