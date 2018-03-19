@@ -383,12 +383,13 @@ layui.use(['table','jquery','form'], function(){
 			  layer.alert('未选择角色');
 			  return;
 		  }
-		  var oCks = xtree3.GetChecked(); //这是方法
+		  var oCks = xtree3.GetAllCheckBox(); //这是方法
 		  var arr=[];
           for (var i = 0; i < oCks.length; i++) {
               arr.push(oCks[i].value);
           }
           var permissions = JSON.stringify(arr);
+          console.log(permissions);
           $.ajax({
         	  url:'$!{rc.contextPath}/user/role/allocate_permission',
         	  data:{roleId:selectedRoleId,permissions:arr},
