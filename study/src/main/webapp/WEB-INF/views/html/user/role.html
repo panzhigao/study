@@ -283,6 +283,7 @@ layui.use(['table','jquery','form'], function(){
 	      });
 	    }else if(obj.event==='allocate'){
 	    	$('#myTree').modal('show');
+	    	xtree3._options.roleId=data.roleId;
 	    	xtree3.render();
 	    	$('#selectedRoleId').val(data.roleId);
 	    }
@@ -351,7 +352,7 @@ layui.use(['table','jquery','form'], function(){
       //3、最完整的参数用法
        xtree3= new layuiXtree({
           elem: 'xtree3'                  //必填三兄弟之老大
-          ,roleId:123
+          ,roleId:null
           ,method: 'post'
           , form: form                    //必填三兄弟之这才是真老大
           , data: '$!{rc.contextPath}/user/permission/get_role_tree' //必填三兄弟之这也算是老大

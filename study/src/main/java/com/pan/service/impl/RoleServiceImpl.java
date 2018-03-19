@@ -57,7 +57,8 @@ public class RoleServiceImpl implements RoleService{
 		}
 		return pageData;
 	}
-
+	
+	//TODO 删除角色，连同其下的权限删除
 	@Override
 	public void deleteRole(String roleId) {
 		roleMapper.deleteRole(roleId);
@@ -69,6 +70,9 @@ public class RoleServiceImpl implements RoleService{
 		if(role==null){
 			throw new BusinessException("该角色不存在");
 		}
+		//TODO 增加日志
+		//删除该角色下的所有权限，再重新添加
+		roleMapper.deleteRolePermissionByRoleId(roleId);
 		List<RolePermission> list=new ArrayList<RolePermission>();
 		for (String string : permissions) {
 			RolePermission rolePermission=new RolePermission();

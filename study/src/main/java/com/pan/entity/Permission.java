@@ -32,6 +32,10 @@ public class Permission extends BaseEntity{
 	 * 父级pid
 	 */
 	private String pId="0";
+	/**
+	 * 标识，0-未选中
+	 */
+	private String marker;
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -50,16 +54,24 @@ public class Permission extends BaseEntity{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	public String getPId() {
+	public String getpId() {
 		return pId;
 	}
-	public void setPId(String pId) {
+	public void setpId(String pId) {
 		this.pId = pId;
+	}
+	public String getMarker() {
+		return marker;
+	}
+	public void setMarker(String marker) {
+		this.marker = marker;
 	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
-				+ permissionName + ", url=" + url + ", pId=" + pId + "]";
+				+ permissionName + ", url=" + url + ", pId=" + pId
+				+ ", marker=" + marker + ", getId()=" + getId()
+				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
+				+ getUpdateTime() + "]";
 	}
 }

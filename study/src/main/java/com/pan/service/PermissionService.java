@@ -34,8 +34,8 @@ public interface PermissionService {
 	 */
 	public List<TreeNode> getTreeData();
 	/**
-	 * 获取权限层级树数据
+	 * 根据角色id获取权限层级树数据
 	 * @return
 	 */
-	public List<RoleTree> getRoleTreeData();
+	public List<RoleTree> getRoleTreeData(String roleId);
 }

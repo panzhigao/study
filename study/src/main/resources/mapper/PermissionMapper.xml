@@ -48,4 +48,12 @@
   <select id="findAll" resultMap="BaseResultMap">
  	select <include refid="Base_Column_List"/> from t_permission
   </select>
+  
+  <select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">
+ 	select tp.permission_id,tp.permission_name,tp.url,ifnull(tr.role_id,0)marker from t_permission tp		
+	left join t_role_permission trp on trp.permission_id=tp.permission_id
+	left join (select role_id from t_role where role_id =#{roleId}) tr on tr.role_id=trp.role_id
+	group by tp.permission_id
+  </select>
+  
 </mapper>

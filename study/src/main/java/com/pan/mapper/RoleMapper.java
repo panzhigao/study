@@ -41,4 +41,9 @@ public interface RoleMapper {
 	 * @param permissions
 	 */
 	public void addRolePermission(List<RolePermission> list);
+	/**
+	 * 删除角色权限
+	 * @param roleId
+	 */
+	public void deleteRolePermissionByRoleId(String roleId);
 }

@@ -39,8 +39,8 @@ public class PermissionServiceImpl implements PermissionService {
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
-		if(StringUtils.isBlank(permission.getPId())){
-			permission.setPId("0");
+		if(StringUtils.isBlank(permission.getpId())){
+			permission.setpId("0");
 		}
 		permission.setCreateTime(new Date());
 		permission.setPermissionId(IdUtils.generatePermissionId());
@@ -80,7 +80,7 @@ public class PermissionServiceImpl implements PermissionService {
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
 			treeNode.setId(permission.getPermissionId());
-			treeNode.setpId(permission.getPId());
+			treeNode.setpId(permission.getpId());
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
 			//treeNode.setData(permission.getUrl());
@@ -90,15 +90,21 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	@Override
-	public List<RoleTree> getRoleTreeData() {
-		List<Permission> list = this.permissionMapper.findAll();
+	public List<RoleTree> getRoleTreeData(String roleId) {
+		if(StringUtils.isBlank(roleId)){
+			return new ArrayList<RoleTree>();
+		}
+		List<Permission> list = this.permissionMapper.getPermissionSelectedByRoleId(roleId);
 		List<RoleTree> nodes=new ArrayList<RoleTree>(20);
 		for (Permission permission : list) {
 			RoleTree roleTree=new RoleTree();
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
-			roleTree.setpId(permission.getPId());
+			roleTree.setpId(permission.getpId());
+			if(!StringUtils.equals(permission.getMarker(),"0")){
+				roleTree.setChecked(true);
+			}
 			nodes.add(roleTree);
 		}
 		return RoleTree.buildTree(nodes);
