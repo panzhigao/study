@@ -101,7 +101,7 @@
           <dl class="layui-nav-child">
             <dd><a href="$!{rc.contextPath}/user/permission"  style="padding-left:55px;">权限列表</a></dd>
             <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">角色管理</a></dd>
-            <dd><a href="javascript:;" style="padding-left:55px;">角色分配</a></dd>
+            <dd><a href="$!{rc.contextPath}/user/admin" style="padding-left:55px;">角色分配</a></dd>
           </dl>
      </li>
   </ul>
@@ -356,7 +356,7 @@ layui.use(['table','jquery','form'], function(){
           ,method: 'post'
           , form: form                    //必填三兄弟之这才是真老大
           , data: '$!{rc.contextPath}/user/permission/get_role_tree' //必填三兄弟之这也算是老大
-          , isopen: false  //加载完毕后的展开状态，默认值：true
+          , isopen: true  //加载完毕后的展开状态，默认值：true
           , ckall: true    //启用全选功能，默认值：false
           , ckallback: function () { } //全选框状态改变后执行的回调函数
           , icon: {        //三种图标样式，更改几个都可以，用的是layui的图标
