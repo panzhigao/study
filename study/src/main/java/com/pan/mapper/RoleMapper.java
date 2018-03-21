@@ -46,4 +46,10 @@ public interface RoleMapper {
 	 * @param roleId
 	 */
 	public void deleteRolePermissionByRoleId(String roleId);
+	/**
+	 * 获取用户角色
+	 * @param userId
+	 * @return
+	 */
+	public List<Role> getRoleSelectedByUserId(String userId);
 }

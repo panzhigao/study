@@ -1,5 +1,8 @@
 package com.pan.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.pan.entity.User;
 
 /**
@@ -36,4 +39,15 @@ public interface UserMapper {
 	 * @param user
 	 */
 	public void updateUserByUserId(User user);
+	/**
+	 * 查询文章详细,支持分页
+	 * @param params
+	 * @return
+	 */
+	public int getCountByParams(Map<String,Object> params);
+	/**
+	 * 分页查询用户信息
+	 * @return
+	 */
+	public List<User> findByParams(Map<String,Object> params);
 }

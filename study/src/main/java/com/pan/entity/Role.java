@@ -22,6 +22,10 @@ public class Role extends BaseEntity{
 	 */
 	@NotEmpty(message="角色名称不能为空")
 	private String roleName;
+	/**
+	 * 是否选中
+	 */
+	private String marker;
 	public String getRoleId() {
 		return roleId;
 	}
@@ -34,11 +38,16 @@ public class Role extends BaseEntity{
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+	
+	public String getMarker() {
+		return marker;
+	}
+	public void setMarker(String marker) {
+		this.marker = marker;
+	}
 	@Override
 	public String toString() {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName
-				+ ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
-				+ "]";
+				+ ", marker=" + marker + "]";
 	}
 }

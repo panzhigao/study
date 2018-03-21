@@ -36,7 +36,7 @@
     
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
-       <li class="layui-nav-item" style="margin-right:30px;">
+      <li class="layui-nav-item" style="margin-right:30px;">
     	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
   	  </li>
       <li class="layui-nav-item">
@@ -51,7 +51,7 @@
           <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -97,12 +97,12 @@
       </a>
     </li>
     <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
-          <dl class="layui-nav-child">
-            <dd><a href="$!{rc.contextPath}/user/permission"  style="padding-left:55px;">权限列表</a></dd>
-            <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">角色管理</a></dd>
-            <dd><a href="$!{rc.contextPath}/user/manage" style="padding-left:55px;">用户管理</a></dd>
-          </dl>
+        <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
+        <dl class="layui-nav-child">
+            <dd><a href="$!{rc.contextPath}/user/permission" style="padding-left:55px;">权限列表</a></dd>
+            <dd><a href="javascript:;" style="padding-left:55px;">角色管理</a></dd>
+            <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">用户管理</a></dd>
+        </dl>
      </li>
   </ul>
 
@@ -118,24 +118,16 @@
   
   
   <div class="fly-panel fly-panel-user" pad20>
-    <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li data-type="mine-jie" lay-id="index" class="layui-this">用户管理</li>
+      </ul>
+      
+      	  	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		   角色名称：
-	    <div class="layui-inline">
-	    	<input placeholder="请输入权限名称" class="layui-input" name="roleName" id="roleNameInput" autocomplete="off">
+	    	<table id="userListTab" lay-filter="myTable"></table>
 	    </div>
-	    
-	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
-	    
-	    <div class="layui-btn-group">
-	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">增加</button>
-  		</div>
-  		
-	    <table id="roleTable" lay-filter="roleTab"></table>
-	        
-	    </div>
-      
       </div>
     </div>
   </div>
@@ -150,38 +142,11 @@
   </p>
 </div>
 
-<!-- 模态框（Modal） -->
-<div  class="modal fade" style="margin-top:100px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加权限</h4>
-            </div>
-                                    
-            <div class="modal-body">
-            	<div class="layui-form-item">
-    				<div class="">
-    				    <h4> 角色名称:</h4>
-      					<input type="text" id="roleName" name="roleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
-    				</div>		
-  				</div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="addRole">新增</button>
-            </div>
-            
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
 <!-- 模态框-权限树 -->
 <div  class="modal fade" style="margin-top:100px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        	<input type="hidden" id="selectedRoleId"/>
+        <input type="hidden" id="selectedUserId"/>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">分配权限</h4>
@@ -218,82 +183,26 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
-var xtree3;
 
+var xtree3;
 //table
-layui.use(['table','jquery','form'], function(){
+layui.use(['table','jquery'], function(){
 	  var table = layui.table;
-	  var $ = layui.$ , active = {
-	    reload: function(){
-	        var roleNameInput = $('#roleNameInput');
-	        //执行重载
-	        table.reload('tab', {
-	          page: {
-	            curr: 1 //重新从第 1 页开始
-	          }
-	          ,where: {
-	        	  roleName: roleNameInput.val(),
-	          }
-	        });
-	      }
-	    };
-	  
-	  $('#addRole').click(function(){
-		 var roleName=$('#roleName').val();
-		 if(!roleName){
-			 layer.msg('权限名称不能为空');
-			 return;
-		 }
-		 $.ajax({
-			 url:'$!{rc.contextPath}/user/role/add',
-			 type:'post',
-			 data:{roleName:roleName},
-			 success:function(res){
-				 if(res.code=='200'){
-					 layer.msg('新增角色成功');
-					 $('#roleName').val("");
-					 $('#myModal').modal('hide');
-					 table.reload('tab');
-				 }else{
-					 layer.msg(res.msg);
-				 }
-			 }
-		 }); 
-	  });
-	  
+	  var $ = layui.$ ;
 	  //监听工具条
-	  table.on('tool(roleTab)', function(obj){
+	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
-	     if(obj.event === 'del'){
-	      layer.confirm('确定删除该角色么', function(index){
-	        layer.close(index);
-	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/role/delete",
-	    		type:"post",
-	    		data:{roleId:data.roleId},
-	    		success:function(data){
-	    			if(data.code=='200'){
-	    				layer.alert(data.msg);
-	    				table.reload('tab');
-	    			}else{	    				
-	    				layer.alert(data.msg);
-	    			}
-	    		}
-	    	});  
-	      });
-	    }else if(obj.event==='allocate'){
+	    if(obj.event === 'allocate'){
 	    	$('#myTree').modal('show');
-	    	xtree3._options.roleId=data.roleId;
+	    	xtree3._options.roleId=data.userId;
 	    	xtree3.render();
-	    	$('#selectedRoleId').val(data.roleId);
-	    }
+	    }  
 	  });
-	  
 	  //第一个实例
 	  table.render({
-		id: 'tab',  
-	    method: 'post',  
-	    elem: '#roleTable',
+		id: 'articlesTab',  
+	    //method: 'post',  
+	    elem: '#userListTab',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -306,56 +215,62 @@ layui.use(['table','jquery','form'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/role/get_roles', //数据接口
+	    url: '$!{rc.contextPath}/user/userList', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'roleId', title: '角色ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'roleName', title: '角色名称', width:450},
-	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
+	      {field: 'userId', title: '用户ID', width:200, fixed: 'left'},
+	      {field: 'nickname', title: '用户姓名', width:100, fixed: 'left'},
+	      {field: 'sex', title: '用户性别', width:100, fixed: 'left',templet:function(d){
+	    	  var sex='无';
+	    	  if(d.sex==0){
+	    		  sex='男';
+	    	  }else if(d.sex==1){
+	    		  sex='女';
+	    	  }
+	    	  return sex;
+	      }},
+	      {field: 'status', title: '状态', width:100,templet:
+	    	  function(d){
+	    	  	switch(d.status){
+		    	  	case '0':temp='禁用';break;
+		    	  	case '1':temp='正常';break;
+		    	  	default:temp="无状态";
+	    	  	}
+	    	  	return temp;
+	      	  }
+	       },
+	      {field: 'createTime', title: '创建时间', width:250, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return allocate+t_delete;
+	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配权限</a>';
+	    	  return allocate;
 	      }}
 	    ]]
 	  });
 	  
-	  $('#search').on('click', function(){
-		   var type = $(this).data('type');
-		   active[type] ? active[type].call(this) : '';
-	  });
 	  
+	  var status='';
+	  function reload(tableId){
+		 //执行重载
+		 table.reload(tableId, {
+		 page: {curr: 1},
+		 where: {status:status}
+		 }); 
+	  }
+	  	    		  
 	  //消息读取
 	  #if(${user})
 	  websocketConnect();
 	  #end
 	  
 	  var form = layui.form;
-
-//       //1、最基础的用法 - 直接绑定json
-//       var xtree1 = new layuiXtree({
-//           elem: 'xtree3'   //(必填) 放置xtree的容器，样式参照 .xtree_contianer
-//           , form: form     //(必填) layui 的 from
-//           , data: json     //(必填) json数据
-//       });
-/*
-      //2、最基础的用法 - 异步加载
-      var xtree2 = new layuiXtree({
-          elem: 'xtree2'                  //(必填) 放置xtree的容器，样式参照 .xtree_contianer
-          , form: form                    //(必填) layui 的 from
-          , data: 'server/xtreedata.ashx' //(必填) 数据接口，需要返回以上结构的json字符串
-      });*/
-
-      
-      //3、最完整的参数用法
-       xtree3= new layuiXtree({
+	  xtree3= new layuiXtree({
           elem: 'xtree3'                  //必填三兄弟之老大
           ,roleId:null
           ,method: 'post'
           , form: form                    //必填三兄弟之这才是真老大
-          , data: '$!{rc.contextPath}/user/permission/get_role_tree' //必填三兄弟之这也算是老大
+          , data: '$!{rc.contextPath}/user/role/get_role_tree' //必填三兄弟之这也算是老大
           , isopen: true  //加载完毕后的展开状态，默认值：true
           , ckall: true    //启用全选功能，默认值：false
           , ckallback: function () { } //全选框状态改变后执行的回调函数
@@ -378,8 +293,8 @@ layui.use(['table','jquery','form'], function(){
       });
 	  
 	  $('#btnSave').click(function(){
-		  var selectedRoleId=$('#selectedRoleId').val();
-		  if(!selectedRoleId){
+		  var selectedUserId=$('#selectedUserId').val();
+		  if(!selectedUserId){
 			  layer.alert('未选择角色');
 			  return;
 		  }
@@ -388,11 +303,11 @@ layui.use(['table','jquery','form'], function(){
           for (var i = 0; i < oCks.length; i++) {
               arr.push(oCks[i].value);
           }
-          var permissions = JSON.stringify(arr);
+          var roles = JSON.stringify(arr);
           console.log(permissions);
           $.ajax({
         	  url:'$!{rc.contextPath}/user/role/allocate_permission',
-        	  data:{roleId:selectedRoleId,permissions:arr},
+        	  data:{userId:selectedUserId,permissions:arr},
         	  dataType:'json',
         	  type:'post',
         	  success:function(res){
@@ -406,9 +321,9 @@ layui.use(['table','jquery','form'], function(){
           
           });
 	  });
+	  
+	  
 });
-
-
 </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
     <result column="role_id"            property="roleId"          jdbcType="VARCHAR" />
     <result column="role_name"          property="roleName"        jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="marker"             property="marker"          jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -56,4 +57,12 @@
   		  (#{item.roleId,jdbcType=VARCHAR},#{item.permissionId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
   	</foreach>
   </insert>
+  
+  <select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
+ 	select tr.role_id,tr.role_name,max(ifnull(tr.user_id,0))marker from t_role tr		
+	left join t_user_role tur on tur.role_id=tr.role_id
+	left join (select user_id from t_user where user_id =#{userId}) tr on tr.user_id=tur.user_id
+	group by tr.role_id
+  </select>
+  
 </mapper>

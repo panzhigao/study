@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pan.dto.RoleTree;
+import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.mapper.PermissionMapper;
@@ -90,14 +90,14 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	@Override
-	public List<RoleTree> getRoleTreeData(String roleId) {
+	public List<Tree> getPermissionTreeData(String roleId) {
 		if(StringUtils.isBlank(roleId)){
-			return new ArrayList<RoleTree>();
+			return new ArrayList<Tree>();
 		}
 		List<Permission> list = this.permissionMapper.getPermissionSelectedByRoleId(roleId);
-		List<RoleTree> nodes=new ArrayList<RoleTree>(20);
+		List<Tree> nodes=new ArrayList<Tree>(20);
 		for (Permission permission : list) {
-			RoleTree roleTree=new RoleTree();
+			Tree roleTree=new Tree();
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
@@ -107,6 +107,6 @@ public class PermissionServiceImpl implements PermissionService {
 			}
 			nodes.add(roleTree);
 		}
-		return RoleTree.buildTree(nodes);
+		return Tree.buildTree(nodes);
 	}
 }

@@ -1,6 +1,9 @@
 package com.pan.service;
 
+import java.util.List;
 import java.util.Map;
+
+import com.pan.dto.Tree;
 import com.pan.entity.Role;
 
 /**
@@ -36,4 +39,9 @@ public interface RoleService {
 	 * @return
 	 */
 	public Role findByRoleId(String roleId);
+	/**
+	 * 根据角色id获取权限层级树数据
+	 * @return
+	 */
+	public List<Tree> getRoleTreeData(String roleId);
 }

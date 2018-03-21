@@ -3,7 +3,7 @@ package com.pan.service;
 import java.util.List;
 import java.util.Map;
 
-import com.pan.dto.RoleTree;
+import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 
@@ -37,5 +37,5 @@ public interface PermissionService {
 	 * 根据角色id获取权限层级树数据
 	 * @return
 	 */
-	public List<RoleTree> getRoleTreeData(String roleId);
+	public List<Tree> getPermissionTreeData(String roleId);
 }

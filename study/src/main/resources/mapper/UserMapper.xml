@@ -73,5 +73,41 @@
   	</set>
   	where user_id=#{userId}
   </update>
-
+  
+  <select id="getCountByParams" resultType="int">
+  	select count(0) from t_user
+  	<where> 
+  		<if test="sex !=null and sex !='' ">
+  			and sex=#{sex}
+  		</if>
+  		<if test="status !=null and status !=''">
+  			and status=#{status}
+  		</if>
+  		<if test="userId !=null and userId!=''">
+  			and user_id=#{userId}
+  		</if>
+  	</where>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>
+  	
+  <select id="findByParams" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from t_user
+  	<where> 
+  		<if test="sex !=null and sex !='' ">
+  			and sex=#{sex}
+  		</if>
+  		<if test="status !=null and status !=''">
+  			and status=#{status}
+  		</if>
+  		<if test="userId !=null and userId!=''">
+  			and user_id=#{userId}
+  		</if>
+  	</where>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>	
+	
 </mapper>

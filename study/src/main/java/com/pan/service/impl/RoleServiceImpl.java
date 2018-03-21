@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pan.common.exception.BusinessException;
+import com.pan.dto.Tree;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.mapper.RoleMapper;
@@ -94,5 +96,25 @@ public class RoleServiceImpl implements RoleService{
 		}
 		return null;
 	}
-
+	
+	@Override
+	public List<Tree> getRoleTreeData(String userId) {
+		if(StringUtils.isBlank(userId)){
+			return new ArrayList<Tree>();
+		}
+		List<Role> list = this.roleMapper.getRoleSelectedByUserId(userId);
+		List<Tree> nodes=new ArrayList<Tree>(20);
+		for (Role role : list) {
+			Tree roleTree=new Tree();
+			roleTree.setTitle(role.getRoleName());
+			roleTree.setValue(role.getRoleId());
+			roleTree.setId(role.getRoleId());
+			roleTree.setpId("0");
+			if(!StringUtils.equals(role.getMarker(),"0")){
+				roleTree.setChecked(true);
+			}
+			nodes.add(roleTree);
+		}
+		return Tree.buildTree(nodes);
+	}
 }

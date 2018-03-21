@@ -3,7 +3,11 @@ package com.pan.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +26,14 @@ import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
+import com.pan.mapper.RoleMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.ImageUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.JsonUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.RegexUtils;
 import com.pan.util.ValidationUtils;
@@ -45,6 +51,7 @@ public class UserServiceImpl implements UserService{
 	
 	private static final String DATEFORMAT="yyyyMMdd";
 	
+	//TODO 修改配置
 	private static final String PIC_BASE="http://www.pan.com/myimage/"; 
 	
 	/**
@@ -55,6 +62,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private RoleMapper roleMapper;
 	
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
@@ -225,5 +235,26 @@ public class UserServiceImpl implements UserService{
 	public void updateUserByUserId(User user) {
 		user.setUpdateTime(new Date());
 		userMapper.updateUserByUserId(user);
+	}
+
+	@Override
+	public Map<String, Object> findByParams(Map<String, Object> params) {
+		Map<String,Object> pageData=new HashMap<String, Object>(2);
+		List<User> list = new ArrayList<User>();
+		try {
+			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
+			int total=userMapper.getCountByParams(params);
+			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
+			if(total>0){				
+				list = userMapper.findByParams(params);
+			}
+			pageData.put("data", list);
+			pageData.put("total", total);
+			pageData.put("code", "200");
+			pageData.put("msg", "");
+		} catch (Exception e) {
+			logger.error("分页查询文章异常", e);
+		}
+		return pageData;
 	}
 }

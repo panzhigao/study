@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class RoleTree {
+public class Tree {
 	private String title;
 	private String value;
 	private boolean checked;
-	private List<RoleTree> data=new ArrayList<RoleTree>();
+	private List<Tree> data=new ArrayList<Tree>();
 	private String id;
 	private String pId;
 	public String getTitle() {
@@ -31,10 +31,10 @@ public class RoleTree {
 		this.checked = checked;
 	}
 	
-	public List<RoleTree> getData() {
+	public List<Tree> getData() {
 		return data;
 	}
-	public void setData(List<RoleTree> data) {
+	public void setData(List<Tree> data) {
 		this.data = data;
 	}
 	public String getpId() {
@@ -56,13 +56,13 @@ public class RoleTree {
 				+ checked + ", data=" + data + ", id=" + id + ", pId=" + pId
 				+ "]";
 	}
-	public static List<RoleTree> buildTree(List<RoleTree> nodes){
-		List<RoleTree> list=new ArrayList<RoleTree>();
-		for (RoleTree treeNode : nodes) {
+	public static List<Tree> buildTree(List<Tree> nodes){
+		List<Tree> list=new ArrayList<Tree>();
+		for (Tree treeNode : nodes) {
 			if("0".equals(treeNode.getpId())){
 				list.add(treeNode);
 			}else{
-				for (RoleTree temp : nodes) {
+				for (Tree temp : nodes) {
 					if(StringUtils.equals(temp.getId(), treeNode.getpId())){
 						temp.data.add(treeNode);
 					}

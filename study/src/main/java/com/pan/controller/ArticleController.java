@@ -81,7 +81,7 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 跳转文章列表页
+	 * 获取文章列表信息
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})

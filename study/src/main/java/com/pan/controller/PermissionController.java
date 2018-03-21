@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
-import com.pan.dto.RoleTree;
+import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.service.PermissionService;
@@ -52,9 +52,14 @@ public class PermissionController {
 		return ResultMsg.ok("删除权限成功");
 	}
 	
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/get_role_tree")
+	/**
+	 * 获取权限树
+	 * @param roleId
+	 * @return
+	 */
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/get_permission_tree")
 	@ResponseBody
-	public List<RoleTree> loadRoleTree(String roleId){
-		return permissionService.getRoleTreeData(roleId);
+	public List<Tree> loadRoleTree(String roleId){
+		return permissionService.getPermissionTreeData(roleId);
 	}
 }
