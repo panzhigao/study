@@ -65,4 +65,7 @@
 	group by tr.role_id
   </select>
   
+  <select id="getRoleByUserId" resultType="String">
+  	select role_id from t_user_role where user_id=#{userId}
+  </select>
 </mapper>

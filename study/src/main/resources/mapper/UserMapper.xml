@@ -87,9 +87,6 @@
   			and user_id=#{userId}
   		</if>
   	</where>
-  	<if test="offset!=null and row !=null">
-  		limit #{offset},#{row}
-  	</if>
   </select>
   	
   <select id="findByParams" resultMap="BaseResultMap">

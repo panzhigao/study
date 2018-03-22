@@ -79,7 +79,7 @@
 			<version>1.1.1</version>
 		</dependency>
 		<!-- Spring -->
-		
+
 		<!-- WEB SOCKET API -->
 		<dependency>
 			<groupId>javax.websocket</groupId>
@@ -98,7 +98,7 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- WEB SOCKET API -->
-		
+
 
 		<!-- 数据库连接 -->
 		<dependency>
@@ -230,7 +230,7 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		
+
 		<!-- WEB SOCKET API -->
 		<dependency>
 			<groupId>javax.websocket</groupId>
@@ -249,35 +249,39 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- WEB SOCKET API -->
-		
-<!-- 		<dependency> -->
-<!-- 		   <groupId>org.apache.tomcat.embed</groupId> -->
-<!-- 		   <artifactId>tomcat-embed-websocket</artifactId> -->
-<!-- 		   <version>8.5.15</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.23</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.tomcat.embed</groupId> -->
+		<!-- <artifactId>tomcat-embed-websocket</artifactId> -->
+		<!-- <version>8.5.15</version> -->
+		<!-- </dependency> -->
 	</dependencies>
 
 	<build>
 		<finalName>study</finalName>
 		<plugins>
-			<plugin>  
-            <groupId>org.apache.maven.plugins</groupId>  
-            <artifactId>maven-compiler-plugin</artifactId>  
-            <version>2.3.2</version>  
-            <configuration>  
-                <source>1.7</source>  
-                <target>1.7</target>  
-            </configuration>  
-        </plugin>  
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
-					<hostName>localhost</hostName>   
-					<port>8080</port>    
-					<path>/study</path>    
-					<uriEncoding>UTF-8</uriEncoding>     
+					<hostName>localhost</hostName>
+					<port>8080</port>
+					<path>/study</path>
+					<uriEncoding>UTF-8</uriEncoding>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,7 +1,9 @@
 package com.pan.util;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
 
@@ -9,7 +11,7 @@ import com.google.gson.JsonNull;
  * @author Administrator
  */
 public class JsonUtils {
-	
+
 	private static Gson gson = new Gson();
 
 	private JsonUtils() {
@@ -37,12 +39,12 @@ public class JsonUtils {
 	 * @return
 	 */
 	public static <T> Object fromJson(String json, Class<T> classOfT) {
-		return gson.fromJson(json,classOfT);
+		return gson.fromJson(json, classOfT);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> Object fromJson(String json, Class<T>... classOfT) {
-		return gson.fromJson(json,classOfT[0]);
+		return gson.fromJson(json, classOfT[0]);
 	}
 
 	/**
@@ -58,4 +60,8 @@ public class JsonUtils {
 		return gson.fromJson(json, typeOfT);
 	}
 
+	public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
+		List<T> ts = (List<T>) JSON.parseArray(jsonString, clazz);
+		return ts;
+	}
 }

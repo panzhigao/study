@@ -122,4 +122,9 @@ public class RoleServiceImpl implements RoleService{
 	public List<Role> findAll() {
 		return roleMapper.findByParams(new HashMap<String,Object>());
 	}
+
+	@Override
+	public List<String> getRoleByUserId(String userId) {
+		return this.roleMapper.getRoleByUserId(userId);
+	}
 }

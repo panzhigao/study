@@ -1,10 +1,9 @@
 package com.pan.controller;
 
+import java.util.List;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
+import com.pan.service.RoleService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
@@ -40,6 +39,9 @@ public class LoginController{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private RoleService roleService;
 	
 	/**
 	 * 跳转登录页
@@ -76,6 +78,9 @@ public class LoginController{
 		userInDb.setPassword(null);
 		String json=JsonUtils.toJson(userInDb);
 		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
+		List<String> list = roleService.getRoleByUserId(userInDb.getUserId());
+		String[] strings = new String[list.size()];
+		JedisUtils.sadd("user_roles:"+userInDb.getUserId(), list.toArray(strings));
 		//用户登录成功，将用户session添加到redis集合中
 		request.getSession().setAttribute("userId", userInDb.getUserId());
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());

@@ -49,4 +49,10 @@ public interface RoleService {
 	 * @return
 	 */
 	public List<Role> findAll();
+	/**
+	 * 获取用户角色id
+	 * @param userId
+	 * @return
+	 */
+	public List<String> getRoleByUserId(String userId);
 }

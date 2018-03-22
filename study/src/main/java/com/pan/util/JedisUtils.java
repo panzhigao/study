@@ -1,6 +1,9 @@
 package com.pan.util;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -190,6 +193,21 @@ public class JedisUtils {
 		return res;
 	}
 	
+	public static Set<String> smembers(String key){
+		Jedis jedis = null;
+		Set<String> smembers=new HashSet<String>();
+		try {
+			jedis = jedisPool.getResource();
+			smembers = jedis.smembers(key);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return smembers;
+	}
+	
 	/**
 	 * 设置key的值,并返回一个旧值
 	 * 
@@ -310,4 +328,18 @@ public class JedisUtils {
 		}
 	}
 	
+	public static List<String> mget(String[] keys) {
+		Jedis jedis = null;
+		List<String> list =new ArrayList<String>();
+		try {
+			jedis = jedisPool.getResource();
+			list= jedis.mget(keys);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return list;
+	}
 }
