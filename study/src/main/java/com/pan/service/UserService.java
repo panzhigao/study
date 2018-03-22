@@ -1,7 +1,9 @@
 package com.pan.service;
 
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 
@@ -82,4 +84,10 @@ public interface UserService {
 	 * @return
 	 */
 	public Map<String,Object> findByParams(Map<String,Object> params);
+	/**
+	 * 为用户分配角色
+	 * @param userId
+	 * @param permissions
+	 */
+	public void allocateRoleToUser(String userId,String[] roles);
 }

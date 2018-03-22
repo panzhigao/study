@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pan.entity.User;
+import com.pan.entity.UserRole;
 
 /**
  * 
@@ -50,4 +51,14 @@ public interface UserMapper {
 	 * @return
 	 */
 	public List<User> findByParams(Map<String,Object> params);
+	/**
+	 * 新增用户角色
+	 * @param list
+	 */
+	public void addUserRole(List<UserRole> list);
+	/**
+	 * 删除用户角色
+	 * @param userId
+	 */
+	public void deleteUserRoleByUserId(String userId);
 }

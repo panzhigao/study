@@ -117,4 +117,9 @@ public class RoleServiceImpl implements RoleService{
 		}
 		return Tree.buildTree(nodes);
 	}
+
+	@Override
+	public List<Role> findAll() {
+		return roleMapper.findByParams(new HashMap<String,Object>());
+	}
 }

@@ -44,4 +44,9 @@ public interface RoleService {
 	 * @return
 	 */
 	public List<Tree> getRoleTreeData(String roleId);
+	/**
+	 * 获取所有角色
+	 * @return
+	 */
+	public List<Role> findAll();
 }

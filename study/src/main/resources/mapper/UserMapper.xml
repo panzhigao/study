@@ -109,5 +109,15 @@
   		limit #{offset},#{row}
   	</if>
   </select>	
-	
+  
+  <insert id="addUserRole" parameterType="java.util.List">
+  	insert into t_user_role (user_id,role_id,create_time) values
+  	<foreach collection="list" item="item" separator="," close=";">  	
+  		  (#{item.userId,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
+  	</foreach>
+  </insert>	
+  
+    <delete id="deleteUserRoleByUserId">
+  	delete from t_user_role where user_id=#{userId}
+  </delete>
 </mapper>

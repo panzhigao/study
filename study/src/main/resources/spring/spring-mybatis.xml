@@ -77,5 +77,6 @@
 			expression="execution(public * com.pan.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
-
+	
+	<bean class="com.pan.init.InitTheContext"/>
 </beans>

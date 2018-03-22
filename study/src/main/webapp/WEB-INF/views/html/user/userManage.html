@@ -193,8 +193,9 @@ layui.use(['table','jquery'], function(){
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'allocate'){
+	    	$('#selectedUserId').val(data.userId);
 	    	$('#myTree').modal('show');
-	    	xtree3._options.roleId=data.userId;
+	    	xtree3._options.params={userId:data.userId};
 	    	xtree3.render();
 	    }  
 	  });
@@ -267,7 +268,7 @@ layui.use(['table','jquery'], function(){
 	  var form = layui.form;
 	  xtree3= new layuiXtree({
           elem: 'xtree3'                  //必填三兄弟之老大
-          ,roleId:null
+          ,params:null
           ,method: 'post'
           , form: form                    //必填三兄弟之这才是真老大
           , data: '$!{rc.contextPath}/user/role/get_role_tree' //必填三兄弟之这也算是老大
@@ -301,13 +302,16 @@ layui.use(['table','jquery'], function(){
 		  var oCks = xtree3.GetAllCheckBox(); //这是方法
 		  var arr=[];
           for (var i = 0; i < oCks.length; i++) {
+        	  if(oCks[i].value=='on'){
+        		  continue;
+        	  }
               arr.push(oCks[i].value);
           }
           var roles = JSON.stringify(arr);
-          console.log(permissions);
+          console.log(roles);
           $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/allocate_permission',
-        	  data:{userId:selectedUserId,permissions:arr},
+        	  url:'$!{rc.contextPath}/user/role/allocate_role',
+        	  data:{userId:selectedUserId,roles:arr},
         	  dataType:'json',
         	  type:'post',
         	  success:function(res){

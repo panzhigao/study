@@ -56,4 +56,8 @@
 	group by tp.permission_id
   </select>
   
+  
+  <select id="getPermissionByRoleId" resultMap="BaseResultMap">
+  	select tp.permission_name,tp.url from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
+  </select>
 </mapper>

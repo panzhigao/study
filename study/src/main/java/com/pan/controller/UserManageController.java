@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
@@ -64,7 +66,18 @@ public class UserManageController {
 	 */
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/get_role_tree")
 	@ResponseBody
-	public List<Tree> loadRoleTree(String roleId){
-		return roleService.getRoleTreeData(roleId);
+	public List<Tree> loadRoleTree(String userId){
+		return roleService.getRoleTreeData(userId);
+	}
+	
+	/**
+	 * 为用户分配角色
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_role")
+	@ResponseBody
+	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]")String[] roles){
+		userService.allocateRoleToUser(userId, roles);
+		return ResultMsg.ok("分配用户角色成功");
 	}
 }

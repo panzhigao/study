@@ -38,4 +38,10 @@ public interface PermissionService {
 	 * @return
 	 */
 	public List<Tree> getPermissionTreeData(String roleId);
+	/**
+	 * 查找角色所有权限
+	 * @param roleId
+	 * @return
+	 */
+	public List<Permission> getPermissionByRoleId(String roleId);
 }

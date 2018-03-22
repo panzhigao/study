@@ -9,16 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
@@ -26,6 +23,7 @@ import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
+import com.pan.entity.UserRole;
 import com.pan.mapper.RoleMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
@@ -256,5 +254,25 @@ public class UserServiceImpl implements UserService{
 			logger.error("分页查询文章异常", e);
 		}
 		return pageData;
+	}
+
+	@Override
+	public void allocateRoleToUser(String userId, String[] roles) {
+		User user=this.findByUserId(userId);
+		if(user==null){
+			throw new BusinessException("该用户不存在");
+		}
+		//TODO 增加日志
+		//删除该用户下的所有角色，再重新添加
+		userMapper.deleteUserRoleByUserId(userId);
+		List<UserRole> list=new ArrayList<UserRole>();
+		for (String role : roles) {
+			UserRole userRole=new UserRole();
+			userRole.setRoleId(role);
+			userRole.setUserId(userId);
+			userRole.setCreateTime(new Date());
+			list.add(userRole);
+		}
+		userMapper.addUserRole(list);
 	}
 }

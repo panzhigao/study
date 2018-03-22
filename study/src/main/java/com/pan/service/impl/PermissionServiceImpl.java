@@ -109,4 +109,9 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 		return Tree.buildTree(nodes);
 	}
+
+	@Override
+	public List<Permission> getPermissionByRoleId(String roleId) {
+		return permissionMapper.getPermissionByRoleId(roleId);
+	}
 }

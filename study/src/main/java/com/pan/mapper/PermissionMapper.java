@@ -39,8 +39,14 @@ public interface PermissionMapper {
 	 */
 	public List<Permission> findAll();
 	/**
-	 * 查找角色权限的权限
+	 * 查找角色选中的权限
 	 * @return
 	 */
 	public List<Permission> getPermissionSelectedByRoleId(String roleId);
+	/**
+	 * 查找角色所有权限
+	 * @param roleId
+	 * @return
+	 */
+	public List<Permission> getPermissionByRoleId(String roleId);
 }

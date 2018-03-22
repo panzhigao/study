@@ -28,7 +28,11 @@ public class IdUtils {
 	private static final String PERMISSION_KEY="permission_id";
 	
 	private static final String ROLE_KEY="role_id";
-	
+	 /**
+     * 日期起始点
+     */
+    private final static long epoch=1463108596098L;
+
 	/**
 	 * 创建文章id
 	 * @return
@@ -153,7 +157,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(MESSAGE_KEY);
 			}
-			messageId="m"+value;
+			messageId="m"+((System.currentTimeMillis() - epoch) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成消息id错误",e);
 			throw e;
@@ -175,7 +179,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(PERMISSION_KEY);
 			}
-			permissionId="p"+value;
+			permissionId="p"+((System.currentTimeMillis() - epoch) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成权限id错误",e);
 			throw e;
@@ -197,7 +201,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(ROLE_KEY);
 			}
-			roleId="r"+value;
+			roleId="r"+((System.currentTimeMillis() - epoch) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成角色id错误",e);
 			throw e;

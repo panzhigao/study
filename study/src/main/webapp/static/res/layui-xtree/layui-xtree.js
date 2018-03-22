@@ -70,8 +70,14 @@ layuiXtree.prototype.Loading = function (options) {
 
     //如果是字符串url，进行异步加载
     var obj = new XMLHttpRequest();
-    var roleId=options.roleId;
-    var url=options.data+"?roleId="+roleId;
+    var params=options.params;
+    var temp='';
+    if(params){
+        for(var attr in params){
+        	temp+=attr+'='+params[attr];
+        }
+    }
+    var url=options.data+"?"+temp;
     //TODO 修改成可配参数
     obj.open('get', url, true);
     obj.onreadystatechange = function () {
