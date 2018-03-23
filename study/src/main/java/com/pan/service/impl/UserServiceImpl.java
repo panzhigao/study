@@ -274,5 +274,6 @@ public class UserServiceImpl implements UserService{
 			list.add(userRole);
 		}
 		userMapper.addUserRole(list);
+		JedisUtils.setString("user_roles:"+userId, JsonUtils.toJson(roles));
 	}
 }

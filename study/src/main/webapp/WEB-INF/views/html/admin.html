@@ -6,108 +6,238 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用户中心</title>
     <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
-    <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/admin.css">
     <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 </head>
-<body>
-    <div class="layui-layout-admin">
-        <!--头部-->
-        <div class="layui-header">
-            <div class="layui-logo">用户中心</div>
-            <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="javascript:void(0)">控制台</a></li>
-                <li class="layui-nav-item"><a href="javascript:;">商品管理</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">其他系统</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="http://www.baidu.com">百度</a></dd>
-                        <dd><a href="javascript:;">消息管理</a></dd>
-                        <dd><a href="javascript:;">授权管理</a></dd>
-                    </dl>
-                </li>
-            </ul>
-            <ul class="layui-nav layui-layout-right">
-                <li class="layui-nav-item">
-                    <a href=""><img src="http://m.zhengjinfan.cn/images/0.jpg" class="layui-nav-img">Huang BaoKang</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">安全设置</a></dd>
-                    </dl>
-                </li>
-            </ul>
+<body class="childrenBody">
+	<div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
+        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'>$!{collectionCounts}</span>）</li>
+      </ul>
+      
+      	  	
+      <div class="layui-tab-content" style="padding:0;">
+	    <div class="layui-tab-item layui-show">
+		    <div class="layui-tab-content">
+		       <span class="layui-breadcrumb" lay-separator="|">
+		  		<a href="javascript:;" class="category-item selected" status="">全部</a>
+		  		<a href="javascript:;" class="category-item" status="3">已发表</a>
+		  		<a href="javascript:;" class="category-item" status="0">未通过</a>
+		  		<a href="javascript:;" class="category-item" status="1">草稿</a>
+		  		<a href="javascript:;" class="category-item" status="2">审核中</a>
+				</span>
+		    </div>
+	    	<table id="myArticles" lay-filter="myTable"></table>
+	    </div>
+      
+      	
+        <div class="layui-tab-item">
+          <table id="myCollections" lay-filter="myCollections"></table>
         </div>
-
-        <!--左侧-->
-        <div class="layui-side layui-bg-black">
-            <div class="layui-side-scroll">
-                <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="hbkNavbar">
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;">基本元素</a>
-                        <dl class="layui-nav-child">
-                            <dd lay-id="111"><a href="javascript:;" data-options="{url:'http://www.baidu.com',title:'baidu'}">百度</a></dd>
-                            <dd><a href="">表单</a></dd>
-                            <dd><a href="">导航栏</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href="">组件</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="http://www.baidu.com">Navbar</a></dd>
-                            <dd><a href="">Tab</a></dd>
-                            <dd><a href="">OneLevel</a></dd>
-                            <dd><a href="">app.js主入口</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href=""><i class="layui-icon">&#xe620;</i>表格</a>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href="javascript:;" data-options="{url:'http://www.baidu.com',title:'baidu'}">表单</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!--中间主体-->
-        <div class="layui-body" id="container">
-            <div class="layui-tab" lay-filter="tabs" lay-allowClose="true">
-                <ul class="layui-tab-title">
-                    <li class="layui-this">首页</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">首页内容</div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
+  </div>
+<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/util.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
-    //JavaScript代码区域
-    layui.use('element', function(){
-        var element = layui.element;
-        element.on('nav(hbkNavbar)',function(elem){
-            /*使用DOM操作获取超链接的自定义data属性值*/
-            var options = eval('('+elem.context.children[0].dataset.options+')');
-            //var options=JSON.parse(elem.context.children[0].dataset.options);
-            var url = options.url;
-            var title = options.title;
-            element.tabAdd('tabs',{
-                title : title,
-                content : '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>',
-                id : '111'
-            });
-        });
-        /*使用下面的方式需要引用jquery*/
-       /* $('.layui-nav-child a').click(function () {
-            var options = eval('('+$(this).data('options')+')');
-            var url = options.url;
-            var title = options.title;
-            element.tabAdd('tabs',{
-                title : title,
-                content : '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>'
-            });
-        });*/
-    });
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+//table
+layui.use(['table','jquery'], function(){
+	  var table = layui.table;
+	  var $ = layui.$ ;
+	  //监听工具条
+	  table.on('tool(myTable)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('确定删除该文章么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/delete_article",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				//table.reload('myArticles');
+	    				reload('articlesTab');
+	    				var counts=$('#articleCounts').html()|0;
+	    				$('#articleCounts').html(--counts);
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	      });
+	    } else if(obj.event === 'edit'){
+	    	 if(data.status==2){
+	    		 layer.alert('审核中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 if(data.status==3){
+	    		 layer.alert('发布中文章不能编辑');
+	    		 return;
+	    	 }
+	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
+	    }
+	  });
+	  //第一个实例
+	  table.render({
+		id: 'articlesTab',  
+	    //method: 'post',  
+	    elem: '#myArticles',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/get_articles', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'status', title: '状态', width:100, sort: true,templet:
+	    	  function(d){
+	    	  	switch(d.status){
+		    	  	case '0':temp='审核未通过';break;
+		    	  	case '1':temp='草稿';break;
+		    	  	case '2':temp='审核中';break;
+		    	  	case '3':temp='发布成功';break;
+		    	  	default:temp="无状态";
+	    	  	}
+	    	  	return temp;
+	      	  }
+	       },
+	      {field: 'createTime', title: '创建时间', width:250, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+edit+t_delete;
+	      }}
+	    ]]
+	  });
+	  
+	  
+	  var status='';
+	  function reload(tableId){
+		 //执行重载
+		 table.reload(tableId, {
+		 page: {curr: 1},
+		 where: {status:status}
+		 }); 
+	  }
+	  
+	  //切换文章类型状态
+	  $('.category-item').click(function(obj){
+	  	$('.category-item').removeClass('selected');
+	  	$(this).addClass('selected');
+	  	var temp=$(this).attr('status');
+	  	if(status!=temp){
+	  		status=temp;
+	  	}else{
+	  		return;
+	  	}
+	  	reload('articlesTab');
+	  });	
+	  
+	  
+	  //监听工具条
+	  table.on('tool(myCollections)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'detail'){
+	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
+	    } else if(obj.event === 'del'){
+	      layer.confirm('确定删除该收藏么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/collection/remove",
+	    		type:"post",
+	    		data:{articleId:data.articleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				reload('collectionsTab');
+	    				var counts=$('#collectionCounts').html()|0;
+	    				$('#collectionCounts').html(--counts);
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	      });
+	    }
+	  });
+	 
+	  //收藏
+	  table.render({
+		id: 'collectionsTab',  
+	    //method: 'post',  
+	    elem: '#myCollections',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	    	//statusName: 'status', //数据状态的字段名称，默认：code
+	        statusCode: 200, //成功的状态码，默认：0
+	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/collection/get_collections', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	      }},
+	      {field: 'createTime', title: '收藏时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:160,templet:function(row){
+	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  return detail+t_delete;
+	      }}
+	    ]]
+	  });	
+	  
+	  //消息读取
+	  #if(${user})
+	  websocketConnect();
+	  #end
+	  
+});
 </script>
 </body>
 </html>

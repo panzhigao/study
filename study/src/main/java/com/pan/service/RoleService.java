@@ -55,4 +55,9 @@ public interface RoleService {
 	 * @return
 	 */
 	public List<String> getRoleByUserId(String userId);
+	/**
+	 * 重新缓存指定角色用户权限
+	 * @param roleId
+	 */
+	void recachePermissionByRoleId(String roleId);
 }

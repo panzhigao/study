@@ -36,6 +36,10 @@ public class Permission extends BaseEntity{
 	 * 标识，0-未选中
 	 */
 	private String marker;
+	/**
+	 * 图标
+	 */
+	private String icon;
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -66,13 +70,18 @@ public class Permission extends BaseEntity{
 	public void setMarker(String marker) {
 		this.marker = marker;
 	}
+	
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
 				+ permissionName + ", url=" + url + ", pId=" + pId
-				+ ", marker=" + marker + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
+				+ ", marker=" + marker + ", icon=" + icon + "]";
 	}
 	@Override
 	public int hashCode() {

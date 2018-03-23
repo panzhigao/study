@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.util.CookieUtils;
@@ -30,11 +34,19 @@ public class AdminController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/admin")
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mav=new ModelAndView("html/test");
+		return mav;
+	}
+	
+	/**
+	 * 加载菜单栏数据
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/loadMenu")
+	@ResponseBody
+	public List<Tree> loadMenu(){
 		String userId = CookieUtils.getLoginUserId();
-		//TODO 写成service方法
-		Set<String> smembers = JedisUtils.smembers("user_roles:"+userId);
-		String[] arr=new String[smembers.size()];
-		arr=smembers.toArray(arr);
+		String roles = JedisUtils.getString("user_roles:"+userId);
+		String[] arr=(String[]) JsonUtils.fromJson(roles, String[].class);
 		for (int i = 0; i < arr.length; i++) {
 			arr[i]="role_permissions:"+arr[i];
 		}
@@ -52,10 +64,10 @@ public class AdminController {
 			roleTree.setId(permission.getPermissionId());
 			roleTree.setpId(permission.getPId());
 			roleTree.setUrl(permission.getUrl());
+			roleTree.setIcon("123");
 			nodes.add(roleTree);
 		}
 		List<Tree> buildTree = Tree.buildTree(nodes);
-		mav.addObject("permissions", buildTree);
-		return mav;
+		return buildTree;
 	}
 }

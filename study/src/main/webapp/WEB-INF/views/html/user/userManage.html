@@ -299,7 +299,7 @@ layui.use(['table','jquery'], function(){
 			  layer.alert('未选择角色');
 			  return;
 		  }
-		  var oCks = xtree3.GetAllCheckBox(); //这是方法
+		  var oCks = xtree3.GetAllChecked(); //这是方法
 		  var arr=[];
           for (var i = 0; i < oCks.length; i++) {
         	  if(oCks[i].value=='on'){

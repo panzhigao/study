@@ -13,6 +13,7 @@ public class Tree {
 	private String id;
 	private String pId;
 	private String url;
+	private String icon;
 	public String getTitle() {
 		return title;
 	}
@@ -58,11 +59,18 @@ public class Tree {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 	@Override
 	public String toString() {
 		return "Tree [title=" + title + ", value=" + value + ", checked="
 				+ checked + ", data=" + data + ", id=" + id + ", pId=" + pId
-				+ ", url=" + url + "]";
+				+ ", url=" + url + ", icon=" + icon + "]";
 	}
 	public static List<Tree> buildTree(List<Tree> nodes){
 		List<Tree> list=new ArrayList<Tree>();

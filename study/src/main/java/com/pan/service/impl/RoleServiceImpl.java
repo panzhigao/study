@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
 
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
+import com.pan.entity.Permission;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.mapper.RoleMapper;
+import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.IdUtils;
+import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
 
@@ -29,6 +32,9 @@ public class RoleServiceImpl implements RoleService{
 
 	@Autowired
 	private RoleMapper roleMapper;
+	
+	@Autowired
+	private PermissionService permissionService;
 	
 	@Override
 	public void addRole(Role role) {
@@ -84,6 +90,7 @@ public class RoleServiceImpl implements RoleService{
 			list.add(rolePermission);
 		}
 		roleMapper.addRolePermission(list);
+		recachePermissionByRoleId(roleId);
 	}
 
 	@Override
@@ -126,5 +133,20 @@ public class RoleServiceImpl implements RoleService{
 	@Override
 	public List<String> getRoleByUserId(String userId) {
 		return this.roleMapper.getRoleByUserId(userId);
+	}
+	
+	/**
+	 * 重新缓存指定角色用户权限
+	 * @param roleId
+	 */
+	@Override
+	public void recachePermissionByRoleId(String roleId){
+		try {
+			List<Permission> permissionList = permissionService.getPermissionByRoleId(roleId);
+			String listStr=JsonUtils.toJson(permissionList);
+			JedisUtils.setString("role_permissions:"+roleId, listStr);
+		} catch (Exception e) {
+			logger.error("缓存角色权限失败,roleId:{}",roleId);
+		}
 	}
 }
