@@ -12,6 +12,7 @@ public class Tree {
 	private List<Tree> data=new ArrayList<Tree>();
 	private String id;
 	private String pId;
+	private String url;
 	public String getTitle() {
 		return title;
 	}
@@ -50,11 +51,18 @@ public class Tree {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	@Override
 	public String toString() {
-		return "RoleTree [title=" + title + ", value=" + value + ", checked="
+		return "Tree [title=" + title + ", value=" + value + ", checked="
 				+ checked + ", data=" + data + ", id=" + id + ", pId=" + pId
-				+ "]";
+				+ ", url=" + url + "]";
 	}
 	public static List<Tree> buildTree(List<Tree> nodes){
 		List<Tree> list=new ArrayList<Tree>();

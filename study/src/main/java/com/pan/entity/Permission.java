@@ -31,7 +31,7 @@ public class Permission extends BaseEntity{
 	/**
 	 * 父级pid
 	 */
-	private String pId="0";
+	private String pId;
 	/**
 	 * 标识，0-未选中
 	 */
@@ -54,10 +54,10 @@ public class Permission extends BaseEntity{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getpId() {
+	public String getPId() {
 		return pId;
 	}
-	public void setpId(String pId) {
+	public void setPId(String pId) {
 		this.pId = pId;
 	}
 	public String getMarker() {
@@ -73,5 +73,28 @@ public class Permission extends BaseEntity{
 				+ ", marker=" + marker + ", getId()=" + getId()
 				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
 				+ getUpdateTime() + "]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((permissionId == null) ? 0 : permissionId.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Permission))
+			return false;
+		Permission other = (Permission) obj;
+		if (permissionId == null) {
+			if (other.permissionId != null)
+				return false;
+		} else if (!permissionId.equals(other.permissionId))
+			return false;
+		return true;
 	}
 }

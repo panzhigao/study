@@ -66,7 +66,16 @@
                     </li>
                     #foreach($item in $permissions)
                     <li class="layui-nav-item">
-                    	<a href="javascript:;">$item.permissionName</a>
+                    	#if($item.data.size()==0)
+                    	<a href="$item.url">$item.title</a>
+                    	#else
+                    		<a href="javascript:;">$item.title</a>
+	                    	<dl class="layui-nav-child">
+	                    	#foreach($child in $item.data)
+	                    		<dd><a data-options="{url:'$!{rc.contextPath}$child.url',title:'$child.title'}">$child.title</a></dd>
+	                    	#end
+	                    	</dl>
+                    	#end
                     </li>
                     #end
                 </ul>

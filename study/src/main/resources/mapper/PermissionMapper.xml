@@ -58,6 +58,7 @@
   
   
   <select id="getPermissionByRoleId" resultMap="BaseResultMap">
-  	select tp.permission_name,tp.url from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
+  	select tp.permission_id,tp.pid,tp.permission_name,tp.url from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
+  	where trp.role_id=#{roleId}
   </select>
 </mapper>
