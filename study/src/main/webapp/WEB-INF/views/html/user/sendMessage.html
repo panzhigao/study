@@ -18,108 +18,8 @@
   <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
-<body>
+<body class="childrenBody" style="height:1000px;">
 
-<div class="fly-header layui-bg-black">
-  <div class="layui-container">
-    <a class="fly-logo" href="$!{rc.contextPath}">
-      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
-    </a>
-    <ul class="layui-nav fly-nav layui-hide-xs">
-      <li class="layui-nav-item layui-this">
-        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
-      </li>
-    </ul>
-    
-    <ul class="layui-nav fly-nav-user">
-      <!-- 登入后的状态 -->
-      <li class="layui-nav-item" style="margin-right:30px;">
-    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
-  	  </li>
-      <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">$!{user.nickname}</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end"">
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;">
-          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="layui-container fly-marginTop fly-user-main">
-  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/u/$!{user.userId}">
-        <i class="layui-icon">&#xe609;</i>
-        我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/set">
-        <i class="layui-icon">&#xe620;</i>
-        基本设置
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/my_articles">
-        <i class="layui-icon">&#xe621;</i>
-        我的文章
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/message">
-        <i class="layui-icon">&#xe611;</i>
-        我的消息
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/check">
-        <i class="layui-icon">&#xe612;</i>
-       审核文章
-      </a>
-    </li>
-    <li class="layui-nav-item layui-this">
-      <a href="$!{rc.contextPath}/user/systemMessage">
-        <i class="layui-icon">&#xe63a;</i>
-        发送消息
-      </a>
-    </li>
-    <li class="layui-nav-item">
-        <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
-        <dl class="layui-nav-child">
-            <dd><a href="$!{rc.contextPath}/user/permission" style="padding-left:55px;">权限列表</a></dd>
-            <dd><a href="javascript:;" style="padding-left:55px;">角色管理</a></dd>
-            <dd><a href="javascript:;" style="padding-left:55px;">角色分配</a></dd>
-        </dl>
-     </li>
-  </ul>
-
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
@@ -152,20 +52,11 @@
           <table id="systemMessageTab" lay-filter="systemMessageTab"></table>
         </div>
       </div>
-        
+    
       </div>
     </div>
-  </div>
-</div>
 
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>

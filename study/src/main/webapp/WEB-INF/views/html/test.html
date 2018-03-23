@@ -86,6 +86,9 @@
 			    </div>
 			    <!-- 顶部右侧菜单 -->
 			    <ul class="layui-nav top_menu">
+			    	<li class="layui-nav-item" style="margin-right:30px;">
+    					<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+  	  				</li>
 			    	<li class="layui-nav-item showNotice" id="showNotice" pc>
 						<a href="javascript:;"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>
 					</li>
@@ -128,7 +131,7 @@
 				</ul>
 				<div class="layui-tab-content clildFrame">
 					<div class="layui-tab-item layui-show">
-						<iframe src="page/main.html"></iframe>
+						<div>123</div>
 					</div>
 				</div>
 			</div>
@@ -141,7 +144,7 @@
 
 	<!-- 锁屏 -->
 	<div class="admin-header-lock" id="lock-box" style="display: none;">
-		<div class="admin-header-lock-img"><img src="images/face.jpg"/></div>
+		<div class="admin-header-lock-img"><img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end"/></div>
 		<div class="admin-header-lock-name" id="lockUserName">请叫我马哥</div>
 		<div class="input_btn">
 			<input type="password" class="admin-header-lock-input layui-input" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />
@@ -157,5 +160,13 @@
 <!-- 	<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui-admin/js/nav.js"></script> -->
 	<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui-admin/js/leftNav.js"></script>
 	<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui-admin/js/index.js"></script>
+	<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
+	<script type="text/javascript" src="$!{rc.contextPath}/static/js/util.js"></script>
+	<script type="text/javascript">
+	//消息读取
+	  #if(${user})
+	  websocketConnect();
+	  #end
+	</script>
 </body>
 </html>
