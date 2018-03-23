@@ -8,12 +8,6 @@
     <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
     <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui-admin/css/admin.css">
     <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
-    <style type="text/css">
-    	.layui-tab-item {
-    		display: none;
-    		height:1000px;
-		}
-    </style>
 </head>
 <body class="main_body">
 	<div class="layui-layout layui-layout-admin">
@@ -107,9 +101,9 @@
 							<cite>$!{user.nickname}</cite>
 						</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
-							<dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
-							<dd><a href="javascript:;"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
+							<dd><a href="javascript:;" data-url="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe612;</i><cite>个人资料</cite></a></dd>
+							<dd><a href="javascript:;" data-url="$!{rc.contextPath}/user/set#pass"><i class="layui-icon">&#xe614;</i><cite>修改密码</cite></a></dd>
+							<dd><a href="$!{rc.contextPath}/user/quit"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
 						</dl>
 					</li>
 				</ul>

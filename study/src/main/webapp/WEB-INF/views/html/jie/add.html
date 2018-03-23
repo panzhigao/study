@@ -4,59 +4,16 @@
 <head>
   <meta charset="utf-8">
   <title>发表问题 编辑问题 公用</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="fly,layui,前端社区">
-  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
-<body>
 
-<div class="fly-header layui-bg-black">
-  <div class="layui-container">
-    <a class="fly-logo" href="$!{rc.contextPath}">
-      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
-    </a>
-    <ul class="layui-nav fly-nav layui-hide-xs">
-      <li class="layui-nav-item layui-this">
-        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
-      </li>
-    </ul>
-    
-    <ul class="layui-nav fly-nav-user">      
-      <!-- 登入后的状态 -->
-      <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">${user.nickname}</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="layui-container fly-marginTop">
+<body class="childrenBody" style="height:1100px;">
   <div class="fly-panel" pad20 style="padding-top: 5px;">
-    <!--<div class="fly-none">没有权限</div>-->
     <div class="layui-form layui-form-pane">
       <div class="layui-tab layui-tab-brief" lay-filter="user">
         <ul class="layui-tab-title">
-          <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+          <li class="layui-this">发表新帖</li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
           <div class="layui-tab-item layui-show">
@@ -126,7 +83,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <div class="fly-footer">
   <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
@@ -138,6 +94,7 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'jie';
 layui.cache.user = {
@@ -163,7 +120,6 @@ layui.use(['jquery', 'form','layedit'], function(){
 		  }
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器
-	  var $ = layui.$ ;
 	  var form = layui.form;
 	  form.verify({
 		  content:function(){
@@ -177,20 +133,20 @@ layui.use(['jquery', 'form','layedit'], function(){
 		form.on('submit(publish)', function(data){
 			params = data.field;
 			params.status=2;
-			publish($,params);
+			publish(params);
 			return false;
 		});
 		form.on('submit(save)', function(data){
 			layedit.sync(index);
 			params = data.field;
 			params.status=1;
-			publish($,params);
+			publish(params);
 			return false;
 		});
 });
 
 //提交
-function publish($,params){
+function publish(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/user/save_article",
 			type:"post",
@@ -218,9 +174,6 @@ function publish($,params){
 			}
 	});
 }	
-
-
-
 </script>
 </body>
 </html>

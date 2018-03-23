@@ -3,127 +3,20 @@
 <head>
   <meta charset="utf-8">
   <title>用户中心</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="fly,layui,前端社区">
-  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
   <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
   <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
   <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <style type="text/css">
-  	.selected {color:#5FB878 !important;}
-  </style>
 </head>
-<body>
 
-<div class="fly-header layui-bg-black">
-  <div class="layui-container">
-    <a class="fly-logo" href="$!{rc.contextPath}">
-      <img src="$!{rc.contextPath}/static/res/images/logo.png" alt="layui">
-    </a>
-    <ul class="layui-nav fly-nav layui-hide-xs">
-      <li class="layui-nav-item layui-this">
-        <a href="$!{rc.contextPath}"><i class="iconfont icon-jiaoliu"></i>交流</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
-      </li>
-      <li class="layui-nav-item">
-        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
-      </li>
-    </ul>
-    
-    <ul class="layui-nav fly-nav-user">
-      <!-- 登入后的状态 -->
-      <li class="layui-nav-item" style="margin-right:30px;">
-    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
-  	  </li>
-      <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">$!{user.nickname}</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-          <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;">
-          <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="layui-container fly-marginTop fly-user-main">
-  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/u/$!{user.userId}">
-        <i class="layui-icon">&#xe609;</i>
-        我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/set">
-        <i class="layui-icon">&#xe620;</i>
-        基本设置
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/my_articles">
-        <i class="layui-icon">&#xe621;</i>
-        我的文章
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/message">
-        <i class="layui-icon">&#xe611;</i>
-        我的消息
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/check">
-        <i class="layui-icon">&#xe612;</i>
-       审核文章
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="$!{rc.contextPath}/user/systemMessage">
-        <i class="layui-icon">&#xe63a;</i>
-        发送消息
-      </a>
-    </li>
-    <li class="layui-nav-item layui-nav-itemed">
-        <a class="" href="javascript:;"><i class="layui-icon">&#xe63c;</i>权限管理</a>
-        <dl class="layui-nav-child">
-            <dd><a href="$!{rc.contextPath}/user/permission" style="padding-left:55px;">权限列表</a></dd>
-            <dd><a href="javascript:;" style="padding-left:55px;">角色管理</a></dd>
-            <dd><a href="javascript:;" class="layui-this" style="padding-left:55px;">用户管理</a></dd>
-        </dl>
-     </li>
-  </ul>
-
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  
+<body class="childrenBody" style="height:2500px;">
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="mine-jie" lay-id="index" class="layui-this">用户管理</li>
       </ul>
       
-      	  	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 	    	<table id="userListTab" lay-filter="myTable"></table>
@@ -131,16 +24,6 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
 
 <!-- 模态框-权限树 -->
 <div  class="modal fade" style="margin-top:100px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -160,9 +43,8 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" id="btnSave">保存</button>
             </div>
-            
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -210,9 +92,7 @@ layui.use(['table','jquery'], function(){
 	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
 	    },
 	    response: {
-	    	//statusName: 'status', //数据状态的字段名称，默认：code
 	        statusCode: 200, //成功的状态码，默认：0
-	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
@@ -243,6 +123,9 @@ layui.use(['table','jquery'], function(){
 	      {field: 'createTime', title: '创建时间', width:250, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
+	      {field: 'lastLoginTime', title: '最近登录时间', width:250, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.lastLoginTime));
+	      }},
 	      {title:'操作',width:160,templet:function(row){
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配角色</a>';
 	    	  return allocate;
@@ -259,19 +142,14 @@ layui.use(['table','jquery'], function(){
 		 where: {status:status}
 		 }); 
 	  }
-	  	    		  
-	  //消息读取
-	  #if(${user})
-	  websocketConnect();
-	  #end
-	  
+	  	    		  	  
 	  var form = layui.form;
 	  xtree3= new layuiXtree({
-          elem: 'xtree3'                  //必填三兄弟之老大
+          elem: 'xtree3'                  
           ,params:null
           ,method: 'post'
-          , form: form                    //必填三兄弟之这才是真老大
-          , data: '$!{rc.contextPath}/user/role/get_role_tree' //必填三兄弟之这也算是老大
+          , form: form                    
+          , data: '$!{rc.contextPath}/user/role/get_role_tree' 
           , isopen: true  //加载完毕后的展开状态，默认值：true
           , ckall: true    //启用全选功能，默认值：false
           , ckallback: function () { } //全选框状态改变后执行的回调函数
@@ -286,10 +164,7 @@ layui.use(['table','jquery'], function(){
               , end: "#828282"       //末级节点图标的颜色
           }
           , click: function (data) {  //节点选中状态改变事件监听，全选框有自己的监听事件
-              console.log(data.elem); //得到checkbox原始DOM对象
-              console.log(data.elem.checked); //开关是否开启，true或者false
-              console.log(data.value); //开关value值，也可以通过data.elem.value得到
-              console.log(data.othis); //得到美化后的DOM对象
+             
           }
       });
 	  
@@ -322,11 +197,8 @@ layui.use(['table','jquery'], function(){
 	    				layer.alert(res.msg);
 	    			}
         	  }
-          
           });
 	  });
-	  
-	  
 });
 </script>
 </body>

@@ -35,7 +35,6 @@
 	    	<table id="myArticles" lay-filter="myTable"></table>
 	    </div>
       
-      	
         <div class="layui-tab-item">
           <table id="myCollections" lay-filter="myCollections"></table>
         </div>
@@ -69,7 +68,7 @@ layui.use(['table','jquery'], function(){
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'detail'){
-	      location.href="$!{rc.contextPath}/article/"+data.articleId;	
+	      window.open("$!{rc.contextPath}/article/"+data.articleId, '_blank').location;
 	    } else if(obj.event === 'del'){
 	      layer.confirm('确定删除该文章么', function(index){
 	        layer.close(index);
@@ -80,7 +79,6 @@ layui.use(['table','jquery'], function(){
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
-	    				//table.reload('myArticles');
 	    				reload('articlesTab');
 	    				var counts=$('#articleCounts').html()|0;
 	    				$('#articleCounts').html(--counts);
@@ -113,9 +111,7 @@ layui.use(['table','jquery'], function(){
 	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
 	    },
 	    response: {
-	    	//statusName: 'status', //数据状态的字段名称，默认：code
 	        statusCode: 200, //成功的状态码，默认：0
-	    	//msgName: 'msg', //状态信息的字段名称，默认：msg
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },

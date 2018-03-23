@@ -122,22 +122,22 @@
     </div>
 
 <div style="margin-top:-40px;" class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1" >
-		<div class="modal-dialog modal-lg" id="modalDialog">
+		<div class="modal-dialog modal-lg" id="modalDialog" style="width:900px;height:500px;" >
 			<div class="modal-content">
 				<form class="avatar-form">
 					<div class="modal-header">
 						<button class="close" data-dismiss="modal" type="button">&times;</button>
-						<h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
+						<label for="avatarInput" style="line-height: 35px;">图片上传</label>
+						<button class="btn btn btn-primary"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
 					</div>
 					<div class="modal-body">
 						<div class="avatar-body">
 							<div class="avatar-upload">
 								<input class="avatar-src" name="avatar_src" type="hidden">
 								<input class="avatar-data" name="avatar_data" type="hidden">
-								<label for="avatarInput" style="line-height: 35px;">图片上传</label>
-								<button class="btn btn btn-primary"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
 								<span id="avatar-name"></span>
-								<input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file"></div>
+								<input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file">
+							</div>
 							<div class="row">
 								<div class="col-md-9">
 									<div class="avatar-wrapper"></div>
