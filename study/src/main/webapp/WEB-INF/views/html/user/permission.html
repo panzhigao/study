@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <title>用户中心</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="fly,layui,前端社区">
-  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
   <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
@@ -20,6 +18,7 @@
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-btn-group">
 		     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal"><i class="layui-icon">&#xe608;</i> 增加</button>
+		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
 	  		</div>
 	    </div>
       	<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
@@ -78,16 +77,17 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
-
-
 var treeTable;
 //table
-layui.use(['table','jquery','treeGrid'], function(){
+layui.use(['table','jquery','treeGrid','form'], function(){
+	  var form=layui.form;
+	  var treeGrid = layui.treeGrid; 
+	  var table=layui.table;
+	  var layerTips = parent.layer === undefined ? layui.layer : parent.layer; //获取父窗口的layer对象
 	  $('#add').click(function(){
 		  $('#selectPId').val('');
 	  });
-	  var treeGrid = layui.treeGrid; 
-	  var table=layui.table;
+	  
 	  $('#addPermission').click(function(){
 		 var permissionName=$('#permissionName').val();
 		 if(!permissionName){
@@ -117,12 +117,7 @@ layui.use(['table','jquery','treeGrid'], function(){
 		 }); 
 	  });
 	  
-	      
-	  //消息读取
-	  #if(${user})
-	  websocketConnect();
-	  #end
-	  
+	    	  
 	  treeTable =treeGrid.render({
 		  id: 'tab', 
           elem: '#treeTable',
@@ -145,7 +140,84 @@ layui.use(['table','jquery','treeGrid'], function(){
     	      }}
           ]],
           page:false
-      });  
+      });
+	  
+	  
+	  $('#btnAdd').on('click', function() {
+			$.get('$!{rc.contextPath}/user/permissionAdd', null, function(form) {
+				layer.open({
+					type: 1,
+					title: '添加权限',
+					content: form,
+					btn: ['保存', '取消'],
+					shade: false,
+					offset: ['50px', '20%'],
+					area: ['800px', '400px'],
+				yes: function(index) {
+					//触发表单的提交事件
+					$('form.layui-form').find('button[lay-filter=edit]').click();
+				},
+				full: function(elem) {
+					var win = window.top === window.self ? window : parent.window;
+					$(win).on('resize', function() {
+						var $this = $(this);
+						elem.width($this.width()).height($this.height()).css({
+							top: 0,
+							left: 0
+						});
+						elem.children('div.layui-layer-content').height($this.height() - 95);
+					});
+				},
+				success: function(layero, index) {
+					//弹出窗口成功后渲染表单
+					var form = layui.form;
+					form.render();
+					form.on('submit(edit)', function(data) {
+						console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+						console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+						console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+						 $.ajax({
+							 url:'$!{rc.contextPath}/user/permission/add',
+							 type:'post',
+							 data:data.field,
+							 success:function(res){
+								 if(res.code=='200'){
+									 layer.msg('新增权限成功');
+									 $('#permissionName').val("");
+									 $('#url').val("");
+									 $('#myModal').modal('hide');
+									 treeTable.reload();
+								 }else{
+									 layer.msg(res.msg);
+								 }
+							 }
+						 });
+						
+						//调用父窗口的layer对象
+						/*layerTips.open({
+							title: '这里面是表单的信息',
+							type: 1,
+							content: JSON.stringify(data.field),
+							area: ['500px', '300px'],
+							btn: ['关闭并刷新', '关闭'],
+							yes: function(index, layero) {
+								layerTips.msg('你点击了关闭并刷新');
+								layerTips.close(index);
+								location.reload(); //刷新
+							}
+
+						});*/
+						//这里可以写ajax方法提交表单
+						return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。									
+					});
+					//console.log(layero, index);
+				},
+				end: function() {
+					addBoxIndex = -1;
+				}
+				});
+			});
+		});
 });
 
 function deleteNode(id){

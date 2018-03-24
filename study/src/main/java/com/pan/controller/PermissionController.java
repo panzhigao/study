@@ -26,9 +26,22 @@ public class PermissionController {
 	@Autowired
 	private PermissionService permissionService;
 	
+	/**
+	 * 跳转权限管理页面
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permission")
 	public String toPermissionPage(){
 		return "html/user/permission";
+	}
+	
+	/**
+	 * 跳转权限新增页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/permissionAdd")
+	public String toPermissionAddPage(){
+		return "html/user/permissionAdd";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/add")
