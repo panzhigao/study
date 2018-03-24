@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.RoleMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.RolePermission">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="role_id"            property="roleId"          jdbcType="VARCHAR" />
+    <result column="permission_id"      property="permissionId"    jdbcType="VARCHAR" />
+    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,role_id,permission_id,create_time
+  </sql>
+  
+  <delete id="deleteRolePermissionByPermissionId">
+  	delete from t_role_permission where permission_id=#{permissionId}
+  </delete>
+     
+  <delete id="deleteRolePermissionByRoleId">
+  	delete from t_role_permission where role_id=#{roleId}
+  </delete>
+  
+  <insert id="addRolePermission" parameterType="java.util.List">
+  	insert into t_role_permission (role_id,permission_id,create_time) values
+  	<foreach collection="list" item="item" separator="," close=";">  	
+  		  (#{item.roleId,jdbcType=VARCHAR},#{item.permissionId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
+  	</foreach>
+  </insert>
+</mapper>

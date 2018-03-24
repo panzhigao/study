@@ -37,6 +37,14 @@ public class Permission extends BaseEntity{
 	 */
 	private String marker;
 	/**
+	 * 层级
+	 */
+	private Integer level;
+	/**
+	 * 排序
+	 */
+	private Integer sort;
+	/**
 	 * 图标
 	 */
 	private String icon;
@@ -77,11 +85,31 @@ public class Permission extends BaseEntity{
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
+	
+	public String getpId() {
+		return pId;
+	}
+	public void setpId(String pId) {
+		this.pId = pId;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	public Integer getSort() {
+		return sort;
+	}
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
 				+ permissionName + ", url=" + url + ", pId=" + pId
-				+ ", marker=" + marker + ", icon=" + icon + "]";
+				+ ", marker=" + marker + ", level=" + level + ", sort=" + sort
+				+ ", icon=" + icon + "]";
 	}
 	@Override
 	public int hashCode() {

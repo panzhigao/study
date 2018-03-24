@@ -15,9 +15,12 @@ import org.springframework.stereotype.Service;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
+import com.pan.entity.Role;
 import com.pan.mapper.PermissionMapper;
 import com.pan.service.PermissionService;
+import com.pan.service.RoleService;
 import com.pan.util.IdUtils;
+import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
 
@@ -34,6 +37,9 @@ public class PermissionServiceImpl implements PermissionService {
 	
 	@Autowired
 	private PermissionMapper permissionMapper;
+	
+	@Autowired
+	private RoleService roleService;
 	
 	@Override
 	public void addPermission(Permission permission) {
@@ -67,10 +73,21 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 		return pageData;
 	}
-
+	
+	/**
+	 * 删除权限
+	 * 同时删除缓存中角色的权限信息
+	 */
 	@Override
 	public void deletePermission(String permissionId) {
+		//删除数据库信息
 		permissionMapper.deletePermission(permissionId);
+		//删除缓存数据
+		List<Role> roles = roleService.findAll();
+		for (Role role : roles) {
+			String roleId=role.getRoleId();
+			JedisUtils.hdel("role_permissions:"+roleId, permissionId);
+		}
 	}
 
 	@Override
@@ -83,7 +100,8 @@ public class PermissionServiceImpl implements PermissionService {
 			treeNode.setpId(permission.getPId());
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
-			//treeNode.setData(permission.getUrl());
+			treeNode.setIcon(permission.getIcon());
+			treeNode.setSort(permission.getSort());
 			nodes.add(treeNode);
 		}
 		return nodes;
@@ -102,6 +120,7 @@ public class PermissionServiceImpl implements PermissionService {
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
 			roleTree.setpId(permission.getPId());
+			roleTree.setIcon(permission.getIcon());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
 				roleTree.setChecked(true);
 			}

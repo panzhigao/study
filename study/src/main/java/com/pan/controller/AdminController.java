@@ -33,7 +33,7 @@ public class AdminController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/admin")
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
-		ModelAndView mav=new ModelAndView("html/test");
+		ModelAndView mav=new ModelAndView("html/admin");
 		return mav;
 	}
 	
@@ -64,7 +64,7 @@ public class AdminController {
 			roleTree.setId(permission.getPermissionId());
 			roleTree.setpId(permission.getPId());
 			roleTree.setUrl(permission.getUrl());
-			roleTree.setIcon("123");
+			roleTree.setIcon(permission.getIcon());
 			nodes.add(roleTree);
 		}
 		List<Tree> buildTree = Tree.buildTree(nodes);

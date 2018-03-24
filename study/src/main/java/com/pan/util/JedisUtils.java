@@ -342,4 +342,19 @@ public class JedisUtils {
 		}
 		return list;
 	}
+	
+	public static Long hdel(String key,String... fields) {
+		Jedis jedis = null;
+		Long res=0L;
+		try {
+			jedis = jedisPool.getResource();
+			res= jedis.hdel(key, fields);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
 }

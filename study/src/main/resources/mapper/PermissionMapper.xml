@@ -9,10 +9,13 @@
     <result column="url"        	    property="url"             jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="pid"                property="pId"             jdbcType="VARCHAR" />
+    <result column="level"              property="level"           jdbcType="INTEGER" />
+    <result column="sort"               property="sort"            jdbcType="INTEGER" />
+    <result column="icon"               property="icon"            jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,permission_id,permission_name,url,create_time,pid
+    id,permission_id,permission_name,url,create_time,pid,level,sort,icon
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
@@ -38,7 +41,10 @@
     </select>
    
   <insert id="addPermission" parameterType="com.pan.entity.Collection">
-  	insert into t_permission (<include refid="Base_Column_List"/>) values (null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pId,jdbcType=VARCHAR})
+  	insert into t_permission (<include refid="Base_Column_List"/>) values 
+  	(null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},
+  	#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pId,jdbcType=VARCHAR},
+  	#{level,jdbcType=INTEGER},#{sort,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deletePermission">
@@ -58,7 +64,7 @@
   
   
   <select id="getPermissionByRoleId" resultMap="BaseResultMap">
-  	select tp.permission_id,tp.pid,tp.permission_name,tp.url from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
+  	select tp.permission_id,tp.pid,tp.permission_name,tp.url,tp.icon from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
   	where trp.role_id=#{roleId}
   </select>
 </mapper>
