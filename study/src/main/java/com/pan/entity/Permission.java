@@ -1,5 +1,6 @@
 package com.pan.entity;
 
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -48,6 +49,10 @@ public class Permission extends BaseEntity{
 	 * 图标
 	 */
 	private String icon;
+	/**
+	 * 类型
+	 */
+	private String type;
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -66,12 +71,6 @@ public class Permission extends BaseEntity{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getPId() {
-		return pId;
-	}
-	public void setPId(String pId) {
-		this.pId = pId;
-	}
 	public String getMarker() {
 		return marker;
 	}
@@ -85,13 +84,6 @@ public class Permission extends BaseEntity{
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	
-	public String getpId() {
-		return pId;
-	}
-	public void setpId(String pId) {
-		this.pId = pId;
-	}
 	public Integer getLevel() {
 		return level;
 	}
@@ -104,12 +96,25 @@ public class Permission extends BaseEntity{
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getpId() {
+		return pId;
+	}
+	public void setpId(String pId) {
+		this.pId = pId;
+	}
 	@Override
 	public String toString() {
 		return "Permission [permissionId=" + permissionId + ", permissionName="
 				+ permissionName + ", url=" + url + ", pId=" + pId
 				+ ", marker=" + marker + ", level=" + level + ", sort=" + sort
-				+ ", icon=" + icon + "]";
+				+ ", icon=" + icon + ", type=" + type + "]";
 	}
 	@Override
 	public int hashCode() {

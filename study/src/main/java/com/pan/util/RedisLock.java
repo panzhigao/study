@@ -5,8 +5,6 @@ import java.util.Random;
 /**
  * redis分布式同步锁
  *
- * @author liudongxu06
- * @date 2017/11/28
  */
 public class RedisLock {
 

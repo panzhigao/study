@@ -15,15 +15,18 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,permission_id,permission_name,url,create_time,pid,level,sort,icon
+    id,permission_id,permission_name,url,create_time,pid,level,sort,icon,type
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_permission
   	<where>
+  		<if test="permissionId !=null and permissionId !=''">
+	  			and permission_id=#{permissionId}
+	  	</if>
   		<if test="permissionName !=null and permissionName !=''">
 	  			and permission_name like CONCAT('%','${permissionName}','%')
-	  		</if>
+	  	</if>
   	</where>
   	order by create_time desc
   	<if test="offset!=null and row !=null">
@@ -44,7 +47,7 @@
   	insert into t_permission (<include refid="Base_Column_List"/>) values 
   	(null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},
   	#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pId,jdbcType=VARCHAR},
-  	#{level,jdbcType=INTEGER},#{sort,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR})
+  	#{level,jdbcType=INTEGER},#{sort,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deletePermission">
@@ -62,9 +65,33 @@
 	group by tp.permission_id
   </select>
   
-  
   <select id="getPermissionByRoleId" resultMap="BaseResultMap">
-  	select tp.permission_id,tp.pid,tp.permission_name,tp.url,tp.icon from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
+  	select tp.permission_id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort from t_role_permission trp join t_permission tp on trp.permission_id=tp.permission_id
   	where trp.role_id=#{roleId}
   </select>
+  
+  <update id="updatePermission">
+  	update t_permission 
+  	<set>
+  		<if test="url !=null and url !=''">
+	  			url=#{url,jdbcType=VARCHAR},
+	  	</if>
+  		<if test="permissionName !=null and permissionName !=''">
+	  			permission_name=#{permissionName,jdbcType=VARCHAR},
+	  	</if>
+	  	<if test="sort !=null and sort !=''">
+	  			sort=#{sort,jdbcType=INTEGER},
+	  	</if>
+	  	<if test="icon !=null and icon !=''">
+	  			icon=#{icon,jdbcType=VARCHAR},
+	  	</if>
+	  	<if test="type !=null and type !=''">
+	  			type=#{type,jdbcType=VARCHAR},
+	  	</if>
+	  	<if test="updateTime !=null">
+	  			update_time=#{updateTime,jdbcType=TIMESTAMP},
+	  	</if>
+  	</set>
+  	where permission_id=#{permissionId}
+  </update>
 </mapper>

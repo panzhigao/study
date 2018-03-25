@@ -49,4 +49,8 @@ public interface PermissionMapper {
 	 * @return
 	 */
 	public List<Permission> getPermissionByRoleId(String roleId);
+	/**
+	 * 更新权限
+	 */
+	public void updatePermission(Permission permission);
 }

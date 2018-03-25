@@ -44,6 +44,15 @@ public class PermissionController {
 		return "html/user/permissionAdd";
 	}
 	
+	/**
+	 * 跳转权限新增页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/permissionEdit")
+	public String toPermissionEditPage(){
+		return "html/user/permissionEdit";
+	}
+	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/add")
 	@ResponseBody
 	public ResultMsg addPermission(Permission permission){
@@ -74,5 +83,19 @@ public class PermissionController {
 	@ResponseBody
 	public List<Tree> loadRoleTree(String roleId){
 		return permissionService.getPermissionTreeData(roleId);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
+	@ResponseBody
+	public ResultMsg loadPermissionDetail(String permissionId){
+		Permission Permission = permissionService.getByPermissionId(permissionId);
+		return ResultMsg.ok("获取权限信息成功", Permission);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doEdit")
+	@ResponseBody
+	public ResultMsg editPermission(Permission permission){
+		permissionService.updatePermission(permission);
+		return ResultMsg.ok();
 	}
 }

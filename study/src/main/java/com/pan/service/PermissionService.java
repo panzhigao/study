@@ -44,4 +44,14 @@ public interface PermissionService {
 	 * @return
 	 */
 	public List<Permission> getPermissionByRoleId(String roleId);
+	/**
+	 * 根据permissionId查找唯一数据
+	 * @param permissionId
+	 * @return
+	 */
+	public Permission getByPermissionId(String permissionId);
+	/**
+	 * 更新权限
+	 */
+	public void updatePermission(Permission permission);
 }

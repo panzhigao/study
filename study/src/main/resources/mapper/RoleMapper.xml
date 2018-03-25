@@ -47,17 +47,6 @@
   	delete from t_role where role_id=#{roleId}
   </delete>
   
-  <delete id="deleteRolePermissionByRoleId">
-  	delete from t_role_permission where role_id=#{roleId}
-  </delete>
-  
-  <insert id="addRolePermission" parameterType="java.util.List">
-  	insert into t_role_permission (role_id,permission_id,create_time) values
-  	<foreach collection="list" item="item" separator="," close=";">  	
-  		  (#{item.roleId,jdbcType=VARCHAR},#{item.permissionId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
-  	</foreach>
-  </insert>
-  
   <select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
  	select tr.role_id,tr.role_name,max(ifnull(tr.user_id,0))marker from t_role tr		
 	left join t_user_role tur on tur.role_id=tr.role_id

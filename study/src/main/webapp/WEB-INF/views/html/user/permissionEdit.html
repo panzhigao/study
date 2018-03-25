@@ -1,0 +1,37 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<input type="hidden" id="permissionId" name="permissionId">
+		<div class="layui-form-item">
+			<label class="layui-form-label">权限名</label>
+			<div class="layui-input-block">
+				<input lay-verify="required" id="permissionName" type="text" name="permissionName" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">权限url</label>
+			<div class="layui-input-block">
+				<input type="text" id="url" name="url"  placeholder="请输入权限url" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">权限排序</label>
+			<div class="layui-input-block">
+				<input type="number" min="1" id="sort" name="sort" placeholder="请输入权限url" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-block">
+				<input type="radio" name="type" value="0" title="菜单">
+				<input type="radio" name="type" value="1" title="链接">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">图标</label>
+			<div class="layui-input-block">
+				<input type="text" min="1" id="icon" name="icon" placeholder="请输入权限图标" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

@@ -2,11 +2,15 @@ package com.pan.util;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.pan.common.exception.BusinessException;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -352,6 +356,83 @@ public class JedisUtils {
 		} catch (Exception e) {
 			jedis.close();
 			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	public static String hmset(String key,Map<String, String> hash) {
+		Jedis jedis = null;
+		String res=null;
+		try {
+			jedis = jedisPool.getResource();
+			res= jedis.hmset(key, hash);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	public static String hgset(String key,String field) {
+		Jedis jedis = null;
+		String res=null;
+		try {
+			jedis = jedisPool.getResource();
+			res= jedis.hget(key, field);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	public static Map<String, String> hgetAll(String key) {
+		Jedis jedis = null;
+		Map<String, String> map=new HashMap<String, String>();
+		try {
+			jedis = jedisPool.getResource();
+			map= jedis.hgetAll(key);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return map;
+	}
+	
+	public static Long hset(String key,String field,String value) {
+		Long res=null;
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			res= jedis.hset(key, field, value);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			throw new BusinessException("redis hset操作失败 ");
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	public static Boolean hexists(String key,String field) {
+		Boolean res=false;
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			res= jedis.hexists(key, field);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+			throw new BusinessException("redis hset操作失败 ");
 		} finally {
 			jedis.close();
 		}

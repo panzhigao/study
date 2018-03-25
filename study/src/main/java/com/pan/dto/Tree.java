@@ -1,6 +1,8 @@
 package com.pan.dto;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ public class Tree {
 	private String pId;
 	private String url;
 	private String icon;
+	private Integer sort;
 	public String getTitle() {
 		return title;
 	}
@@ -66,16 +69,24 @@ public class Tree {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
+	
+	public Integer getSort() {
+		return sort;
+	}
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 	@Override
 	public String toString() {
 		return "Tree [title=" + title + ", value=" + value + ", checked="
 				+ checked + ", data=" + data + ", id=" + id + ", pId=" + pId
-				+ ", url=" + url + ", icon=" + icon + "]";
+				+ ", url=" + url + ", icon=" + icon + ", sort=" + sort + "]";
 	}
 	public static List<Tree> buildTree(List<Tree> nodes){
 		List<Tree> list=new ArrayList<Tree>();
+		Collections.sort(nodes,new TreeComparator());
 		for (Tree treeNode : nodes) {
-			if("0".equals(treeNode.getpId())){
+			if(treeNode.getpId()==null||"0".equals(treeNode.getpId())){
 				list.add(treeNode);
 			}else{
 				for (Tree temp : nodes) {
@@ -86,5 +97,13 @@ public class Tree {
 			}
 		}
 		return list;
+	}
+	
+	static class TreeComparator implements Comparator<Tree>{
+		@Override
+		public int compare(Tree o1, Tree o2) {
+			return o1.getSort()-o2.getSort();
+		}
+		
 	}
 }

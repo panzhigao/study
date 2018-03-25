@@ -1,5 +1,9 @@
 package com.pan.mapper;
 
+import java.util.List;
+
+import com.pan.entity.RolePermission;
+
 
 /**
  * 
@@ -17,4 +21,8 @@ public interface RolePermissionMapper {
 	 * @param roleId
 	 */
 	public void deleteRolePermissionByRoleId(String roleId);
+	/**
+	 * 新增角色权限
+	 */
+	public void addRolePermission(List<RolePermission> list);
 }

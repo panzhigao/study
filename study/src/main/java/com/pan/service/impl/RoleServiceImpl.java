@@ -18,6 +18,7 @@ import com.pan.entity.Permission;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.mapper.RoleMapper;
+import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.IdUtils;
@@ -35,6 +36,9 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private PermissionService permissionService;
+	
+	@Autowired
+	private RolePermissionMapper rolePermissionMapper;
 	
 	@Override
 	public void addRole(Role role) {
@@ -80,7 +84,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 		//TODO 增加日志
 		//删除该角色下的所有权限，再重新添加
-		roleMapper.deleteRolePermissionByRoleId(roleId);
+		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
 		List<RolePermission> list=new ArrayList<RolePermission>();
 		for (String string : permissions) {
 			RolePermission rolePermission=new RolePermission();
@@ -89,7 +93,7 @@ public class RoleServiceImpl implements RoleService{
 			rolePermission.setCreateTime(new Date());
 			list.add(rolePermission);
 		}
-		roleMapper.addRolePermission(list);
+		rolePermissionMapper.addRolePermission(list);
 		recachePermissionByRoleId(roleId);
 	}
 
@@ -143,8 +147,9 @@ public class RoleServiceImpl implements RoleService{
 	public void recachePermissionByRoleId(String roleId){
 		try {
 			List<Permission> permissionList = permissionService.getPermissionByRoleId(roleId);
-			String listStr=JsonUtils.toJson(permissionList);
-			JedisUtils.setString("role_permissions:"+roleId, listStr);
+			//清除原有角色权限缓存
+			JedisUtils.delete("role_permissions:"+roleId);
+			JedisUtils.hmset("role_permissions:"+roleId, JsonUtils.listToMap(permissionList, "permissionId"));
 		} catch (Exception e) {
 			logger.error("缓存角色权限失败,roleId:{}",roleId);
 		}

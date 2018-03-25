@@ -5,13 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
@@ -19,6 +18,7 @@ import com.pan.entity.Role;
 import com.pan.mapper.PermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
+import com.pan.util.BeanUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -45,8 +45,8 @@ public class PermissionServiceImpl implements PermissionService {
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
-		if(StringUtils.isBlank(permission.getPId())){
-			permission.setPId("0");
+		if(StringUtils.isBlank(permission.getpId())){
+			permission.setpId("0");
 		}
 		permission.setCreateTime(new Date());
 		permission.setPermissionId(IdUtils.generatePermissionId());
@@ -97,7 +97,7 @@ public class PermissionServiceImpl implements PermissionService {
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
 			treeNode.setId(permission.getPermissionId());
-			treeNode.setpId(permission.getPId());
+			treeNode.setpId(permission.getpId());
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
@@ -119,7 +119,7 @@ public class PermissionServiceImpl implements PermissionService {
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
-			roleTree.setpId(permission.getPId());
+			roleTree.setpId(permission.getpId());
 			roleTree.setIcon(permission.getIcon());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
 				roleTree.setChecked(true);
@@ -132,5 +132,39 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<Permission> getPermissionByRoleId(String roleId) {
 		return permissionMapper.getPermissionByRoleId(roleId);
+	}
+
+	@Override
+	public Permission getByPermissionId(String permissionId) {
+		Map<String,Object> params=new HashMap<String, Object>(1);
+		params.put("permissionId", permissionId);
+		List<Permission> list = this.permissionMapper.findByParams(params);
+		return list.size()==1?list.get(0):null;
+	}
+
+	@Override
+	public void updatePermission(Permission permission) {
+		if(StringUtils.isBlank(permission.getPermissionId())){
+			throw new BusinessException("权限id为空");
+		}
+		Permission permissionInDb = getByPermissionId(permission.getPermissionId());
+		if(permissionInDb==null){
+			throw new BusinessException("权限已不存在");
+		}
+		permissionMapper.updatePermission(permission);
+		try {
+			BeanUtils.copyPropertiesIgnoreNull(permission,permissionInDb);
+			//同步缓存
+			List<Role> roles = roleService.findAll();
+			for (Role role : roles) {
+				String roleId=role.getRoleId();
+				if(JedisUtils.hexists("role_permissions:"+roleId, permission.getPermissionId())){
+					JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permissionInDb));
+				}
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("修改权限失败");
+		}
 	}
 }

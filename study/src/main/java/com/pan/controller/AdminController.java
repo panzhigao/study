@@ -3,6 +3,7 @@ package com.pan.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,14 +48,11 @@ public class AdminController {
 		String userId = CookieUtils.getLoginUserId();
 		String roles = JedisUtils.getString("user_roles:"+userId);
 		String[] arr=(String[]) JsonUtils.fromJson(roles, String[].class);
-		for (int i = 0; i < arr.length; i++) {
-			arr[i]="role_permissions:"+arr[i];
-		}
-		List<String> list = JedisUtils.mget(arr);
 		Set<Permission> permissions=new HashSet<Permission>();
-		for (String string : list) {
-			List<Permission> p= (List<Permission>) JsonUtils.jsonToList(string, Permission.class);
-			permissions.addAll(p);
+		for (int i = 0; i < arr.length; i++) {
+			Map<String, String> hgetAll = JedisUtils.hgetAll("role_permissions:"+arr[i]);
+			permissions.addAll(JsonUtils.mapToList(hgetAll,Permission.class));
+			
 		}
 		List<Tree> nodes=new ArrayList<Tree>(20);
 		for (Permission permission : permissions) {
@@ -62,9 +60,10 @@ public class AdminController {
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
-			roleTree.setpId(permission.getPId());
+			roleTree.setpId(permission.getpId());
 			roleTree.setUrl(permission.getUrl());
 			roleTree.setIcon(permission.getIcon());
+			roleTree.setSort(permission.getSort());
 			nodes.add(roleTree);
 		}
 		List<Tree> buildTree = Tree.buildTree(nodes);
