@@ -16,9 +16,13 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 public class MyHandler extends TextWebSocketHandler{
 	
 	private static final Logger logger = LoggerFactory.getLogger(MyHandler.class);
-    //在线用户列表
+    /**
+     * 在线用户列表
+     */
     private static final Map<String, WebSocketSession> USERS;
-    //用户标识
+    /**
+     * 用户标识
+     */
     private static final String USER_ID = "userId";
 
     static {

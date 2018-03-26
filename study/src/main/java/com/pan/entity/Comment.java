@@ -32,7 +32,7 @@ public class Comment extends BaseEntity{
 	 * 评论内容
 	 */
 	@NotEmpty(message="评论内容不能为空")
-	private String commentContent;//TODO 评论字符限制
+	private String commentContent;
 	/**
 	 * 接收回复的评论用户
 	 */

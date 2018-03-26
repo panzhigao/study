@@ -32,8 +32,10 @@ public class CheckController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/check")
 	public ModelAndView toIndex(){
 		Map<String,Object> params=new HashMap<String, Object>(2);
-		params.put("status", Article.STATUS_IN_REVIEW);//审核中
-		params.put("type", Article.TYPE_ARTICLE);//类型为文章
+		//审核中
+		params.put("status", Article.STATUS_IN_REVIEW);
+		//类型为文章
+		params.put("type", Article.TYPE_ARTICLE);
 		int articleCounts=articleService.getCount(params);
 		ModelAndView mav=new ModelAndView("html/user/check");
 		mav.addObject("articleCounts", articleCounts);
@@ -51,8 +53,10 @@ public class CheckController {
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
 		params.put("row", pageSize);
-		params.put("status", Article.STATUS_IN_REVIEW);//审核中
-		params.put("type", Article.TYPE_ARTICLE);//类型为文章
+		//审核中
+		params.put("status", Article.STATUS_IN_REVIEW);
+		//类型为文章
+		params.put("type", Article.TYPE_ARTICLE);
 		Map<String,Object> pageData=articleService.findByParams(params);
 		return pageData;
 	}

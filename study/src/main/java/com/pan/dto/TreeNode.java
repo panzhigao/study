@@ -13,6 +13,7 @@ public class TreeNode {
 	private String url;
 	private String icon;
 	private Integer sort;
+	private String type;
 	private List<TreeNode> children=new ArrayList<TreeNode>();
 	public String getId() {
 		return id;
@@ -68,11 +69,18 @@ public class TreeNode {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	@Override
 	public String toString() {
 		return "TreeNode [id=" + id + ", pId=" + pId + ", name=" + name
 				+ ", data=" + data + ", url=" + url + ", icon=" + icon
-				+ ", sort=" + sort + ", children=" + children + "]";
+				+ ", sort=" + sort + ", type=" + type + ", children="
+				+ children + "]";
 	}
 	public static List<TreeNode> buildTree(List<TreeNode> nodes){
 		List<TreeNode> list=new ArrayList<TreeNode>();

@@ -7,11 +7,12 @@
     <result column="role_id"            property="roleId"          jdbcType="VARCHAR" />
     <result column="role_name"          property="roleName"        jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="create_user"        property="createUser"      jdbcType="VARCHAR" />
     <result column="marker"             property="marker"          jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,role_id,role_name,create_time
+    id,role_id,role_name,create_time,create_user
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
@@ -40,7 +41,7 @@
     </select>
    
   <insert id="addRole" parameterType="com.pan.entity.Role">
-  	insert into t_role (<include refid="Base_Column_List"/>) values (null,#{roleId,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+  	insert into t_role (<include refid="Base_Column_List"/>) values (null,#{roleId,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{createUser,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deleteRole">
@@ -62,10 +63,13 @@
   	update t_role
   	<set>
   		<if test="roleName !=null and roleName !=''">
-	  		role_name=#{roleName,jdbcType=VARCHAR}
+	  		role_name=#{roleName,jdbcType=VARCHAR},
 	  	</if>
 	  	<if test="updateTime !=null">
-	  		update_time=#{updateTime,jdbcType=TIMESTAMP}
+	  		update_time=#{updateTime,jdbcType=TIMESTAMP},
+	  	</if>
+	  	<if test="updateUser !=null and updateUser !=''">
+	  		update_user=#{updateUser,jdbcType=VARCHAR},
 	  	</if>
   	</set>
   	where role_id=#{roleId}

@@ -394,7 +394,7 @@ public class JedisUtils {
 	
 	public static Map<String, String> hgetAll(String key) {
 		Jedis jedis = null;
-		Map<String, String> map=new HashMap<String, String>();
+		Map<String, String> map=new HashMap<String, String>(20);
 		try {
 			jedis = jedisPool.getResource();
 			map= jedis.hgetAll(key);

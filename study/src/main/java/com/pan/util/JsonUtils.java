@@ -1,6 +1,10 @@
 package com.pan.util;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,14 +72,14 @@ public class JsonUtils {
 		List<T> ts = (List<T>) JSON.parseArray(jsonString, clazz);
 		return ts;
 	}
-	
-	public static <T> Map<String,String> listToMap(List<T> list,String keyId){
-		Map<String, String> map=new HashMap<String, String>();
+
+	public static <T> Map<String, String> listToMap(List<T> list, String keyId) {
+		Map<String, String> map = new HashMap<String, String>(10);
 		for (T t : list) {
 			try {
 				Field field = t.getClass().getDeclaredField(keyId);
 				field.setAccessible(true);
-				String id=(String) field.get(t);
+				String id = (String) field.get(t);
 				map.put(id, toJson(t));
 			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
@@ -87,14 +91,56 @@ public class JsonUtils {
 		}
 		return map;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> mapToList(Map<String,String> map,Class<T> clazz){
-		List<T> list=new ArrayList<T>();
-		for(Map.Entry<String,String> entry:map.entrySet()){
-			list.add((T) fromJson(entry.getValue(),clazz));
+	public static <T> List<T> mapToList(Map<String, String> map, Class<T> clazz) {
+		List<T> list = new ArrayList<T>();
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			list.add((T) fromJson(entry.getValue(), clazz));
 		}
 		return list;
 	}
-
+	
+	/**
+	 * object to map
+	 * @param obj
+	 * @return
+	 * @throws IllegalAccessException
+	 */
+	public static Map<String, String> objectToMap(Object obj){
+		Map<String, String> map = new HashMap<>(10);
+		Class<?> clazz = obj.getClass();
+		for (Field field : clazz.getDeclaredFields()) {
+			field.setAccessible(true);
+			String fieldName = field.getName();
+			Object value;
+			try {
+				value = field.get(obj);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+				continue;
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				continue;
+			}
+			map.put(fieldName, String.valueOf(value));
+		}
+		return map;
+	}
+	
+    public static Object mapToObject(Map<String,String> map, Class<?> beanClass) throws Exception {      
+        if (map == null){        	
+        	return null;      
+        }     
+        Object obj = beanClass.newInstance();    
+        BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());      
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();      
+        for (PropertyDescriptor property : propertyDescriptors) {    
+            Method setter = property.getWriteMethod();      
+            if (setter != null) {    
+                setter.invoke(obj, map.get(property.getName()));     
+            }    
+        }    
+        return obj;    
+    } 
 }

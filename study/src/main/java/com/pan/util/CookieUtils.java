@@ -271,6 +271,25 @@ public final class CookieUtils {
     	return user;
     }
     
+    /**
+     * 获取登陆用户信息
+     * @return
+     */
+    public static User setLoginUser(User user){
+    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
+    	if(cookieValue!=null){
+    		String json=JsonUtils.toJson(user);
+    		JedisUtils.setString(MyConstant.USER_LOGINED+cookieValue, json);
+    	}
+    	return user;
+    }
+    
+    
+    public static User getLoginUser(){
+    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	return getLoginUser(request);
+    }
 
     /**
      * 获取登陆用户id
@@ -285,11 +304,12 @@ public final class CookieUtils {
     	return userId;
     }
     
-    public static void validateVercode(HttpServletRequest request,String vercode){
+    public static void validateVercode(String vercode){
     	if(StringUtils.isBlank(vercode)){
 			throw new BusinessException("验证码不能为空");
 		}
-    	String cookieValue = getCookieValue(request, MyConstant.SESSION_ID);
+    	HttpServletRequest requset = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	String cookieValue = getCookieValue(requset, MyConstant.SESSION_ID);
     	if(cookieValue==null){
     		throw new BusinessException("验证码失效");
     	}
@@ -303,7 +323,7 @@ public final class CookieUtils {
     }
     
     public static String getLoginUserId(){
-    	HttpServletRequest requset = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	return getLoginUserId(requset);
+    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	return getLoginUserId(request);
     }
 }

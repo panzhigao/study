@@ -54,4 +54,9 @@ public interface PermissionService {
 	 * 更新权限
 	 */
 	public void updatePermission(Permission permission);
+	/**
+	 * 获取所有权限
+	 * @return
+	 */
+	public List<Permission> getAll();
 }

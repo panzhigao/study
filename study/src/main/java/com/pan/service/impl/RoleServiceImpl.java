@@ -21,6 +21,7 @@ import com.pan.mapper.RoleMapper;
 import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
+import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -39,12 +40,14 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private RolePermissionMapper rolePermissionMapper;
-	
+
 	@Override
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
 		ValidationUtils.validateEntity(role);
+		String loginUserId = CookieUtils.getLoginUserId();
 		role.setCreateTime(new Date());
+		role.setCreateUser(loginUserId);
 		role.setRoleId(IdUtils.generateRoleId());
 		roleMapper.addRole(role);
 	}
@@ -70,10 +73,15 @@ public class RoleServiceImpl implements RoleService{
 		return pageData;
 	}
 	
-	//TODO 删除角色，连同其下的权限删除
+	
 	@Override
 	public void deleteRole(String roleId) {
+		//删除角色信息
 		roleMapper.deleteRole(roleId);
+		//删除角色下关联的权限
+		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
+		//清除缓存中角色的权限信息
+		JedisUtils.delete("role_permissions:"+roleId);
 	}
 
 	@Override
@@ -99,7 +107,7 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public Role findByRoleId(String roleId) {
-		Map<String,Object> params=new HashMap<String, Object>();
+		Map<String,Object> params=new HashMap<String, Object>(1);
 		params.put("roleId", roleId);
 		List<Role> list = roleMapper.findByParams(params);
 		if(list.size()==1){
@@ -126,12 +134,12 @@ public class RoleServiceImpl implements RoleService{
 			}
 			nodes.add(roleTree);
 		}
-		return Tree.buildTree(nodes);
+		return Tree.buildTree(nodes,false);
 	}
 
 	@Override
 	public List<Role> findAll() {
-		return roleMapper.findByParams(new HashMap<String,Object>());
+		return roleMapper.findByParams(new HashMap<String,Object>(1));
 	}
 
 	@Override
@@ -157,6 +165,10 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public void updateRole(Role role) {
+		ValidationUtils.validateEntityWithGroups(role);
+		role.setUpdateTime(new Date());
+		String loginUserId = CookieUtils.getLoginUserId();
+		role.setUpdateUser(loginUserId);
 		roleMapper.updateRole(role);
 	}
 }

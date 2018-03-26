@@ -31,7 +31,7 @@ public class RedisLock {
     private static Random random = new Random();
 
     public RedisLock(String lockKey) {
-        this.lockKey = lockKey + "_lock";
+        this.lockKey = "lock:"+lockKey ;
     }
 
     public RedisLock(String lockKey, int timeoutMillis) {

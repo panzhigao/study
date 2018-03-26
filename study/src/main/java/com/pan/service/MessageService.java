@@ -12,6 +12,7 @@ import com.pan.entity.Message;
 public interface MessageService {
 	/**
 	 * 新增通知
+	 * @param message
 	 */
 	public void addMessage(Message message);
 	/**

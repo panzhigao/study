@@ -10,6 +10,7 @@ import com.pan.entity.Praise;
 public interface PraiseService {
 	/**
 	 * 点赞
+	 * @param praise
 	 */
 	public void addPraise(Praise praise);
 }

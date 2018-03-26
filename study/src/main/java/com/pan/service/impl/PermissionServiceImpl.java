@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
@@ -19,6 +22,7 @@ import com.pan.mapper.PermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.BeanUtils;
+import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -52,6 +56,8 @@ public class PermissionServiceImpl implements PermissionService {
 			permission.setSort(1);
 		}
 		permission.setCreateTime(new Date());
+		String loginUserId = CookieUtils.getLoginUserId();
+		permission.setCreateUser(loginUserId);
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
 	}
@@ -105,6 +111,7 @@ public class PermissionServiceImpl implements PermissionService {
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
 			treeNode.setSort(permission.getSort());
+			treeNode.setType(permission.getType());
 			nodes.add(treeNode);
 		}
 		return nodes;
@@ -118,19 +125,19 @@ public class PermissionServiceImpl implements PermissionService {
 		List<Permission> list = this.permissionMapper.getPermissionSelectedByRoleId(roleId);
 		List<Tree> nodes=new ArrayList<Tree>(20);
 		for (Permission permission : list) {
-			Tree roleTree=new Tree();
-			roleTree.setTitle(permission.getPermissionName());
-			roleTree.setValue(permission.getPermissionId());
-			roleTree.setId(permission.getPermissionId());
-			roleTree.setpId(permission.getpId());
-			roleTree.setIcon(permission.getIcon());
-			roleTree.setSort(permission.getSort());
+			Tree permissionTree=new Tree();
+			permissionTree.setTitle(permission.getPermissionName());
+			permissionTree.setValue(permission.getPermissionId());
+			permissionTree.setId(permission.getPermissionId());
+			permissionTree.setpId(permission.getpId());
+			permissionTree.setIcon(permission.getIcon());
+			permissionTree.setSort(permission.getSort());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
-				roleTree.setChecked(true);
+				permissionTree.setChecked(true);
 			}
-			nodes.add(roleTree);
+			nodes.add(permissionTree);
 		}
-		return Tree.buildTree(nodes);
+		return Tree.buildTree(nodes,true);
 	}
 
 	@Override
@@ -155,6 +162,12 @@ public class PermissionServiceImpl implements PermissionService {
 		if(permissionInDb==null){
 			throw new BusinessException("权限已不存在");
 		}
+		if(MyConstant.PERMISSION_TYPE_MENU.equals(permission.getType())){
+			permission.setUrl("  ");
+		}
+		String loginUserId = CookieUtils.getLoginUserId();
+		permission.setUpdateUser(loginUserId);
+		permission.setUpdateTime(new Date());
 		permissionMapper.updatePermission(permission);
 		try {
 			BeanUtils.copyPropertiesIgnoreNull(permission,permissionInDb);
@@ -170,5 +183,10 @@ public class PermissionServiceImpl implements PermissionService {
 			e.printStackTrace();
 			throw new BusinessException("修改权限失败");
 		}
+	}
+
+	@Override
+	public List<Permission> getAll() {
+		return permissionMapper.findAll();
 	}
 }

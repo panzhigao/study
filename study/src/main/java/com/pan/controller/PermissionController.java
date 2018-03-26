@@ -62,7 +62,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/get_permissions")
 	@ResponseBody
-	public ResultMsg loadPermissions(Integer pageSize,Integer pageNo,String permissionName){
+	public ResultMsg loadPermissions(){
 		List<TreeNode> nodes=permissionService.getTreeData();
 		return ResultMsg.build(ResultCodeEmun.SUCCESS, ResultCodeEmun.SUCCESS.getMsg(),nodes);
 	}
@@ -88,8 +88,8 @@ public class PermissionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
 	@ResponseBody
 	public ResultMsg loadPermissionDetail(String permissionId){
-		Permission Permission = permissionService.getByPermissionId(permissionId);
-		return ResultMsg.ok("获取权限信息成功", Permission);
+		Permission permission = permissionService.getByPermissionId(permissionId);
+		return ResultMsg.ok("获取权限信息成功", permission);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doEdit")

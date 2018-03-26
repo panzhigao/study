@@ -93,6 +93,7 @@ public class ArticleServiceImpl implements ArticleService {
 	/**
 	 * 新增文章
 	 */
+	@Override
 	public void saveArticle(Article article) {
 		checkArticle(article);
 		// 默认草稿状态
@@ -105,12 +106,14 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setType("1");
 		articleMapper.saveArticle(article);
 	}
-
+	
+	@Override
 	public List<Article> findListByUserId(String userId) {
 		logger.info("用户id为:{}", userId);
 		return articleMapper.findListByUserId(userId);
 	}
-
+	
+	@Override
 	public Map<String,Object> findByParams(Map<String, Object> params) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Article> list = new ArrayList<Article>();
@@ -130,7 +133,8 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return pageData;
 	}
-
+	
+	@Override
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
 		//TODO 修改判断
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
@@ -154,6 +158,7 @@ public class ArticleServiceImpl implements ArticleService {
 	/**
 	 * 更新文章信息 要校验当前文章是否是当前登录用户下的文章
 	 */
+	@Override
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}",article);
 		//校验前台传来的数据
@@ -186,7 +191,8 @@ public class ArticleServiceImpl implements ArticleService {
 			throw new BusinessException("修改文章信息失败,请稍后");
 		}
 	}
-
+	
+	@Override
 	public Article getByArticleId(String articleId) {
 		logger.info("查询文章信息,文章id为:{}",articleId);
 		if(StringUtils.isBlank(articleId)){
@@ -200,7 +206,8 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return null;
 	}
-
+	
+	@Override
 	public void deleteArticle(String articleId, String userId) {
 		if(StringUtils.isBlank(articleId)){
 			throw new BusinessException("文章id不能为空");
@@ -220,7 +227,8 @@ public class ArticleServiceImpl implements ArticleService {
 			throw new BusinessException("删除文章失败");
 		}
 	}
-
+	
+	@Override
 	public int getCount(Map<String, Object> params) {
 		logger.info("查询文章条数条件：{}",JsonUtils.toJson(params));
 		return articleMapper.getCountByParams(params);
@@ -262,7 +270,8 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setCreateTime(new Date());
 		article.setPublishTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		article.setType(Article.TYPE_SYSTEM_MESSAGE);//系统消息文章
+		//系统消息文章
+		article.setType(Article.TYPE_SYSTEM_MESSAGE);
 		Message message=new Message();
 		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());

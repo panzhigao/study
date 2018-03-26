@@ -7,7 +7,7 @@
 				<input lay-verify="required" id="permissionName" type="text" name="permissionName" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
 			</div>
 		</div>
-		<div class="layui-form-item">
+		<div class="layui-form-item" id="urlDiv">
 			<label class="layui-form-label">权限url</label>
 			<div class="layui-input-block">
 				<input type="text" id="url" name="url"  placeholder="请输入权限url" autocomplete="off" class="layui-input">
@@ -22,8 +22,8 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">类型</label>
 			<div class="layui-input-block">
-				<input type="radio" name="type" value="0" title="菜单">
-				<input type="radio" name="type" value="1" title="链接">
+				<input type="radio" name="type" value="0" title="菜单" lay-filter="type">
+				<input type="radio" name="type" value="1" title="链接" lay-filter="type">
 			</div>
 		</div>
 		<div class="layui-form-item">

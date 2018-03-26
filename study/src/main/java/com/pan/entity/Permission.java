@@ -125,18 +125,23 @@ public class Permission extends BaseEntity{
 	}
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){			
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){			
 			return false;
-		if (!(obj instanceof Permission))
+		}
+		if (!(obj instanceof Permission)){			
 			return false;
+		}
 		Permission other = (Permission) obj;
 		if (permissionId == null) {
-			if (other.permissionId != null)
+			if (other.permissionId != null){				
 				return false;
-		} else if (!permissionId.equals(other.permissionId))
+			}
+		} else if (!permissionId.equals(other.permissionId)){			
 			return false;
+		}
 		return true;
 	}
 }

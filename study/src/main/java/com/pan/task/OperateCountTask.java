@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.pan.service.ArticleService;
 import com.pan.util.JedisUtils;
+import com.pan.util.RedisLock;
 
 /**
  * 
@@ -24,23 +25,34 @@ public class OperateCountTask {
 	@Autowired
 	private ArticleService articleService;
 	
+	private final static String LOCK_COMMENT_COUNT = "commentcount";
+	
+	private final static String LOCK_VIEW_COUNT ="viewcount";
 	/**
 	 * 每5分钟更新文章数据库评论数
 	 */
 	@Scheduled(cron = "0 0/5 * * * ?")
 	public void updateCommentCount(){
-		//TODO 加同步锁
-		logger.info("------------------执行定时任务,更新文章数据库评论数------------------");
-		Set<String> keys = JedisUtils.keys("comment_count:*");
-		for (String string : keys) {
-			String articleId=string.substring(14);
-			String countStr = JedisUtils.getString(string);
-			Integer commentCount=Integer.valueOf(countStr);
-			int updateArticleCommentCoumts = articleService.updateArticleCommentCount(articleId, commentCount);
-			if(updateArticleCommentCoumts==1){				
-				JedisUtils.delete(string);
+		RedisLock lock=new RedisLock(LOCK_COMMENT_COUNT);
+		try {
+			if(lock.lock()){
+				logger.info("------------------执行定时任务,更新文章数据库评论数------------------");
+				Set<String> keys = JedisUtils.keys("comment_count:*");
+				for (String string : keys) {
+					String articleId=string.substring(14);
+					String countStr = JedisUtils.getString(string);
+					Integer commentCount=Integer.valueOf(countStr);
+					int updateArticleCommentCoumts = articleService.updateArticleCommentCount(articleId, commentCount);
+					if(updateArticleCommentCoumts==1){				
+						JedisUtils.delete(string);
+					}
+				}
+				lock.unlock();
 			}
+		} catch (InterruptedException e) {
+			logger.error("执行定时任务,更新文章数据库评论数异常",e);
 		}
+
 	}
 	
 	/**
@@ -48,17 +60,24 @@ public class OperateCountTask {
 	 */
 	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateViewCount(){
-		//TODO 加同步锁
-		logger.info("------------------执行定时任务,更新文章数据库阅读数------------------");
-		Set<String> keys = JedisUtils.keys("article_view_count:*");
-		for (String string : keys) {
-			String articleId=string.substring(19);
-			String countStr = JedisUtils.getString(string);
-			Integer viewCount=Integer.valueOf(countStr);
-			int updateArticleCommentCoumts = articleService.updateArticleViewCount(articleId, viewCount);
-			if(updateArticleCommentCoumts==1){				
-				JedisUtils.delete(string);
+		RedisLock lock=new RedisLock(LOCK_VIEW_COUNT);
+		try {
+			if(lock.lock()){
+				logger.info("------------------执行定时任务,更新文章数据库阅读数------------------");
+				Set<String> keys = JedisUtils.keys("article_view_count:*");
+				for (String string : keys) {
+					String articleId=string.substring(19);
+					String countStr = JedisUtils.getString(string);
+					Integer viewCount=Integer.valueOf(countStr);
+					int updateArticleCommentCoumts = articleService.updateArticleViewCount(articleId, viewCount);
+					if(updateArticleCommentCoumts==1){				
+						JedisUtils.delete(string);
+					}
+				}
+				lock.unlock();
 			}
+		} catch (InterruptedException e) {
+			logger.error("执行定时任务,更新文章数据库阅读数异常",e);
 		}
 	}
 }

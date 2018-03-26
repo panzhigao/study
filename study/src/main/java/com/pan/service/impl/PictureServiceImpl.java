@@ -34,10 +34,12 @@ public class PictureServiceImpl implements PictureService{
 	@Value("${picture.dir}")
 	private String pictureDir;
 	
+	@Override
 	public void savePicture(Picture picture) {
 		pictureMapper.savePicture(picture);
 	}
-
+	
+	@Override
 	public List<Picture> findByParams(Map<String, Object> params) {
 		List<Picture> list = new ArrayList<Picture>();
 		try {
@@ -53,7 +55,8 @@ public class PictureServiceImpl implements PictureService{
 		}
 		return list;
 	}
-
+	
+	@Override
 	public void deleteByPictureId(String userId,String pictureId) {
 		logger.info("删除的图片id为{}",pictureId);
 		if(StringUtils.isBlank(pictureId)){

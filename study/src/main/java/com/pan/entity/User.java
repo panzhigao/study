@@ -138,6 +138,15 @@ public class User extends BaseEntity{
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
+	
+	public User() {
+		super();
+	}
+	public User(String userId, String status) {
+		super();
+		this.userId = userId;
+		this.status = status;
+	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", sex=" + sex + ", username="

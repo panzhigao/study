@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.service.RoleService;
@@ -38,7 +35,7 @@ public class UserManageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/manage")
-	public ModelAndView toUserEditPage(HttpServletRequest request){
+	public ModelAndView toUserEditPage(){
 		ModelAndView mav=new ModelAndView("html/user/userManage");
 		return mav;
 	}
@@ -49,7 +46,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/userList"})
 	@ResponseBody
-	public Map<String,Object> getUserList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+	public Map<String,Object> getUserList(Integer pageSize,Integer pageNo){
 		Map<String,Object> params=new HashMap<String, Object>(5);
 		Integer offset=(pageNo-1)*pageSize;
 		params.put("offset", offset);
@@ -79,5 +76,17 @@ public class UserManageController {
 	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]")String[] roles){
 		userService.allocateRoleToUser(userId, roles);
 		return ResultMsg.ok("分配用户角色成功");
+	}
+	
+	/**
+	 * 修改用户状态
+	 * 禁用和启用
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/manage/changeStatus")
+	@ResponseBody
+	public ResultMsg changeUserStatus(String userId,String status){
+		String message = userService.changeUserStatus(userId, status);
+		return ResultMsg.ok(message);
 	}
 }

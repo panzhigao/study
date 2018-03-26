@@ -42,7 +42,7 @@ public class PraiseServiceImpl implements PraiseService{
 			logger.error("评论信息不存在:{}",praise.getCommentId());
 			throw new BusinessException("评论信息不存在");
 		}
-		Map<String,Object> params=new HashMap<String, Object>();
+		Map<String,Object> params=new HashMap<String, Object>(3);
 		params.put("userId", praise.getUserId());
 		params.put("commentId", praise.getCommentId());
 		Praise findByParams = praiseMapper.findByParams(params);

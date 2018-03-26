@@ -9,17 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
@@ -49,8 +51,12 @@ public class UserServiceImpl implements UserService{
 	
 	private static final String DATEFORMAT="yyyyMMdd";
 	
-	//TODO 修改配置
-	private static final String PIC_BASE="http://www.pan.com/myimage/"; 
+	
+	/**
+	 * 图片访问路径
+	 */
+	@Value("${picture.url=}")
+	private String imgUrl;
 	
 	/**
 	 * 图片保存路径
@@ -67,6 +73,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
 	
+	@Override
 	public User saveUser(User user){
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
 		String username=user.getUsername();
@@ -102,13 +109,15 @@ public class UserServiceImpl implements UserService{
 			throw new BusinessException("注册用户信息失败");
 		}
 	}
-
+	
+	@Override
 	public User findByUsername(String username) {
 		return this.userMapper.findByUsername(username);
 	}
-
-	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode) {
-		CookieUtils.validateVercode(httpRequest, vercode);
+	
+	@Override
+	public User checkLogin(User user,String vercode) {
+		CookieUtils.validateVercode(vercode);
 		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
 		String username=user.getUsername();
 		User userInDb=null;
@@ -137,19 +146,22 @@ public class UserServiceImpl implements UserService{
 			throw new BusinessException("用户名或密码错误");
 		}
 	}
-
+	
+	@Override
 	public void updateUserLastLoginTime(String userId) {
 		User user=new User();
 		user.setUserId(userId);
 		user.setLastLoginTime(new Date());
 		userMapper.updateUserByUserId(user);
 	}
-
+	
+	@Override
 	public User findByUserId(String userId) {
 		logger.info("用户id:{}",userId);
 		return userMapper.findByUserId(userId);
 	}
-
+	
+	@Override
 	public void updateUserInfo(User user, UserExtension userExtension) {
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
 		String userId=user.getUserId();
@@ -157,9 +169,9 @@ public class UserServiceImpl implements UserService{
 		if(StringUtils.isNotBlank(user.getUserPortrait())){
 			String temp=user.getUserPortrait();
 			temp=temp.replace("data:image/jpeg;base64,", "");
-			String generateImage = ImageUtils.GenerateImage(temp, pictureDir);
+			String generateImage = ImageUtils.generateImage(temp, pictureDir);
 			if(generateImage!=null){
-				String newPortrait=PIC_BASE+generateImage;
+				String newPortrait=imgUrl+generateImage;
 				user.setUserPortrait(newPortrait);
 			}else{
 				user.setUserPortrait(null);
@@ -180,12 +192,14 @@ public class UserServiceImpl implements UserService{
 			userExtensionMapper.saveUserExtension(userExtensionTemp);
 		}	
 	}
-
+	
+	@Override
 	public User findByUserTelephone(String telephone) {
 		logger.info("手机号：{}",telephone);
 		return userMapper.findByTelephone(telephone);
 	}
-
+	
+	@Override
 	public UserExtension findExtensionByUserId(String userId) {
 		return userExtensionMapper.findByUserId(userId);
 	}
@@ -195,12 +209,12 @@ public class UserServiceImpl implements UserService{
 		ValidationUtils.validateEntityWithGroups(user,TelephoneBindGroup.class);
 		//校验手机号是否被占用
 		User userInDb = findByUserTelephone(user.getTelephone());
-		if("set".equals(operateType)){
+		if(MyConstant.OPERATETYPE_SET.equals(operateType)){
 			if(userInDb!=null){
 				logger.info("该手机号已被使用：{}",user.getTelephone());
 				throw new BusinessException("该手机号已被使用，请更换手机号");
 			}
-		}else if("findPassword".equals(operateType)){
+		}else if(MyConstant.OPERATETYPE_FINDPASSWORD.equals(operateType)){
 			if(userInDb==null){
 				logger.info("该手机号未注册：{}",user.getTelephone());
 				throw new BusinessException("该手机号未注册");
@@ -275,5 +289,34 @@ public class UserServiceImpl implements UserService{
 		}
 		userMapper.addUserRole(list);
 		JedisUtils.setString("user_roles:"+userId, JsonUtils.toJson(roles));
+	}
+
+	@Override
+	public String changeUserStatus(String userId, String status) {
+		String message=null;
+		User userInDb = userMapper.findByUserId(userId);
+		if(userInDb==null){
+			throw new BusinessException("用户不存在");
+		}
+		User user=new User(userId,status);
+		String loginUserId = CookieUtils.getLoginUserId();
+		user.setUpdateUser(loginUserId);
+		user.setUpdateTime(new Date());
+		if(User.STATUS_BLOCKED.equals(status)){
+			message="禁用账号成功";
+			userMapper.updateUserByUserId(user);
+			User loginUser = CookieUtils.getLoginUser();
+			loginUser.setStatus(status);
+			CookieUtils.setLoginUser(loginUser);
+		}else if(User.STATUS_NORMAL.equals(status)){
+			message="启用账号成功";
+			userMapper.updateUserByUserId(user);
+			User loginUser = CookieUtils.getLoginUser();
+			loginUser.setStatus(status);
+			CookieUtils.setLoginUser(loginUser);
+		}else{
+			message="操作错误，请稍后重试";
+		}	
+		return message;
 	}
 }

@@ -1,9 +1,6 @@
 package com.pan.service;
 
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 
@@ -44,7 +41,7 @@ public interface UserService {
 	 * @param vercode
 	 * @return
 	 */
-	public User checkLogin(HttpServletRequest httpRequest,User user,String vercode);
+	public User checkLogin(User user,String vercode);
 	/**
 	 * 更新用户登陆时间
 	 * @param userId
@@ -62,8 +59,10 @@ public interface UserService {
 	 */
 	public UserExtension findExtensionByUserId(String userId);
 	/**
-	 * 发送手机验证码
-	 * @param telephone
+	 * 发送验证码
+	 * @param user 用户信息
+	 * @param operateType 操作类型
+	 * @return
 	 */
 	public String sendValidationCode(User user,String operateType);
 	/**
@@ -87,7 +86,13 @@ public interface UserService {
 	/**
 	 * 为用户分配角色
 	 * @param userId
-	 * @param permissions
+	 * @param roles 角色id数组
 	 */
 	public void allocateRoleToUser(String userId,String[] roles);
+	/**
+	 * 修改用户状态
+	 * @param userId
+	 * @param status
+	 */
+	public String changeUserStatus(String userId,String status);
 }

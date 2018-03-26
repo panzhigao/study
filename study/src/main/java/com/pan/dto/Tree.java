@@ -7,6 +7,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class Tree {
 	private String title;
 	private String value;
@@ -82,9 +87,11 @@ public class Tree {
 				+ checked + ", data=" + data + ", id=" + id + ", pId=" + pId
 				+ ", url=" + url + ", icon=" + icon + ", sort=" + sort + "]";
 	}
-	public static List<Tree> buildTree(List<Tree> nodes){
+	public static List<Tree> buildTree(List<Tree> nodes,boolean sortFlag){
 		List<Tree> list=new ArrayList<Tree>();
-		Collections.sort(nodes,new TreeComparator());
+		if(sortFlag){			
+			Collections.sort(nodes,new TreeComparator());
+		}
 		for (Tree treeNode : nodes) {
 			if(treeNode.getpId()==null||"0".equals(treeNode.getpId())){
 				list.add(treeNode);

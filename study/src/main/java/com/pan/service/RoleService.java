@@ -13,7 +13,8 @@ import com.pan.entity.Role;
  */
 public interface RoleService {
 	/**
-	 * 添加角色
+	 * 新增角色
+	 * @param role
 	 */
 	public void addRole(Role role);
 	/**
@@ -24,7 +25,7 @@ public interface RoleService {
 	public Map<String,Object> findByParams(Map<String,Object> params);
 	/**
 	 * 删除角色
-	 * @param permissionId
+	 * @param roleId 角色id
 	 */
 	public void deleteRole(String roleId);
 	/**
@@ -62,6 +63,7 @@ public interface RoleService {
 	public void recachePermissionByRoleId(String roleId);
 	/**
 	 * 编辑角色
+	 * @param role
 	 */
 	public void updateRole(Role role);
 }

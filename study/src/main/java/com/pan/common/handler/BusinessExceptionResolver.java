@@ -30,6 +30,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));  
     }  
 	
+	@Override
 	public ModelAndView resolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
 		logger.error(ex.getMessage());

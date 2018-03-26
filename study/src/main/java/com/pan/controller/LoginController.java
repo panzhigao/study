@@ -71,7 +71,7 @@ public class LoginController{
 	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user,String vercode){
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
-		User userInDb = userService.checkLogin(request,user,vercode);
+		User userInDb = userService.checkLogin(user,vercode);
 		String token=UUID.randomUUID().toString();
 		
 		//设置cookie过期时间

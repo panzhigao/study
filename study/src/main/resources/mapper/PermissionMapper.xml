@@ -18,6 +18,10 @@
     id,permission_id,permission_name,url,create_time,pid,level,sort,icon,type
   </sql>
   
+  <sql id="Add_Column_List" >
+    id,permission_id,permission_name,url,create_time,pid,level,sort,icon,type,create_user
+  </sql>
+  
   <select id="findByParams" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_permission
   	<where>
@@ -43,11 +47,11 @@
 	  	</where>
     </select>
    
-  <insert id="addPermission" parameterType="com.pan.entity.Collection">
-  	insert into t_permission (<include refid="Base_Column_List"/>) values 
+  <insert id="addPermission" parameterType="com.pan.entity.Permission">
+  	insert into t_permission (<include refid="Add_Column_List"/>) values 
   	(null,#{permissionId,jdbcType=VARCHAR},#{permissionName,jdbcType=VARCHAR},
   	#{url,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{pId,jdbcType=VARCHAR},
-  	#{level,jdbcType=INTEGER},#{sort,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR})
+  	#{level,jdbcType=INTEGER},#{sort,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deletePermission">
@@ -73,7 +77,7 @@
   <update id="updatePermission">
   	update t_permission 
   	<set>
-  		<if test="url !=null and url !=''">
+  		<if test="url !=null ">
 	  			url=#{url,jdbcType=VARCHAR},
 	  	</if>
   		<if test="permissionName !=null and permissionName !=''">
@@ -90,6 +94,9 @@
 	  	</if>
 	  	<if test="updateTime !=null">
 	  			update_time=#{updateTime,jdbcType=TIMESTAMP},
+	  	</if>
+	  	<if test="updateUser !=null and updateUser !=''">
+	  			update_user=#{updateUser,jdbcType=VARCHAR},
 	  	</if>
   	</set>
   	where permission_id=#{permissionId}

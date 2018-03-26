@@ -66,7 +66,7 @@ public class AdminController {
 			roleTree.setSort(permission.getSort());
 			nodes.add(roleTree);
 		}
-		List<Tree> buildTree = Tree.buildTree(nodes);
+		List<Tree> buildTree = Tree.buildTree(nodes,true);
 		return buildTree;
 	}
 }

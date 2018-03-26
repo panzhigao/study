@@ -29,6 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor{
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));  
     } 
 	
+	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		User loginUser = CookieUtils.getLoginUser(request);
 		if(loginUser==null){
@@ -56,12 +57,14 @@ public class LoginInterceptor implements HandlerInterceptor{
 		}
 		return true;
 	}
-
+	
+	@Override
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 	}
-
+	
+	@Override
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
