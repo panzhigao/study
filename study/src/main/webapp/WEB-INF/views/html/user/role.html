@@ -34,13 +34,13 @@
     </div>
   </div>
 
-<!-- 模态框（Modal） -->
+<!-- 模态框新增 -->
 <div  class="modal fade" style="margin-top:30px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加权限</h4>
+                <h4 class="modal-title" id="myModalLabel">添加角色</h4>
             </div>
                                     
             <div class="modal-body">
@@ -60,11 +60,38 @@
     </div>
 </div>
 
+<input type="hidden" id="selectedRoleId"/>
+
+<!-- 模态框修改 -->
+<div  class="modal fade" style="margin-top:30px" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改角色</h4>
+            </div>
+                                    
+            <div class="modal-body">
+            	<div class="layui-form-item">
+    				<div class="">
+    				    <h4> 角色名称:</h4>
+      					<input type="text" id="newRoleName" name="newRoleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+    				</div>		
+  				</div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnEdit">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 模态框-权限树 -->
 <div  class="modal fade" style="margin-top:10px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        	<input type="hidden" id="selectedRoleId"/>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">分配权限</h4>
@@ -79,8 +106,8 @@
                 <button type="button" class="btn btn-primary" id="btnSave">保存</button>
             </div>
             
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -169,6 +196,10 @@ layui.use(['table','jquery','form'], function(){
 	    	xtree3._options.params={roleId:data.roleId};
 	    	xtree3.render();
 	    	$('#selectedRoleId').val(data.roleId);
+	    }else if(obj.event==='edit'){
+	    	$('#selectedRoleId').val(data.roleId);
+	    	$('#newRoleName').val(data.roleName);
+	    	$('#editModal').modal('show');
 	    }
 	  });
 	  
@@ -195,10 +226,11 @@ layui.use(['table','jquery','form'], function(){
 	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
-	      {title:'操作',width:160,templet:function(row){
+	      {title:'操作',width:200,templet:function(row){
+	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return allocate+t_delete;
+	    	  return edit+allocate+t_delete;
 	      }}
 	    ]]
 	  });
@@ -264,6 +296,35 @@ layui.use(['table','jquery','form'], function(){
         	  }
           });
 	  });
+	  
+	  $('#btnEdit').click(function(){
+		  var selectedRoleId=$('#selectedRoleId').val();
+		  if(!selectedRoleId){
+			  layer.alert('未选择角色');
+			  return;
+		  }
+		  var newRoleName=$('#newRoleName').val();
+		  if(!newRoleName){
+			 layer.msg('权限名称不能为空');
+			 return;
+	  	  }
+          $.ajax({
+        	  url:'$!{rc.contextPath}/user/role/edit',
+        	  data:{roleId:selectedRoleId,roleName:newRoleName},
+        	  dataType:'json',
+        	  type:'post',
+        	  success:function(res){
+        		  if(res.code=='200'){
+	    				layer.alert(res.msg);
+	    				$('#editModal').modal('hide');
+	    				table.reload('tab');
+	    			}else{	    				
+	    				layer.alert(res.msg);
+	    			}
+        	  }
+          });
+	  });
+	  
 });
 
 

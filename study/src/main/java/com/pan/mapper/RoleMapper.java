@@ -45,4 +45,9 @@ public interface RoleMapper {
 	 * @return
 	 */
 	public List<String> getRoleByUserId(String userId);
+	/**
+	 * 编辑角色
+	 * @param role
+	 */
+	public void updateRole(Role role);
 }

@@ -18,19 +18,26 @@ public class BaseEntity implements Serializable{
 	/**
 	 * 自增主键
 	 */
-	private Integer id;
+	protected Integer id;
 	/**
 	 * 创建时间
 	 */
-	private Date createTime;
+	protected Date createTime;
+	/**
+	 * 创建人
+	 */
+	protected String createUser;
 	/**
 	 * 更新时间
 	 */
-	private Date updateTime;
+	protected Date updateTime;
+	/**
+	 * 修改人
+	 */
+	protected String updateUser;
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -40,19 +47,23 @@ public class BaseEntity implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
+	public String getCreateUser() {
+		return createUser;
+	}
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
 	public Date getUpdateTime() {
 		return updateTime;
 	}
-
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
-	@Override
-	public String toString() {
-		return "BaseEntity [id=" + id + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + "]";
+	public String getUpdateUser() {
+		return updateUser;
+	}
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 	
 }

@@ -64,7 +64,9 @@ layui.use(['table','jquery','treeGrid','form'], function(){
           method: 'post',
           cols: [[
 			  {field:'icon',width:'80', title: '图标',templet:function(row){
-				return '<i class="layui-icon">'+row.icon+'</i>';
+				var temp=row.level*10;
+				var css='padding-left:'+temp+'px;';
+				return '<i class="layui-icon" style='+css+'>'+row.icon+'</i>';
 			  }},
               {field:'id', width:'100', title: 'id'},
               {field:'name', edit:'text',width:'200', title: '权限名'},
@@ -95,6 +97,7 @@ function showTab(title,pId,level){
 			content: form,
 			btn: ['保存', '取消'],
 			shade: false,
+			maxmin: true,
 			offset: ['50px', '20%'],
 			area: ['800px', '400px'],
 		yes: function(index) {
@@ -148,20 +151,21 @@ function showTab(title,pId,level){
 }
 
 function deleteNode(id){
-	 $.ajax({
-		 url:'$!{rc.contextPath}/user/permission/delete',
-		 type:'post',
-		 data:{permissionId:id},
-		 success:function(res){
-			 if(res.code=='200'){
-				 layer.msg('删除权限成功');
-				 treeTable.reload();
-			 }else{
-				 layer.msg(res.msg);
+	layer.confirm('确定删除该文章么', function(index){
+		 $.ajax({
+			 url:'$!{rc.contextPath}/user/permission/delete',
+			 type:'post',
+			 data:{permissionId:id},
+			 success:function(res){
+				 if(res.code=='200'){
+					 layer.msg('删除权限成功');
+					 treeTable.reload();
+				 }else{
+					 layer.msg(res.msg);
+				 }
 			 }
-		 }
-	 }); 
-	
+		 });
+	});
 }
 
 function addSub(pId){

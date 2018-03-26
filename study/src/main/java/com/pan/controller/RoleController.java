@@ -66,4 +66,16 @@ public class RoleController {
 		roleService.allocatePermissionToRole(roleId, permissions);
 		return ResultMsg.ok("分配角色权限成功");
 	}
+	
+	/**
+	 * 编辑权限
+	 * @param roleId
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/edit")
+	@ResponseBody
+	public ResultMsg editRole(Role role){
+		roleService.updateRole(role);
+		return ResultMsg.ok();
+	}
 }

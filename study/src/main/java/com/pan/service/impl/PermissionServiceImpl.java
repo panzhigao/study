@@ -48,6 +48,9 @@ public class PermissionServiceImpl implements PermissionService {
 		if(StringUtils.isBlank(permission.getpId())){
 			permission.setpId("0");
 		}
+		if(permission.getSort()==null){
+			permission.setSort(1);
+		}
 		permission.setCreateTime(new Date());
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
@@ -121,6 +124,7 @@ public class PermissionServiceImpl implements PermissionService {
 			roleTree.setId(permission.getPermissionId());
 			roleTree.setpId(permission.getpId());
 			roleTree.setIcon(permission.getIcon());
+			roleTree.setSort(permission.getSort());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
 				roleTree.setChecked(true);
 			}

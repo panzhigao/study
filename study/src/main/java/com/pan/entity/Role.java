@@ -48,6 +48,8 @@ public class Role extends BaseEntity{
 	@Override
 	public String toString() {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName
-				+ ", marker=" + marker + "]";
+				+ ", marker=" + marker + ", id=" + id + ", createTime="
+				+ createTime + ", createUser=" + createUser + ", updateTime="
+				+ updateTime + ", updateUser=" + updateUser + "]";
 	}
 }

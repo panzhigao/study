@@ -154,4 +154,9 @@ public class RoleServiceImpl implements RoleService{
 			logger.error("缓存角色权限失败,roleId:{}",roleId);
 		}
 	}
+
+	@Override
+	public void updateRole(Role role) {
+		roleMapper.updateRole(role);
+	}
 }
