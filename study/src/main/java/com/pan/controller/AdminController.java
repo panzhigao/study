@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,7 +52,9 @@ public class AdminController {
 		Set<Permission> permissions=new HashSet<Permission>();
 		for (int i = 0; i < arr.length; i++) {
 			Map<String, String> hgetAll = JedisUtils.hgetAll("role_permissions:"+arr[i]);
-			permissions.addAll(JsonUtils.mapToList(hgetAll,Permission.class));
+			if(MapUtils.isNotEmpty(hgetAll)){				
+				permissions.addAll(JsonUtils.mapToList(hgetAll,Permission.class));
+			}
 			
 		}
 		List<Tree> nodes=new ArrayList<Tree>(20);

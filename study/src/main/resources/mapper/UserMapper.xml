@@ -17,6 +17,10 @@
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
   </resultMap>
   
+  <resultMap id="MoreResultMap" type="com.pan.dto.UserDTO" extends="BaseResultMap">  
+    <result property="roleNames" column="role_names"/>  
+</resultMap> 
+  
   <sql id="Base_Column_List" >
     id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait
   </sql>
@@ -86,25 +90,39 @@
   		<if test="status !=null and status !=''">
   			and status=#{status}
   		</if>
-  		<if test="userId !=null and userId!=''">
-  			and user_id=#{userId}
+  		<if test="telephone !=null and telephone!=''">
+  			and telephone=#{telephone}
+  		</if>
+  		<if test="username !=null and username!=''">
+  			and username like CONCAT('%','${username}','%')
+  		</if>
+  		<if test="nickname !=null and nickname!=''">
+  			and nickname=#{nickname}
   		</if>
   	</where>
   </select>
   	
-  <select id="findByParams" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_user
+  <select id="findByParams" resultMap="MoreResultMap">
+  	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.password,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names 
+  	from t_user tu left join t_user_role tur on tu.user_id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
   	<where> 
   		<if test="sex !=null and sex !='' ">
-  			and sex=#{sex}
+  			and tu.sex=#{sex}
   		</if>
   		<if test="status !=null and status !=''">
-  			and status=#{status}
+  			and tu.astatus=#{status}
   		</if>
-  		<if test="userId !=null and userId!=''">
-  			and user_id=#{userId}
+  		<if test="telephone !=null and telephone!=''">
+  			and tu.telephone=#{telephone}
+  		</if>
+  		<if test="username !=null and username!=''">
+  			and tu.username like CONCAT('%','${username}','%')
+  		</if>
+  		<if test="nickname !=null and nickname!=''">
+  			and tu.nickname=#{nickname}
   		</if>
   	</where>
+  	group by tu.user_id
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>

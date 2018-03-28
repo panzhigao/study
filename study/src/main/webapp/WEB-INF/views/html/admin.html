@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用户中心</title>
     <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -81,7 +80,7 @@
 			    <!-- 顶部右侧菜单 -->
 			    <ul class="layui-nav top_menu">
 			    	<li class="layui-nav-item" style="margin-right:30px;">
-    					<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+    					<a href="javascript:;" data-url="$!{rc.contextPath}/user/message"><i class="layui-icon" data-icon="&#xe609;"></i><cite>我的消息</cite><span class="layui-badge" id="messageCount">0</span></a>
   	  				</li>
 			    	<li class="layui-nav-item showNotice" id="showNotice" pc>
 						<a href="javascript:;"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>

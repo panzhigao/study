@@ -1,9 +1,7 @@
 package com.pan.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +13,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
+import com.pan.vo.QueryUserVO;
 
 /**
  * 
@@ -41,18 +40,13 @@ public class UserManageController {
 	}
 	
 	/**
-	 * 获取文章列表信息
+	 * 获取用户列表信息
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value={"/user/userList"})
+	@RequestMapping(method=RequestMethod.POST,value={"/user/userList"})
 	@ResponseBody
-	public Map<String,Object> getUserList(Integer pageSize,Integer pageNo){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		params.put("type", "1");
-		Map<String,Object> pageData=userService.findByParams(params);
+	public Map<String,Object> getUserList(QueryUserVO queryUserVO){
+		Map<String,Object> pageData=userService.findPageData(queryUserVO);
 		return pageData;
 	}
 	
@@ -73,7 +67,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_role")
 	@ResponseBody
-	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]")String[] roles){
+	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]",required=false)String[] roles){
 		userService.allocateRoleToUser(userId, roles);
 		return ResultMsg.ok("分配用户角色成功");
 	}

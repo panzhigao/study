@@ -65,5 +65,4 @@ public class BaseEntity implements Serializable{
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
-	
 }

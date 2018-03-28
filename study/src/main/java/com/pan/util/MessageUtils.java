@@ -6,6 +6,11 @@ import org.springframework.web.socket.TextMessage;
 
 import com.pan.websocket.MyHandler;
 
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class MessageUtils {
 	
 	private static MyHandler myHandler;

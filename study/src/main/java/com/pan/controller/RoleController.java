@@ -62,7 +62,7 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_permission")
 	@ResponseBody
-	public ResultMsg allocatePermission(String roleId,@RequestParam(value = "permissions[]")String[] permissions){
+	public ResultMsg allocatePermission(String roleId,@RequestParam(value = "permissions[]",required=false)String[] permissions){
 		roleService.allocatePermissionToRole(roleId, permissions);
 		return ResultMsg.ok("分配角色权限成功");
 	}

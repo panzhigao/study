@@ -3,7 +3,8 @@ package com.pan.util;
 import java.util.Random;
 
 /**
- * redis分布式同步锁
+ * 
+ * @author panzhigao-wb
  *
  */
 public class RedisLock {

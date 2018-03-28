@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ import com.pan.util.PasswordUtils;
 import com.pan.util.RegexUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
+import com.pan.vo.QueryUserVO;
 
 /**
  * 
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService{
 	/**
 	 * 图片访问路径
 	 */
-	@Value("${picture.url=}")
+	@Value("${picture.url}")
 	private String imgUrl;
 	
 	/**
@@ -250,15 +252,15 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Map<String, Object> findByParams(Map<String, Object> params) {
+	public Map<String, Object> findPageData(QueryUserVO queryUserVO) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<User> list = new ArrayList<User>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
-			int total=userMapper.getCountByParams(params);
+			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryUserVO));
+			int total=userMapper.getCountByParams(queryUserVO);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = userMapper.findByParams(params);
+				list = userMapper.findByParams(queryUserVO);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -279,15 +281,19 @@ public class UserServiceImpl implements UserService{
 		//TODO 增加日志
 		//删除该用户下的所有角色，再重新添加
 		userMapper.deleteUserRoleByUserId(userId);
-		List<UserRole> list=new ArrayList<UserRole>();
-		for (String role : roles) {
-			UserRole userRole=new UserRole();
-			userRole.setRoleId(role);
-			userRole.setUserId(userId);
-			userRole.setCreateTime(new Date());
-			list.add(userRole);
+		if(ArrayUtils.isNotEmpty(roles)){
+			List<UserRole> list=new ArrayList<UserRole>();
+			for (String role : roles) {
+				UserRole userRole=new UserRole();
+				userRole.setRoleId(role);
+				userRole.setUserId(userId);
+				userRole.setCreateTime(new Date());
+				list.add(userRole);
+			}
+			userMapper.addUserRole(list);
+		}else{
+			roles=new String[0];
 		}
-		userMapper.addUserRole(list);
 		JedisUtils.setString("user_roles:"+userId, JsonUtils.toJson(roles));
 	}
 

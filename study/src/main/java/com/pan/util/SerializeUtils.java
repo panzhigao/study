@@ -9,6 +9,11 @@ import java.io.ObjectOutputStream;
 
 import com.pan.common.exception.BusinessException;
 
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 public class SerializeUtils {
 	
 	public static byte[] serialize(Object value) {

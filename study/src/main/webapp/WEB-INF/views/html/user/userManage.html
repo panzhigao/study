@@ -19,8 +19,16 @@
       
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
+	      <div class="layui-tab-item layui-show">
+		         用户账号：
+	    	<div class="layui-inline">
+	    		<input placeholder="请输入用户账号" class="layui-input" name="userName" id="userNameInput" autocomplete="off">
+	    	</div>
+	    
+	    	<button class="layui-btn" data-type="reload" id="search">搜索</button>
+	    	
 	    	<table id="userListTab" lay-filter="myTable"></table>
-	    </div>
+	     </div>
       </div>
     </div>
   </div>
@@ -72,6 +80,20 @@ layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ ;
 	  var form=layui.form;
+	  var active = {
+			    reload: function(){
+			        var userNameInput = $('#userNameInput');
+			        //执行重载
+			        table.reload('userTab', {
+			          page: {
+			            curr: 1 //重新从第 1 页开始
+			          }
+			          ,where: {
+			        	  username: userNameInput.val(),
+			          }
+			        });
+			      }
+			    };
 	  //监听工具条
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
@@ -103,8 +125,8 @@ layui.use(['table','jquery','form'], function(){
 	  
 	  //第一个实例
 	  table.render({
-		id: 'articlesTab',  
-	    //method: 'post',  
+		id: 'userTab',  
+	    method: 'post',  
 	    elem: '#userListTab',
 	    height: 500,
 	    request: {
@@ -145,6 +167,7 @@ layui.use(['table','jquery','form'], function(){
 	      {field: 'lastLoginTime', title: '最近登录时间', width:200, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.lastLoginTime));
 	      }},
+	      {field: 'roleNames', title: '拥有角色', width:200},
 	      {title:'操作',width:160,templet:function(row){
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配角色</a>';
 	    	  return allocate;
@@ -152,16 +175,11 @@ layui.use(['table','jquery','form'], function(){
 	    ]]
 	  });
 	  
-	  
-	  var status='';
-	  function reload(tableId){
-		 //执行重载
-		 table.reload(tableId, {
-		 page: {curr: 1},
-		 where: {status:status}
-		 }); 
-	  }
-	  	    		  	  
+	  $('#search').on('click', function(){
+		   var type = $(this).data('type');
+		   active[type] ? active[type].call(this) : '';
+	  });
+	  	  	    		  	  
 	  var form = layui.form;
 	  xtree3= new layuiXtree({
           elem: 'xtree3'                  
@@ -212,6 +230,7 @@ layui.use(['table','jquery','form'], function(){
         		  if(res.code=='200'){
 	    				layer.alert(res.msg);
 	    				$('#myTree').modal('hide');
+	    				active.reload();
 	    			}else{	    				
 	    				layer.alert(res.msg);
 	    			}

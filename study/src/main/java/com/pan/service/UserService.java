@@ -1,8 +1,10 @@
 package com.pan.service;
 
 import java.util.Map;
+
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
+import com.pan.vo.QueryUserVO;
 
 /**
  * 
@@ -82,7 +84,7 @@ public interface UserService {
 	 * @param params
 	 * @return
 	 */
-	public Map<String,Object> findByParams(Map<String,Object> params);
+	public Map<String,Object> findPageData(QueryUserVO queryUserVO);
 	/**
 	 * 为用户分配角色
 	 * @param userId

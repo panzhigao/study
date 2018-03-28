@@ -12,6 +12,11 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+/**
+ * 
+ * @author panzhigao-wb
+ *
+ */
 @Service
 public class MyHandler extends TextWebSocketHandler{
 	
