@@ -607,6 +607,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
   
   //固定Bar
+  /*
   util.fixbar({
     bar1: '&#xe642;'
     ,bgcolor: '#009688'
@@ -617,7 +618,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       }
     }
   });
-
+*/
   exports('fly', fly);
 
 });

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.pan.dto.Tree;
 import com.pan.entity.Role;
+import com.pan.vo.QueryRoleVO;
 
 /**
  * 
@@ -22,7 +23,13 @@ public interface RoleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public Map<String,Object> findByParams(Map<String,Object> params);
+	public Map<String,Object> findPageData(QueryRoleVO queryRoleVO);
+	/**
+	 * 多条件查询，支持分页
+	 * @param params 条件有userId,articleId
+	 * @return
+	 */
+	public List<Role> findByParams(QueryRoleVO queryRoleVO);
 	/**
 	 * 删除角色
 	 * @param roleId 角色id

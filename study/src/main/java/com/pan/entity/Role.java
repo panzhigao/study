@@ -26,6 +26,10 @@ public class Role extends BaseEntity{
 	 * 是否选中
 	 */
 	private String marker;
+	/**
+	 * 是否是超级管理员
+	 */
+	private String superAdminFlag;
 	public String getRoleId() {
 		return roleId;
 	}
@@ -45,11 +49,17 @@ public class Role extends BaseEntity{
 	public void setMarker(String marker) {
 		this.marker = marker;
 	}
+	
+	public String getSuperAdminFlag() {
+		return superAdminFlag;
+	}
+	public void setSuperAdminFlag(String superAdminFlag) {
+		this.superAdminFlag = superAdminFlag;
+	}
 	@Override
 	public String toString() {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName
-				+ ", marker=" + marker + ", id=" + id + ", createTime="
-				+ createTime + ", createUser=" + createUser + ", updateTime="
-				+ updateTime + ", updateUser=" + updateUser + "]";
+				+ ", marker=" + marker + ", superAdminFlag=" + superAdminFlag
+				+ "]";
 	}
 }

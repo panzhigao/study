@@ -18,7 +18,9 @@ import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
 import com.pan.entity.Role;
+import com.pan.entity.RolePermission;
 import com.pan.mapper.PermissionMapper;
+import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.BeanUtils;
@@ -27,6 +29,7 @@ import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.vo.QueryRoleVO;
 
 
 /**
@@ -45,6 +48,9 @@ public class PermissionServiceImpl implements PermissionService {
 	@Autowired
 	private RoleService roleService;
 	
+	@Autowired
+	private RolePermissionMapper rolePermissionMapper;
+	
 	@Override
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
@@ -60,6 +66,17 @@ public class PermissionServiceImpl implements PermissionService {
 		permission.setCreateUser(loginUserId);
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
+		QueryRoleVO queryRoleVO=new QueryRoleVO();
+		queryRoleVO.setSuperAdminFlag("1");
+		//自动为超级管理员添加权限
+		List<Role> list = roleService.findByParams(queryRoleVO);
+		if(list.size()>0){
+			String roleId=list.get(0).getRoleId();
+			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
+			List<RolePermission> roles=new ArrayList<>();
+			roles.add(rolePermission);
+			rolePermissionMapper.addRolePermission(roles);
+		}
 	}
 
 	@Override

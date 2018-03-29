@@ -32,15 +32,21 @@ public class LoginInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		User loginUser = CookieUtils.getLoginUser(request);
-		if(loginUser==null){
-			logger.info("用户未登录");
+		if(loginUser==null||User.STATUS_BLOCKED.equals(loginUser.getStatus())){
+			String message="";
+			if(loginUser==null){
+				message="用户未登录";
+			}else if(User.STATUS_BLOCKED.equals(loginUser.getStatus())){
+				message="用户被禁用";
+			}
+			logger.info(message);
 			if(isAjax(request)){
 				response.setCharacterEncoding("UTF-8");
 				response.setContentType("application/json; charset=utf-8");  
 	            PrintWriter writer= null;
 				 try {  
 					 writer=response.getWriter(); 
-	                 ResultMsg resultMsg=ResultMsg.fail("请先登录");
+	                 ResultMsg resultMsg=ResultMsg.fail(message);
 	                 writer.write(JsonUtils.toJson(resultMsg));
 	                 writer.flush();  
 	             } catch (IOException e) {  

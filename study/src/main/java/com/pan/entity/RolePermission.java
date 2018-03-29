@@ -1,5 +1,7 @@
 package com.pan.entity;
 
+import java.util.Date;
+
 /**
  * 
  * @author panzhigao-wb
@@ -32,6 +34,16 @@ public class RolePermission extends BaseEntity{
 	}
 	public void setPermissionId(String permissionId) {
 		this.permissionId = permissionId;
+	}
+	
+	public RolePermission() {
+		super();
+	}
+	public RolePermission(String roleId, String permissionId) {
+		super();
+		this.roleId = roleId;
+		this.permissionId = permissionId;
+		this.createTime=new Date();
 	}
 	@Override
 	public String toString() {

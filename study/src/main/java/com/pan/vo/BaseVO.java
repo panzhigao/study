@@ -24,6 +24,9 @@ public class BaseVO {
 		this.pageNo = pageNo;
 	}
 	public Integer getOffset(){
+		if(pageNo==null||pageSize==null){
+			return null;
+		}
 		return (this.pageNo-1)*this.pageSize;
 	}
 	public Integer getRow(){

@@ -4,19 +4,17 @@
   <meta charset="utf-8">
   <title>帐号设置</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="fly,layui,前端社区">
-  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
-  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+  <link href="$!{rc.contextPath}/static/css/bootstrap.css" rel="stylesheet">
+  <link href="$!{rc.contextPath}/static/css/font-awesome/css/font-awesome.min.css" rel="stylesheet"> 
   <link href="$!{rc.contextPath}/static/css/cropper.min.css" rel="stylesheet">
   <link href="$!{rc.contextPath}/static/css/sitelogo.css" rel="stylesheet">
-  <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
-  <script src="$!{rc.contextPath}/static/js/cropper.js"></script>
-  <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
-  <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/cropper.js"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/sitelogo.js"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/html2canvas.min.js" charset="utf-8"></script>
 </head>
 <body class="childrenBody" style="height:2500px;">
   <div class="fly-panel fly-panel-user" pad20>
@@ -183,9 +181,8 @@
 	</div>
 </div>
 	
-<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
-<script src="$!{rc.contextPath}/static/js/util.js"></script>
-<!-- <script src="$!{rc.contextPath}/static/js/jquery.js"></script> -->
+<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -260,8 +257,6 @@ layui.use(['jquery', 'form'], function(){
 		   send(tel);
 		});
 		
-		//$("#modalDialog").draggable();//为模态对话框添加拖拽
-        //$("#avatar-modal").css("overflow", "hidden");//禁止模态对话框的半透明背景滚动
 });
 
 //提交修改用户信息

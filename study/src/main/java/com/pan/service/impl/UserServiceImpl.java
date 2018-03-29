@@ -312,14 +312,18 @@ public class UserServiceImpl implements UserService{
 			message="禁用账号成功";
 			userMapper.updateUserByUserId(user);
 			User loginUser = CookieUtils.getLoginUser();
-			loginUser.setStatus(status);
-			CookieUtils.setLoginUser(loginUser);
+			if(loginUser!=null){
+				loginUser.setStatus(status);
+				CookieUtils.setLoginUser(loginUser);
+			}
 		}else if(User.STATUS_NORMAL.equals(status)){
 			message="启用账号成功";
 			userMapper.updateUserByUserId(user);
 			User loginUser = CookieUtils.getLoginUser();
-			loginUser.setStatus(status);
-			CookieUtils.setLoginUser(loginUser);
+			if(loginUser!=null){
+				loginUser.setStatus(status);
+				CookieUtils.setLoginUser(loginUser);
+			}
 		}else{
 			message="操作错误，请稍后重试";
 		}	

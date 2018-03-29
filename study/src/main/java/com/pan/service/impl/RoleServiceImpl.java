@@ -28,6 +28,7 @@ import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.vo.QueryRoleVO;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -55,15 +56,15 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public Map<String, Object> findByParams(Map<String, Object> params) {
+	public Map<String, Object> findPageData(QueryRoleVO queryRoleVO) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Role> list = new ArrayList<Role>();
 		try {
-			logger.info("分页权限参数为:{}", JsonUtils.toJson(params));
-			int total=roleMapper.getCountByParams(params);
+			logger.info("分页权限参数为:{}", JsonUtils.toJson(queryRoleVO));
+			int total=roleMapper.getCountByParams(queryRoleVO);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = roleMapper.findByParams(params);
+				list = roleMapper.findByParams(queryRoleVO);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -111,9 +112,9 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public Role findByRoleId(String roleId) {
-		Map<String,Object> params=new HashMap<String, Object>(1);
-		params.put("roleId", roleId);
-		List<Role> list = roleMapper.findByParams(params);
+		QueryRoleVO queryRoleVO=new QueryRoleVO();
+		queryRoleVO.setRoleId(roleId);
+		List<Role> list = roleMapper.findByParams(queryRoleVO);
 		if(list.size()==1){
 			return list.get(0);
 		}
@@ -143,7 +144,7 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public List<Role> findAll() {
-		return roleMapper.findByParams(new HashMap<String,Object>(1));
+		return roleMapper.findByParams(new QueryRoleVO());
 	}
 
 	@Override
@@ -176,5 +177,10 @@ public class RoleServiceImpl implements RoleService{
 		String loginUserId = CookieUtils.getLoginUserId();
 		role.setUpdateUser(loginUserId);
 		roleMapper.updateRole(role);
+	}
+
+	@Override
+	public List<Role> findByParams(QueryRoleVO queryRoleVO) {
+		return roleMapper.findByParams(queryRoleVO);
 	}
 }

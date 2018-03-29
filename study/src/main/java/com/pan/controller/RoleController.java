@@ -1,18 +1,16 @@
 package com.pan.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
 import com.pan.service.RoleService;
+import com.pan.vo.QueryRoleVO;
 
 /**
  * 角色管理
@@ -39,13 +37,8 @@ public class RoleController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/get_roles")
 	@ResponseBody
-	public Map<String,Object> loadRoles(Integer pageSize,Integer pageNo,String roleName){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		params.put("roleName", roleName);
-		Map<String,Object> pageData=roleService.findByParams(params);
+	public Map<String,Object> loadRoles(QueryRoleVO queryRoleVO){
+		Map<String,Object> pageData=roleService.findPageData(queryRoleVO);
 		return pageData;
 	}
 	

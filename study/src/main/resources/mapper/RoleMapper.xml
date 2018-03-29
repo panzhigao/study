@@ -9,10 +9,11 @@
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="create_user"        property="createUser"      jdbcType="VARCHAR" />
     <result column="marker"             property="marker"          jdbcType="VARCHAR" />
+    <result column="super_admin_flag"   property="superAdminFlag"    jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,role_id,role_name,create_time,create_user
+    id,role_id,role_name,create_time,create_user,super_admin_flag
   </sql>
   
   <select id="findByParams" resultMap="BaseResultMap">
@@ -23,6 +24,9 @@
 	  	</if>
 	  	<if test="roleId !=null and roleId !=''">
 	  			and role_id=#{roleId}
+	  	</if>
+	  	<if test="superAdminFlag !=null and superAdminFlag !=''">
+	  			and super_admin_flag=#{superAdminFlag}
 	  	</if>
   	</where>
   	order by create_time desc
@@ -37,11 +41,17 @@
 	  		<if test="roleName !=null and roleName !=''">
 	  			and role_name like CONCAT('%','${roleName}','%')
 	  		</if>
+	  		<if test="roleId !=null and roleId !=''">
+	  			and role_id=#{roleId}
+	  		</if>
+	  		<if test="superAdminFlag !=null and superAdminFlag !=''">
+	  			and super_admin_flag=#{superAdminFlag}
+	  	</if>
 	  	</where>
     </select>
    
   <insert id="addRole" parameterType="com.pan.entity.Role">
-  	insert into t_role (<include refid="Base_Column_List"/>) values (null,#{roleId,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{createUser,jdbcType=VARCHAR})
+  	insert into t_role (<include refid="Base_Column_List"/>) values (null,#{roleId,jdbcType=VARCHAR},#{roleName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{createUser,jdbcType=VARCHAR},#{superAdminFlag,jdbcType=VARCHAR})
   </insert>
   
   <delete id="deleteRole">
