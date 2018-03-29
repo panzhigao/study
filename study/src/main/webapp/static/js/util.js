@@ -51,7 +51,7 @@ function tranTime(fromTime){
 function websocketConnect(){
 	$.post('/study/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://www.pan.com:8080/study/myHandler")
+	var ws = new WebSocket("ws://localhost:8080/study/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
@@ -66,7 +66,9 @@ function websocketConnect(){
 	  var message=JSON.parse(msg.data);
 	  //系统消息
 	  if(message&&message.messageType==3){
-		  showMessage(message);
+		  //showMessage(message);
+		  showNotice(message.commentContent);
+		  window.sessionStorage.setItem('message',message.commentContent);
 	  }else{//个人消息树增加
 		  var count=$("#messageCount").html()|0;
 	      $("#messageCount").html(++count);
