@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <title>Fly Template v3.0，基于 layui 的极简社区页面模版</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="fly,layui,前端社区">
-  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
@@ -88,8 +86,8 @@
         
         <!-- 用户登入后显示 -->
         #if($user)
-        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/my_articles">我发表的贴</a></li> 
-        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/my_articles#collection">我收藏的贴</a></li> 
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/admin?div=my_articles">我发表的贴</a></li> 
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/admin?div=my_articles#collection">我收藏的贴</a></li> 
         #end
       </ul> 
       

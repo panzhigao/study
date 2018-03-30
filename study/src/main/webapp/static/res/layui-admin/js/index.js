@@ -82,16 +82,50 @@ layui.config({
 		}
 	})
 	
-	if(window.sessionStorage.getItem("menu") == null||window.sessionStorage.getItem("curmenu") == '"undefined"'){
+	//if(window.sessionStorage.getItem("menu") == null||window.sessionStorage.getItem("curmenu") == '"undefined"'){
 		var params=getRequest();
-		if(params['div']=='message'){
+		var div=params['div'];
+		if(div){
+			var title='';
+			switch(div){
+				case 'message':title='我的消息';break;
+				case 'collection':title='我的收藏';div='my_articles#collection';break;
+				case 'my_articles':title='我的文章';break;
+				case 'articleAdd':title='发表新帖';break;
+				case 'set':title='基本设置';break;
+				default:break;
+			}
+			if(!title){
+				return;
+			}
 			var layId=new Date().getTime();
-			var curMenu={'icon':'&#xe705;','title':'我的消息','href':'/study/user/message','layId':layId};
-			var menu=[curMenu];
+			var curMenu={'icon':'&#xe705;','title':title,'href':'/study/user/'+div,'layId':layId};
+			var temp=window.sessionStorage.getItem("menu");
+			var arr=new Array();
+			if(temp){
+				var menus=JSON.parse(temp);
+				if(menus.length>0){					
+					arr=menus;
+				}
+				var flag=false;
+				for(var i=0;i<menus.length;i++){
+					var one=menus[i];
+					if(one.title==curMenu.title){
+						flag=true;
+						break;
+					}
+					
+				}
+				if(!flag){	
+					arr.push(curMenu);				
+				}
+			}else{
+				arr.push(curMenu);
+			}
 			window.sessionStorage.setItem('curmenu',JSON.stringify(curMenu));
-			window.sessionStorage.setItem('menu',JSON.stringify(menu));
+			window.sessionStorage.setItem('menu',JSON.stringify(arr));
 		}
-	}
+	//}
 
 	
 	//刷新后还原打开的窗口

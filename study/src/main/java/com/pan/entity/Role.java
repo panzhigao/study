@@ -56,6 +56,9 @@ public class Role extends BaseEntity{
 	public void setSuperAdminFlag(String superAdminFlag) {
 		this.superAdminFlag = superAdminFlag;
 	}
+	public boolean isSuperAdmin(){
+		return "1".equals(this.superAdminFlag);
+	}
 	@Override
 	public String toString() {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName

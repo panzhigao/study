@@ -49,6 +49,7 @@ public class RoleServiceImpl implements RoleService{
 		String loginUserId = CookieUtils.getLoginUserId();
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
+		role.setSuperAdminFlag("0");
 		role.setRoleId(IdUtils.generateRoleId());
 		roleMapper.addRole(role);
 	}
@@ -77,6 +78,13 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Override
 	public void deleteRole(String roleId) {
+		Role roleInDb = this.findByRoleId(roleId);
+		if(roleInDb==null){
+			throw new BusinessException("该角色不存在");
+		}
+		if(roleInDb.isSuperAdmin()){
+			throw new BusinessException("超级管理员不能删除");
+		}
 		//删除角色信息
 		roleMapper.deleteRole(roleId);
 		//删除角色下关联的权限
@@ -90,6 +98,9 @@ public class RoleServiceImpl implements RoleService{
 		Role role = findByRoleId(roleId);
 		if(role==null){
 			throw new BusinessException("该角色不存在");
+		}
+		if(role.isSuperAdmin()){
+			throw new BusinessException("超级管理员不能编辑");
 		}
 		//TODO 增加日志
 		//删除该角色下的所有权限，再重新添加

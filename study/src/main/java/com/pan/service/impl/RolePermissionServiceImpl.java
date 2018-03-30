@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.pan.entity.RolePermission;
+import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.RolePermissionService;
 
 /**
@@ -13,24 +15,25 @@ import com.pan.service.RolePermissionService;
  * @version 创建时间：2018年3月30日 上午9:25:19
  * 类说明
  */
+@Service
 public class RolePermissionServiceImpl implements RolePermissionService{
 	
 	@Autowired
-	private RolePermissionService rolePermissionService;
+	private RolePermissionMapper rolePermissionMapper;
 	
 	@Override
 	public void deleteRolePermissionByPermissionId(String permissionId) {
-		rolePermissionService.deleteRolePermissionByPermissionId(permissionId);
+		rolePermissionMapper.deleteRolePermissionByPermissionId(permissionId);
 	}
 
 	@Override
 	public void deleteRolePermissionByRoleId(String roleId) {
-		rolePermissionService.deleteRolePermissionByRoleId(roleId);
+		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
 	}
 
 	@Override
 	public void addRolePermission(List<RolePermission> list) {
-		rolePermissionService.addRolePermission(list);
+		rolePermissionMapper.addRolePermission(list);
 	}
 
 	@Override

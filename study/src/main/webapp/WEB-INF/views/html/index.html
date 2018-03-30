@@ -41,7 +41,7 @@
       #else
       <!-- 登入后的状态 -->
       <li class="layui-nav-item" style="margin-right:30px;">
-    	<a href="$!{rc.contextPath}/user/message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
+    	<a href="$!{rc.contextPath}/user/admin?div=message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
   	  </li>
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
@@ -51,8 +51,8 @@
           <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="$!{rc.contextPath}/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="$!{rc.contextPath}/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/admin?div=set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/admin?div=message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
@@ -77,14 +77,14 @@
       
       <!-- 用户登入后显示 -->
       #if($user)
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/center">我发表的贴</a></li> 
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/admin?div=my_articles">我发表的贴</a></li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="$!{rc.contextPath}/user/admin?div=collection">我收藏的贴</a></li> 
       #end
     </ul> 
     
     <div class="fly-column-right layui-hide-xs"> 
       <span class="fly-search"><i class="layui-icon"></i></span> 
-      <a href="$!{rc.contextPath}/user/articleAdd" class="layui-btn">发表新帖</a> 
+      <a href="$!{rc.contextPath}/user/admin?div=articleAdd" class="layui-btn">发表新帖</a> 
     </div> 
     <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
       <a href="jie/add.html" class="layui-btn">发表新帖</a> 
