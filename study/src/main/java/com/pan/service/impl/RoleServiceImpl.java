@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,15 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.mapper.RoleMapper;
-import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.PermissionService;
+import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
@@ -42,7 +40,7 @@ public class RoleServiceImpl implements RoleService{
 	private PermissionService permissionService;
 	
 	@Autowired
-	private RolePermissionMapper rolePermissionMapper;
+	private RolePermissionService rolePermissionService;
 
 	@Override
 	public void addRole(Role role) {
@@ -82,7 +80,7 @@ public class RoleServiceImpl implements RoleService{
 		//删除角色信息
 		roleMapper.deleteRole(roleId);
 		//删除角色下关联的权限
-		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
+		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		//清除缓存中角色的权限信息
 		JedisUtils.delete("role_permissions:"+roleId);
 	}
@@ -95,7 +93,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 		//TODO 增加日志
 		//删除该角色下的所有权限，再重新添加
-		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
+		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		if(ArrayUtils.isNotEmpty(permissions)){
 			List<RolePermission> list=new ArrayList<RolePermission>();
 			for (String string : permissions) {
@@ -105,7 +103,7 @@ public class RoleServiceImpl implements RoleService{
 				rolePermission.setCreateTime(new Date());
 				list.add(rolePermission);
 			}
-			rolePermissionMapper.addRolePermission(list);
+			rolePermissionService.addRolePermission(list);
 		}
 		recachePermissionByRoleId(roleId);
 	}

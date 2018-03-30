@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
@@ -20,8 +19,8 @@ import com.pan.entity.Permission;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.mapper.PermissionMapper;
-import com.pan.mapper.RolePermissionMapper;
 import com.pan.service.PermissionService;
+import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
 import com.pan.util.BeanUtils;
 import com.pan.util.CookieUtils;
@@ -49,7 +48,7 @@ public class PermissionServiceImpl implements PermissionService {
 	private RoleService roleService;
 	
 	@Autowired
-	private RolePermissionMapper rolePermissionMapper;
+	private RolePermissionService rolePermissionService;
 	
 	@Override
 	public void addPermission(Permission permission) {
@@ -73,9 +72,7 @@ public class PermissionServiceImpl implements PermissionService {
 		if(list.size()>0){
 			String roleId=list.get(0).getRoleId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
-			List<RolePermission> roles=new ArrayList<>();
-			roles.add(rolePermission);
-			rolePermissionMapper.addRolePermission(roles);
+			rolePermissionService.addRolePermission(rolePermission);
 		}
 	}
 
