@@ -329,4 +329,9 @@ public class UserServiceImpl implements UserService{
 		}	
 		return message;
 	}
+
+	@Override
+	public int findRoleUserCountByRoleId(String roleId) {
+		return userMapper.findRoleUserCountByRoleId(roleId);
+	}
 }

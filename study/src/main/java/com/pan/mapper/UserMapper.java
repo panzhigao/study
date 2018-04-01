@@ -60,4 +60,10 @@ public interface UserMapper {
 	 * @param userId
 	 */
 	public void deleteUserRoleByUserId(String userId);
+	/**
+	 * 查找使用角色的用户数
+	 * @param roleId
+	 * @return
+	 */
+	public int findRoleUserCountByRoleId(String roleId);
 }

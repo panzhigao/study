@@ -97,4 +97,10 @@ public interface UserService {
 	 * @param status
 	 */
 	public String changeUserStatus(String userId,String status);
+	/**
+	 * 查找使用角色的用户数
+	 * @param roleId
+	 * @return
+	 */
+	public int findRoleUserCountByRoleId(String roleId);
 }

@@ -135,7 +135,12 @@
   	</foreach>
   </insert>	
   
-    <delete id="deleteUserRoleByUserId">
+  <!-- 根据角色查找使用该角色的用户数 -->
+  <select id="findRoleUserCountByRoleId" resultType="int">
+  	select count(0) from t_user_role where role_id=#{roleId}
+  </select>
+  
+  <delete id="deleteUserRoleByUserId">
   	delete from t_user_role where user_id=#{userId}
   </delete>
 </mapper>

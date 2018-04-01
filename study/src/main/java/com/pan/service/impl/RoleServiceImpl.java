@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
@@ -21,6 +23,7 @@ import com.pan.mapper.RoleMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
+import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
@@ -41,7 +44,10 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private RolePermissionService rolePermissionService;
-
+	
+	@Autowired
+	private UserService userService;
+	
 	@Override
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
@@ -84,6 +90,10 @@ public class RoleServiceImpl implements RoleService{
 		}
 		if(roleInDb.isSuperAdmin()){
 			throw new BusinessException("超级管理员不能删除");
+		}
+		int count = userService.findRoleUserCountByRoleId(roleId);
+		if(count>0){
+			throw new BusinessException("改角色已使用，不能被删除");
 		}
 		//删除角色信息
 		roleMapper.deleteRole(roleId);
