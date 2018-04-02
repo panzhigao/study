@@ -139,10 +139,20 @@ layui.use(['table','jquery'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){
+	    	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
+        	  var p_delete='#hasPermission("/user/permission/delete") 1 #end';
+	    	  
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-	    	  return detail+edit+t_delete;
+	    	  var show='';
+	    	  if(p_edit){
+	    		  show+=edit;
+	    	  }
+	    	  if(p_delete){
+	    		  show+=t_delete;
+	    	  }
+	    	  return detail+show;
 	      }}
 	    ]]
 	  });

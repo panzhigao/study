@@ -14,7 +14,11 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-btn-group">
+ 
+		    	#hasPermission("/user/permission/add")
 		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
+				#end
+				
 	  		</div>
 	    </div>
       	<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
@@ -51,7 +55,7 @@ layui.use(['table','jquery','treeGrid','form'], function(){
 		  $('#selectPId').val('');
 	  });
 	  
-	      	  
+ 
 	  treeTable =treeGrid.render({
 		  id: 'tab', 
           elem: '#treeTable',
@@ -72,15 +76,36 @@ layui.use(['table','jquery','treeGrid','form'], function(){
               {field:'name', edit:'text',width:'160', title: '权限名'},
               {field:'url', edit:'text',width:'220', title: '权限url'},
               {field:'type', width:'80', title: '类型',templet:function(row){
-            	  return row.type=='0'?'菜单':'链接';
+            	  var show='';
+            	  switch(row.type){
+	            	  case '0':show='菜单';break;
+	            	  case '1':show='链接';break;
+	            	  case '2':show='按钮';break;
+	            	  default :break;
+            	  }
+            	  return show;
     	      }},
               {field:'sort', width:'80', title: '排序'},
               {field:'pId', width:'100', title: 'pId'},
               {field:'ids',width:'250', title: '编辑',templet:function(row){
+            	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
+            	  var p_add='#hasPermission("/user/permission/add") 1 #end';
+            	  var p_delete='#hasPermission("/user/permission/delete") 1 #end';
+            	  
             	  var edit='<a class="layui-btn layui-btn-xs" onclick="edit(\''+row.id+'\')">编辑</a>';
             	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub(\''+row.id+'\')">新增子权限</a>';
     	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteNode(\''+row.id+'\')">删除</a>';
-    	    	  return edit+add+t_delete;
+    	    	  var show='';
+    	    	  if(p_edit){
+    	    		  show+=edit;
+    	    	  }
+    	    	  if(p_add){
+    	    		  show+=add;
+    	    	  }
+    	    	  if(p_delete){
+    	    		  show+=t_delete;
+    	    	  }
+    	    	  return show;
     	      }}
           ]],
           page:false

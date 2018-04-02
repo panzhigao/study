@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.druid.support.json.JSONUtils;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
@@ -75,7 +73,7 @@ public class PermissionServiceImpl implements PermissionService {
 			String roleId=list.get(0).getRoleId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
 			rolePermissionService.addRolePermission(rolePermission);
-			JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JSONUtils.toJSONString(permission));
+			JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permission));
 		}
 	}
 

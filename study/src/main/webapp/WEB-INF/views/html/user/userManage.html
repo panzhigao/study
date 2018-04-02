@@ -153,9 +153,13 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
+	    	  	  var p='#hasPermission("/user/manage/changeStatus") 1 #end';
 		    	  var temp='';
 		    	  if(d.status=='1'){
 		    		  var temp='checked';
+		    		  if(!p){
+		    			  temp+='  disabled';
+		    		  }
 		    	  }
 		    	  var s='<input value="1" userid="'+d.userId+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" '+temp+'>';
 		    	  return s;
@@ -169,8 +173,13 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'roleNames', title: '拥有角色', width:200},
 	      {title:'操作',width:160,templet:function(row){
+	    	  var p_allocate='#hasPermission("/user/role/allocate_role") 1 #end';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配角色</a>';
-	    	  return allocate;
+	    	  var show='';
+	    	  if(p_allocate){
+	    		  show+=allocate;
+	    	  }
+	    	  return show;
 	      }}
 	    ]]
 	  });

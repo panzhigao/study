@@ -59,6 +59,9 @@ public class AdminController {
 		}
 		List<Tree> nodes=new ArrayList<Tree>(20);
 		for (Permission permission : permissions) {
+			if("2".equals(permission.getType())){
+				continue;
+			}
 			Tree roleTree=new Tree();
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());

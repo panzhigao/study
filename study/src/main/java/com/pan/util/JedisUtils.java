@@ -438,4 +438,19 @@ public class JedisUtils {
 		}
 		return res;
 	}
+	
+	public static String hget(String key,String field) {
+		Jedis jedis = null;
+		String res=null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.hget(key, field);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
 }
