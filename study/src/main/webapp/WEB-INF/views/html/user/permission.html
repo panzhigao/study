@@ -15,9 +15,9 @@
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-btn-group">
  
-		    	#hasPermission("/user/permission/add")
+		    	
 		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
-				#end
+				
 				
 	  		</div>
 	    </div>
@@ -73,8 +73,8 @@ layui.use(['table','jquery','treeGrid','form'], function(){
 				return '<i class="layui-icon" style='+css+'>'+row.icon+'</i>';
 			  }},
               {field:'id', width:'100', title: 'id'},
-              {field:'name', edit:'text',width:'160', title: '权限名'},
-              {field:'url', edit:'text',width:'220', title: '权限url'},
+              {field:'name',width:'160', title: '权限名'},
+              {field:'url',width:'220', title: '权限url'},
               {field:'type', width:'80', title: '类型',templet:function(row){
             	  var show='';
             	  switch(row.type){
@@ -89,8 +89,8 @@ layui.use(['table','jquery','treeGrid','form'], function(){
               {field:'pId', width:'100', title: 'pId'},
               {field:'ids',width:'250', title: '编辑',templet:function(row){
             	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
-            	  var p_add='#hasPermission("/user/permission/add") 1 #end';
-            	  var p_delete='#hasPermission("/user/permission/delete") 1 #end';
+            	  var p_add='#hasPermission("/user/permission/doAdd") 1 #end';
+            	  var p_delete='#hasPermission("/user/permission/doDelete") 1 #end';
             	  
             	  var edit='<a class="layui-btn layui-btn-xs" onclick="edit(\''+row.id+'\')">编辑</a>';
             	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub(\''+row.id+'\')">新增子权限</a>';
@@ -119,7 +119,7 @@ layui.use(['table','jquery','treeGrid','form'], function(){
 });
 
 function showTab(title,pId,level){
-	$.get('$!{rc.contextPath}/user/permissionAdd', null, function(form) {
+	$.get('$!{rc.contextPath}/user/permission/addPage', null, function(form) {
 	if(form.code=='400'){
 		layer.msg(form.msg);
 		return;
@@ -169,7 +169,7 @@ function showTab(title,pId,level){
 				data.field['pId']=pId;
 				data.field['level']=level;
 				 $.ajax({
-					 url:'$!{rc.contextPath}/user/permission/add',
+					 url:'$!{rc.contextPath}/user/permission/doAdd',
 					 type:'post',
 					 data:data.field,
 					 success:function(res){

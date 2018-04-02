@@ -176,7 +176,7 @@ layui.use(['laypage', 'layer','jquery'], function(){
 
 function getData($){
 	$.ajax({
-		url:'$!{rc.contextPath}/article/get_articles',
+		url:'$!{rc.contextPath}/article/getPageData',
 		type:'get',
 		data:{pageNo:pageNo,pageSize:pageSize,userId:userId},
 		success:function(res){

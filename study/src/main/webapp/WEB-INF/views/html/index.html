@@ -793,7 +793,7 @@ websocketConnect();
 //加载系统公告
 function loadSystemMessage(){
 	$.ajax({
-		url:'$!{rc.contextPath}/article/get_articles',
+		url:'$!{rc.contextPath}/article/getPageData',
 		type:'get',
 		data:{type:2,pageSize:5,pageNo:1},
 		success:function(res){

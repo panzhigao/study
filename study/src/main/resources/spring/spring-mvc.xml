@@ -41,12 +41,12 @@
 	     <mvc:exclude-mapping path="/register"/>
 	     <mvc:exclude-mapping path="/doRegister"/>
 	     <mvc:exclude-mapping path="/checkUnique"/>
-	     <mvc:exclude-mapping path="/static/images/**"/>
-	     <mvc:exclude-mapping path="/static/css/**"/>
-	     <mvc:exclude-mapping path="/static/js/**"/>
-	     <mvc:exclude-mapping path="/static/frame/**"/>
-	     <mvc:exclude-mapping path="/static/assets/**"/>
-	     <mvc:exclude-mapping path="/static/res/**"/>
+	     <mvc:exclude-mapping path="/static/**"/>
+<!-- 	     <mvc:exclude-mapping path="/static/css/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/js/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/frame/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/assets/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/res/**"/> -->
 	     <bean class="com.pan.interceptor.LoginInterceptor"/> 
 	   </mvc:interceptor> 
 	   <mvc:interceptor>
@@ -59,12 +59,12 @@
 	     <mvc:exclude-mapping path="/register"/>
 	     <mvc:exclude-mapping path="/doRegister"/>
 	     <mvc:exclude-mapping path="/checkUnique"/>
-	     <mvc:exclude-mapping path="/static/images/**"/>
-	     <mvc:exclude-mapping path="/static/css/**"/>
-	     <mvc:exclude-mapping path="/static/js/**"/>
-	     <mvc:exclude-mapping path="/static/frame/**"/>
-	     <mvc:exclude-mapping path="/static/assets/**"/>
-	     <mvc:exclude-mapping path="/static/res/**"/>
+	     <mvc:exclude-mapping path="/static/**"/>
+<!-- 	     <mvc:exclude-mapping path="/static/css/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/js/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/frame/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/assets/**"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/res/**"/> -->
 	   	 <bean class="com.pan.interceptor.PermissionInterceptor"/> 
 	   </mvc:interceptor>
 	</mvc:interceptors> 

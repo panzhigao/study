@@ -24,25 +24,40 @@ public class RoleController {
 	private RoleService roleService;
 	
 	@RequestMapping(method=RequestMethod.GET,value="/user/role")
-	public String toPermissionPage(){
+	public String toRolePage(){
 		return "html/user/role";
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/add")
+	/**
+	 * 新增角色
+	 * @param role
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/doAdd")
 	@ResponseBody
 	public ResultMsg addRole(Role role){
 		roleService.addRole(role);
 		return ResultMsg.ok("新增权限成功");
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/get_roles")
+	/**
+	 * 获取角色信息
+	 * @param queryRoleVO
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/getRoles")
 	@ResponseBody
 	public Map<String,Object> loadRoles(QueryRoleVO queryRoleVO){
 		Map<String,Object> pageData=roleService.findPageData(queryRoleVO);
 		return pageData;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/delete")
+	/**
+	 * 删除角色
+	 * @param roleId
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/doDelete")
 	@ResponseBody
 	public ResultMsg deleteRole(String roleId){
 		roleService.deleteRole(roleId);
@@ -53,7 +68,7 @@ public class RoleController {
 	 * 为角色分配权限
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_permission")
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocatePermission")
 	@ResponseBody
 	public ResultMsg allocatePermission(String roleId,@RequestParam(value = "permissions[]",required=false)String[] permissions){
 		roleService.allocatePermissionToRole(roleId, permissions);
@@ -65,7 +80,7 @@ public class RoleController {
 	 * @param roleId
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/edit")
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/doEdit")
 	@ResponseBody
 	public ResultMsg editRole(Role role){
 		roleService.updateRole(role);

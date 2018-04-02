@@ -95,6 +95,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void saveArticle(Article article) {
+		String userId=CookieUtils.getLoginUserId();
+		article.setUserId(userId);
 		checkArticle(article);
 		// 默认草稿状态
 		if (StringUtils.isBlank(article.getStatus())) {
@@ -161,6 +163,8 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}",article);
+		String userId=CookieUtils.getLoginUserId();
+		article.setUserId(userId);
 		//校验前台传来的数据
 		checkArticle(article);
 		String articleId = article.getArticleId();

@@ -40,8 +40,8 @@ public class PermissionController {
 	 * 跳转权限新增页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/permissionAdd")
-	@HasPermission("/user/permission/add")
+	@RequestMapping(method=RequestMethod.GET,value="/user/permission/addPage")
+	@HasPermission("/user/permission/doAdd")
 	public String toPermissionAddPage(){
 		return "html/user/permissionAdd";
 	}
@@ -55,7 +55,12 @@ public class PermissionController {
 		return "html/user/permissionEdit";
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/add")
+	/**
+	 * 新增权限
+	 * @param permission
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doAdd")
 	@ResponseBody
 	@HasPermission
 	public ResultMsg addPermission(Permission permission){

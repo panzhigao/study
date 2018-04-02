@@ -284,7 +284,7 @@ function getCount(){
 
 function getData(obj){
  	$.ajax({
- 		url:"$!{rc.contextPath}/article/get_articles",
+ 		url:"$!{rc.contextPath}/article/getPageData",
  		type:"get",
  		data:{pageSize:obj.limit,pageNo:obj.curr,isHot:isHot},
  		beforeSend:function(){

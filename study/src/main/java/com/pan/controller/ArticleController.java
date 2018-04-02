@@ -52,7 +52,7 @@ public class ArticleController {
 	 * 跳转发文页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/articleAdd")
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/jie/add");
 		User user = CookieUtils.getLoginUser(request);
@@ -64,13 +64,11 @@ public class ArticleController {
 	 * 保存文章，文章为草稿状态
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/save_article"})
+	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
 	@ResponseBody
-	public ResultMsg saveArticle(Article article,HttpServletRequest request){
+	public ResultMsg saveArticle(Article article){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoginUserId(request);
-		article.setUserId(userId);
 		articleService.saveArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章保存草稿成功");
@@ -84,7 +82,7 @@ public class ArticleController {
 	 * 获取文章列表信息
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value={"/user/my_articles"})
+	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
 	public ModelAndView toArticleList(HttpServletRequest request){
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
@@ -102,7 +100,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/get_articles")
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
 		String loingUserId = CookieUtils.getLoginUserId(request);
@@ -123,10 +121,10 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId}")
 	@ResponseBody
-	public ModelAndView toArticleDetailPage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/jie/detail");
-		String loginUserId = CookieUtils.getLoginUserId(request);
+		String loginUserId = CookieUtils.getLoginUserId();
 		String status=Article.STATUS_PUBLISHED;
 		Article article=articleService.findByArticleIdAndStatus(articleId,status);
 		//登录状态
@@ -150,9 +148,9 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
 	@ResponseBody
-	public ModelAndView toArticlePage(HttpServletRequest request,@PathVariable("articleId")String articleId){
+	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
 		ModelAndView mav=new ModelAndView("html/jie/edit");
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = CookieUtils.getLoginUserId();
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -166,13 +164,11 @@ public class ArticleController {
 	 * 保存文章，文章为草稿状态
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/edit_article"})
+	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doEdit"})
 	@ResponseBody
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
-		String userId=CookieUtils.getLoginUserId(request);
-		article.setUserId(userId);
 		articleService.updateArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章保存草稿成功");
@@ -186,7 +182,7 @@ public class ArticleController {
 	 * 删除文章
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/delete_article"})
+	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
@@ -209,7 +205,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/get_articles")
+	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,String type){
 		Map<String,Object> params=new HashMap<String, Object>(5);
@@ -232,7 +228,7 @@ public class ArticleController {
 	 * 获取文章条数
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/get_count")
+	@RequestMapping(method=RequestMethod.GET,value="/article/getCount")
 	@ResponseBody
 	public int getCount(String status,String type){
 		Map<String,Object> params=new HashMap<String, Object>(5);
