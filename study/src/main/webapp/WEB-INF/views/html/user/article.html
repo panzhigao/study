@@ -140,7 +140,7 @@ layui.use(['table','jquery'], function(){
 	      }},
 	      {title:'操作',width:160,templet:function(row){
 	    	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
-        	  var p_delete='#hasPermission("/user/permission/delete") 1 #end';
+        	  var p_delete='#hasPermission("/user/delete_article") 1 #end';
 	    	  
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';

@@ -120,6 +120,10 @@ layui.use(['table','jquery','treeGrid','form'], function(){
 
 function showTab(title,pId,level){
 	$.get('$!{rc.contextPath}/user/permissionAdd', null, function(form) {
+	if(form.code=='400'){
+		layer.msg(form.msg);
+		return;
+	}	
 	var index=layer.open({
 			type: 1,
 			title: title,

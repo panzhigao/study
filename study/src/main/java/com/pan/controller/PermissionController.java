@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
@@ -40,6 +41,7 @@ public class PermissionController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permissionAdd")
+	@HasPermission("/user/permission/add")
 	public String toPermissionAddPage(){
 		return "html/user/permissionAdd";
 	}
@@ -55,6 +57,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/add")
 	@ResponseBody
+	@HasPermission
 	public ResultMsg addPermission(Permission permission){
 		permissionService.addPermission(permission);
 		return ResultMsg.ok("新增权限成功");

@@ -2,19 +2,13 @@ package com.pan.common.config;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.directive.Directive;
 import org.apache.velocity.runtime.parser.node.Node;
-import com.pan.entity.Permission;
-import com.pan.util.CookieUtils;
-import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
+import com.pan.util.PermissionUtils;
 
 /**
  * @author 作者
@@ -41,20 +35,12 @@ public class PermissionDirective extends Directive {
 			ParseErrorException, MethodInvocationException {
 		String url = (String) getMarcoParam(context, node, 0);  
         Node nodeParent = null;
-        String loginUserId = CookieUtils.getLoginUserId();
-		String roles = JedisUtils.getString("user_roles:"+loginUserId);
-		String[] arr=(String[]) JsonUtils.fromJson(roles, String[].class);
-		for (int i = 0; i < arr.length; i++) {
-			Map<String, String> hgetAll = JedisUtils.hgetAll("role_permissions:"+arr[i]);
-			List<Permission> list = JsonUtils.mapToList(hgetAll,Permission.class);
-			for (Permission permission : list) {
-				if(StringUtils.equals(permission.getUrl(),url)){
-					nodeParent = node.jjtGetChild(1);
-					nodeParent.render(context, writer);  
-					return true;
-				}
-			}	
-		}	
+        boolean hasPermssion = PermissionUtils.hasPermssion(url);
+        if(hasPermssion){
+        	nodeParent = node.jjtGetChild(1);
+			nodeParent.render(context, writer);  
+			return true;
+        }	
 	    return false;
 	}
 
