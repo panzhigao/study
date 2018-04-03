@@ -104,7 +104,7 @@ layui.use(['table','jquery'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/check/get_articles', //数据接口
+	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},

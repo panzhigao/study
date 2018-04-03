@@ -14,7 +14,9 @@
 	<div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
     	<div class="layui-btn-group">
-	     	<button class="layui-btn" onclick="location.href='$!{rc.contextPath}/user/articleAdd'" >写文章</button>
+    		#hasPermission("/user/article/doSave")
+	     	<button class="layui-btn" onclick="location.href='$!{rc.contextPath}/user/article/addPage'" >发表新帖</button>
+	     	#end
   		</div>
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
@@ -71,10 +73,14 @@ layui.use(['table','jquery'], function(){
 	    if(obj.event === 'detail'){
 	      window.open("$!{rc.contextPath}/article/"+data.articleId, '_blank').location;
 	    } else if(obj.event === 'del'){
+    	  if(data.status==3){
+    		 layer.alert('发布中文章不能删除');
+    		 return;
+    	  }
 	      layer.confirm('确定删除该文章么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/delete_article",
+	    		url:"$!{rc.contextPath}/user/article/doDelete",
 	    		type:"post",
 	    		data:{articleId:data.articleId},
 	    		success:function(data){
@@ -139,8 +145,8 @@ layui.use(['table','jquery'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
-        	  var p_delete='#hasPermission("/user/delete_article") 1 #end';
+	    	  var p_edit='#hasPermission("/user/article/doEdit") 1 #end';
+        	  var p_delete='#hasPermission("/user/article/doDelete") 1 #end';
 	    	  
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';

@@ -59,7 +59,7 @@ layui.use(['table','jquery','treeGrid','form'], function(){
 	  treeTable =treeGrid.render({
 		  id: 'tab', 
           elem: '#treeTable',
-          url:'$!{rc.contextPath}/user/permission/get_permissions',
+          url:'$!{rc.contextPath}/user/permission/getData',
           cellMinWidth: 100,
           alias: 'changyong',
           treeId:'id',//树形id字段名称
@@ -194,9 +194,9 @@ function showTab(title,pId,level){
 }
 
 function deleteNode(id){
-	layer.confirm('确定删除该文章么', function(index){
+	layer.confirm('确定删除该权限么', function(index){
 		 $.ajax({
-			 url:'$!{rc.contextPath}/user/permission/delete',
+			 url:'$!{rc.contextPath}/user/permission/doDelete',
 			 type:'post',
 			 data:{permissionId:id},
 			 success:function(res){

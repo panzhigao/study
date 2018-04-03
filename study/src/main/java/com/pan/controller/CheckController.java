@@ -46,7 +46,7 @@ public class CheckController {
 	 * 加载文章列数据，文章状态为审核中
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/check/get_articles")
+	@RequestMapping(method=RequestMethod.POST,value="/user/check/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
 		Map<String,Object> params=new HashMap<String, Object>(5);

@@ -18,6 +18,7 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Message;
+import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
@@ -143,10 +144,10 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isBlank(userId)||StringUtils.isBlank(articleId)){
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
-		return getUserArticle(userId, articleId);
+		return getArticleByUserIdAndArticleId(userId, articleId);
 	}
 	
-	private Article getUserArticle(String userId,String articleId){
+	private Article getArticleByUserIdAndArticleId(String userId,String articleId){
 		Article article=new Article();
 		article.setUserId(userId);
 		article.setArticleId(articleId);
@@ -216,7 +217,7 @@ public class ArticleServiceImpl implements ArticleService {
 		if(StringUtils.isBlank(articleId)){
 			throw new BusinessException("文章id不能为空");
 		}
-		Article article = getUserArticle(userId, articleId);
+		Article article = getArticleByUserIdAndArticleId(userId, articleId);
 		if(article==null){
 			logger.info("根据文章id{}未查询到文章信息",articleId);
 			throw new BusinessException("文章不存在");
@@ -224,6 +225,10 @@ public class ArticleServiceImpl implements ArticleService {
 		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
 			logger.info("审核中文章不能删除");
 			throw new BusinessException("审核中文章不能删除");
+		}
+		if(Article.STATUS_PUBLISHED.equals(article.getStatus())){
+			logger.info("发布中文章不能删除");
+			throw new BusinessException("发布中文章不能删除");
 		}
 		int num=this.articleMapper.deleteByUserIdAndArticleId(userId, articleId);
 		if(num!=1){
@@ -309,6 +314,9 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public Message notPassArticle(String articleId,String reason) {
+		if(StringUtils.isBlank(reason)){
+			throw new BusinessException("原因不能为空");
+		}
 		Article article = articleMapper.findByArticleId(articleId);
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -320,6 +328,7 @@ public class ArticleServiceImpl implements ArticleService {
 		articleMapper.updateArticle(article);
 		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
 		//发送消息
+		User user=CookieUtils.getLoginUser();
 		Message message=new Message();
 		message.setMessageId(IdUtils.generateMessageId());
 		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
@@ -329,6 +338,8 @@ public class ArticleServiceImpl implements ArticleService {
 		message.setReceiverUserId(article.getUserId());
 		message.setCreateTime(new Date());
 		message.setCommentContent(reason);
+		message.setSenderName(user.getUsername());
+		message.setSenderUserId(user.getUserId());
 		messageService.addMessage(message);
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
 		return message;

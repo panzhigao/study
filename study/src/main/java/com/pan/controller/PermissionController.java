@@ -68,14 +68,18 @@ public class PermissionController {
 		return ResultMsg.ok("新增权限成功");
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/get_permissions")
+	/**
+	 * 获取权限数据
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/permission/getData")
 	@ResponseBody
 	public ResultMsg loadPermissions(){
 		List<TreeNode> nodes=permissionService.getTreeData();
 		return ResultMsg.build(ResultCodeEmun.SUCCESS, ResultCodeEmun.SUCCESS.getMsg(),nodes);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/delete")
+	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
 	@ResponseBody
 	public ResultMsg deletePermissions(String permissionId){
 		permissionService.deletePermission(permissionId);

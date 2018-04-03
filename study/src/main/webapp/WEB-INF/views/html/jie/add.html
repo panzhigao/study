@@ -72,10 +72,12 @@
                   <div class="layui-form-mid layui-word-aux">发表后无法更改飞吻</div>
                 </div>
               </div>
+              #hasPermission("/user/article/doSave")
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="publish" lay-submit>立即发布</button>
                 <button class="layui-btn" lay-filter="save" lay-submit>保存草稿</button>
               </div>
+              #end
             </form>
           </div>
         </div>
@@ -137,7 +139,7 @@ layui.use(['jquery', 'form','layedit'], function(){
 //提交
 function publish(params){
 		$.ajax({
-			url:"$!{rc.contextPath}/user/save_article",
+			url:"$!{rc.contextPath}/user/article/doSave",
 			type:"post",
 			data:params,
 			beforeSend:function(){
@@ -148,7 +150,8 @@ function publish(params){
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/user/my_articles';
+						//跳转我的文章列表页
+						location.href='$!{rc.contextPath}/user/article/mine';
 					},1000);
 				}else{
 					layer.msg(data.msg);

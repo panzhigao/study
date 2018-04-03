@@ -23,6 +23,10 @@ public class RoleController {
 	@Autowired
 	private RoleService roleService;
 	
+	/**
+	 * 跳转角色页
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/role")
 	public String toRolePage(){
 		return "html/user/role";
@@ -41,11 +45,11 @@ public class RoleController {
 	}
 	
 	/**
-	 * 获取角色信息
+	 * 获取分页角色信息
 	 * @param queryRoleVO
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/getRoles")
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/getPageData")
 	@ResponseBody
 	public Map<String,Object> loadRoles(QueryRoleVO queryRoleVO){
 		Map<String,Object> pageData=roleService.findPageData(queryRoleVO);

@@ -23,7 +23,7 @@
 	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    
 	    <div class="layui-btn-group">
-	    	#hasPermission("/user/role/add")
+	    	#hasPermission("/user/role/doAdd")
 	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增角色</button>
 	     	#end
   		</div>
@@ -156,7 +156,7 @@ layui.use(['table','jquery','form'], function(){
 			 return;
 		 }
 		 $.ajax({
-			 url:'$!{rc.contextPath}/user/role/add',
+			 url:'$!{rc.contextPath}/user/role/doAdd',
 			 type:'post',
 			 data:{roleName:roleName},
 			 success:function(res){
@@ -179,7 +179,7 @@ layui.use(['table','jquery','form'], function(){
 	      layer.confirm('确定删除该角色么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/role/delete",
+	    		url:"$!{rc.contextPath}/user/role/doDelete",
 	    		type:"post",
 	    		data:{roleId:data.roleId},
 	    		success:function(data){
@@ -219,7 +219,7 @@ layui.use(['table','jquery','form'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/role/get_roles', //数据接口
+	    url: '$!{rc.contextPath}/user/role/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {field: 'roleId', title: '角色ID', width:100, sort: true, fixed: 'left'},
@@ -228,9 +228,9 @@ layui.use(['table','jquery','form'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/role/edit") 1 #end';
-        	  var p_allocate='#hasPermission("/user/role/allocate_permission") 1 #end';
-        	  var p_delete='#hasPermission("/user/role/delete") 1 #end';
+	    	  var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
+        	  var p_allocate='#hasPermission("/user/role/allocatePermission") 1 #end';
+        	  var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
 	    	  
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';

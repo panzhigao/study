@@ -90,10 +90,12 @@
                   <div class="layui-form-mid layui-word-aux">发表后无法更改飞吻</div>
                 </div>
               </div>
+              #hasPermission("/user/article/doEdit")
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="editPublish" lay-submit>修改发布</button>
                 <button class="layui-btn" lay-filter="editSave" lay-submit>保存草稿</button>
               </div>
+              #end
             </form>
           </div>
         </div>
@@ -101,17 +103,8 @@
     </div>
   </div>
 </div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
-
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'jie';
 layui.cache.user = {
@@ -128,7 +121,7 @@ layui.config({
   fly: 'index'
 }).use('fly');
 
-layui.use(['jquery', 'form','layedit'], function(){
+layui.use(['form','layedit'], function(){
 	  var layedit = layui.layedit;
 	  layedit.set({
 		  uploadImage: {
@@ -137,7 +130,6 @@ layui.use(['jquery', 'form','layedit'], function(){
 		  }
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器
-	  var $ = layui.$ ;
 	  var form = layui.form;
 	  form.verify({
 		  username: function(value, item){ //value：表单的值、item：表单的DOM对象
@@ -168,22 +160,22 @@ layui.use(['jquery', 'form','layedit'], function(){
 		form.on('submit(editPublish)', function(data){
 			params = data.field;
 			params.status=2;
-			publish($,params,2);
+			publish(params,2);
 			return false;
 		});
 		form.on('submit(editSave)', function(data){
 			params = data.field;
 			params.status=1;
-			publish($,params,1);
+			publish(params,1);
 			return false;
 		});
 });
 
 
 //提交
-function publish($,params,status){
+function publish(params,status){
 		$.ajax({
-			url:"$!{rc.contextPath}/user/edit_article",
+			url:"$!{rc.contextPath}/user/article/doEdit",
 			type:"post",
 			data:params,
 			beforeSend:function(){
