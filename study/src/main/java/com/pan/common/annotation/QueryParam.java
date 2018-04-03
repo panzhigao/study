@@ -12,12 +12,21 @@ import com.pan.common.enums.QueryTypeEnum;
 /**
  * @author 作者
  * @version 创建时间：2018年4月3日 下午1:45:21
- * 类说明
+ * es查询参数注解
  */
 @Target(ElementType.FIELD) 
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface QueryType {
+public @interface QueryParam {
+	/**
+	 * 标注字段采用什么匹配类型
+	 * @return
+	 */
 	QueryTypeEnum queryType() default QueryTypeEnum.MATCH;
+	/**
+	 * 标注字段是否需要高亮
+	 * @return
+	 */
+	boolean highLightFlag() default false;
 }

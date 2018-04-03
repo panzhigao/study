@@ -22,12 +22,14 @@ import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
+import com.pan.service.EsClientService;
 import com.pan.service.MessageService;
 import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.vo.QueryArticleVO;
 
 /**
  * 
@@ -38,7 +40,10 @@ import com.pan.util.ValidationUtils;
 public class ArticleServiceImpl implements ArticleService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
-
+	
+	@Autowired
+	private EsClientService esClientService;
+	
 	@Autowired
 	private ArticleMapper articleMapper;
 	
@@ -343,5 +348,12 @@ public class ArticleServiceImpl implements ArticleService {
 		messageService.addMessage(message);
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
 		return message;
+	}
+
+	@Override
+	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
+		List<String> matchQuery = esClientService.queryByParams("article", "doc", queryArticleVO);
+		List<Article> resultList=JsonUtils.toList(matchQuery, Article.class);
+		return resultList;
 	}
 }

@@ -1,14 +1,10 @@
 package com.pan.test;
 
-import java.util.Date;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.pan.entity.User;
 import com.pan.service.EsClientService;
 import com.pan.test.base.BaseTest;
-import com.pan.vo.PzgVO;
+import com.pan.vo.QueryArticleVO;
 
 
 
@@ -24,22 +20,19 @@ public class ElasticsearchTest extends BaseTest{
 	
 	@Test
 	public void test1(){
-		String index="pzg";
-		String type="hello";
-		User user=new User();
-		user.setNickname("毛毛饱满");
-		user.setPassword("6744");
-		user.setCreateTime(new Date());
-		boolean createIndex = esClientService.createIndex(index, type, user);
-		System.out.println(createIndex);
+		QueryArticleVO articleVO=new QueryArticleVO();
+		articleVO.setTitle("刚刚");
+		long queryCountByParams = esClientService.queryCountByParams("article", "doc", articleVO);
+		System.out.println(queryCountByParams+"-----------------");
 	}
 	
 	@Test
 	public void test2(){
-		String index="pzg";
-		String type="hello";
-		PzgVO pzgVO=new PzgVO();
-		pzgVO.setNickname("毛77777777777");
-		esClientService.matchQuery(index, type, pzgVO);
+		
+	}
+	
+	@Test
+	public void test3(){
+		
 	}
 }

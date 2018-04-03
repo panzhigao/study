@@ -186,7 +186,8 @@ function publish(params,status){
 				if(data.code=='200'){
 					layer.msg(data.msg);
 					setTimeout(function(){
-						location.href='$!{rc.contextPath}/article/$!{article.articleId}';
+						//跳转我的文章列表页
+						location.href='$!{rc.contextPath}/user/article/mine';
 					},1000);
 				}else{
 					layer.msg(data.msg);

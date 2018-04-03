@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.pan.entity.Article;
 import com.pan.entity.Message;
+import com.pan.vo.QueryArticleVO;
 
 
 /**
@@ -94,4 +95,9 @@ public interface ArticleService {
 	 * 审核未通过文章
 	 */
 	public Message notPassArticle(String articleId,String reason);
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO);
 }
