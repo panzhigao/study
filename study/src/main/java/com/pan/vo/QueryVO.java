@@ -4,7 +4,7 @@ package com.pan.vo;
  * @version 创建时间：2018年3月28日 下午6:28:30
  * 类说明
  */
-public class BaseVO {
+public class QueryVO {
 	/**
 	 * 分页
 	 */

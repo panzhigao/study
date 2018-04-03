@@ -73,6 +73,19 @@ public class JsonUtils {
 		return ts;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> toList(List<String> list, Class<T> clazz) {
+		List<T> resultList=new ArrayList<T>();
+		for (String string : list) {
+			if(string==null){
+				continue;
+			}
+			Object obj = fromJson(string, clazz);
+			resultList.add((T) obj);
+		}
+		return resultList;
+	}
+	
 	public static <T> Map<String, String> listToMap(List<T> list, String keyId) {
 		Map<String, String> map = new HashMap<String, String>(10);
 		for (T t : list) {

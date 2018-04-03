@@ -12,6 +12,8 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 	
+	
+	
 	<!-- 引入属性文件 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -30,6 +32,10 @@
 	<bean class="com.pan.util.MessageUtils">
 		<property name="myHandler" ref="myHandler"/>
 	</bean>
+	
+	<bean id="client" factory-bean="esClientBuilder" factory-method="build" />
+
+	<bean id="esClientBuilder" class="com.pan.common.client.EsClientBuilder"></bean>
 	
 	<bean class="com.pan.common.handler.BusinessExceptionResolver"></bean>
 	

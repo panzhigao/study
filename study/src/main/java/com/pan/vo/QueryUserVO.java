@@ -6,7 +6,7 @@ package com.pan.vo;
  * @version 创建时间：2018年3月28日 下午5:17:24
  * 类说明
  */
-public class QueryUserVO extends BaseVO{
+public class QueryUserVO extends QueryVO{
 	/**
 	 * 用户性别
 	 */
