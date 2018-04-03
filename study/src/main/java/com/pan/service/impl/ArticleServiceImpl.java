@@ -110,6 +110,7 @@ public class ArticleServiceImpl implements ArticleService {
 			article.setStatus(Article.STATUS_SKETCH);
 		}
 		article.setCreateTime(new Date());
+		article.setUpdateTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
 		article.setType("1");
 		articleMapper.saveArticle(article);

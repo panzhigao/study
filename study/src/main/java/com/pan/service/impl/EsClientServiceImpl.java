@@ -178,8 +178,6 @@ public class EsClientServiceImpl implements EsClientService {
 		SearchHit[] hits = response.getHits().getHits();
 		for (SearchHit searchHit : hits) {
 			String res = searchHit.getSourceAsString();
-			System.out.println(searchHit.getHighlightFields()
-					+ "--------------------------");
 			list.add(res);
 		}
 		return list;

@@ -89,9 +89,9 @@ layui.config({
 			var title='';
 			switch(div){
 				case 'message':title='我的消息';break;
-				case 'collection':title='我的收藏';div='my_articles#collection';break;
-				case 'my_articles':title='我的文章';break;
-				case 'articleAdd':title='发表新帖';break;
+				case 'collection':title='我的收藏';div='article/mine#collection';break;
+				case 'mine':div="article/mine";title='我的文章';break;
+				case 'addPage':div="article/addPage";title='发表新帖';break;
 				case 'set':title='基本设置';break;
 				default:break;
 			}

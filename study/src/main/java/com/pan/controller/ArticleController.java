@@ -119,7 +119,7 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:$a\\d+}")
 	@ResponseBody
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常

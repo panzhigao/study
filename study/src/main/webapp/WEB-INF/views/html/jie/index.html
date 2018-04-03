@@ -85,17 +85,17 @@
       
       <!-- 用户登入后显示 -->
       #if($user)
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a target="_blank" href="$!{rc.contextPath}/user/admin?div=my_articles">我发表的贴</a></li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a target="_blank" href="$!{rc.contextPath}/user/admin?div=mine">我发表的贴</a></li> 
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a target="_blank" href="$!{rc.contextPath}/user/admin?div=collection">我收藏的贴</a></li> 
       #end
     </ul> 
     
     <div class="fly-column-right layui-hide-xs"> 
       <span class="fly-search"><i class="layui-icon"></i></span> 
-      <a href="$!{rc.contextPath}/user/admin?div=articleAdd" class="layui-btn">发表新帖</a> 
+      <a href="$!{rc.contextPath}/user/admin?div=addPage" class="layui-btn">发表新帖</a> 
     </div> 
     <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
-      <a href="$!{rc.contextPath}/user/articleAdd" class="layui-btn">发表新帖</a> 
+      <a href="$!{rc.contextPath}/user/admin?div=addPage" class="layui-btn">发表新帖</a> 
     </div> 
   </div>
 </div>
@@ -272,7 +272,7 @@ layui.use(['laypage', 'layer','jquery'], function(){
 
 function getCount(){
 	$.ajax({
-		url:"$!{rc.contextPath}/article/get_count",
+		url:"$!{rc.contextPath}/article/getCount",
 		type:"get",
 		async:false,
 		data:{status:3,type:1},
