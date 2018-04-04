@@ -1,13 +1,19 @@
 package com.pan.vo;
+
+import com.pan.common.annotation.QueryParam;
+
+
 /**
  * @author 作者
  * @version 创建时间：2018年4月3日 下午3:49:39
  * 类说明
  */
+@QueryParam(highLightFlag=true)
 public class QueryArticleVO extends QueryVO{
 	/**
 	 * 文章id
 	 */
+	@QueryParam(highLightFlag=false)
 	private String articleId;
 	/**
 	 * 用户id

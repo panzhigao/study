@@ -502,6 +502,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
       ,'</form>'].join('')
       ,success: function(layero){
+    	  alert(123);
         var input = layero.find('input');
         input.focus();
 

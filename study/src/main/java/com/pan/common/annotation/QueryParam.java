@@ -14,7 +14,7 @@ import com.pan.common.enums.QueryTypeEnum;
  * @version 创建时间：2018年4月3日 下午1:45:21
  * es查询参数注解
  */
-@Target(ElementType.FIELD) 
+@Target({ElementType.FIELD,ElementType.TYPE}) 
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
