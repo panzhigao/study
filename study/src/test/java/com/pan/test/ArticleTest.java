@@ -32,6 +32,7 @@ public class ArticleTest extends BaseTest{
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void test2(){
 		QueryArticleVO queryArticleVO=new QueryArticleVO();

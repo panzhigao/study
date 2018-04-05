@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-
 import com.pan.entity.Article;
 import com.pan.entity.Message;
 import com.pan.vo.QueryArticleVO;
@@ -32,7 +31,7 @@ public interface ArticleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public Map<String,Object> findByParams(Map<String,Object> params);
+	public Map<String,Object> findByParams(QueryArticleVO queryArticleVO);
 	/**
 	 * 获取用户的文章详细信息
 	 * @param userId
@@ -63,7 +62,7 @@ public interface ArticleService {
 	 * @param params
 	 * @return
 	 */
-	public int getCount(Map<String, Object> params);
+	public int getCount(QueryArticleVO queryArticleVO);
 	/**
 	 * 根据文章id和状态查找唯一文章信息
 	 * @param articleId
@@ -100,4 +99,10 @@ public interface ArticleService {
 	 * @return
 	 */
 	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO);
+	/**
+	 * 根据文章标题搜索文章
+	 * @param title
+	 * @return
+	 */
+	public List<Article> searchArticleByTitle(String title);
 }

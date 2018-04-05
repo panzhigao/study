@@ -239,7 +239,7 @@ public final class CookieUtils {
                 domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= MAX_LENGTH && len > MIN_LENGTH) {
                 // xxx.com or xxx.cn
-                domainName = "." + domains[len - 2] + "." + domains[len - 1];
+                domainName = domains[len - 2] + "." + domains[len - 1];
             } else {
                 domainName = serverName;
             }

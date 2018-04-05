@@ -106,15 +106,8 @@
       <div class="fly-panel" style="margin-bottom: 0;">
         
         <div class="fly-panel-title fly-filter">
-<!--           <a href="" class="layui-this">综合</a> -->
-<!--           <span class="fly-mid"></span> -->
-<!--           <a href="">未结</a> -->
-<!--           <span class="fly-mid"></span> -->
-<!--           <a href="">已结</a> -->
-<!--           <span class="fly-mid"></span> -->
-<!--           <a href="">精华</a> -->
           <span class="fly-filter-left layui-hide-xs">
-            <a href="javascrpt:;" class="layui-this category-item" data-ishot="">按最新</a>
+            <a href="javascrpt:;" class="category-item selected" data-ishot="">按最新</a>
             <span class="fly-mid"></span>
             <a href="javascrpt:;" class="category-item" data-ishot="1">按热议</a>
           </span>
@@ -255,8 +248,11 @@ layui.use(['laypage', 'layer','jquery'], function(){
 	  
 	  //切换文章类型状态
 	  $('.category-item').click(function(obj){
-	  	$('.category-item').removeClass('layui-this');
-	  	$(this).addClass('layui-this');
+		if($(this).hasClass('selected')){
+			return;	  
+		}
+	  	$('.category-item').removeClass('selected');
+	  	$(this).addClass('selected');
 	  	isHot=$(this).data('ishot');
 		laypage.render({
 		    elem: 'myPage',

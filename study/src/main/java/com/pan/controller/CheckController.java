@@ -1,18 +1,16 @@
 package com.pan.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.service.ArticleService;
+import com.pan.vo.QueryArticleVO;
 
 /**
  * 审核文章
@@ -31,12 +29,12 @@ public class CheckController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/check")
 	public ModelAndView toIndex(){
-		Map<String,Object> params=new HashMap<String, Object>(2);
+		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		//审核中
-		params.put("status", Article.STATUS_IN_REVIEW);
+		queryArticleVO.setStatus( Article.STATUS_IN_REVIEW);
 		//类型为文章
-		params.put("type", Article.TYPE_ARTICLE);
-		int articleCounts=articleService.getCount(params);
+		queryArticleVO.setType(Article.TYPE_ARTICLE);
+		int articleCounts=articleService.getCount(queryArticleVO);
 		ModelAndView mav=new ModelAndView("html/user/check");
 		mav.addObject("articleCounts", articleCounts);
 		return mav;
@@ -49,15 +47,12 @@ public class CheckController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		//审核中
-		params.put("status", Article.STATUS_IN_REVIEW);
-		//类型为文章
-		params.put("type", Article.TYPE_ARTICLE);
-		Map<String,Object> pageData=articleService.findByParams(params);
+		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		queryArticleVO.setPageSize(pageSize);
+		queryArticleVO.setPageNo(pageNo);
+		queryArticleVO.setStatus(Article.STATUS_IN_REVIEW);
+		queryArticleVO.setType(Article.TYPE_ARTICLE);
+		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
 		return pageData;
 	}
 	

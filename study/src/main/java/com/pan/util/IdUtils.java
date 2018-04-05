@@ -50,7 +50,6 @@ public class IdUtils {
 			articleId="a"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
 		} catch (Exception e) {
 			logger.error("生成文章id错误",e);
-			throw e;
 		}
 		return articleId;
 	}
@@ -72,7 +71,6 @@ public class IdUtils {
 			pictureId="pic"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
 		} catch (Exception e) {
 			logger.error("生成图片id错误",e);
-			throw e;
 		}
 		return pictureId;
 	}
@@ -94,7 +92,6 @@ public class IdUtils {
 			commentId="c"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
 		} catch (Exception e) {
 			logger.error("生成评论id错误",e);
-			throw e;
 		}
 		return commentId;
 	}
@@ -116,7 +113,6 @@ public class IdUtils {
 			praiseId="z"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成赞id错误",e);
-			throw e;
 		}
 		return praiseId;
 	}
@@ -138,7 +134,6 @@ public class IdUtils {
 			praiseId="collect"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成收藏id错误",e);
-			throw e;
 		}
 		return praiseId;
 	}
@@ -160,7 +155,6 @@ public class IdUtils {
 			messageId="m"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成消息id错误",e);
-			throw e;
 		}
 		return messageId;
 	}
@@ -182,7 +176,6 @@ public class IdUtils {
 			permissionId="p"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成权限id错误",e);
-			throw e;
 		}
 		return permissionId;
 	}
@@ -204,7 +197,6 @@ public class IdUtils {
 			roleId="r"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成角色id错误",e);
-			throw e;
 		}
 		return roleId;
 	}

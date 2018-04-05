@@ -27,7 +27,6 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.entity.UserRole;
-import com.pan.mapper.RoleMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
@@ -68,9 +67,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserMapper userMapper;
-	
-	@Autowired
-	private RoleMapper roleMapper;
 	
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;

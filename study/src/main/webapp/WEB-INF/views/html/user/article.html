@@ -6,9 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
-  <style type="text/css">
-  	.selected {color:#5FB878 !important;}
-  </style>
 </head>
 <body class="childrenBody" style="height:1100px;">
 	<div class="fly-panel fly-panel-user" pad20>
@@ -175,14 +172,11 @@ layui.use(['table','jquery'], function(){
 	  
 	  //切换文章类型状态
 	  $('.category-item').click(function(obj){
+		if($(this).hasClass('selected')){
+			return;	  
+		}
 	  	$('.category-item').removeClass('selected');
 	  	$(this).addClass('selected');
-	  	var temp=$(this).attr('status');
-	  	if(status!=temp){
-	  		status=temp;
-	  	}else{
-	  		return;
-	  	}
 	  	reload('articlesTab');
 	  });	
 	  

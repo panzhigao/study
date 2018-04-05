@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
-import com.pan.service.CommentService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
+import com.pan.vo.QueryArticleVO;
 
 /**
  * 用户创作
@@ -42,9 +41,6 @@ public class ArticleController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private CommentService commentService;
 	
 	@Autowired
 	private CollectionService collectionService;
@@ -86,9 +82,10 @@ public class ArticleController {
 	public ModelAndView toArticleList(HttpServletRequest request){
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
-		params.put("userId", loingUserId);
-		params.put("type", "1");
-		int articleCounts=articleService.getCount(params);
+		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		queryArticleVO.setUserId(loingUserId);
+		queryArticleVO.setType("1");
+		int articleCounts=articleService.getCount(queryArticleVO);
 		int collectionCounts = collectionService.getCount(params);
 		ModelAndView mav=new ModelAndView("html/user/article");
 		mav.addObject("articleCounts", articleCounts);
@@ -102,16 +99,15 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/getPageData")
 	@ResponseBody
-	public Map<String,Object> getUserArticleList(HttpServletRequest request,Integer pageSize,Integer pageNo,String status){
-		String loingUserId = CookieUtils.getLoginUserId(request);
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		params.put("userId", loingUserId);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		params.put("status", status);
-		params.put("type", "1");
-		Map<String,Object> pageData=articleService.findByParams(params);
+	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
+		String loingUserId = CookieUtils.getLoginUserId();
+		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		queryArticleVO.setUserId(loingUserId);
+		queryArticleVO.setPageSize(pageSize);
+		queryArticleVO.setPageNo(pageNo);
+		queryArticleVO.setStatus(status);
+		queryArticleVO.setType("1");
+		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
 		return pageData;
 	}
 	
@@ -208,19 +204,18 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,String type){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		params.put("userId", userId);
-		params.put("status", Article.STATUS_PUBLISHED);
-		params.put("isHot", isHot);
-		params.put("type", type);
-		params.put("orderCondition", "publish_time desc");
+		QueryArticleVO articleVO=new QueryArticleVO();
+		articleVO.setPageSize(pageSize);
+		articleVO.setPageNo(pageNo);
+		articleVO.setStatus(Article.STATUS_PUBLISHED);
+		articleVO.setIsHot(isHot);
+		articleVO.setType(type);
+		articleVO.setStatus(Article.STATUS_PUBLISHED);
+		articleVO.setOrderCondition("publish_time desc");
 		if(StringUtils.isBlank(type)){
-			params.put("type", Article.TYPE_ARTICLE);
+			articleVO.setType(Article.TYPE_ARTICLE);
 		}
-		Map<String,Object> pageData=articleService.findByParams(params);
+		Map<String,Object> pageData=articleService.findByParams(articleVO);
 		return pageData;
 	}
 	
@@ -231,9 +226,9 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/article/getCount")
 	@ResponseBody
 	public int getCount(String status,String type){
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		params.put("status", status);
-		params.put("type", type);
-		return articleService.getCount(params);
+		QueryArticleVO articleVO=new QueryArticleVO();
+		articleVO.setStatus(status);
+		articleVO.setType(type);
+		return articleService.getCount(articleVO);
 	}
 }

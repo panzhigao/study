@@ -1,11 +1,9 @@
 package com.pan.mapper;
 
 import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.pan.entity.Article;
+import com.pan.vo.QueryArticleVO;
 
 /**
  * 
@@ -35,13 +33,13 @@ public interface ArticleMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<Article> findByParams(Map<String,Object> params);
+	public List<Article> findByParams(QueryArticleVO queryArticleVO);
 	/**
 	 * 查询文章详细,支持分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(Map<String,Object> params);
+	public int getCountByParams(QueryArticleVO queryArticleVO);
 	/**
 	 * 更新文章
 	 * @param article

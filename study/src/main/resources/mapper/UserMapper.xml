@@ -19,7 +19,7 @@
   
   <resultMap id="MoreResultMap" type="com.pan.dto.UserDTO" extends="BaseResultMap">  
     <result property="roleNames" column="role_names"/>  
-</resultMap> 
+  </resultMap> 
   
   <sql id="Base_Column_List" >
     id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait

@@ -8,7 +8,6 @@ import com.pan.common.annotation.QueryParam;
  * @version 创建时间：2018年4月3日 下午3:49:39
  * 类说明
  */
-@QueryParam(highLightFlag=true)
 public class QueryArticleVO extends QueryVO{
 	/**
 	 * 文章id
@@ -32,6 +31,15 @@ public class QueryArticleVO extends QueryVO{
 	 * 1-文章 2-系统消息
 	 */
 	private String type;
+	/**
+	 * 是否热门
+	 */
+	private String isHot;
+	/**
+	 * 排序规则
+	 */
+	private String orderCondition;
+	
 	public String getArticleId() {
 		return articleId;
 	}
@@ -62,10 +70,25 @@ public class QueryArticleVO extends QueryVO{
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public String getIsHot() {
+		return isHot;
+	}
+	public void setIsHot(String isHot) {
+		this.isHot = isHot;
+	}
+	
+	public String getOrderCondition() {
+		return orderCondition;
+	}
+	public void setOrderCondition(String orderCondition) {
+		this.orderCondition = orderCondition;
+	}
 	@Override
 	public String toString() {
 		return "QueryArticleVO [articleId=" + articleId + ", userId=" + userId
 				+ ", status=" + status + ", title=" + title + ", type=" + type
+				+ ", isHot=" + isHot + ", orderCondition=" + orderCondition
 				+ "]";
 	}	
 }

@@ -7,13 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
@@ -21,7 +19,6 @@ import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleService;
-import com.pan.service.CommentService;
 import com.pan.service.EsClientService;
 import com.pan.service.MessageService;
 import com.pan.util.CookieUtils;
@@ -46,9 +43,6 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	private ArticleMapper articleMapper;
-	
-	@Autowired
-	private CommentService commentService;
 	
 	@Autowired
 	private MessageService messageService;
@@ -123,15 +117,15 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	@Override
-	public Map<String,Object> findByParams(Map<String, Object> params) {
+	public Map<String,Object> findByParams(QueryArticleVO queryArticleVO) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Article> list = new ArrayList<Article>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
-			int total=articleMapper.getCountByParams(params);
+			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleVO));
+			int total=articleMapper.getCountByParams(queryArticleVO);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = articleMapper.findByParams(params);
+				list = articleMapper.findByParams(queryArticleVO);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -244,9 +238,9 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	@Override
-	public int getCount(Map<String, Object> params) {
-		logger.info("查询文章条数条件：{}",JsonUtils.toJson(params));
-		return articleMapper.getCountByParams(params);
+	public int getCount(QueryArticleVO queryArticleVO) {
+		logger.info("查询文章条数条件：{}",JsonUtils.toJson(queryArticleVO));
+		return articleMapper.getCountByParams(queryArticleVO);
 	}
 
 	@Override
@@ -350,11 +344,25 @@ public class ArticleServiceImpl implements ArticleService {
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
 		return message;
 	}
-
+	
+	/**
+	 * 根据条件查询es中的文章信息
+	 */
 	@Override
 	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
-		List<String> matchQuery = esClientService.queryByParams("article", "doc", queryArticleVO);
-		List<Article> resultList=JsonUtils.toList(matchQuery, Article.class);
+		List<String> resultStringList = esClientService.queryByParams("article", "doc", queryArticleVO);
+		List<Article> resultList=JsonUtils.toList(resultStringList, Article.class);
 		return resultList;
+	}
+	
+	/**
+	 * 通过文章标题查询文章信息
+	 */
+	@Override
+	public List<Article> searchArticleByTitle(String title) {
+		//TODO 改成dto
+		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		queryArticleVO.setTitle(title);
+		return queryFromEsByCondition(queryArticleVO);
 	}
 }

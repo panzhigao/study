@@ -25,7 +25,7 @@ public @interface QueryParam {
 	 */
 	QueryTypeEnum queryType() default QueryTypeEnum.MATCH;
 	/**
-	 * 标注字段是否需要高亮
+	 * 标注字段是否需要高亮,默认为不高亮
 	 * @return
 	 */
 	boolean highLightFlag() default false;

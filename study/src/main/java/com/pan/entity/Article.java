@@ -79,14 +79,6 @@ public class Article extends BaseEntity{
 	 */
 	private String image;
 	/**
-	 * 用户昵称
-	 */
-	private String nickname;
-	/**
-	 * 用户头像
-	 */
-	private String userPortrait;
-	/**
 	 * 评论数
 	 */
 	private Integer commentCount;
@@ -161,22 +153,6 @@ public class Article extends BaseEntity{
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-	
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
 	}
 	
 	public Integer getCommentCount() {
