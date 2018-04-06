@@ -5,11 +5,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
@@ -36,8 +39,7 @@ import com.pan.vo.QueryVO;
 @Service
 public class EsClientServiceImpl implements EsClientService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(EsClientServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(EsClientServiceImpl.class);
 
 	@Autowired
 	private RestHighLevelClient client;
@@ -56,10 +58,13 @@ public class EsClientServiceImpl implements EsClientService {
 		return true;
 	}
 
-	@Override
-	public List<String> queryByParams(String index, String type, QueryVO queryVO) {
-		return queryByParamsWithHightLight(index, type, queryVO, false);
-	}
+	/**
+	 * 查询文章信息，不高亮
+	 */
+//	@Override
+//	public List<String> queryByParams(String index, String type, QueryVO queryVO) {
+//		return queryByParamsWithHightLight(index, type, queryVO, true);
+//	}
 
 	/**
 	 * 构建查询条件 遍历字段，获取字段上的注解，当查询类型为MATCH时，分词匹配 当查询类型为TERM时，不分词匹配
@@ -87,21 +92,18 @@ public class EsClientServiceImpl implements EsClientService {
 					QueryTypeEnum queryType = annotation.queryType();
 					switch (queryType) {
 					case MATCH:
-						MatchQueryBuilder matchQueryBuilder = QueryBuilders
-								.matchQuery(field.getName(), value);
+						MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery(field.getName(), value);
 						boolBuilder.must(matchQueryBuilder);
 						break;
 					case TERM:
-						TermQueryBuilder termQueryBuilder = QueryBuilders
-								.termQuery(field.getName(), value);
+						TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery(field.getName(), value);
 						boolBuilder.must(termQueryBuilder);
 						break;
 					default:
 						break;
 					}
 				} else {
-					MatchQueryBuilder matchQueryBuilder = QueryBuilders
-							.matchQuery(field.getName(), value);
+					MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery(field.getName(), value);
 					boolBuilder.must(matchQueryBuilder);
 				}
 			}
@@ -115,8 +117,43 @@ public class EsClientServiceImpl implements EsClientService {
 	 * @param queryVO
 	 * @return
 	 */
+//	@SuppressWarnings("rawtypes")
+//	private HighlightBuilder highParams(QueryVO queryVO) {
+//		HighlightBuilder highlightBuilder = null;
+//		Class clazz = queryVO.getClass();
+//		Field[] fields = clazz.getDeclaredFields();
+//		for (Field field : fields) {
+//			field.setAccessible(true);
+//			Object value = null;
+//			try {
+//				value = field.get(queryVO);
+//			} catch (IllegalArgumentException | IllegalAccessException e) {
+//				e.printStackTrace();
+//				continue;
+//			}
+//			if (value != null) {
+//				QueryParam annotation = field.getAnnotation(QueryParam.class);
+//				if (annotation != null && annotation.highLightFlag()) {
+//					if (highlightBuilder == null) {
+//						highlightBuilder = new HighlightBuilder();
+//						highlightBuilder.preTags("<h2>");
+//						highlightBuilder.postTags("</h2>");
+//					}
+//					highlightBuilder.field(field.getName());
+//				}
+//			}
+//		}
+//		return highlightBuilder;
+//	}
+	
+	/**
+	 * 构造高亮查询参数
+	 * 
+	 * @param queryVO
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
-	private HighlightBuilder highParams(QueryVO queryVO) {
+	private HighlightBuilder highParams(QueryVO queryVO,List<String> fieldList) {
 		HighlightBuilder highlightBuilder = null;
 		Class clazz = queryVO.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -134,8 +171,11 @@ public class EsClientServiceImpl implements EsClientService {
 				if (annotation != null && annotation.highLightFlag()) {
 					if (highlightBuilder == null) {
 						highlightBuilder = new HighlightBuilder();
-						highlightBuilder.preTags("<h2>");
-						highlightBuilder.postTags("</h2>");
+						highlightBuilder.preTags("<strong style='color:red;'>");
+						highlightBuilder.postTags("</strong>");
+					}
+					if(fieldList!=null){
+						fieldList.add(field.getName());
 					}
 					highlightBuilder.field(field.getName());
 				}
@@ -144,9 +184,33 @@ public class EsClientServiceImpl implements EsClientService {
 		return highlightBuilder;
 	}
 
+
 	@Override
-	public List<String> queryByParamsWithHightLight(String index, String type,
-			QueryVO queryVO, boolean highLightFlag) {
+	public long queryCountByParams(String index, String type, QueryVO queryVO) {
+		// 查询条件
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		BoolQueryBuilder boolQueryBuilder = generate(queryVO);
+		searchSourceBuilder.query(boolQueryBuilder);
+		searchSourceBuilder.size(0);
+
+		SearchRequest request = new SearchRequest(index);
+		request.types(type);
+		request.source(searchSourceBuilder);
+		request.searchType(SearchType.QUERY_THEN_FETCH);
+		SearchResponse response = null;
+		try {
+			response = client.search(request);
+		} catch (IOException e) {
+			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryVO));
+		}
+		long totalHits = response.getHits().getTotalHits();
+		return totalHits;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> queryByParamsWithHightLight(String index, String type, QueryVO queryVO, boolean highLightFlag,
+			Class<?> T) {
 		// 查询条件
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		if (queryVO.getOffset() != null && queryVO.getRow() != null) {
@@ -156,8 +220,9 @@ public class EsClientServiceImpl implements EsClientService {
 		BoolQueryBuilder boolQueryBuilder = generate(queryVO);
 		searchSourceBuilder.query(boolQueryBuilder);
 		
-		if(highLightFlag){
-			HighlightBuilder hiBuilder = highParams(queryVO);
+		List<String> fieldList=new ArrayList<String>();
+		if (highLightFlag) {
+			HighlightBuilder hiBuilder = highParams(queryVO,fieldList);
 			if (hiBuilder != null) {
 				searchSourceBuilder.highlighter(hiBuilder);
 			}
@@ -166,43 +231,51 @@ public class EsClientServiceImpl implements EsClientService {
 		SearchRequest request = new SearchRequest(index);
 		request.types(type);
 		request.source(searchSourceBuilder);
-		
+
 		SearchResponse response = null;
-		List<String> list = new ArrayList<String>();
+		List<T> list = new ArrayList<T>();
 		try {
 			response = client.search(request);
 		} catch (IOException e) {
-			logger.error("查询索引失败,index:{},type:{},params:{}", index, type,JsonUtils.toJson(queryVO));
+			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryVO), e);
 			return list;
 		}
 		SearchHit[] hits = response.getHits().getHits();
 		for (SearchHit searchHit : hits) {
 			String res = searchHit.getSourceAsString();
-			list.add(res);
+			Object obj = JsonUtils.fromJson(res,T);
+			if(highLightFlag){
+				for(String filedStr:fieldList){
+					Text[] texts = searchHit.getHighlightFields().get(filedStr).getFragments();
+					String highText="";
+					for(Text t:texts){
+						highText+=t.toString();
+					}
+				    setValue(obj,filedStr,highText);
+				    list.add(((T) obj));
+				}
+			}
 		}
 		return list;
 	}
-
-	@Override
-	public long queryCountByParams(String index, String type, QueryVO queryVO) {
-		// 查询条件
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		BoolQueryBuilder boolQueryBuilder = generate(queryVO);
-		searchSourceBuilder.query(boolQueryBuilder);
-		searchSourceBuilder.size(0);
-		
-		SearchRequest request = new SearchRequest(index);
-		request.types(type);
-		request.source(searchSourceBuilder);
-		request.searchType(SearchType.QUERY_THEN_FETCH);
-		SearchResponse response = null;
-		try {
-			response = client.search(request);
-		} catch (IOException e) {
-			logger.error("查询索引失败,index:{},type:{},params:{}", index, type,
-					JsonUtils.toJson(queryVO));
+	
+	
+	@SuppressWarnings("rawtypes")
+	private void setValue(Object obj,String filedStr,Object value){
+		Class clazz=obj.getClass();
+		Field[] declaredFields = clazz.getDeclaredFields();
+		Field[] parentFileds = clazz.getSuperclass().getDeclaredFields();
+		Field[] all = (Field[]) ArrayUtils.addAll(declaredFields, parentFileds);
+		for (Field field : all) {
+			if(StringUtils.equals(filedStr, field.getName())){
+				try {
+					field.setAccessible(true);
+					field.set(obj, value);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}	
 		}
-		long totalHits = response.getHits().getTotalHits();
-		return totalHits;
 	}
+	
 }

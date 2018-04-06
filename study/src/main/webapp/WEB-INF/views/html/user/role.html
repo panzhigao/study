@@ -262,7 +262,7 @@ layui.use(['table','jquery','form'], function(){
           ,params:null
           ,method: 'post'
           , form: form                    
-          , data: '$!{rc.contextPath}/user/permission/get_permission_tree' 
+          , data: '$!{rc.contextPath}/user/permission/getPermissionTree' 
           , isopen: true  //加载完毕后的展开状态，默认值：true
           , ckall: true    //启用全选功能，默认值：false
           , ckallback: function () { } //全选框状态改变后执行的回调函数
@@ -297,7 +297,7 @@ layui.use(['table','jquery','form'], function(){
           var permissions = JSON.stringify(arr);
           console.log(permissions);
           $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/allocate_permission',
+        	  url:'$!{rc.contextPath}/user/role/allocatePermission',
         	  data:{roleId:selectedRoleId,permissions:arr},
         	  dataType:'json',
         	  type:'post',

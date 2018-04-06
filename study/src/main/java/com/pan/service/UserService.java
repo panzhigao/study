@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
+import com.pan.entity.UserRole;
 import com.pan.vo.QueryUserVO;
 
 /**
@@ -103,4 +104,9 @@ public interface UserService {
 	 * @return
 	 */
 	public int findRoleUserCountByRoleId(String roleId);
+	/**
+	 * 为用户添加用户角色信息
+	 * @param userRole
+	 */
+	public void addUserRole(UserRole userRole);
 }

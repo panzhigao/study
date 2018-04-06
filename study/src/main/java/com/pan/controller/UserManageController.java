@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.service.RoleService;
@@ -34,6 +36,7 @@ public class UserManageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/manage")
+	@HasPermission
 	public ModelAndView toUserEditPage(){
 		ModelAndView mav=new ModelAndView("html/user/userManage");
 		return mav;
@@ -45,6 +48,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/userList"})
 	@ResponseBody
+	@HasPermission(value="/user/manage")
 	public Map<String,Object> getUserList(QueryUserVO queryUserVO){
 		Map<String,Object> pageData=userService.findPageData(queryUserVO);
 		return pageData;
@@ -55,8 +59,9 @@ public class UserManageController {
 	 * @param roleId
 	 * @return
 	 */
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/get_role_tree")
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/getRoleTree")
 	@ResponseBody
+	@HasPermission(value="/user/manage")
 	public List<Tree> loadRoleTree(String userId){
 		return roleService.getRoleTreeData(userId);
 	}
@@ -65,8 +70,9 @@ public class UserManageController {
 	 * 为用户分配角色
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocate_role")
+	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocateRole")
 	@ResponseBody
+	@HasPermission
 	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]",required=false)String[] roles){
 		userService.allocateRoleToUser(userId, roles);
 		return ResultMsg.ok("分配用户角色成功");
@@ -79,6 +85,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/manage/changeStatus")
 	@ResponseBody
+	@HasPermission
 	public ResultMsg changeUserStatus(String userId,String status){
 		String message = userService.changeUserStatus(userId, status);
 		return ResultMsg.ok(message);

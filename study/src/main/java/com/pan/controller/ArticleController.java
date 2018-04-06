@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -44,11 +46,13 @@ public class ArticleController {
 	
 	@Autowired
 	private CollectionService collectionService;
+	
 	/**
 	 * 跳转发文页面
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
+	@HasPermission("/user/article/doSave")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/jie/add");
 		User user = CookieUtils.getLoginUser(request);
@@ -62,6 +66,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
 	@ResponseBody
+	@HasPermission
 	public ResultMsg saveArticle(Article article){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
@@ -79,6 +84,7 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
+	@HasPermission
 	public ModelAndView toArticleList(HttpServletRequest request){
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		Map<String,Object> params=new HashMap<String, Object>(2);
@@ -99,6 +105,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/getPageData")
 	@ResponseBody
+	@HasPermission(value="/user/article/mine")
 	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
 		String loingUserId = CookieUtils.getLoginUserId();
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
@@ -115,8 +122,9 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:$a\\d+}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
 	@ResponseBody
+	@HasPermission(value="/user/article/doEdit")
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/jie/detail");
@@ -144,6 +152,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
 	@ResponseBody
+	@HasPermission(value="/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
 		ModelAndView mav=new ModelAndView("html/jie/edit");
 		String loingUserId = CookieUtils.getLoginUserId();
@@ -162,6 +171,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doEdit"})
 	@ResponseBody
+	@HasPermission
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
@@ -180,6 +190,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
+	@HasPermission
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
 		String userId=CookieUtils.getLoginUserId(request);

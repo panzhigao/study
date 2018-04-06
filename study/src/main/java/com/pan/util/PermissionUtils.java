@@ -17,6 +17,9 @@ public class PermissionUtils {
 	public static boolean hasPermssion(String url){
         String loginUserId = CookieUtils.getLoginUserId();
 		String roles = JedisUtils.getString("user_roles:"+loginUserId);
+		if(StringUtils.isBlank(roles)){
+			return false;
+		}
 		String[] arr=(String[]) JsonUtils.fromJson(roles, String[].class);
 		for (int i = 0; i < arr.length; i++) {
 			Map<String, String> hgetAll = JedisUtils.hgetAll("role_permissions:"+arr[i]);

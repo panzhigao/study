@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
 import com.pan.entity.Message;
 import com.pan.vo.QueryArticleVO;
@@ -98,11 +100,11 @@ public interface ArticleService {
 	 * 
 	 * @return
 	 */
-	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO);
+	public List<ArticleDTO> queryFromEsByCondition(QueryArticleVO queryArticleVO);
 	/**
 	 * 根据文章标题搜索文章
 	 * @param title
 	 * @return
 	 */
-	public List<Article> searchArticleByTitle(String title);
+	public List<ArticleDTO> searchArticleByTitle(String title);
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
@@ -47,6 +48,7 @@ public class UserSetController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/set")
+	@HasPermission
 	public ModelAndView toSetPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/set");
 		User user = CookieUtils.getLoginUser(request);
@@ -62,6 +64,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/doSet")
 	@ResponseBody
+	@HasPermission(value="/user/set")
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
 		String userId = CookieUtils.getLoginUserId(request);
@@ -83,6 +86,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/resetPassword")
 	@ResponseBody
+	@HasPermission(value="/user/set")
 	public ResultMsg resetPassword(HttpServletRequest request,PasswordDTO passwordDTO) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		ValidationUtils.validateEntity(passwordDTO);
 		if(!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())){
@@ -105,6 +109,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/sendValidationCode")
 	@ResponseBody
+	@HasPermission(value="/user/set")
 	public ResultMsg sendValidationCode(HttpServletRequest request,String telephone){
 		User user=new User();
 		user.setTelephone(telephone);
@@ -118,6 +123,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/confirmBind")
 	@ResponseBody
+	@HasPermission(value="/user/set")
 	public ResultMsg confirmBind(HttpServletRequest request,String telephone,String code){
 		String loginUserId = CookieUtils.getLoginUserId(request);
 		User user=new User();

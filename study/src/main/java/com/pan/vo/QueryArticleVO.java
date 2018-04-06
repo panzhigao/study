@@ -12,7 +12,7 @@ public class QueryArticleVO extends QueryVO{
 	/**
 	 * 文章id
 	 */
-	@QueryParam(highLightFlag=false)
+	//@QueryParam(highLightFlag=false)
 	private String articleId;
 	/**
 	 * 用户id
@@ -25,6 +25,7 @@ public class QueryArticleVO extends QueryVO{
 	/**
 	 * 文章标题
 	 */
+	@QueryParam(highLightFlag=true)
 	private String title;
 	/**
 	 * 文章类型

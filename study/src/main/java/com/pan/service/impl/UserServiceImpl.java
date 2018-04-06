@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
 	
+	
 	@Override
 	public User saveUser(User user){
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
@@ -95,6 +96,10 @@ public class UserServiceImpl implements UserService{
 			user.setCreateTime(new Date());
 			user.setStatus(User.STATUS_NORMAL);
 			userMapper.saveUser(user);
+			//为用户添加用户角色信息
+			UserRole userRole=new UserRole(userId, "r1001308");
+			userRole.setCreateTime(new Date());
+			this.addUserRole(userRole);
 			return user;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("加密用户密码错误",e);
@@ -329,5 +334,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int findRoleUserCountByRoleId(String roleId) {
 		return userMapper.findRoleUserCountByRoleId(roleId);
+	}
+
+	@Override
+	public void addUserRole(UserRole userRole) {
+		List<UserRole> list=new ArrayList<UserRole>();
+		list.add(userRole);
+		userMapper.addUserRole(list);
 	}
 }

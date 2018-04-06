@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -33,6 +35,7 @@ public class MessageController {
 	private ArticleService articleService;
 	
 	@RequestMapping(method=RequestMethod.GET,value="/user/message")
+	@HasPermission
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/message");
 		return mav;
@@ -40,6 +43,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/load")
 	@ResponseBody
+	@HasPermission(value="/user/message")
 	public ResultMsg loadMessages(){
 		String loginUserId = CookieUtils.getLoginUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);
@@ -48,6 +52,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/count")
 	@ResponseBody
+	@HasPermission(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
 		String loginUserId = CookieUtils.getLoginUserId();
 		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
@@ -56,6 +61,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/clean")
 	@ResponseBody
+	@HasPermission(value="/user/message")
 	public ResultMsg cleanMessage(String messageId){
 		String loginUserId = CookieUtils.getLoginUserId();
 		int count=messageService.cleanMessage(loginUserId, messageId);
@@ -68,6 +74,7 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemMessage")
+	@HasPermission
 	public ModelAndView toSendMessageIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/sendMessage");
 		return mav;
@@ -81,6 +88,7 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/send")
 	@ResponseBody
+	@HasPermission(value="/user/systemMessage")
 	public ResultMsg sendMessage(Article article){
 		logger.info("发布消息开始");
 		String userId=CookieUtils.getLoginUserId();
@@ -90,17 +98,18 @@ public class MessageController {
 	}
 	
 	/**
-	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
+	 * 加载消息列表，分页查询，该接口不用用户登陆，查询的系统消息
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/message/get_messages")
+	@RequestMapping(method=RequestMethod.POST,value="/message/getMessages")
 	@ResponseBody
+	@HasPermission(value="/user/systemMessage")
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setPageSize(pageSize);
 		queryArticleVO.setPageNo(pageNo);
 		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
-		queryArticleVO.setType("2");
+		queryArticleVO.setType(Article.TYPE_SYSTEM_MESSAGE);
 		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
 		return pageData;
 	}

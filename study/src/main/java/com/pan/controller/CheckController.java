@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.service.ArticleService;
@@ -28,6 +30,7 @@ public class CheckController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/check")
+	@HasPermission
 	public ModelAndView toIndex(){
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		//审核中
@@ -46,6 +49,7 @@ public class CheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/getPageData")
 	@ResponseBody
+	@HasPermission(value="/user/check")
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setPageSize(pageSize);
@@ -62,6 +66,7 @@ public class CheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/pass")
 	@ResponseBody
+	@HasPermission(value="/user/check")
 	public ResultMsg articlePass(String articleId){
 		articleService.passArticle(articleId);
 		return ResultMsg.ok("文章通过审核");
@@ -73,6 +78,7 @@ public class CheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/notPass")
 	@ResponseBody
+	@HasPermission(value="/user/check")
 	public ResultMsg articleNotPass(String articleId,String reason){
 		articleService.notPassArticle(articleId,reason);
 		return ResultMsg.ok("文章未通过审核");

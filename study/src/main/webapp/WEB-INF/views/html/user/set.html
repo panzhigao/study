@@ -268,6 +268,7 @@ function editUser(params){
 			success:function(data){
 				if(data.code=='200'){
 					layer.msg(data.msg);
+					parent.location.reload();
 				}else{
 					layer.msg(data.msg);
 				}
@@ -327,6 +328,7 @@ function confirmBind(params){
 				if(res.code=='200'){
 					layer.alert("绑定成功", {icon: 6});
 					$('#bindForm')[0].reset();
+					parent.location.reload();
 				}else{
 					layer.msg(res.msg);
 				}

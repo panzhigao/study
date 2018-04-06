@@ -33,6 +33,15 @@ public class UserRole extends BaseEntity{
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
+	
+	public UserRole() {
+		super();
+	}
+	public UserRole(String userId, String roleId) {
+		super();
+		this.userId = userId;
+		this.roleId = roleId;
+	}
 	@Override
 	public String toString() {
 		return "UserRole [userId=" + userId + ", roleId=" + roleId

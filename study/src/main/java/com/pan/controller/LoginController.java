@@ -95,17 +95,7 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/quit")
 	public String quit(HttpServletRequest request,HttpServletResponse response){
-		String token = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
-		String sessionId = CookieUtils.getCookieValue(request,MyConstant.SESSION_ID);
-		if(token!=null){
-			//立即过期redis中的登录状态
-			JedisUtils.expire(MyConstant.USER_LOGINED+token, 0);
-		}
-		if(sessionId!=null){
-			//立即过期redis中的session
-			JedisUtils.expire(MyConstant.USER_SESSION+sessionId, 0);
-		}
-		CookieUtils.deleteCookie(request, response, MyConstant.TOKEN);
+		CookieUtils.cleanUserLoginTrace();
 		return "redirect:/login";
 	}
 }

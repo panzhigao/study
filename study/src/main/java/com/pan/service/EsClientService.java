@@ -12,25 +12,16 @@ import com.pan.vo.QueryVO;
 public interface EsClientService {
 	
 	public boolean createIndex(String index,String type,Object obj);
-	
 	/**
-	 * 查询索引数据，不高亮
-	 * @param index 索引名称
-	 * @param type 类型
-	 * @param queryVO 查询参数
-	 * @return
-	 */
-	public List<String> queryByParams(String index,String type,QueryVO queryVO);
-	
-	/**
-	 * 查询并高亮字段
+	 * 查询并高亮字段，支持分页
 	 * 在需要高亮的字段上加上注解
 	 * @param index
 	 * @param type
 	 * @param queryVO
+	 * @param highLightFlag 为true时表示高亮字段
 	 * @return
 	 */
-	public List<String> queryByParamsWithHightLight(String index,String type,QueryVO queryVO,boolean highLightFlag);
+	public <T>List<T> queryByParamsWithHightLight(String index,String type,QueryVO queryVO,boolean highLightFlag,Class<?> T);
 	/**
 	 * 
 	 * @param index

@@ -249,6 +249,7 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- WEB SOCKET API -->
+		
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -259,14 +260,14 @@
 		<dependency>
 			<groupId>org.elasticsearch.client</groupId>
 			<artifactId>transport</artifactId>
-			<version>6.2.3</version>
+			<version>6.0.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-high-level-client -->
 		<dependency>
 			<groupId>org.elasticsearch.client</groupId>
 			<artifactId>elasticsearch-rest-high-level-client</artifactId>
-			<version>6.2.3</version>
+			<version>6.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -276,33 +277,33 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<finalName>study</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat8-maven-plugin</artifactId>
-				<version>3.0-r1655215</version>
-			</plugin>
-		</plugins>
-	</build>
+<!-- 	<build> -->
+<!-- 		<finalName>study</finalName> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.tomcat.maven</groupId> -->
+<!-- 				<artifactId>tomcat8-maven-plugin</artifactId> -->
+<!-- 				<version>3.0-r1655215</version> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>alfresco-public</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>alfresco-public-snapshots</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>beardedgeeks-releases</id>
-			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
-		</pluginRepository>
-	</pluginRepositories>
+<!-- 	<pluginRepositories> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>alfresco-public</id> -->
+<!-- 			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url> -->
+<!-- 		</pluginRepository> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>alfresco-public-snapshots</id> -->
+<!-- 			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>true</enabled> -->
+<!-- 				<updatePolicy>daily</updatePolicy> -->
+<!-- 			</snapshots> -->
+<!-- 		</pluginRepository> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>beardedgeeks-releases</id> -->
+<!-- 			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url> -->
+<!-- 		</pluginRepository> -->
+<!-- 	</pluginRepositories> -->
 </project>

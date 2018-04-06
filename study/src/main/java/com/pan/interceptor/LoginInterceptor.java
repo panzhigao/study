@@ -38,6 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 				message="用户未登录";
 			}else if(User.STATUS_BLOCKED.equals(loginUser.getStatus())){
 				message="用户被禁用";
+				CookieUtils.cleanUserLoginTrace();
 			}
 			logger.info(message);
 			if(isAjax(request)){

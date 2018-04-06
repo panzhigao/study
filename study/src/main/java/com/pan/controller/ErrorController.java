@@ -20,4 +20,13 @@ public class ErrorController {
 	public String to500(){
 		return "html/error/500";
 	}
+	
+	/**
+	 * 没有权限
+	 * @return
+	 */
+	@RequestMapping(value="/unauth")
+	public String toUnauthPage(){
+		return "html/error/unauth";
+	}
 }

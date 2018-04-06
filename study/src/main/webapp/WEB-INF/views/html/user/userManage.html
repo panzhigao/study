@@ -173,7 +173,7 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'roleNames', title: '拥有角色', width:200},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var p_allocate='#hasPermission("/user/role/allocate_role") 1 #end';
+	    	  var p_allocate='#hasPermission("/user/role/allocateRole") 1 #end';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配角色</a>';
 	    	  var show='';
 	    	  if(p_allocate){
@@ -195,7 +195,7 @@ layui.use(['table','jquery','form'], function(){
           ,params:null
           ,method: 'post'
           , form: form                    
-          , data: '$!{rc.contextPath}/user/role/get_role_tree' 
+          , data: '$!{rc.contextPath}/user/role/getRoleTree' 
           , isopen: true  //加载完毕后的展开状态，默认值：true
           , ckall: true    //启用全选功能，默认值：false
           , ckallback: function () { } //全选框状态改变后执行的回调函数
@@ -231,7 +231,7 @@ layui.use(['table','jquery','form'], function(){
           var roles = JSON.stringify(arr);
           console.log(roles);
           $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/allocate_role',
+        	  url:'$!{rc.contextPath}/user/role/allocateRole',
         	  data:{userId:selectedUserId,roles:arr},
         	  dataType:'json',
         	  type:'post',

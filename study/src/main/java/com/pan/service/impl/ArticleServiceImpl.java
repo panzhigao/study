@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
+import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
 import com.pan.entity.Message;
 import com.pan.entity.User;
@@ -261,6 +262,7 @@ public class ArticleServiceImpl implements ArticleService {
 		Article article=new Article();
 		article.setArticleId(articleId);
 		article.setCommentCount(commentCount);
+		article.setUpdateTime(new Date());
 		return articleMapper.updateArticle(article);
 	}
 
@@ -269,6 +271,7 @@ public class ArticleServiceImpl implements ArticleService {
 		Article article=new Article();
 		article.setArticleId(articleId);
 		article.setViewCount(viewCount);
+		article.setUpdateTime(new Date());
 		return articleMapper.updateArticle(article);
 	}
 
@@ -306,6 +309,7 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		article.setStatus(Article.STATUS_PUBLISHED);
 		article.setPublishTime(new Date());
+		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
 	}
 	
@@ -349,18 +353,15 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 根据条件查询es中的文章信息
 	 */
 	@Override
-	public List<Article> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
-		List<String> resultStringList = esClientService.queryByParams("article", "doc", queryArticleVO);
-		List<Article> resultList=JsonUtils.toList(resultStringList, Article.class);
-		return resultList;
+	public List<ArticleDTO> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
+		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticleVO,true,ArticleDTO.class);
 	}
 	
 	/**
 	 * 通过文章标题查询文章信息
 	 */
 	@Override
-	public List<Article> searchArticleByTitle(String title) {
-		//TODO 改成dto
+	public List<ArticleDTO> searchArticleByTitle(String title) {
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setTitle(title);
 		return queryFromEsByCondition(queryArticleVO);

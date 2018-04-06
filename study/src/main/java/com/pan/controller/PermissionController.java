@@ -32,6 +32,7 @@ public class PermissionController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permission")
+	@HasPermission
 	public String toPermissionPage(){
 		return "html/user/permission";
 	}
@@ -47,10 +48,11 @@ public class PermissionController {
 	}
 	
 	/**
-	 * 跳转权限新增页面
+	 * 跳转权限编辑页面
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permissionEdit")
+	@HasPermission("/user/permission/doEdit")
 	public String toPermissionEditPage(){
 		return "html/user/permissionEdit";
 	}
@@ -74,6 +76,7 @@ public class PermissionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/getData")
 	@ResponseBody
+	@HasPermission(value="/user/permission")
 	public ResultMsg loadPermissions(){
 		List<TreeNode> nodes=permissionService.getTreeData();
 		return ResultMsg.build(ResultCodeEmun.SUCCESS, ResultCodeEmun.SUCCESS.getMsg(),nodes);
@@ -81,6 +84,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
 	@ResponseBody
+	@HasPermission
 	public ResultMsg deletePermissions(String permissionId){
 		permissionService.deletePermission(permissionId);
 		return ResultMsg.ok("删除权限成功");
@@ -91,14 +95,16 @@ public class PermissionController {
 	 * @param roleId
 	 * @return
 	 */
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/get_permission_tree")
+	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/getPermissionTree")
 	@ResponseBody
+	@HasPermission(value="/user/permission")
 	public List<Tree> loadRoleTree(String roleId){
 		return permissionService.getPermissionTreeData(roleId);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
 	@ResponseBody
+	@HasPermission(value="/user/permission/doEdit")
 	public ResultMsg loadPermissionDetail(String permissionId){
 		Permission permission = permissionService.getByPermissionId(permissionId);
 		return ResultMsg.ok("获取权限信息成功", permission);
@@ -106,6 +112,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doEdit")
 	@ResponseBody
+	@HasPermission
 	public ResultMsg editPermission(Permission permission){
 		permissionService.updatePermission(permission);
 		return ResultMsg.ok();

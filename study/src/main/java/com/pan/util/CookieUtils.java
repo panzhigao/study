@@ -3,17 +3,14 @@ package com.pan.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
@@ -325,5 +322,21 @@ public final class CookieUtils {
     public static String getLoginUserId(){
     	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
     	return getLoginUserId(request);
+    }
+    
+    public static void cleanUserLoginTrace(){
+    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    	HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
+    	String token = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
+		String sessionId = CookieUtils.getCookieValue(request,MyConstant.SESSION_ID);
+		if(token!=null){
+			//立即过期redis中的登录状态
+			JedisUtils.expire(MyConstant.USER_LOGINED+token, 0);
+		}
+		if(sessionId!=null){
+			//立即过期redis中的session
+			JedisUtils.expire(MyConstant.USER_SESSION+sessionId, 0);
+		}
+		CookieUtils.deleteCookie(request, response, MyConstant.TOKEN);
     }
 }
