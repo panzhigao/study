@@ -284,7 +284,17 @@ layui.config({
   ,base: '$!{rc.contextPath}/static/res/mods/'
 }).extend({
   fly: 'index'
-}).use(['fly', 'face','jie'], function(){
+}).use(['fly', 'face','jie','util'], function(){
+  var util=layui.util;
+	   util.fixbar({
+	    bgcolor: '#009688'
+	    ,click: function(type){
+	      if(type === 'bar1'){
+	        //layer.msg('打开 index.js，开启发表新帖的路径');
+	        location.href = '/study/user/articleAdd';
+	      }
+	    }
+  });
   var form = layui.form;
   var articleId='${article.articleId}';
   loadComments(articleId);

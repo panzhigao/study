@@ -136,7 +136,17 @@
 <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
-layui.use(['layer'], function(){
+layui.use(['layer','util'], function(){
+	var util=layui.util;
+	  util.fixbar({
+		    bgcolor: '#009688'
+		    ,click: function(type){
+		      if(type === 'bar1'){
+		        //layer.msg('打开 index.js，开启发表新帖的路径');
+		        location.href = '/study/user/articleAdd';
+		      }
+		    }
+		  });
 	$('#searchBtn').click(function(){
 		var q=$('#q').val();
 		if(!q){

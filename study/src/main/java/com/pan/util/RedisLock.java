@@ -27,7 +27,7 @@ public class RedisLock {
     /**
      * 1纳秒=0.000001 毫秒
      */
-    private static final int MILLIS_NANO_TIME = 100000000;
+    private static final long MILLIS_NANO_TIME = 100000000L;
 
     private static Random random = new Random();
 
@@ -44,7 +44,8 @@ public class RedisLock {
         this(lockKey, timeoutMillis);
         this.expireMillis = expireMillis;
     }
-
+    
+   
     public synchronized boolean lock() throws InterruptedException {
         final long nano = System.nanoTime();
         final long timeout = timeoutMillis * MILLIS_NANO_TIME;

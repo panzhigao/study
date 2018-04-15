@@ -229,7 +229,17 @@ layui.config({
 }).use('fly');
 
 var isHot='';
-layui.use(['laypage', 'layer','jquery'], function(){
+layui.use(['laypage', 'layer','jquery','util'], function(){
+	var util=layui.util;
+    util.fixbar({
+	    bgcolor: '#009688'
+	    ,click: function(type){
+	      if(type === 'bar1'){
+	        //layer.msg('打开 index.js，开启发表新帖的路径');
+	        location.href = '/study/user/articleAdd';
+	      }
+	    }
+	  });
 	var laypage = layui.laypage;
 	//消息读取
 	#if(${user})
