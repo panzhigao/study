@@ -50,7 +50,7 @@ public class MyConstant {
 	/**
 	 * 权限类型  链接
 	 */
-	public static final String PERMISSION_TYPE_HREF="0";
+	public static final String PERMISSION_TYPE_HREF="1";
 	
 	public static final String USER_ID="userId";
 }

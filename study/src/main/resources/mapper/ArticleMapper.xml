@@ -58,20 +58,7 @@
   <select id="findByParams" resultMap="MoreResultMap" parameterType="com.pan.vo.QueryArticleVO">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
   	on a.user_id=u.user_id 
-  	<where> 
-  		<if test="articleId !=null and articleId!='' ">
-  			and a.article_id=#{articleId}
-  		</if>
-  		<if test="status !=null and status !=''">
-  			and a.status=#{status}
-  		</if>
-  		<if test="userId !=null and userId!=''">
-  			and a.user_id=#{userId}
-  		</if>
-  		<if test="type !=null and type !=''">
-  			and a.type=#{type}
-  		</if>
-  	</where>
+  	<include refid="whereSql"/>
   	<choose>
   		<when  test="isHot !=null and isHot !=''">
   			order by comment_count desc,view_count desc,publish_time desc
@@ -88,22 +75,27 @@
   	</if>
   </select>
   
-    <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryArticleVO">
-	  	select count(0) from t_article 
-	  	<where>
-	  		<if test="articleId !=null and articleId!='' ">
-	  			and article_id=#{articleId}
-	  		</if>
-	  		<if test="status !=null and status !=''">
-	  			and status=#{status}
-	  		</if>
-	  		<if test="userId !=null and userId!=''">
-	  			and user_id=#{userId}
-	  		</if>
-	  		<if test="type !=null and type !=''">
-  				and type=#{type}
+  <sql id="whereSql">
+  	<where> 
+  		    1=1
+  		<if test="articleId !=null and articleId!='' ">
+  			and a.article_id=#{articleId}
   		</if>
-	  	</where>
+  		<if test="status !=null and status !=''">
+  			and a.status=#{status}
+  		</if>
+  		<if test="userId !=null and userId!=''">
+  			and a.user_id=#{userId}
+  		</if>
+  		<if test="type !=null and type !=''">
+  			and a.type=#{type}
+  		</if>
+  	</where>
+  </sql>
+  
+  <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryArticleVO">
+	  	select count(0) from t_article a
+	  	<include refid="whereSql"/>
     </select>
   
   

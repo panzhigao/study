@@ -131,7 +131,8 @@ layui.use(['jquery', 'form','layedit'], function(){
 			layedit.sync(index);
 			params = data.field;
 			params.status=1;
-			publish(params);
+			console.log(params)
+			//publish(params);
 			return false;
 		});
 });

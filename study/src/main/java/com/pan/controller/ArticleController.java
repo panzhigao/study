@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.annotation.HasPermission;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
@@ -26,6 +25,7 @@ import com.pan.service.CollectionService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.TransFieldUtils;
 import com.pan.vo.QueryArticleVO;
 
 /**
@@ -138,6 +138,7 @@ public class ArticleController {
 		if(article==null){
 			throw new BusinessException("文章不存在");
 		}
+		TransFieldUtils.transEntity(article);
 		mav.addObject("article", article);
 		long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
 		mav.addObject("viewCount",viewCount+article.getViewCount());

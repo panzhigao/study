@@ -15,6 +15,7 @@ import com.pan.entity.Comment;
 import com.pan.entity.User;
 import com.pan.service.CommentService;
 import com.pan.util.CookieUtils;
+import com.pan.util.TransFieldUtils;
 
 @Controller
 @RequestMapping("/api")
@@ -36,6 +37,7 @@ public class CommentController {
 		User loginUser = CookieUtils.getLoginUser(request);
 		addComment.setUserPortrait(loginUser.getUserPortrait());
 		addComment.setNickname(loginUser.getNickname());
+		TransFieldUtils.transEntity(addComment);
 		return ResultMsg.ok("评论成功",addComment);
 	}
 	
@@ -49,6 +51,7 @@ public class CommentController {
 		//TODO 分页
 		String loingUserId = CookieUtils.getLoginUserId(request);
 		List<Comment> comments = commentService.loadComments(loingUserId,articleId);
+		TransFieldUtils.transEntityCollection(comments);
 		return ResultMsg.ok("获取评论信息成功",comments);
 	}
 	

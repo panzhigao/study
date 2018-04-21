@@ -59,7 +59,7 @@
   </delete>
   
   <select id="findAll" resultMap="BaseResultMap">
- 	select <include refid="Base_Column_List"/> from t_permission
+ 	select <include refid="Base_Column_List"/> from t_permission order by sort asc
   </select>
   
   <select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">

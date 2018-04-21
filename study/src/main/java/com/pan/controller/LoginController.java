@@ -57,7 +57,7 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("html/user/login");
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
-		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
+		JedisUtils.setStringExpire(MyConstant.USER_SESSION+cookieValue, vercode,3600);
 		mav.addObject("vercode", vercode);
 		return mav;
 	}

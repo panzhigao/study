@@ -285,6 +285,7 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use(['fly', 'face','jie','util'], function(){
+  var fly=layui.fly;
   var util=layui.util;
 	   util.fixbar({
 	    bgcolor: '#009688'
@@ -305,6 +306,10 @@ layui.config({
   
   form.on('submit(comment)', function(data){
 		params = data.field;
+		content=params.commentContent;
+		content = /^\{html\}/.test(content) ? content.replace(/^\{html\}/, ''):fly.content(content);
+		params.commentContent=content;
+		console.log(params);
 		sendComment(params);
 		return false;
    });

@@ -73,11 +73,8 @@ public class RedisLock {
         
     public synchronized void unlock() {
         if (locked) {
-        	System.out.println("dellockKey");
-            Long delete = delete(lockKey);
-            System.out.println("deletenum:"+delete);
+            delete(lockKey);
             this.locked = false;
-            System.out.println("dddd");
         }
     }
 

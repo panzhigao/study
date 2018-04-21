@@ -2,6 +2,7 @@ package com.pan.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.pan.common.annotation.UnescapeHtml;
 import com.pan.util.JsonUtils;
 
 /**
@@ -32,6 +33,7 @@ public class Comment extends BaseEntity{
 	 * 评论内容
 	 */
 	@NotEmpty(message="评论内容不能为空")
+	@UnescapeHtml
 	private String commentContent;
 	/**
 	 * 接收回复的评论用户

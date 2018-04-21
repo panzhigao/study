@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.pan.common.annotation.UnescapeHtml;
 import com.pan.util.JsonUtils;
 
 
@@ -69,6 +70,7 @@ public class Article extends BaseEntity{
 	 * 文章内容
 	 */
 	@NotEmpty(message="文章内容不能为空")
+	@UnescapeHtml
 	private String content;
 	/**
 	 * 文章概要
