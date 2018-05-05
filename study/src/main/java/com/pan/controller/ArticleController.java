@@ -1,10 +1,7 @@
 package com.pan.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +24,7 @@ import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.TransFieldUtils;
 import com.pan.vo.QueryArticleVO;
+import com.pan.vo.QueryCollectionVO;
 
 /**
  * 用户创作
@@ -85,14 +83,16 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
 	@HasPermission
-	public ModelAndView toArticleList(HttpServletRequest request){
-		String loingUserId = CookieUtils.getLoginUserId(request);
-		Map<String,Object> params=new HashMap<String, Object>(2);
+	public ModelAndView toArticleList(){
+		String loingUserId = CookieUtils.getLoginUserId();
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setUserId(loingUserId);
-		queryArticleVO.setType("1");
+		queryArticleVO.setType(Article.TYPE_ARTICLE);
 		int articleCounts=articleService.getCount(queryArticleVO);
-		int collectionCounts = collectionService.getCount(params);
+		QueryCollectionVO collectionVO=new QueryCollectionVO();
+		collectionVO.setUserId(loingUserId);
+		collectionVO.setTitle(Article.TYPE_ARTICLE);
+		int collectionCounts = collectionService.getCount(collectionVO);
 		ModelAndView mav=new ModelAndView("html/user/article");
 		mav.addObject("articleCounts", articleCounts);
 		mav.addObject("collectionCounts", collectionCounts);
@@ -113,7 +113,7 @@ public class ArticleController {
 		queryArticleVO.setPageSize(pageSize);
 		queryArticleVO.setPageNo(pageNo);
 		queryArticleVO.setStatus(status);
-		queryArticleVO.setType("1");
+		queryArticleVO.setType(Article.TYPE_ARTICLE);
 		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
 		return pageData;
 	}
@@ -217,12 +217,12 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,String type){
 		QueryArticleVO articleVO=new QueryArticleVO();
+		articleVO.setUserId(userId);
 		articleVO.setPageSize(pageSize);
 		articleVO.setPageNo(pageNo);
 		articleVO.setStatus(Article.STATUS_PUBLISHED);
 		articleVO.setIsHot(isHot);
 		articleVO.setType(type);
-		articleVO.setStatus(Article.STATUS_PUBLISHED);
 		articleVO.setOrderCondition("publish_time desc");
 		if(StringUtils.isBlank(type)){
 			articleVO.setType(Article.TYPE_ARTICLE);

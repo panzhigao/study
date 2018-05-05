@@ -15,6 +15,9 @@ public class QueryVO {
 		return pageSize;
 	}
 	public void setPageSize(Integer pageSize) {
+		if(pageSize==null||pageSize>=30){
+			pageSize=30;
+		}
 		this.pageSize = pageSize;
 	}
 	public Integer getPageNo() {

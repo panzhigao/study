@@ -1,8 +1,8 @@
 package com.pan.service;
 
 import java.util.Map;
-
 import com.pan.entity.Collection;
+import com.pan.vo.QueryCollectionVO;
 
 /**
  * 
@@ -15,7 +15,7 @@ public interface CollectionService{
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public Map<String,Object> findByParams(Map<String,Object> params);	
+	public Map<String,Object> findByParams(QueryCollectionVO queryCollectionVO);	
 	/**
 	 * 添加收藏
 	 * @param collection
@@ -38,5 +38,5 @@ public interface CollectionService{
 	 * @param params
 	 * @return
 	 */
-	public int getCount(Map<String,Object> params);
+	public int getCount(QueryCollectionVO queryCollectionVO);
 }

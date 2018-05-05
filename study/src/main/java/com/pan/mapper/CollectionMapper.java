@@ -1,11 +1,9 @@
 package com.pan.mapper;
 
 import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.pan.entity.Collection;
+import com.pan.vo.QueryCollectionVO;
 
 /**
  * 
@@ -18,13 +16,13 @@ public interface CollectionMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<Collection> findByParams(Map<String,Object> params);
+	public List<Collection> findByParams(QueryCollectionVO queryCollectionVO);
 	/**
 	 * 查询分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(Map<String,Object> params);
+	public int getCountByParams(QueryCollectionVO queryCollectionVO);
 	/**
 	 * 新增收藏
 	 * @param collection

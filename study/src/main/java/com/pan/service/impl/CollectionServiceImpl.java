@@ -5,12 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Collection;
@@ -19,6 +17,7 @@ import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
+import com.pan.vo.QueryCollectionVO;
 
 
 /**
@@ -38,14 +37,14 @@ public class CollectionServiceImpl implements CollectionService {
 	private CollectionMapper collectionMapper;
 	
 	@Override
-	public Map<String, Object> findByParams(Map<String, Object> params) {
+	public Map<String, Object> findByParams(QueryCollectionVO queryCollectionVO) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Collection> list = new ArrayList<Collection>();
 		try {
-			logger.info("分页查询收藏参数为:{}", JsonUtils.toJson(params));
-			list = collectionMapper.findByParams(params);
+			logger.info("分页查询收藏参数为:{}", JsonUtils.toJson(queryCollectionVO));
+			list = collectionMapper.findByParams(queryCollectionVO);
 			pageData.put("data", list);
-			int total=collectionMapper.getCountByParams(params);
+			int total=collectionMapper.getCountByParams(queryCollectionVO);
 			pageData.put("total", total);
 			pageData.put("code", "200");
 			pageData.put("msg", "");
@@ -87,7 +86,7 @@ public class CollectionServiceImpl implements CollectionService {
 	}
 
 	@Override
-	public int getCount(Map<String, Object> params) {
-		return collectionMapper.getCountByParams(params);
+	public int getCount(QueryCollectionVO queryCollectionVO) {
+		return collectionMapper.getCountByParams(queryCollectionVO);
 	}	
 }

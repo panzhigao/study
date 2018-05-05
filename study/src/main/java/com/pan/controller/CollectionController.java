@@ -1,20 +1,17 @@
 package com.pan.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
 import com.pan.service.CollectionService;
 import com.pan.util.CookieUtils;
+import com.pan.vo.QueryCollectionVO;
 
 @Controller
 public class CollectionController {
@@ -71,14 +68,10 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
-	public Map<String,Object> getUserCollectionList(HttpServletRequest request,Integer pageSize,Integer pageNo){
-		String loingUserId = CookieUtils.getLoginUserId(request);
-		Map<String,Object> params=new HashMap<String, Object>(5);
-		params.put("userId", loingUserId);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		Map<String,Object> pageData=collectionService.findByParams(params);
+	public Map<String,Object> getUserCollectionList(QueryCollectionVO collectionVO){
+		String loingUserId = CookieUtils.getLoginUserId();
+		collectionVO.setUserId(loingUserId);
+		Map<String,Object> pageData=collectionService.findByParams(collectionVO);
 		return pageData;
 	}
 }
