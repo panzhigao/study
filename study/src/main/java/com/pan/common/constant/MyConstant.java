@@ -9,7 +9,7 @@ public class MyConstant {
 	
 	public static final String TOKEN="token";
 	
-	public static final String SESSION_ID="sessionId";
+	public static final String SESSION_ID="JSESSIONID";
 	
 	public static final String USER_LOGINED="user_login:";
 	

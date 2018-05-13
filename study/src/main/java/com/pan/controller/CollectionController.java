@@ -11,6 +11,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
 import com.pan.service.CollectionService;
 import com.pan.util.CookieUtils;
+import com.pan.util.TokenUtils;
 import com.pan.vo.QueryCollectionVO;
 
 @Controller
@@ -69,7 +70,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
 	public Map<String,Object> getUserCollectionList(QueryCollectionVO collectionVO){
-		String loingUserId = CookieUtils.getLoginUserId();
+		String loingUserId = TokenUtils.getLoingUserId();
 		collectionVO.setUserId(loingUserId);
 		Map<String,Object> pageData=collectionService.findByParams(collectionVO);
 		return pageData;

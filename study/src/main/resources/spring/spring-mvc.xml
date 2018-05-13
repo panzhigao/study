@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/context 
@@ -10,7 +10,9 @@
 	http://www.springframework.org/schema/task
 	http://www.springframework.org/schema/task/spring-task-4.0.xsd
 	http://www.springframework.org/schema/mvc 
-	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<!-- 自动扫描(自动注入) -->
 	<context:component-scan base-package="com.pan.controller" />
@@ -31,42 +33,32 @@
 	   	 <mvc:mapping path="/**" />
 	   	 <bean class="com.pan.interceptor.SessionInterceptor"></bean> 
 	   </mvc:interceptor>
-	   <mvc:interceptor> 
-	     <mvc:mapping path="/user/**" />
-	     <mvc:mapping path="/api/user/**" />
-	     <mvc:exclude-mapping path="/"/>
-	     <mvc:exclude-mapping path="/forget"/>
-	     <mvc:exclude-mapping path="/login"/>
-	     <mvc:exclude-mapping path="/doLogin"/>
-	     <mvc:exclude-mapping path="/register"/>
-	     <mvc:exclude-mapping path="/doRegister"/>
-	     <mvc:exclude-mapping path="/checkUnique"/>
-	     <mvc:exclude-mapping path="/static/**"/>
-<!-- 	     <mvc:exclude-mapping path="/static/css/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/js/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/frame/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/assets/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/res/**"/> -->
-	     <bean class="com.pan.interceptor.LoginInterceptor"/> 
-	   </mvc:interceptor> 
-	   <mvc:interceptor>
-	   	 <mvc:mapping path="/user/**" />
-	     <mvc:mapping path="/api/user/**" />
-	     <mvc:exclude-mapping path="/"/>
-	     <mvc:exclude-mapping path="/forget"/>
-	     <mvc:exclude-mapping path="/login"/>
-	     <mvc:exclude-mapping path="/doLogin"/>
-	     <mvc:exclude-mapping path="/register"/>
-	     <mvc:exclude-mapping path="/doRegister"/>
-	     <mvc:exclude-mapping path="/checkUnique"/>
-	     <mvc:exclude-mapping path="/static/**"/>
-<!-- 	     <mvc:exclude-mapping path="/static/css/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/js/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/frame/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/assets/**"/> -->
-<!-- 	     <mvc:exclude-mapping path="/static/res/**"/> -->
-	   	 <bean class="com.pan.interceptor.PermissionInterceptor"/> 
-	   </mvc:interceptor>
+<!-- 	   <mvc:interceptor>  -->
+<!-- 	     <mvc:mapping path="/user/**" /> -->
+<!-- 	     <mvc:mapping path="/api/user/**" /> -->
+<!-- 	     <mvc:exclude-mapping path="/"/> -->
+<!-- 	     <mvc:exclude-mapping path="/forget"/> -->
+<!-- 	     <mvc:exclude-mapping path="/login"/> -->
+<!-- 	     <mvc:exclude-mapping path="/doLogin"/> -->
+<!-- 	     <mvc:exclude-mapping path="/register"/> -->
+<!-- 	     <mvc:exclude-mapping path="/doRegister"/> -->
+<!-- 	     <mvc:exclude-mapping path="/checkUnique"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/**"/> -->
+<!-- 	     <bean class="com.pan.interceptor.LoginInterceptor"/>  -->
+<!-- 	   </mvc:interceptor>  -->
+<!-- 	   <mvc:interceptor> -->
+<!-- 	   	 <mvc:mapping path="/user/**" /> -->
+<!-- 	     <mvc:mapping path="/api/user/**" /> -->
+<!-- 	     <mvc:exclude-mapping path="/"/> -->
+<!-- 	     <mvc:exclude-mapping path="/forget"/> -->
+<!-- 	     <mvc:exclude-mapping path="/login"/> -->
+<!-- 	     <mvc:exclude-mapping path="/doLogin"/> -->
+<!-- 	     <mvc:exclude-mapping path="/register"/> -->
+<!-- 	     <mvc:exclude-mapping path="/doRegister"/> -->
+<!-- 	     <mvc:exclude-mapping path="/checkUnique"/> -->
+<!-- 	     <mvc:exclude-mapping path="/static/**"/> -->
+<!-- 	   	 <bean class="com.pan.interceptor.PermissionInterceptor"/>  -->
+<!-- 	   </mvc:interceptor> -->
 	</mvc:interceptors> 
 	
 	<!-- 引入属性文件,mvc无法引入spring容器的属性 -->
@@ -111,4 +103,10 @@
 	    <!-- 最大文件大小，-1为不限制大小 -->  
 	    <property name="maxUploadSize" value="-1"/>  
 	</bean>  
+	
+	<aop:config proxy-target-class="true"/>
+	<bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+      <property name="securityManager" ref="securityManager" />
+   </bean>
 </beans>

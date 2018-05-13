@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -23,7 +24,11 @@ import com.pan.util.JsonUtils;
  * 
  */
 public class BusinessExceptionResolver implements HandlerExceptionResolver {
-
+	
+	private String deaultMessage="系统未知错误";
+	
+	private String viewName="html/error/500";
+	
 	private static final Logger logger = LoggerFactory.getLogger(BusinessExceptionResolver.class);
 	
 	public static boolean isAjax(HttpServletRequest request) {  
@@ -38,10 +43,13 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		// 如果抛出的是系统自定义的异常则直接转换
 		if (ex instanceof BusinessException) {
 			businessException = (BusinessException) ex;
-		} else {
+		}else if(ex instanceof AuthorizationException){//权限异常
+			viewName="html/error/unauth";
+			businessException = new BusinessException("权限异常,没有当前权限");
+		}else {
 			// 如果抛出的不是系统自定义的异常则重新构造一个未知错误异常
 			// 这里我就也有CustomException省事了，实际中应该要再定义一个新的异常
-			businessException = new BusinessException("系统未知错误");
+			businessException = new BusinessException(deaultMessage);
 		}
 		if(isAjax(request)){
 			response.setCharacterEncoding("UTF-8");
@@ -65,7 +73,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("message", businessException.getMessage());
 		modelAndView.addObject("user", CookieUtils.getLoginUser(request));
-		modelAndView.setViewName("html/error/500");
+		modelAndView.setViewName(viewName);
 		return modelAndView;
 
 	}

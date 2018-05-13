@@ -28,6 +28,7 @@ import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.QueryRoleVO;
 
@@ -52,7 +53,7 @@ public class RoleServiceImpl implements RoleService{
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
 		ValidationUtils.validateEntity(role);
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
 		role.setSuperAdminFlag("0");
@@ -100,7 +101,8 @@ public class RoleServiceImpl implements RoleService{
 		//删除角色下关联的权限
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		//清除缓存中角色的权限信息
-		JedisUtils.delete("role_permissions:"+roleId);
+		TokenUtils.clearAuth();
+		//JedisUtils.delete("role_permissions:"+roleId);
 	}
 
 	@Override
@@ -126,7 +128,8 @@ public class RoleServiceImpl implements RoleService{
 			}
 			rolePermissionService.addRolePermission(list);
 		}
-		recachePermissionByRoleId(roleId);
+		TokenUtils.clearAuth();
+		//recachePermissionByRoleId(roleId);
 	}
 
 	@Override
@@ -193,7 +196,7 @@ public class RoleServiceImpl implements RoleService{
 	public void updateRole(Role role) {
 		ValidationUtils.validateEntityWithGroups(role);
 		role.setUpdateTime(new Date());
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		role.setUpdateUser(loginUserId);
 		roleMapper.updateRole(role);
 	}

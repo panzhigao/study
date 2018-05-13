@@ -53,4 +53,10 @@ public interface PermissionMapper {
 	 * 更新权限
 	 */
 	public void updatePermission(Permission permission);
+	/**
+	 * 获取用户权限
+	 * @param userId
+	 * @return
+	 */
+	public List<Permission> findPermissionsByUserId(String userId);
 }

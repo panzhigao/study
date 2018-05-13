@@ -1,5 +1,7 @@
 package com.pan.test;
 
+import java.util.Set;
+
 import org.junit.Test;
 
 import com.pan.test.base.BaseTest;
@@ -31,7 +33,7 @@ public class JedisTest extends BaseTest{
 	@Test
 	public void test4(){
 		//JedisUtils.setString("p", "pzgd");
-		Long expire = JedisUtils.expire("22", 300);
-		System.out.println(expire);
+		Set<byte[]> byteKeys = JedisUtils.getByteKeys("redis-cache:*".getBytes());
+		System.out.println(byteKeys);
 	}
 }

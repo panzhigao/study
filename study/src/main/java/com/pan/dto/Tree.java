@@ -1,5 +1,6 @@
 package com.pan.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +13,11 @@ import org.apache.commons.lang3.StringUtils;
  * @author panzhigao-wb
  *
  */
-public class Tree {
+public class Tree implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 744786613483339466L;
 	private String title;
 	private String value;
 	private boolean checked;

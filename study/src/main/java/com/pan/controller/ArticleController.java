@@ -3,6 +3,7 @@ package com.pan.controller;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.annotation.HasPermission;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -22,6 +22,7 @@ import com.pan.service.CollectionService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
 import com.pan.vo.QueryArticleVO;
 import com.pan.vo.QueryCollectionVO;
@@ -50,7 +51,7 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
-	@HasPermission("/user/article/doSave")
+	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/jie/add");
 		User user = CookieUtils.getLoginUser(request);
@@ -64,7 +65,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/article/doSave")
 	public ResultMsg saveArticle(Article article){
 		logger.info("发布文章开始");
 		ResultMsg resultMsg=null;
@@ -82,9 +83,9 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
-	@HasPermission
+	@RequiresPermissions("/user/article/mine")
 	public ModelAndView toArticleList(){
-		String loingUserId = CookieUtils.getLoginUserId();
+		String loingUserId = TokenUtils.getLoingUserId();
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setType(Article.TYPE_ARTICLE);
@@ -105,9 +106,9 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/getPageData")
 	@ResponseBody
-	@HasPermission(value="/user/article/mine")
+	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
-		String loingUserId = CookieUtils.getLoginUserId();
+		String loingUserId = TokenUtils.getLoingUserId();
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setPageSize(pageSize);
@@ -124,11 +125,11 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
 	@ResponseBody
-	@HasPermission(value="/user/article/doEdit")
+	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/jie/detail");
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		String status=Article.STATUS_PUBLISHED;
 		Article article=articleService.findByArticleIdAndStatus(articleId,status);
 		//登录状态
@@ -153,10 +154,10 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
 	@ResponseBody
-	@HasPermission(value="/user/article/doEdit")
+	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
 		ModelAndView mav=new ModelAndView("html/jie/edit");
-		String loingUserId = CookieUtils.getLoginUserId();
+		String loingUserId = TokenUtils.getLoingUserId();
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -172,7 +173,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doEdit"})
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/article/doEdit")
 	public ResultMsg updateArticle(Article article,HttpServletRequest request){
 		logger.info("发布文章开始",article);
 		ResultMsg resultMsg=null;
@@ -191,7 +192,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/article/doDelete")
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
 		String userId=CookieUtils.getLoginUserId(request);

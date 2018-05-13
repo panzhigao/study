@@ -2,8 +2,7 @@ package com.pan.common.config;
 
 import java.io.IOException;
 import java.io.Writer;
-
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
@@ -11,9 +10,6 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.directive.Directive;
 import org.apache.velocity.runtime.parser.node.Node;
 
-import com.pan.util.CookieUtils;
-import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
 
 /**
  * @author 作者
@@ -37,17 +33,12 @@ public class RoleDirective extends Directive {
 			ParseErrorException, MethodInvocationException {
 		String roleId = (String) getMarcoParam(context, node, 0);  
         Node nodeParent = null;
-        String loginUserId = CookieUtils.getLoginUserId();
-        String roles = JedisUtils.getString("user_roles:"+loginUserId);
-		String[] arr=(String[]) JsonUtils.fromJson(roles, String[].class);
-		for (String string : arr) {
-			if(StringUtils.equals(roleId, string)){
-				nodeParent = node.jjtGetChild(1);
-				nodeParent.render(context, writer);  
-				return true;
-			}
-		}	
-	    return false;
+		if(SecurityUtils.getSubject().hasRole(roleId)){
+			nodeParent = node.jjtGetChild(1);
+			nodeParent.render(context, writer);  
+			return true;
+		}
+		return false;	   
 	}
 
 	private static Object getMarcoParam(InternalContextAdapter context, Node node,

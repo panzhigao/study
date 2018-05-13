@@ -26,6 +26,7 @@ import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.QueryArticleVO;
 
@@ -96,7 +97,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void saveArticle(Article article) {
-		String userId=CookieUtils.getLoginUserId();
+		String userId=TokenUtils.getLoingUserId();
 		article.setUserId(userId);
 		checkArticle(article);
 		// 默认草稿状态
@@ -165,7 +166,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}",article);
-		String userId=CookieUtils.getLoginUserId();
+		String userId=TokenUtils.getLoingUserId();
 		article.setUserId(userId);
 		//校验前台传来的数据
 		checkArticle(article);
@@ -288,7 +289,7 @@ public class ArticleServiceImpl implements ArticleService {
 		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		Set<String> set=new HashSet<String>();
 		set.add(loginUserId);
 		MessageUtils.sendMessageToAllUsersWithException(JsonUtils.toJson(message), set);

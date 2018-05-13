@@ -36,6 +36,7 @@ import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.RegexUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
 import com.pan.vo.QueryUserVO;
@@ -306,7 +307,7 @@ public class UserServiceImpl implements UserService{
 			throw new BusinessException("用户不存在");
 		}
 		User user=new User(userId,status);
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		user.setUpdateUser(loginUserId);
 		user.setUpdateTime(new Date());
 		if(User.STATUS_BLOCKED.equals(status)){

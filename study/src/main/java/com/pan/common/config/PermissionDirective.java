@@ -2,13 +2,14 @@ package com.pan.common.config;
 
 import java.io.IOException;
 import java.io.Writer;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.directive.Directive;
 import org.apache.velocity.runtime.parser.node.Node;
-import com.pan.util.PermissionUtils;
 
 /**
  * @author 作者
@@ -35,8 +36,7 @@ public class PermissionDirective extends Directive {
 			ParseErrorException, MethodInvocationException {
 		String url = (String) getMarcoParam(context, node, 0);  
         Node nodeParent = null;
-        boolean hasPermssion = PermissionUtils.hasPermssion(url);
-        if(hasPermssion){
+        if(SecurityUtils.getSubject().isPermitted(url)){
         	nodeParent = node.jjtGetChild(1);
 			nodeParent.render(context, writer);  
 			return true;

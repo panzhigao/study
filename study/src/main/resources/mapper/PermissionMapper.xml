@@ -101,4 +101,11 @@
   	</set>
   	where permission_id=#{permissionId}
   </update>
+  
+  <select id="findPermissionsByUserId" resultMap="BaseResultMap">
+  	select tp.id,tp.permission_id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user from t_user tu left 
+  	join t_user_role tur on tu.user_id=tur.user_id 
+  	join t_role_permission trp on trp.role_id=tur.role_id  
+  	join t_permission tp on tp.permission_id=trp.permission_id where tu.user_id=#{userId} 
+  </select>
 </mapper>

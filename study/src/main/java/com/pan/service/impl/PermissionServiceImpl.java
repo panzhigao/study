@@ -27,6 +27,7 @@ import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.QueryRoleVO;
 
@@ -61,20 +62,21 @@ public class PermissionServiceImpl implements PermissionService {
 			permission.setSort(1);
 		}
 		permission.setCreateTime(new Date());
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		permission.setCreateUser(loginUserId);
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
 		QueryRoleVO queryRoleVO=new QueryRoleVO();
 		queryRoleVO.setSuperAdminFlag("1");
 		//自动为超级管理员添加权限
-		List<Role> list = roleService.findByParams(queryRoleVO);
-		if(list.size()>0){
-			String roleId=list.get(0).getRoleId();
-			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
-			rolePermissionService.addRolePermission(rolePermission);
-			JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permission));
-		}
+		TokenUtils.clearAuth();
+//		List<Role> list = roleService.findByParams(queryRoleVO);
+//		if(list.size()>0){
+//			String roleId=list.get(0).getRoleId();
+//			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
+//			rolePermissionService.addRolePermission(rolePermission);
+//			JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permission));
+//		}
 	}
 
 	@Override
@@ -107,11 +109,12 @@ public class PermissionServiceImpl implements PermissionService {
 		//删除数据库信息
 		permissionMapper.deletePermission(permissionId);
 		//删除缓存数据
-		List<Role> roles = roleService.findAll();
-		for (Role role : roles) {
-			String roleId=role.getRoleId();
-			JedisUtils.hdel("role_permissions:"+roleId, permissionId);
-		}
+		TokenUtils.clearAuth();
+//		List<Role> roles = roleService.findAll();
+//		for (Role role : roles) {
+//			String roleId=role.getRoleId();
+//			JedisUtils.hdel("role_permissions:"+roleId, permissionId);
+//		}
 	}
 
 	@Override
@@ -180,28 +183,34 @@ public class PermissionServiceImpl implements PermissionService {
 		if(MyConstant.PERMISSION_TYPE_MENU.equals(permission.getType())){
 			permission.setUrl("  ");
 		}
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		permission.setUpdateUser(loginUserId);
 		permission.setUpdateTime(new Date());
 		permissionMapper.updatePermission(permission);
-		try {
-			BeanUtils.copyPropertiesIgnoreNull(permission,permissionInDb);
-			//同步缓存
-			List<Role> roles = roleService.findAll();
-			for (Role role : roles) {
-				String roleId=role.getRoleId();
-				if(JedisUtils.hexists("role_permissions:"+roleId, permission.getPermissionId())){
-					JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permissionInDb));
-				}
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException("修改权限失败");
-		}
+		TokenUtils.clearAllUserAuth();
+//		try {
+//			BeanUtils.copyPropertiesIgnoreNull(permission,permissionInDb);
+//			//同步缓存
+//			List<Role> roles = roleService.findAll();
+//			for (Role role : roles) {
+//				String roleId=role.getRoleId();
+//				if(JedisUtils.hexists("role_permissions:"+roleId, permission.getPermissionId())){
+//					JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permissionInDb));
+//				}
+//			}
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			throw new BusinessException("修改权限失败");
+//		}
 	}
 
 	@Override
 	public List<Permission> getAll() {
 		return permissionMapper.findAll();
+	}
+
+	@Override
+	public List<Permission> findPermissionsByUserId(String userId) {
+		return permissionMapper.findPermissionsByUserId(userId);
 	}
 }

@@ -59,4 +59,11 @@ public interface PermissionService {
 	 * @return
 	 */
 	public List<Permission> getAll();
+	/**
+	 * 获取用户的所有权限
+	 * @param userId
+	 * @return
+	 */
+	public List<Permission> findPermissionsByUserId(String userId);
+	
 }

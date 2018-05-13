@@ -71,9 +71,21 @@ public class JedisUtils {
 	
 	public static void setString(String key,String value){
 		Jedis jedis = jedisPool.getResource();
-		String set = jedis.set(key, value);
+		jedis.set(key, value);
 		jedis.close();
-		System.out.println("set:"+set);
+	}
+	
+	public static void set(byte[] key,byte[] value){
+		Jedis jedis = jedisPool.getResource();
+		jedis.set(key, value);
+		jedis.close();
+	}
+	
+	public static void setExpire(byte[] key,byte[] value, int seconds){
+		Jedis jedis = jedisPool.getResource();
+		jedis.set(key, value);
+		jedis.expire(key, seconds);
+		jedis.close();
 	}
 	
 	/**
@@ -154,6 +166,12 @@ public class JedisUtils {
 		return value;
 	} 
 	
+	public static Long decreaseKey(byte[] key){
+		Jedis jedis = jedisPool.getResource();
+		Long value = jedis.del(key);
+		jedis.close();
+		return value;
+	}
 	/**
 	 * 
 	 * @param key
@@ -288,6 +306,22 @@ public class JedisUtils {
 		try {
 			jedis = jedisPool.getResource();
 			res = jedis.keys(pattern);
+		} catch (Exception e) {
+			jedis.close();
+			e.printStackTrace();
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
+	
+	public static Set<byte[]> getByteKeys(byte[] key) {
+		Jedis jedis = null;
+		Set<byte[]> res = null;
+		try {
+			jedis = jedisPool.getResource();
+			res = jedis.keys(key);
 		} catch (Exception e) {
 			jedis.close();
 			e.printStackTrace();

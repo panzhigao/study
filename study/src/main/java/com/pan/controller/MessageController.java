@@ -20,6 +20,7 @@ import com.pan.entity.Message;
 import com.pan.service.ArticleService;
 import com.pan.service.MessageService;
 import com.pan.util.CookieUtils;
+import com.pan.util.TokenUtils;
 import com.pan.vo.QueryArticleVO;
 
 
@@ -45,7 +46,7 @@ public class MessageController {
 	@ResponseBody
 	@HasPermission(value="/user/message")
 	public ResultMsg loadMessages(){
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);
 		return ResultMsg.ok("加载消息成功", list);
 	}
@@ -54,7 +55,7 @@ public class MessageController {
 	@ResponseBody
 	@HasPermission(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
 		return ResultMsg.ok("统计成功", count);
 	}
@@ -63,7 +64,7 @@ public class MessageController {
 	@ResponseBody
 	@HasPermission(value="/user/message")
 	public ResultMsg cleanMessage(String messageId){
-		String loginUserId = CookieUtils.getLoginUserId();
+		String loginUserId = TokenUtils.getLoingUserId();
 		int count=messageService.cleanMessage(loginUserId, messageId);
 		return ResultMsg.ok("消息置为已读成功", count);
 	}
@@ -91,7 +92,7 @@ public class MessageController {
 	@HasPermission(value="/user/systemMessage")
 	public ResultMsg sendMessage(Article article){
 		logger.info("发布消息开始");
-		String userId=CookieUtils.getLoginUserId();
+		String userId=TokenUtils.getLoingUserId();
 		article.setUserId(userId);
 		articleService.saveSystemMessage(article);
 		return ResultMsg.ok("消息发布成功");

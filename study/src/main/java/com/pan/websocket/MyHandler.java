@@ -12,6 +12,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.pan.util.TokenUtils;
+
 /**
  * 
  * @author panzhigao-wb
@@ -156,7 +158,8 @@ public class MyHandler extends TextWebSocketHandler{
      */
     private String getClientId(WebSocketSession session) {
         try {
-            String userId =(String) session.getAttributes().get(USER_ID);
+            //String userId =(String) session.getAttributes().get(USER_ID);
+            String userId =TokenUtils.getLoingUserId();
             logger.info("获取用户标识:"+userId);
             return userId;
         } catch (Exception e) {

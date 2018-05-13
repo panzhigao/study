@@ -319,10 +319,10 @@ public final class CookieUtils {
     	}
     }
     
-    public static String getLoginUserId(){
-    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	return getLoginUserId(request);
-    }
+//    public static String getLoginUserId(){
+//    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+//    	return getLoginUserId(request);
+//    }
     
     public static void cleanUserLoginTrace(){
     	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();

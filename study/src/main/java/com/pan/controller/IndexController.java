@@ -19,7 +19,7 @@ public class IndexController {
 	 * 跳转网站主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/")
+	@RequestMapping(method=RequestMethod.GET,value={"/","/index"})
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mav=new ModelAndView("html/index");
 		return mav;

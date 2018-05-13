@@ -9,18 +9,18 @@ import com.pan.service.RoleService;
 
 public class InitTheContext implements ApplicationListener<ContextRefreshedEvent> {
 	
-	@Autowired
-	private RoleService roleService;
+//	@Autowired
+//	private RoleService roleService;
 	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		if(event.getApplicationContext().getParent() == null){
-			List<Role> roles = roleService.findAll();
-			for (Role role : roles) {
-				String roleId=role.getRoleId();
-				roleService.recachePermissionByRoleId(roleId);
-			}
-		}
+//		if(event.getApplicationContext().getParent() == null){
+//			List<Role> roles = roleService.findAll();
+//			for (Role role : roles) {
+//				String roleId=role.getRoleId();
+//				roleService.recachePermissionByRoleId(roleId);
+//			}
+//		}
 	}
 
 }

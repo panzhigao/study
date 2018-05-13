@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.PasswordUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
 
@@ -48,12 +50,13 @@ public class UserSetController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/set")
-	@HasPermission
+	//@HasPermission
+	@RequiresPermissions("/user/set")
 	public ModelAndView toSetPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/set");
-		User user = CookieUtils.getLoginUser(request);
-		UserExtension userExtension=userService.findExtensionByUserId(user.getUserId());
-		mav.addObject("user",user);
+		User loingUser = TokenUtils.getLoingUser();
+		UserExtension userExtension=userService.findExtensionByUserId(loingUser.getUserId());
+		mav.addObject("user",loingUser);
 		mav.addObject("userExtension",userExtension);
 		return mav;
 	}
@@ -64,16 +67,18 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/doSet")
 	@ResponseBody
-	@HasPermission(value="/user/set")
+	//@HasPermission(value="/user/set")
+	@RequiresPermissions("/user/set")
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		String userId = CookieUtils.getLoginUserId(request);
-		String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
+		//String userId = CookieUtils.getLoginUserId(request);
+		//String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
+		String userId=TokenUtils.getLoingUserId();
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
 		User userT = userService.findByUserId(userId);
-		String json=JsonUtils.toJson(userT);
-		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
+		//String json=JsonUtils.toJson(userT);
+		//JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
 		return resultMsg;
 	}
@@ -86,13 +91,14 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/resetPassword")
 	@ResponseBody
-	@HasPermission(value="/user/set")
+	//@HasPermission(value="/user/set")
+	@RequiresPermissions("/user/set")
 	public ResultMsg resetPassword(HttpServletRequest request,PasswordDTO passwordDTO) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		ValidationUtils.validateEntity(passwordDTO);
 		if(!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())){
 			throw new BusinessException("确认密码与密码不一致");
 		}
-		String userId=CookieUtils.getLoginUserId(request);
+		String userId=TokenUtils.getLoingUserId();
 		User userInDb = userService.findByUserId(userId);
 		boolean flag=PasswordUtils.validPassword(passwordDTO.getNowPassword(),userInDb.getPassword());
 		if(!flag){
