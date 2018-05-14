@@ -27,10 +27,6 @@ public class MyHandler extends TextWebSocketHandler{
      * 在线用户列表
      */
     private static final Map<String, WebSocketSession> USERS;
-    /**
-     * 用户标识
-     */
-    private static final String USER_ID = "userId";
 
     static {
         USERS = new HashMap<>();
@@ -41,7 +37,6 @@ public class MyHandler extends TextWebSocketHandler{
         logger.info("成功建立连接");
         String userId = getClientId(session);
         logger.info("userId:{}",userId);
-        //userId=4;
         if (userId != null) {
             USERS.put(userId, session);
         }
@@ -158,7 +153,6 @@ public class MyHandler extends TextWebSocketHandler{
      */
     private String getClientId(WebSocketSession session) {
         try {
-            //String userId =(String) session.getAttributes().get(USER_ID);
             String userId =TokenUtils.getLoingUserId();
             logger.info("获取用户标识:"+userId);
             return userId;

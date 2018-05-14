@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.annotation.HasPermission;
-import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.PasswordDTO;
@@ -24,8 +22,6 @@ import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
-import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -67,18 +63,12 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/doSet")
 	@ResponseBody
-	//@HasPermission(value="/user/set")
 	@RequiresPermissions("/user/set")
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		//String userId = CookieUtils.getLoginUserId(request);
-		//String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
 		String userId=TokenUtils.getLoingUserId();
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
-		User userT = userService.findByUserId(userId);
-		//String json=JsonUtils.toJson(userT);
-		//JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
 		return resultMsg;
 	}
@@ -91,7 +81,6 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/resetPassword")
 	@ResponseBody
-	//@HasPermission(value="/user/set")
 	@RequiresPermissions("/user/set")
 	public ResultMsg resetPassword(HttpServletRequest request,PasswordDTO passwordDTO) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		ValidationUtils.validateEntity(passwordDTO);

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -98,6 +99,22 @@ public class RedisUtils {
 		}
 		
 	}
+	
+	  /**
+     * put cache
+     *
+     * @param field
+     * @param obj
+     * @param <T>
+     * @return
+     */
+    public <T> void set2(String field, T obj) {
+        final byte[] value = SerializeUtils.serialize(obj);
+        redisTemplate.execute((RedisCallback<Void>) connection -> {
+            connection.set(field.getBytes(), value);
+            return null;
+        });
+    }
 	
 	/**
 	 * 普通缓存放入并设置时间

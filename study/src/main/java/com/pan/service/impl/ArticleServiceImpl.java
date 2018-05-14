@@ -68,24 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 * @param article
 	 */
 	private void checkArticle(Article article) {
-		//TODO 待清理
 		ValidationUtils.validateEntity(article);
-//		if (StringUtils.isBlank(article.getUserId())) {
-//			logger.error("用户信息有误");
-//			throw new BusinessException("用户信息有误,请重新登陆");
-//		}
-//		if (StringUtils.isBlank(article.getTitle())) {
-//			logger.error("文章标题不能为空");
-//			throw new BusinessException("文章标题不能为空");
-//		}
-//		if (StringUtils.isBlank(article.getContent())) {
-//			logger.error("文章内容不能为空");
-//			throw new BusinessException("文章内容不能为空");
-//		}
-//		if (StringUtils.isBlank(article.getOutline())) {
-//			logger.error("文章概要不能为空");
-//			throw new BusinessException("文章内容不能为空");
-//		}
 		if(!checkOpearteStatus(article.getStatus())){
 			logger.error("html页面被修改,方法参数错误");
 			throw new BusinessException("文章状态有误,请刷新页面");

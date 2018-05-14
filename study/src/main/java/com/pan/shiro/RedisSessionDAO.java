@@ -15,16 +15,32 @@ import com.pan.util.SerializeUtils;
 public class RedisSessionDAO extends AbstractSessionDAO {
 
 	private static final String REDIS_SESSION_PREFIX = "redis-session:";
+	
+	public static final int DEFAULT_SECONDS=-1;
+	
+	private int seconds=DEFAULT_SECONDS;
+	
+	public int getSeconds() {
+		return seconds;
+	}
 
+	public void setSeconds(int seconds) {
+		this.seconds = seconds;
+	}
+		
 	private byte[] getKey(String key) {
 		return (REDIS_SESSION_PREFIX + key).getBytes();
 	}
 	
+	/**
+	 * 保存session并设置过期时间
+	 * @param session
+	 */
 	private void saveSession(Session session){
 		if(session!=null&&session.getId()!=null){
 			byte[] key = getKey(session.getId().toString());
 			byte[] value = SerializeUtils.serialize(session);
-			JedisUtils.setExpire(key, value, 3600);
+			JedisUtils.setExpire(key, value, seconds);
 		}
 	}
 	
@@ -70,5 +86,4 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		byte[] bs = JedisUtils.get(key);
 		return (Session) SerializeUtils.deserialize(bs);
 	}
-
 }

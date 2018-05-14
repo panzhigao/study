@@ -4,18 +4,43 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.pan.entity.User;
 import com.pan.util.JedisUtils;
 import com.pan.util.SerializeUtils;
 
 public class RedisCache<K, V> implements Cache<K, V> {
-
+	
+	private static final Logger logger=LoggerFactory.getLogger(MyRealm.class);
+	
 	public static final String CACHE_PREFIX = "redis-cache:";
+	
+	public static final int DEFAULT_SECONDS=3600;
+	
+	private int seconds;
+	
+	public int getSeconds() {
+		return seconds;
+	}
 
+	public void setSeconds(int seconds) {
+		this.seconds = seconds;
+	}
+	
+	public RedisCache(){
+		this.seconds=DEFAULT_SECONDS;
+	}
+	
+	public RedisCache(int seconds){
+		this.seconds=seconds;
+	}
+	
 	private byte[] getKey(K key) {
 	    if (key instanceof String) {
             String preKey = CACHE_PREFIX + key;
@@ -37,7 +62,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K k) throws CacheException {
-		System.out.println("从redis读取权限");
+		logger.debug("从redis读取权限",k);
 		byte[] key = getKey(k);
 		if (key != null) {
 			return ((V) SerializeUtils.deserialize(JedisUtils.get(key)));
@@ -55,7 +80,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<K> sets=new HashSet<K>();
 		for(byte[] b:byteKeys){
 			String s=new String(b);
-			System.out.println(s);
 			sets.add(((K)s));
 		}
 		return sets;
@@ -65,7 +89,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	public V put(K k, V v) throws CacheException {
 		byte[] key = getKey(k);
 		byte[] value = SerializeUtils.serialize(v);
-		JedisUtils.setExpire(key, value, 3600);
+		JedisUtils.setExpire(key, value, seconds);
 		return  v;
 	}
 

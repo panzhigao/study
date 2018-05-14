@@ -318,12 +318,7 @@ public final class CookieUtils {
     		throw new BusinessException("验证码输入错误");
     	}
     }
-    
-//    public static String getLoginUserId(){
-//    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-//    	return getLoginUserId(request);
-//    }
-    
+        
     public static void cleanUserLoginTrace(){
     	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
     	HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();

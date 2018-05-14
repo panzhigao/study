@@ -40,13 +40,17 @@
 
 	<bean id="realm" class="com.pan.shiro.MyRealm" />
 
-	<bean id="redisSessionDAO" class="com.pan.shiro.RedisSessionDAO"></bean>
+	<bean id="redisSessionDAO" class="com.pan.shiro.RedisSessionDAO">
+		<property name="seconds" value="${shiro.session.redis.expire}"/>
+	</bean>
 
 	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
 		<property name="sessionDAO" ref="redisSessionDAO" />
 	</bean>
 
-	<bean id="cacheManager" class="com.pan.shiro.RedisCacheManager"></bean>
+	<bean id="cacheManager" class="com.pan.shiro.RedisCacheManager">
+		<property name="seconds" value="${shiro.redis.expire}"/>
+	</bean>
 
 	<!-- 会话Cookie模板 -->
 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
