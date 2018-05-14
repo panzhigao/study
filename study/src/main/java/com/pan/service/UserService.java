@@ -1,5 +1,6 @@
 package com.pan.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.pan.entity.User;
@@ -109,4 +110,10 @@ public interface UserService {
 	 * @param userRole
 	 */
 	public void addUserRole(UserRole userRole);
+	/**
+	 * 根据角色id获取拥有该角色的用户
+	 * @param roleId
+	 * @return
+	 */
+	public List<User> findUserByRoleId(String roleId);
 }

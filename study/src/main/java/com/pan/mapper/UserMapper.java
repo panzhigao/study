@@ -66,4 +66,10 @@ public interface UserMapper {
 	 * @return
 	 */
 	public int findRoleUserCountByRoleId(String roleId);
+	/**
+	 * 查找使用角色的用户数据
+	 * @param roleId
+	 * @return
+	 */
+	public List<User> findUserByRoleId(String roleId);
 }

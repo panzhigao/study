@@ -293,6 +293,8 @@ public class UserServiceImpl implements UserService{
 				list.add(userRole);
 			}
 			userMapper.addUserRole(list);
+			//清空该用户权限缓存
+			TokenUtils.clearAuth(user);
 		}
 	}
 
@@ -339,5 +341,10 @@ public class UserServiceImpl implements UserService{
 		List<UserRole> list=new ArrayList<UserRole>();
 		list.add(userRole);
 		userMapper.addUserRole(list);
+	}
+
+	@Override
+	public List<User> findUserByRoleId(String roleId) {
+		return userMapper.findUserByRoleId(roleId);
 	}
 }

@@ -17,6 +17,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,37 +32,39 @@ import com.pan.service.UserService;
 import com.pan.util.PasswordUtils;
 import com.pan.util.TokenUtils;
 
-public class MyRealm extends AuthorizingRealm{
-	
-	private static final Logger logger=LoggerFactory.getLogger(MyRealm.class);
-	
+public class MyRealm extends AuthorizingRealm {
+
+	private static final Logger logger = LoggerFactory.getLogger(MyRealm.class);
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private PermissionService permissionService;
-	
+
 	/**
 	 * 加载菜单
+	 * 
 	 * @param userId
 	 */
-	private Set<String> loadMenus(String userId){
+	private Set<String> loadMenus(String userId) {
 		logger.debug("---------------从数据库加载权限--------------------");
-		List<Permission> permissionList = permissionService.findPermissionsByUserId(userId);
-		List<Tree> nodes=new ArrayList<Tree>(20);
-		Set<String> permissions=new HashSet<>();
-		for(Permission permission:permissionList){
-			//非菜单路径
-			if(StringUtils.isNotBlank(permission.getUrl())){
+		List<Permission> permissionList = permissionService
+				.findPermissionsByUserId(userId);
+		List<Tree> nodes = new ArrayList<Tree>(20);
+		Set<String> permissions = new HashSet<>();
+		for (Permission permission : permissionList) {
+			// 非菜单路径
+			if (StringUtils.isNotBlank(permission.getUrl())) {
 				permissions.add(permission.getUrl());
 			}
-			if("2".equals(permission.getType())){
+			if ("2".equals(permission.getType())) {
 				continue;
 			}
-			Tree roleTree=new Tree();
+			Tree roleTree = new Tree();
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
@@ -70,70 +74,92 @@ public class MyRealm extends AuthorizingRealm{
 			roleTree.setSort(permission.getSort());
 			nodes.add(roleTree);
 		}
-		List<Tree> buildTree = Tree.buildTree(nodes,true);
+		List<Tree> buildTree = Tree.buildTree(nodes, true);
 		TokenUtils.setAttribute("menus", buildTree);
 		return permissions;
 	}
 	
+	/**
+	 * 授权
+	 */
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		User userInDb = (User)principals.getPrimaryPrincipal();
-		//角色信息
+	protected AuthorizationInfo doGetAuthorizationInfo(
+			PrincipalCollection principals) {
+		User userInDb = (User) principals.getPrimaryPrincipal();
+		// 角色信息
 		List<String> roles = roleService.getRoleByUserId(userInDb.getUserId());
-		//权限信息
+		// 权限信息
 		Set<String> permissions = loadMenus(userInDb.getUserId());
-        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.addRoles(roles);
-        simpleAuthorizationInfo.addStringPermissions(permissions);
+		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+		simpleAuthorizationInfo.addRoles(roles);
+		simpleAuthorizationInfo.addStringPermissions(permissions);
 		return simpleAuthorizationInfo;
 	}
-
+	
+	/**
+	 * 验证
+	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		String username=(String)token.getPrincipal();
-		String inputPassword = new String((char[])token.getCredentials());
+	protected AuthenticationInfo doGetAuthenticationInfo(
+			AuthenticationToken token) throws AuthenticationException {
+		String username = (String) token.getPrincipal();
+		String inputPassword = new String((char[]) token.getCredentials());
 		User userInDb = userService.findByUsername(username);
-		if(userInDb==null){
+		if (userInDb == null) {
 			throw new BusinessException("用户不存在");
 		}
 		try {
-			if(!PasswordUtils.validPassword(inputPassword, userInDb.getPassword())){
+			if (!PasswordUtils.validPassword(inputPassword,
+					userInDb.getPassword())) {
 				throw new BusinessException("用户不存在");
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new IncorrectCredentialsException();
 		}
-		SimpleAuthenticationInfo authenticationInfo=new SimpleAuthenticationInfo(userInDb, inputPassword,getName());
-		//加载菜单到session
+		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb, inputPassword, getName());
+		// 加载菜单到session
 		loadMenus(userInDb.getUserId());
 		return authenticationInfo;
 	}
-	
+
 	/**
 	 * 删除当前用户权限信息
 	 */
 	public void clearAuthz() {
-		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());  
+		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 	}
-	
+
+	/**
+	 * 删除指定用户权限信息
+	 */
+	public void clearAuthz(User user) {
+		Subject subject = SecurityUtils.getSubject();
+		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(user, realmName);
+		subject.runAs(principals);
+		getAuthorizationCache().remove(subject.getPrincipals());
+		subject.releaseRunAs();
+		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+	}
+
 	/**
 	 * 删除所有用户权限信息
 	 */
-	public void clearAllCachedAuthorizationInfo() {  
+	public void clearAllCachedAuthorizationInfo() {
 		logger.debug("----------------清空所有用户权限-----------------");
-	    Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();  
-	    if (cache != null) {  
-	        for (Object key : cache.keys()) { 
-	        	if(key instanceof String){
-	        		String str=(String) key;
-	        		if(((String) key).indexOf(RedisCache.CACHE_PREFIX)>-1){
-	        			str=str.replace(RedisCache.CACHE_PREFIX, "");
-	        			cache.remove(str);  
-	        		}
-	        	}else{	        		
-	        		cache.remove(key);  
-	        	}
-	        }  
-	    }  
-	} 
+		Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+		if (cache != null) {
+			for (Object key : cache.keys()) {
+				if (key instanceof String) {
+					String str = (String) key;
+					if (((String) key).indexOf(RedisCache.CACHE_PREFIX) > -1) {
+						str = str.replace(RedisCache.CACHE_PREFIX, "");
+						cache.remove(str);
+					}
+				} else {
+					cache.remove(key);
+				}
+			}
+		}
+	}
 }

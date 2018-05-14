@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,14 @@ import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
+import com.pan.entity.Role;
+import com.pan.entity.RolePermission;
+import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
+import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
@@ -46,6 +49,9 @@ public class PermissionServiceImpl implements PermissionService {
 	@Autowired
 	private RolePermissionService rolePermissionService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@Override
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
@@ -64,14 +70,16 @@ public class PermissionServiceImpl implements PermissionService {
 		QueryRoleVO queryRoleVO=new QueryRoleVO();
 		queryRoleVO.setSuperAdminFlag("1");
 		//自动为超级管理员添加权限
-		TokenUtils.clearAuth();
-//		List<Role> list = roleService.findByParams(queryRoleVO);
-//		if(list.size()>0){
-//			String roleId=list.get(0).getRoleId();
-//			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
-//			rolePermissionService.addRolePermission(rolePermission);
-//			JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permission));
-//		}
+		List<Role> list = roleService.findByParams(queryRoleVO);
+		if(list.size()>0){
+			String roleId=list.get(0).getRoleId();
+			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
+			rolePermissionService.addRolePermission(rolePermission);
+			List<User> users = userService.findUserByRoleId(roleId);
+			for (User user : users) {
+				TokenUtils.clearAuth(user);
+			}
+		}
 	}
 
 	@Override
@@ -104,12 +112,7 @@ public class PermissionServiceImpl implements PermissionService {
 		//删除数据库信息
 		permissionMapper.deletePermission(permissionId);
 		//删除缓存数据
-		TokenUtils.clearAuth();
-//		List<Role> roles = roleService.findAll();
-//		for (Role role : roles) {
-//			String roleId=role.getRoleId();
-//			JedisUtils.hdel("role_permissions:"+roleId, permissionId);
-//		}
+		TokenUtils.clearAllUserAuth();
 	}
 
 	@Override
@@ -183,20 +186,6 @@ public class PermissionServiceImpl implements PermissionService {
 		permission.setUpdateTime(new Date());
 		permissionMapper.updatePermission(permission);
 		TokenUtils.clearAllUserAuth();
-//		try {
-//			BeanUtils.copyPropertiesIgnoreNull(permission,permissionInDb);
-//			//同步缓存
-//			List<Role> roles = roleService.findAll();
-//			for (Role role : roles) {
-//				String roleId=role.getRoleId();
-//				if(JedisUtils.hexists("role_permissions:"+roleId, permission.getPermissionId())){
-//					JedisUtils.hset("role_permissions:"+roleId, permission.getPermissionId(), JsonUtils.toJson(permissionInDb));
-//				}
-//			}
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			throw new BusinessException("修改权限失败");
-//		}
 	}
 
 	@Override

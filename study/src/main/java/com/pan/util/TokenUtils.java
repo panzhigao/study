@@ -41,6 +41,13 @@ public class TokenUtils {
 	    realm.clearAuthz();  
 	} 
 	
+	//清空指定用户授权信息
+	public static void clearAuth(User user){  
+	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
+	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
+	    realm.clearAuthz(user);  
+	}
+	
 	//清空所有用户授权信息
 	public static void clearAllUserAuth(){  
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
