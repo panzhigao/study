@@ -10,6 +10,10 @@ import com.pan.shiro.MyRealm;
 
 public class TokenUtils {
 	
+	public static boolean isAuthenticated(){
+		return SecurityUtils.getSubject().isAuthenticated();
+	} 
+	
 	public static User getLoingUser(){
 		User user= (User)SecurityUtils.getSubject().getPrincipal();
 		return user;

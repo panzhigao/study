@@ -79,21 +79,6 @@ public class LoginController{
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
 		User userInDb = userService.findByUsername(user.getUsername());
-		
-		
-//		User userInDb = userService.checkLogin(user,vercode);
-//		String token=UUID.randomUUID().toString();
-//		
-//		//设置cookie过期时间
-//		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
-//		userInDb.setPassword(null);
-//		String json=JsonUtils.toJson(userInDb);
-//		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-		
-		//用户角色信息放入redis
-//		List<String> list = roleService.getRoleByUserId(userInDb.getUserId());
-//		JedisUtils.setString("user_roles:"+userInDb.getUserId(), JsonUtils.toJson(list));
-		
 		//用户登录成功，将用户session添加到redis集合中
 		request.getSession().setAttribute("userId", userInDb.getUserId());
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
@@ -105,7 +90,6 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/quit")
 	public String quit(HttpServletRequest request,HttpServletResponse response){
-		//CookieUtils.cleanUserLoginTrace();
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "redirect:/login";

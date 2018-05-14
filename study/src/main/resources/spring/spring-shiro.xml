@@ -27,6 +27,9 @@
 				/doRegister=anon
 				/checkUnique=anon
 				/static/**=anon
+				/article/**=anon
+				/api/**=anon
+				/u/**=anon
 				/**=authc
 			</value>
 		</property>

@@ -125,11 +125,14 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
 	@ResponseBody
-	@RequiresPermissions("/user/article/doEdit")
+	//@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/jie/detail");
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId=null;
+		if(TokenUtils.isAuthenticated()){
+			loginUserId = TokenUtils.getLoingUserId();
+		}
 		String status=Article.STATUS_PUBLISHED;
 		Article article=articleService.findByArticleIdAndStatus(articleId,status);
 		//登录状态
