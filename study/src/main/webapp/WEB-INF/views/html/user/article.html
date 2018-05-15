@@ -177,6 +177,7 @@ layui.use(['table','jquery'], function(){
 		}
 	  	$('.category-item').removeClass('selected');
 	  	$(this).addClass('selected');
+	  	status=$(this).attr('status');
 	  	reload('articlesTab');
 	  });	
 	  

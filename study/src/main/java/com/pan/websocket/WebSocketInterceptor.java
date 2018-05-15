@@ -25,7 +25,6 @@ public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
 			ServerHttpResponse response, WebSocketHandler wsHandler,
 			Map<String, Object> attributes) throws Exception {
 		super.beforeHandshake(request, response, wsHandler, attributes);
-		
         return true;
 	}
 
