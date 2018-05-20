@@ -283,10 +283,10 @@ public final class CookieUtils {
     }
     
     
-    public static User getLoginUser(){
-    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	return getLoginUser(request);
-    }
+//    public static User getLoginUser(){
+//    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+//    	return getLoginUser(request);
+//    }
 
     /**
      * 获取登陆用户id

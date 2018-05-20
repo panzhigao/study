@@ -50,7 +50,7 @@ public class UserSetController {
 	@RequiresPermissions("/user/set")
 	public ModelAndView toSetPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/set");
-		User loingUser = TokenUtils.getLoingUser();
+		User loingUser = TokenUtils.getLoginUser();
 		UserExtension userExtension=userService.findExtensionByUserId(loingUser.getUserId());
 		mav.addObject("user",loingUser);
 		mav.addObject("userExtension",userExtension);

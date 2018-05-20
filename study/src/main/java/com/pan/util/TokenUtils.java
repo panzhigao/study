@@ -14,13 +14,13 @@ public class TokenUtils {
 		return SecurityUtils.getSubject().isAuthenticated();
 	} 
 	
-	public static User getLoingUser(){
+	public static User getLoginUser(){
 		User user= (User)SecurityUtils.getSubject().getPrincipal();
 		return user;
 	} 
 	
 	public static String getLoingUserId(){
-		User loingUser = getLoingUser();
+		User loingUser = getLoginUser();
 		return loingUser.getUserId();
 	} 
 	

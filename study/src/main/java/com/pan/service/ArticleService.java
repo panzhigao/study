@@ -2,12 +2,9 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
-import com.pan.entity.Message;
 import com.pan.vo.QueryArticleVO;
 
 
@@ -88,14 +85,6 @@ public interface ArticleService {
 	 * @param article
 	 */
 	public void saveSystemMessage(Article article);
-	/**
-	 * 审核通过文章
-	 */
-	public void passArticle(String articleId);
-	/**
-	 * 审核未通过文章
-	 */
-	public Message notPassArticle(String articleId,String reason);
 	/**
 	 * 
 	 * @return

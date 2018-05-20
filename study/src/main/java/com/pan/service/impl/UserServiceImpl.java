@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService{
 		if(User.STATUS_BLOCKED.equals(status)){
 			message="禁用账号成功";
 			userMapper.updateUserByUserId(user);
-			User loginUser = CookieUtils.getLoginUser();
+			User loginUser = TokenUtils.getLoginUser();
 			if(loginUser!=null){
 				loginUser.setStatus(status);
 				CookieUtils.setLoginUser(loginUser);
@@ -320,7 +320,7 @@ public class UserServiceImpl implements UserService{
 		}else if(User.STATUS_NORMAL.equals(status)){
 			message="启用账号成功";
 			userMapper.updateUserByUserId(user);
-			User loginUser = CookieUtils.getLoginUser();
+			User loginUser = TokenUtils.getLoginUser();
 			if(loginUser!=null){
 				loginUser.setStatus(status);
 				CookieUtils.setLoginUser(loginUser);

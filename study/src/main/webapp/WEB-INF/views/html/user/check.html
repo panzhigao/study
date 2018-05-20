@@ -10,8 +10,18 @@
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">待审核的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
+        <li data-type="notComplete" lay-id="index" class="layui-this">待审核的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
       </ul>
+      
+      <div class="layui-tab-content" style="padding:0;">
+	    <div class="layui-tab-item layui-show">
+		    <div class="layui-tab-content">
+		       <span class="layui-breadcrumb" lay-separator="|">
+		  		<a href="javascript:;" class="category-item selected" status="0">待审核</a>
+		  		<a href="javascript:;" class="category-item" status="1">审核完成</a>
+				</span>
+		    </div>
+	   </div>
       
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
@@ -55,7 +65,7 @@ layui.use(['table','jquery'], function(){
     		  $.ajax({
   	    		url:"$!{rc.contextPath}/user/check/notPass",
   	    		type:"post",
-  	    		data:{articleId:data.articleId,reason:reason},
+  	    		data:{id:data.id,reason:reason},
   	    		success:function(data){
   	    			if(data.code=='200'){
   	    				layer.alert(data.msg);
@@ -73,7 +83,7 @@ layui.use(['table','jquery'], function(){
 	    		layer.close(index);
 	    		$.ajax({
 	    			url:'$!{rc.contextPath}/user/check/pass',
-	    			data:{articleId:data.articleId},
+	    			data:{id:data.id},
 	    			type:'post',
 	    			success:function(res){
 	    				if(res.code=='200'){
@@ -97,8 +107,9 @@ layui.use(['table','jquery'], function(){
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
-	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    	limitName: 'pageSize', //每页数据量的参数名，默认：limit
 	    },
+	    where: {completeFlag:'0'},
 	    response: {
 	        statusCode: 200, //成功的状态码，默认：0
 	        countName: 'total', //数据总数的字段名称，默认：count
@@ -107,17 +118,16 @@ layui.use(['table','jquery'], function(){
 	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
+	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:400,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
-	      {field: 'status', title: '状态', width:100, sort: true,templet:
+	      {field: 'checkType', title: '审核类型', width:100, sort: true,templet:
 	    	  function(d){
-	    	  	switch(d.status){
-		    	  	case '0':temp='审核未通过';break;
-		    	  	case '1':temp='草稿';break;
-		    	  	case '2':temp='审核中';break;
-		    	  	case '3':temp='发布成功';break;
+	    	  	switch(d.checkType){
+		    	  	case '0':temp='创建';break;
+		    	  	case '1':temp='修改';break;
 		    	  	default:temp="无状态";
 	    	  	}
 	    	  	return temp;
@@ -128,12 +138,37 @@ layui.use(['table','jquery'], function(){
 	      }},
 	      {title:'操作',width:260,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
+	    	  if(row.completeFlag=='1'){
+	    		  return detail;
+	    	  }
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="pass">通过</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="notPass">未通过</a>';
 	    	  return detail+edit+t_delete;
 	      }}
 	    ]]
 	  });
+	  
+	  var completeFlag='0';
+	  function reload(tableId){
+		 //执行重载
+		 table.reload(tableId, {
+		 page: {curr: 1},
+		 where: {completeFlag:completeFlag}
+		 }); 
+	  }
+	  
+	  //切换文章类型状态
+	  $('.category-item').click(function(obj){
+		if($(this).hasClass('selected')){
+			return;	  
+		}
+	  	$('.category-item').removeClass('selected');
+	  	$(this).addClass('selected');
+	  	completeFlag=$(this).attr('status');
+	  	reload('articlesTab');
+	  });
+	  
+	  
 });
 </script>
 </body>

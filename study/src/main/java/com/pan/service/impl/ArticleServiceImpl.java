@@ -16,13 +16,13 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
+import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
+import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.EsClientService;
-import com.pan.service.MessageService;
-import com.pan.util.CookieUtils;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -47,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleMapper articleMapper;
 	
 	@Autowired
-	private MessageService messageService;
+	private ArticleCheckService articleCheckService;
 	
 	/**
 	 * 校验当前操作码状态是否正常
@@ -80,8 +80,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void saveArticle(Article article) {
-		String userId=TokenUtils.getLoingUserId();
-		article.setUserId(userId);
+		User loingUser = TokenUtils.getLoginUser();
+		article.setUserId(loingUser.getUserId());
 		checkArticle(article);
 		// 默认草稿状态
 		if (StringUtils.isBlank(article.getStatus())) {
@@ -93,6 +93,11 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setArticleId(IdUtils.generateArticleId());
 		article.setType("1");
 		articleMapper.saveArticle(article);
+		ArticleCheck articleCheck=new ArticleCheck();
+		articleCheck.setArticleId(article.getArticleId());
+		articleCheck.setTitle(article.getTitle());
+		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
+		articleCheckService.addArticleCheck(articleCheck);
 	}
 	
 	@Override
@@ -279,60 +284,6 @@ public class ArticleServiceImpl implements ArticleService {
 		articleMapper.saveArticle(article);
 	}
 
-	/**
-	 * 审核通过文章
-	 */
-	@Override
-	public void passArticle(String articleId) {
-		Article article = articleMapper.findByArticleId(articleId);
-		if(article==null){
-			throw new BusinessException("文章不存在");
-		}
-		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
-			throw new BusinessException("文章状态不为审核中");
-		}
-		article.setStatus(Article.STATUS_PUBLISHED);
-		article.setPublishTime(new Date());
-		article.setUpdateTime(new Date());
-		articleMapper.updateArticle(article);
-	}
-	
-	/**
-	 * 文章未通过审核
-	 */
-	@Override
-	public Message notPassArticle(String articleId,String reason) {
-		if(StringUtils.isBlank(reason)){
-			throw new BusinessException("原因不能为空");
-		}
-		Article article = articleMapper.findByArticleId(articleId);
-		if(article==null){
-			throw new BusinessException("文章不存在");
-		}
-		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
-			throw new BusinessException("文章状态不为审核中");
-		}
-		article.setStatus(Article.STATUS_NOT_PASS);
-		articleMapper.updateArticle(article);
-		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
-		//发送消息
-		User user=CookieUtils.getLoginUser();
-		Message message=new Message();
-		message.setMessageId(IdUtils.generateMessageId());
-		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
-		message.setStatus(MyConstant.MESSAGE_NOT_READED);
-		message.setContentId(article.getArticleId());
-		message.setContentName(article.getTitle());
-		message.setReceiverUserId(article.getUserId());
-		message.setCreateTime(new Date());
-		message.setCommentContent(reason);
-		message.setSenderName(user.getUsername());
-		message.setSenderUserId(user.getUserId());
-		messageService.addMessage(message);
-		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
-		return message;
-	}
-	
 	/**
 	 * 根据条件查询es中的文章信息
 	 */

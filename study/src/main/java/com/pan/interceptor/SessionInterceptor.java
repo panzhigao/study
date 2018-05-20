@@ -29,7 +29,7 @@ public class SessionInterceptor implements HandlerInterceptor{
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		if(modelAndView!=null){
-			User loginUser=TokenUtils.getLoingUser();
+			User loginUser=TokenUtils.getLoginUser();
 			if(loginUser!=null){			
 				modelAndView.addObject("user",loginUser);
 			}
