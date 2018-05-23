@@ -49,7 +49,7 @@ public class MessageUtils {
 	 * @param message
 	 * @return 是否全部发送成功
 	 */
-	public static boolean sendMessageToAllUsersWithException(String message,Set<String> userIdSet){
+	public static boolean sendMessageToAllExceptionUser(String message,Set<String> userIdSet){
 		boolean sendMessageToAllUsers = myHandler.sendMessageToAllUsersWithException(new TextMessage(message),userIdSet);
 		return sendMessageToAllUsers;
 	}

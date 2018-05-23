@@ -39,29 +39,29 @@ import com.pan.vo.QueryArticleVO;
 public class ArticleServiceImpl implements ArticleService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
-	
+
 	@Autowired
 	private EsClientService esClientService;
-	
+
 	@Autowired
 	private ArticleMapper articleMapper;
-	
+
 	@Autowired
 	private ArticleCheckService articleCheckService;
-	
+
 	/**
-	 * 校验当前操作码状态是否正常
-	 * 1-草稿，2-审核中
+	 * 校验当前操作码状态是否正常 1-草稿，2-审核中
+	 * 
 	 * @param status
 	 * @return
 	 */
-	private boolean checkOpearteStatus(String status){
-		if(Article.STATUS_SKETCH.equals(status)||Article.STATUS_IN_REVIEW.equals(status)){
+	private boolean checkOpearteStatus(String status) {
+		if (Article.STATUS_SKETCH.equals(status) || Article.STATUS_IN_REVIEW.equals(status)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 校验文章信息
 	 * 
@@ -69,7 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	private void checkArticle(Article article) {
 		ValidationUtils.validateEntity(article);
-		if(!checkOpearteStatus(article.getStatus())){
+		if (!checkOpearteStatus(article.getStatus())) {
 			logger.error("html页面被修改,方法参数错误");
 			throw new BusinessException("文章状态有误,请刷新页面");
 		}
@@ -93,28 +93,29 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setArticleId(IdUtils.generateArticleId());
 		article.setType("1");
 		articleMapper.saveArticle(article);
-		ArticleCheck articleCheck=new ArticleCheck();
+		ArticleCheck articleCheck = new ArticleCheck();
 		articleCheck.setArticleId(article.getArticleId());
 		articleCheck.setTitle(article.getTitle());
+		articleCheck.setContent(article.getContent());
 		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
 		articleCheckService.addArticleCheck(articleCheck);
 	}
-	
+
 	@Override
 	public List<Article> findListByUserId(String userId) {
 		logger.info("用户id为:{}", userId);
 		return articleMapper.findListByUserId(userId);
 	}
-	
+
 	@Override
-	public Map<String,Object> findByParams(QueryArticleVO queryArticleVO) {
-		Map<String,Object> pageData=new HashMap<String, Object>(2);
+	public Map<String, Object> findByParams(QueryArticleVO queryArticleVO) {
+		Map<String, Object> pageData = new HashMap<String, Object>(2);
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleVO));
-			int total=articleMapper.getCountByParams(queryArticleVO);
-			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
-			if(total>0){				
+			int total = articleMapper.getCountByParams(queryArticleVO);
+			// 当查询记录大于0时，查询数据库记录，否则直接返回空集合
+			if (total > 0) {
 				list = articleMapper.findByParams(queryArticleVO);
 			}
 			pageData.put("data", list);
@@ -126,19 +127,19 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return pageData;
 	}
-	
+
 	@Override
 	public Article getByUserIdAndArticleId(String userId, String articleId) {
-		//TODO 修改判断
+		// TODO 修改判断
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
-		if(StringUtils.isBlank(userId)||StringUtils.isBlank(articleId)){
+		if (StringUtils.isBlank(userId) || StringUtils.isBlank(articleId)) {
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
 		return getArticleByUserIdAndArticleId(userId, articleId);
 	}
-	
-	private Article getArticleByUserIdAndArticleId(String userId,String articleId){
-		Article article=new Article();
+
+	private Article getArticleByUserIdAndArticleId(String userId, String articleId) {
+		Article article = new Article();
 		article.setUserId(userId);
 		article.setArticleId(articleId);
 		List<Article> list = this.articleMapper.findByCondition(article);
@@ -153,10 +154,10 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public void updateArticle(Article article) {
-		logger.info("前台传来的文章信息,{}",article);
-		String userId=TokenUtils.getLoingUserId();
+		logger.info("前台传来的文章信息,{}", article);
+		String userId = TokenUtils.getLoingUserId();
 		article.setUserId(userId);
-		//校验前台传来的数据
+		// 校验前台传来的数据
 		checkArticle(article);
 		String articleId = article.getArticleId();
 		Article articleInDb = articleMapper.findByArticleId(articleId);
@@ -164,36 +165,38 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.error("根据文章id未查询到数据,articleId:{}", articleId);
 			throw new BusinessException("修改文章信息有误，文章已不存在");
 		}
-		if(Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())){
-			logger.error("当前文章处于发布状态,不可修改", articleInDb);
-			throw new BusinessException("当前文章处于发布状态,不可修改");
-		}
-		if(Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())){
+//		if (Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())) {
+//			logger.error("当前文章处于发布状态,不可修改", articleInDb);
+//			throw new BusinessException("当前文章处于发布状态,不可修改");
+//		}
+		if (Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())) {
 			logger.error("系统消息不可修改", articleInDb);
 			throw new BusinessException("系统消息不可修改");
 		}
 		String userIdInDb = articleInDb.getUserId();
 		// 判断当前文章是当前登录用户下的文章
 		if (!StringUtils.equals(article.getUserId(), userIdInDb)) {
-			logger.error("文章用户id有误,不是当前用户的文章,登录用户id:{},数据库中用户id:{}",article.getUserId(), articleInDb.getUserId());
+			logger.error("文章用户id有误,不是当前用户的文章,登录用户id:{},数据库中用户id:{}", article.getUserId(), articleInDb.getUserId());
 			throw new BusinessException("修改文章信息失败，文章已不存在，请返回文章列表页");
 		}
-		try {
-			article.setUpdateTime(new Date());
-			articleMapper.updateArticle(article);
-		} catch (Exception e) {
-			logger.error("修改文章失败", e);
-			throw new BusinessException("修改文章信息失败,请稍后");
-		}
+		article.setUpdateTime(new Date());
+		articleMapper.updateArticle(article);
+		//新增审核记录
+		ArticleCheck articleCheck = new ArticleCheck();
+		articleCheck.setArticleId(article.getArticleId());
+		articleCheck.setTitle(article.getTitle());
+		articleCheck.setContent(article.getContent());
+		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.UPDATE.getCode());
+		articleCheckService.addArticleCheck(articleCheck);
 	}
-	
+
 	@Override
 	public Article getByArticleId(String articleId) {
-		logger.info("查询文章信息,文章id为:{}",articleId);
-		if(StringUtils.isBlank(articleId)){
+		logger.info("查询文章信息,文章id为:{}", articleId);
+		if (StringUtils.isBlank(articleId)) {
 			throw new BusinessException("文章id为空");
 		}
-		Article article=new Article();
+		Article article = new Article();
 		article.setArticleId(articleId);
 		List<Article> list = this.articleMapper.findByCondition(article);
 		if (list.size() == 1) {
@@ -201,54 +204,53 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void deleteArticle(String articleId, String userId) {
-		if(StringUtils.isBlank(articleId)){
+		if (StringUtils.isBlank(articleId)) {
 			throw new BusinessException("文章id不能为空");
 		}
 		Article article = getArticleByUserIdAndArticleId(userId, articleId);
-		if(article==null){
-			logger.info("根据文章id{}未查询到文章信息",articleId);
+		if (article == null) {
+			logger.info("根据文章id{}未查询到文章信息", articleId);
 			throw new BusinessException("文章不存在");
 		}
-		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+		if (Article.STATUS_IN_REVIEW.equals(article.getStatus())) {
 			logger.info("审核中文章不能删除");
 			throw new BusinessException("审核中文章不能删除");
 		}
-		if(Article.STATUS_PUBLISHED.equals(article.getStatus())){
+		if (Article.STATUS_PUBLISHED.equals(article.getStatus())) {
 			logger.info("发布中文章不能删除");
 			throw new BusinessException("发布中文章不能删除");
 		}
-		int num=this.articleMapper.deleteByUserIdAndArticleId(userId, articleId);
-		if(num!=1){
+		int num = this.articleMapper.deleteByUserIdAndArticleId(userId, articleId);
+		if (num != 1) {
 			logger.info("删除文章失败");
 			throw new BusinessException("删除文章失败");
 		}
 	}
-	
+
 	@Override
 	public int getCount(QueryArticleVO queryArticleVO) {
-		logger.info("查询文章条数条件：{}",JsonUtils.toJson(queryArticleVO));
+		logger.info("查询文章条数条件：{}", JsonUtils.toJson(queryArticleVO));
 		return articleMapper.getCountByParams(queryArticleVO);
 	}
 
 	@Override
 	public Article findByArticleIdAndStatus(String articleId, String status) {
-	    Article article=new Article();
-	    article.setArticleId(articleId);
-	    article.setStatus(status);
-	    List<Article> list = articleMapper.findByCondition(article);
-	    if(list.size()==1){
-	    	return list.get(0);
-	    }
+		Article article = new Article();
+		article.setArticleId(articleId);
+		article.setStatus(status);
+		List<Article> list = articleMapper.findByCondition(article);
+		if (list.size() == 1) {
+			return list.get(0);
+		}
 		return null;
 	}
 
 	@Override
-	public int updateArticleCommentCount(String articleId,
-			Integer commentCount) {
-		Article article=new Article();
+	public int updateArticleCommentCount(String articleId, Integer commentCount) {
+		Article article = new Article();
 		article.setArticleId(articleId);
 		article.setCommentCount(commentCount);
 		article.setUpdateTime(new Date());
@@ -257,13 +259,16 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public int updateArticleViewCount(String articleId, Integer viewCount) {
-		Article article=new Article();
+		Article article = new Article();
 		article.setArticleId(articleId);
 		article.setViewCount(viewCount);
 		article.setUpdateTime(new Date());
 		return articleMapper.updateArticle(article);
 	}
-
+	
+	/**
+	 * 保存系统信息，同时向用户发送通知，除了自己
+	 */
 	@Override
 	public void saveSystemMessage(Article article) {
 		ValidationUtils.validateEntity(article);
@@ -271,16 +276,16 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setCreateTime(new Date());
 		article.setPublishTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		//系统消息文章
+		// 系统消息文章
 		article.setType(Article.TYPE_SYSTEM_MESSAGE);
-		Message message=new Message();
+		Message message = new Message();
 		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
 		String loginUserId = TokenUtils.getLoingUserId();
-		Set<String> set=new HashSet<String>();
+		Set<String> set = new HashSet<String>();
 		set.add(loginUserId);
-		MessageUtils.sendMessageToAllUsersWithException(JsonUtils.toJson(message), set);
+		MessageUtils.sendMessageToAllExceptionUser(JsonUtils.toJson(message), set);
 		articleMapper.saveArticle(article);
 	}
 
@@ -289,15 +294,15 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public List<ArticleDTO> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
-		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticleVO,true,ArticleDTO.class);
+		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticleVO, true, ArticleDTO.class);
 	}
-	
+
 	/**
 	 * 通过文章标题查询文章信息
 	 */
 	@Override
 	public List<ArticleDTO> searchArticleByTitle(String title) {
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticleVO queryArticleVO = new QueryArticleVO();
 		queryArticleVO.setTitle(title);
 		return queryFromEsByCondition(queryArticleVO);
 	}
