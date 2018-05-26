@@ -20,7 +20,7 @@ function navBar(data){
 			ulHtml += '</a>'
 			ulHtml += '<dl class="layui-nav-child">';
 			for(var j=0;j<data[i].data.length;j++){
-				ulHtml += '<dd><a href="javascript:;" data-url="/study'+data[i].data[j].url+'">';
+				ulHtml += '<dd><a href="javascript:;" data-url="/'+data[i].data[j].url+'">';
 				if(data[i].data[j].icon != undefined && data[i].data[j].icon != ''){
 					if(data[i].data[j].icon.indexOf("icon-") != -1){
 						ulHtml += '<i class="iconfont '+data[i].data[j].icon+'" data-icon="'+data[i].data[j].icon+'"></i>';
@@ -32,7 +32,7 @@ function navBar(data){
 			}
 			ulHtml += "</dl>"
 		}else{
-			ulHtml += '<a href="javascript:;" data-url="/study'+data[i].url+'">';
+			ulHtml += '<a href="javascript:;" data-url="/'+data[i].url+'">';
 			if(data[i].icon != undefined && data[i].icon != ''){
 				if(data[i].icon.indexOf("icon-") != -1){
 					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';

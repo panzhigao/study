@@ -53,7 +53,7 @@ public class PermissionInterceptor implements HandlerInterceptor{
     	            	 }
     	             }
     			}else{
-    				response.sendRedirect("/study//unauth");
+    				response.sendRedirect("/unauth");
     			}
     			return false;
         	}

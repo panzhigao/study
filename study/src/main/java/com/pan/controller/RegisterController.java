@@ -77,17 +77,17 @@ public class RegisterController {
 		User saveUser = userService.saveUser(user);
 		String token=UUID.randomUUID().toString();
 		//设置cookie过期时间
-		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
-		saveUser.setPassword(null);
-		String json=JsonUtils.toJson(saveUser);
-		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-		
-		//用户角色信息放入redis
-		List<String> list = roleService.getRoleByUserId(saveUser.getUserId());
-		JedisUtils.setString("user_roles:"+saveUser.getUserId(), JsonUtils.toJson(list));
-				
-		//用户登录成功，将用户session添加到redis集合中
-		request.getSession().setAttribute("userId", saveUser.getUserId());
+//		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
+//		saveUser.setPassword(null);
+//		String json=JsonUtils.toJson(saveUser);
+//		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
+//		
+//		//用户角色信息放入redis
+//		List<String> list = roleService.getRoleByUserId(saveUser.getUserId());
+//		JedisUtils.setString("user_roles:"+saveUser.getUserId(), JsonUtils.toJson(list));
+//				
+//		//用户登录成功，将用户session添加到redis集合中
+//		request.getSession().setAttribute("userId", saveUser.getUserId());
 		return ResultMsg.ok("用户注册成功");
 	}
 	

@@ -1,6 +1,6 @@
 var $,tab,skyconsWeather;
 layui.config({
-	base : "/study/static/res/layui-admin/js/"
+	base : "/static/res/layui-admin/js/"
 }).use(['bodyTab','form','element','layer','jquery'],function(){
 	var form = layui.form,
 		layer = layui.layer,
@@ -99,7 +99,7 @@ layui.config({
 				return;
 			}
 			var layId=new Date().getTime();
-			var curMenu={'icon':'&#xe705;','title':title,'href':'/study/user/'+div,'layId':layId};
+			var curMenu={'icon':'&#xe705;','title':title,'href':'/user/'+div,'layId':layId};
 			var temp=window.sessionStorage.getItem("menu");
 			var arr=new Array();
 			if(temp){

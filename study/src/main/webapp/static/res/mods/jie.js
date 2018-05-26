@@ -38,7 +38,7 @@ layui.define('fly', function(exports){
   });
 
   //提交回答
-  fly.form['/study/api/comment'] = function(data, required){
+  fly.form['/api/comment'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
         <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
@@ -106,7 +106,7 @@ layui.define('fly', function(exports){
     ,collect: function(div){
       var othis = $(this), type = othis.data('type');
       $.ajax({
-    	  url:'/study/user/collection/'+ type +'/',
+    	  url:'/user/collection/'+ type +'/',
     	  data:{articleId: div.data('id')},
     	  type:'post',
     	  success:function(res){
@@ -151,7 +151,7 @@ layui.define('fly', function(exports){
     //查询帖子是否收藏
     if(login[0]&&jieAdmin[0]){
     	$.ajax({
-    		url:'/study/collection/find/',
+    		url:'/collection/find/',
     		data:{articleId: div.data('id')},
     		type:'post',
     		success:function(res){
@@ -168,7 +168,7 @@ layui.define('fly', function(exports){
     } 
     /*
     if(jieAdmin[0]){
-      fly.json('/study/collection/find/', {
+      fly.json('/collection/find/', {
     	  articleId: div.data('id')
       }, function(res){
         jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
@@ -187,7 +187,7 @@ layui.define('fly', function(exports){
     	  return;
       }
       $.ajax({
-    	  url:'/study/api/user/praise/',
+    	  url:'/api/user/praise/',
     	  data:{commentId: li.data('id')},
     	  type:'post',
     	  success:function(res){
@@ -258,7 +258,7 @@ layui.define('fly', function(exports){
     ,del: function(li){ //删除
       layer.confirm('确认删除该回复？', function(index){
         layer.close(index);
-//        fly.json('/study/api/deleteComment/', {
+//        fly.json('/api/deleteComment/', {
 //        	commentId: li.data('id')
 //        }, function(res){
 //        	alert(res.code);
@@ -276,7 +276,7 @@ layui.define('fly', function(exports){
 //          }
 //        });
         $.ajax({
-        	url:'/study/api/user/deleteComment/',
+        	url:'/api/user/deleteComment/',
         	data:{commentId: li.data('id')},
         	type:'post',
         	success:function(res){

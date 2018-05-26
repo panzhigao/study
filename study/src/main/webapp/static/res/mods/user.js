@@ -330,7 +330,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
       var othis = $(this).parents('li'), messageId = othis.data('messageid');
-	  	$.post('/study/user/message/clean',{messageId: messageId},function(res){
+	  	$.post('/user/message/clean',{messageId: messageId},function(res){
 			if(res.code =='200'){
 	            //layer.close(index);
 	            //othis.addClass('layui-hide');
@@ -347,7 +347,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 	        }
 		});
       
-//      fly.json('/study/user/message/clean', {
+//      fly.json('/user/message/clean', {
 //        messageId: messageId
 //      }, function(res){
 //        if(res.status =='200'){
@@ -362,7 +362,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定全部置为已读么？', function(index){
-    	$.post('/study/user/message/clean',{all:true},function(res){
+    	$.post('/user/message/clean',{all:true},function(res){
     		if(res.code =='200'){
                 layer.close(index);
                 othis.addClass('layui-hide');

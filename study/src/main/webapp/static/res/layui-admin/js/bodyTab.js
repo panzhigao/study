@@ -21,7 +21,7 @@ layui.define(["element","jquery"],function(exports){
 	if($(".navBar").html() == ''){
 		var _this = this;
 		$.ajax({
-			url:'/study/user/loadMenu',
+			url:'/user/loadMenu',
 			type:'post',
 			dataType:'json',
 			async:false,

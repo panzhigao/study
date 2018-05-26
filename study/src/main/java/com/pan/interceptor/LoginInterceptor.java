@@ -58,7 +58,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 	            	 }
 	             }
 			}else{
-				response.sendRedirect("/study/login");
+				response.sendRedirect("/login");
 			}
 			return false;
 		}

@@ -49,9 +49,9 @@ function tranTime(fromTime){
 }
 
 function websocketConnect(){
-	$.post('/study/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
+	$.post('/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://www.pan.com/study/myHandler")
+	var ws = new WebSocket("ws://www.pan.com/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
