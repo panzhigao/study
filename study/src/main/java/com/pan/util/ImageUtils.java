@@ -1,9 +1,8 @@
 package com.pan.util;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Base64Utils;
@@ -40,12 +39,15 @@ public class ImageUtils {
 				}
 			}
 			// 生成jpeg图片
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			String dateStr=sdf.format(new Date());
+			String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
 			// 新生成的图片
 			String fileName=dateStr+".jpg";
 			String imgFilePath = fileDir+"/"+fileName;
-			OutputStream out = new FileOutputStream(imgFilePath);
+			File destFile=new File(imgFilePath);
+			destFile.setReadable(true);
+			destFile.setExecutable(true);
+			destFile.setWritable(true);
+			OutputStream out = new FileOutputStream(destFile);
 			out.write(b);
 			out.flush();
 			out.close();

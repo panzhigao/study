@@ -128,7 +128,6 @@ public class FileUploadController {
 						String myFileName = file.getOriginalFilename();
 						//如果名称不为“”,说明该文件存在，否则说明该文件不存在
 						if(myFileName.trim() !=""){
-							System.out.println(myFileName);
 				            String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
 							String contentType=file.getContentType();
 							//后缀名
