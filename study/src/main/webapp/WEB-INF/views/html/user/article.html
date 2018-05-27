@@ -16,8 +16,8 @@
 	     	#end
   		</div>
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'>$!{collectionCounts}</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span id='articleCounts'></span>）</li>
+        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span id='collectionCounts'></span>）</li>
       </ul>
       
       	  	
@@ -121,6 +121,9 @@ layui.use(['table','jquery'], function(){
 	    },
 	    url: '$!{rc.contextPath}/user/article/getPageData', //数据接口
 	    page: true ,//开启分页
+	    done: function(res, curr, count){
+	    	$('#articleCounts').html(count);
+	    },
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
@@ -228,6 +231,9 @@ layui.use(['table','jquery'], function(){
 	    },
 	    url: '$!{rc.contextPath}/user/collection/get_collections', //数据接口
 	    page: true ,//开启分页
+	    done: function(res, curr, count){
+	    	$('#collectionCounts').html(count);
+	    },
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){

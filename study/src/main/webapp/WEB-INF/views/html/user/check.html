@@ -10,8 +10,8 @@
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="notComplete" lay-id="index" class="layui-this">待审核的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
-        <li data-type="complete" lay-id="index" >已审核的帖（<span id='articleCounts'>$!{articleCounts}</span>）</li>
+        <li data-type="notComplete" lay-id="index" class="layui-this">待审核的帖（<span id='notCompleteCount'></span>）</li>
+        <li data-type="complete" lay-id="index" >已审核的帖（<span id='completeCount'></span>）</li>
       </ul>
       
       <div class="layui-tab-content" style="padding:0;">
@@ -111,6 +111,9 @@ layui.use(['table','jquery'], function(){
 	    },
 	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
+	    done: function(res, curr, count){
+	    	$('#completeCount').html(count);
+	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
@@ -161,6 +164,9 @@ layui.use(['table','jquery'], function(){
 	    },
 	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
+	    done: function(res, curr, count){
+	    	$('#notCompleteCount').html(count);
+	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},

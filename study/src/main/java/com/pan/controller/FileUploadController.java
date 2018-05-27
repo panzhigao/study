@@ -1,17 +1,14 @@
 package com.pan.controller;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
 import com.pan.util.CookieUtils;
+import com.pan.util.DateUtils;
 import com.pan.util.IdUtils;
 
 
@@ -68,8 +66,7 @@ public class FileUploadController {
         String path="";  
         if(!file.isEmpty()){  
             //生成时间戳作为文件名称  
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
-            String dateStr=sdf.format(new Date());
+            String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
             //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
             //获得文件后缀名称  
@@ -77,6 +74,8 @@ public class FileUploadController {
             path=dateStr+"."+imageName;  
             File destFile=new File(pictureDir+path); 
             destFile.setReadable(true);
+            destFile.setExecutable(true);
+            destFile.setWritable(true);
             file.transferTo(destFile);  
             Picture picture=new Picture();
             String userId=CookieUtils.getLoginUserId(request);
@@ -130,8 +129,7 @@ public class FileUploadController {
 						//如果名称不为“”,说明该文件存在，否则说明该文件不存在
 						if(myFileName.trim() !=""){
 							System.out.println(myFileName);
-							SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
-				            String dateStr=sdf.format(new Date());
+				            String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
 							String contentType=file.getContentType();
 							//后缀名
 							String fileType=contentType.substring(contentType.indexOf("/")+1);

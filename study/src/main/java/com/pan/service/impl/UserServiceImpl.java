@@ -170,6 +170,9 @@ public class UserServiceImpl implements UserService{
 		return userMapper.findByUserId(userId);
 	}
 	
+	/**
+	 * 更新用户信息，同时更新用户缓存信息
+	 */
 	@Override
 	public void updateUserInfo(User user, UserExtension userExtension) {
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
@@ -188,7 +191,8 @@ public class UserServiceImpl implements UserService{
 		}
 		userMapper.updateUserByUserId(user);
 		//重置用户登陆信息
-		TokenUtils.resetPrincipal(user);
+		User userInDb=this.findByUserId(userId);
+		TokenUtils.resetPrincipal(userInDb);
 		String userBrief=userExtension.getUserBrief();
 		//当没用用户简介时新增，否则更新
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
