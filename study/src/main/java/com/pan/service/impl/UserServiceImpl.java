@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
@@ -53,6 +51,8 @@ public class UserServiceImpl implements UserService{
 	
 	private static final String DATEFORMAT="yyyyMMdd";
 	
+	@Value("${system.defaultRoleId}")
+	private String defaultRoleId;
 	
 	/**
 	 * 图片访问路径
@@ -72,7 +72,9 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
 	
-	
+	/**
+	 * 新增用户,默认新增用户拥有普通用户权限
+	 */
 	@Override
 	public User saveUser(User user){
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService{
 			user.setStatus(User.STATUS_NORMAL);
 			userMapper.saveUser(user);
 			//为用户添加用户角色信息
-			UserRole userRole=new UserRole(userId, "r1001308");
+			UserRole userRole=new UserRole(userId, defaultRoleId);
 			userRole.setCreateTime(new Date());
 			this.addUserRole(userRole);
 			return user;
@@ -182,6 +184,8 @@ public class UserServiceImpl implements UserService{
 			}
 		}
 		userMapper.updateUserByUserId(user);
+		//重置用户登陆信息
+		TokenUtils.resetPrincipal(user);
 		String userBrief=userExtension.getUserBrief();
 		//当没用用户简介时新增，否则更新
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);

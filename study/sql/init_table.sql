@@ -23,6 +23,25 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
 DROP TABLE
+    t_article_check;
+CREATE TABLE
+    t_article_check
+    (
+        id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+        article_id VARCHAR(64) NOT NULL,
+        title VARCHAR(64) NOT NULL,
+        content text COMMENT '文章内容',
+        complete_flag CHAR(1) DEFAULT '0' NOT NULL COMMENT '是否审核完成，0-否，1-是',
+        check_type CHAR(1) NOT NULL COMMENT '审核类型，0-创建，1-修改',
+        check_user_id VARCHAR(64) COMMENT '审核人id',
+        check_username VARCHAR(64) COMMENT '审核人名',
+        check_time DATETIME COMMENT '审核时间',
+        create_time DATETIME NOT NULL COMMENT '创建时间',
+        approve_flag VARCHAR(1) COMMENT '是否通过，0-否，1-是',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章审核表';
+DROP TABLE
     t_collection;
 CREATE TABLE
     t_collection
@@ -209,3 +228,55 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (7, 'r10006', '超级管理员', '2018-03-19 22:52:20', '', '2018-04-01 20:42:57', '20180107a049b606cacd', '1');
+INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (8, 'r1001308', '普通用户', '2018-04-01 20:46:46', '20180107a049b606cacd', null, null, '0');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (39, 'p10038', '基本设置', '/user/set', '2018-03-18 18:13:14', '0', 1, 6, '&#xe652;', '1', '', '2018-05-15 22:33:54', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (40, 'p10039', '我的文章', '/user/article/mine', '2018-03-18 18:13:35', '0', 1, 1, '&#xe705;', '1', '', '2018-04-21 20:48:47', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (41, 'p10040', '我的消息', '/user/message', '2018-03-18 18:13:52', '0', 1, 2, '&#xe756;', '0', '', '2018-04-21 20:54:10', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (42, 'p10041', '审核文章', '/user/check', '2018-03-18 18:14:09', '0', 1, 3, '&#xe69c;', '0', '', '2018-04-21 20:54:15', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (43, 'p10042', '发送消息', '/user/systemMessage', '2018-03-18 18:14:33', '0', 1, 4, '&#xe6fc;', '0', '', '2018-04-21 20:54:24', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (44, 'p10043', '权限管理', '', '2018-03-18 18:14:48', '0', 1, 5, '&#xe68e;', '0', '', '2018-04-21 20:54:30', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (45, 'p10044', '权限列表', '/user/permission', '2018-03-18 18:15:08', 'p10043', 1, 51, '&#xe600;', '0', '', '2018-04-21 20:54:37', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (46, 'p10045', '角色管理', '/user/role', '2018-03-18 18:15:51', 'p10043', 1, 52, '&#xe62e;', '1', '', '2018-04-21 21:00:36', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (48, 'p988454', '用户管理', '/user/manage', '2018-03-23 21:47:29', 'p10043', 1, 53, '&#xe634;', '0', '', '2018-04-21 21:01:07', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (49, 'p1001448', '文章编辑', '/user/article/doEdit', '2018-04-01 21:55:48', 'p10039', 2, 13, '&#xe705;', '2', '20180107a049b606cacd', '2018-04-21 20:49:04', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (50, 'p1002918', '新增权限', '/user/permission/doAdd', '2018-04-02 22:24:41', 'p10044', 2, 513, '&#xe68e;', '2', '20180107a049b606cacd', '2018-04-21 21:00:20', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (51, 'p1002949', '编辑权限', '/user/permission/doEdit', '2018-04-02 22:54:20', 'p10044', 2, 512, '&#xe68e;', '2', '20180107a049b606cacd', '2018-04-21 21:00:15', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (52, 'p1002959', '删除权限', '/user/permission/doDelete', '2018-04-02 23:03:25', 'p10044', 2, 511, '&#xe68e;', '2', '20180107a049b606cacd', '2018-04-21 21:00:08', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (53, 'p1007366', '发表新文章', '/user/article/doSave', '2018-04-06 00:30:33', 'p10039', 2, 11, '&#xe705;', '2', '20180107a049b606cacd', '2018-04-21 20:48:52', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (54, 'p1008656', '分配角色', '/user/role/allocateRole', '2018-04-06 21:59:38', 'p988454', 2, 532, '&#xe68e;', '2', '20180406823da5754261', '2018-04-21 21:01:22', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (55, 'p1008658', '分配权限', '/user/role/allocatePermission', '2018-04-06 22:00:39', 'p10045', 2, 521, '&#xe62e;', '2', '20180406823da5754261', '2018-04-21 21:00:43', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (56, 'p1008660', '编辑角色', '/user/role/doEdit', '2018-04-06 22:01:16', 'p10045', 2, 522, '&#xe68e;', '2', '20180406823da5754261', '2018-04-21 21:00:52', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (57, 'p1008661', '删除角色', '/user/role/doDelete', '2018-04-06 22:01:33', 'p10045', 2, 523, '&#xe68e;', '2', '20180406823da5754261', '2018-04-21 21:00:57', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (58, 'p1008682', '删除文章', '/user/article/doDelete', '2018-04-06 22:21:55', 'p10039', 2, 12, '&#xe68e;', '2', '20180406823da5754261', '2018-04-21 20:49:00', '20180406823da5754261');
+INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (59, 'p1008684', '修改用户状态', '/user/manage/changeStatus', '2018-04-06 22:23:07', 'p988454', 2, 531, '&#xe607;', '2', '20180406823da5754261', '2018-04-21 21:01:16', '20180406823da5754261');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (75, 'r10006', 'p10038', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (76, 'r10006', 'p10039', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (77, 'r10006', 'p10040', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (78, 'r10006', 'p10041', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (79, 'r10006', 'p10042', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (80, 'r10006', 'p10043', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (81, 'r10006', 'p10044', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (82, 'r10006', 'p10045', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (83, 'r10006', 'p988454', '2018-03-23 22:05:02');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (87, 'r10006', 'p1001448', '2018-04-01 21:55:48');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (90, 'r10006', 'p1002918', '2018-04-02 22:24:41');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (91, 'r10006', 'p1002949', '2018-04-02 22:54:20');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (92, 'r10006', 'p1002959', '2018-04-02 23:03:25');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (93, 'r10006', 'p1007366', '2018-04-06 00:30:34');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (94, 'r10006', 'p1008656', '2018-04-06 21:59:38');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (95, 'r10006', 'p1008658', '2018-04-06 22:00:39');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (96, 'r10006', 'p1008660', '2018-04-06 22:01:16');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (97, 'r10006', 'p1008661', '2018-04-06 22:01:33');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (107, 'r10006', 'p1008682', '2018-04-06 22:21:55');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (108, 'r10006', 'p1008684', '2018-04-06 22:23:07');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (187, 'r10006', 'p1030189', '2018-04-21 20:47:07');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (188, 'r10006', 'p1030191', '2018-04-21 20:47:41');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (189, 'r10006', 'p1030197', '2018-04-21 20:52:18');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (190, 'r1001308', 'p10039', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (191, 'r1001308', 'p1007366', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (192, 'r1001308', 'p1008682', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (193, 'r1001308', 'p1001448', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (194, 'r1001308', 'p10040', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (195, 'r1001308', 'p10041', '2018-05-13 19:56:44');
+INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (196, 'r1001308', 'p10038', '2018-05-13 19:56:44');

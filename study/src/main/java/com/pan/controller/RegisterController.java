@@ -1,9 +1,7 @@
 package com.pan.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -20,11 +18,9 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
-import com.pan.service.RoleService;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -43,9 +39,6 @@ public class RegisterController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private RoleService roleService;
 	
 	/**
 	 * 跳转注册页
@@ -74,20 +67,7 @@ public class RegisterController {
 	@ResponseBody
 	public ResultMsg register(HttpServletRequest request,HttpServletResponse response,User user){
 		logger.info("注册开始,用户信息为：{}",user);
-		User saveUser = userService.saveUser(user);
-		String token=UUID.randomUUID().toString();
-		//设置cookie过期时间
-//		CookieUtils.setCookie(request, response, MyConstant.TOKEN,token,cookieMaxage);
-//		saveUser.setPassword(null);
-//		String json=JsonUtils.toJson(saveUser);
-//		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
-//		
-//		//用户角色信息放入redis
-//		List<String> list = roleService.getRoleByUserId(saveUser.getUserId());
-//		JedisUtils.setString("user_roles:"+saveUser.getUserId(), JsonUtils.toJson(list));
-//				
-//		//用户登录成功，将用户session添加到redis集合中
-//		request.getSession().setAttribute("userId", saveUser.getUserId());
+		userService.saveUser(user);
 		return ResultMsg.ok("用户注册成功");
 	}
 	
