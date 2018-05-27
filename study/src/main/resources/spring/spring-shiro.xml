@@ -30,6 +30,9 @@
 				/article/**=anon
 				/api/**=anon
 				/u/**=anon
+				/404=anon
+				/500=anon
+				/unauth=anon
 				/**=authc
 			</value>
 		</property>

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,8 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		}else if(ex instanceof AuthorizationException){//权限异常
 			viewName="html/error/unauth";
 			businessException = new BusinessException("权限异常,没有当前权限");
+		}else if(ex instanceof AuthenticationException){
+			businessException = new BusinessException("用户登陆失败");
 		}else {
 			// 如果抛出的不是系统自定义的异常则重新构造一个未知错误异常
 			// 这里我就也有CustomException省事了，实际中应该要再定义一个新的异常

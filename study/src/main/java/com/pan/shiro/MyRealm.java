@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -101,7 +99,7 @@ public class MyRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
-			AuthenticationToken token) throws AuthenticationException {
+			AuthenticationToken token)  {
 		String username = (String) token.getPrincipal();
 		String inputPassword = new String((char[]) token.getCredentials());
 		User userInDb = userService.findByUsername(username);
@@ -111,7 +109,7 @@ public class MyRealm extends AuthorizingRealm {
 		try {
 			if (!PasswordUtils.validPassword(inputPassword,
 					userInDb.getPassword())) {
-				throw new BusinessException("用户不存在");
+				throw new BusinessException("密码或账户错误");
 			}
 		} catch (Exception e) {
 			throw new IncorrectCredentialsException();
@@ -162,4 +160,5 @@ public class MyRealm extends AuthorizingRealm {
 			}
 		}
 	}
+	
 }

@@ -1,11 +1,13 @@
 package com.pan.common.exception;
 
+import org.apache.shiro.authc.AuthenticationException;
+
 /**
  * 业务异常类
  * @author Administrator
  *
  */
-public class BusinessException extends RuntimeException{
+public class BusinessException extends AuthenticationException{
 
 	/**
 	 * 
@@ -14,11 +16,6 @@ public class BusinessException extends RuntimeException{
 	
 	public BusinessException() {
 		super();
-	}
-
-	public BusinessException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
 	public BusinessException(String message, Throwable cause) {

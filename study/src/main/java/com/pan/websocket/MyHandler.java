@@ -125,13 +125,19 @@ public class MyHandler extends TextWebSocketHandler{
             session.close();
         }
         logger.error("连接出错");
-        USERS.remove(getClientId(session));
+        String clientId = getClientId(session);
+        if(clientId!=null){        	
+        	USERS.remove(clientId);
+        }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-    	logger.info("连接已关闭：" + status);
-        USERS.remove(getClientId(session));
+    	String clientId = getClientId(session);
+    	if(clientId!=null){
+    		logger.info("连接已关闭：" + status);
+            USERS.remove(clientId);
+    	}
     }
 
     @Override

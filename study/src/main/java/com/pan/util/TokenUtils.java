@@ -2,6 +2,7 @@ package com.pan.util;
 
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -80,5 +81,22 @@ public class TokenUtils {
 		PrincipalCollection newPrincipalCollection = new SimplePrincipalCollection(user, realmName);  
 		//重新加载Principal  
 		subject.runAs(newPrincipalCollection); 
+	}
+	
+	/**
+	 * 将用户信息放入subject
+	 * @param user 新的用户信息
+	 */
+	public static void setPrincipal(User user){
+		Subject subject = SecurityUtils.getSubject(); 
+	    UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());  
+		subject.login(token);
+//		
+//		RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
+//	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
+//	    SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(),realm.getName()); 
+//		PrincipalCollection newPrincipalCollection = new SimplePrincipalCollection(authenticationInfo, realm.getName());  
+//		//重新加载Principal  
+//		subject.runAs(newPrincipalCollection); 
 	}
 }

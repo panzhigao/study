@@ -228,6 +228,8 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+INSERT INTO t_user (id, user_id, sex, username, nickname, password, create_time, last_login_time, status, telephone, update_time, user_portrait, update_user) VALUES (1, '20180406823da5754261', '0', 'admin', '管理员', 'B8126D979040396255441D6133A8B3A28265BED4DF055A6525D52877', '2018-04-06 21:17:33', '2018-05-05 13:26:38', '1', null, '2018-05-27 10:14:55', null, null);
+INSERT INTO t_user_role (id, user_id, role_id, create_time) VALUES (1, '20180406823da5754261', 'r10006', null);
 INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (7, 'r10006', '超级管理员', '2018-03-19 22:52:20', '', '2018-04-01 20:42:57', '20180107a049b606cacd', '1');
 INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (8, 'r1001308', '普通用户', '2018-04-01 20:46:46', '20180107a049b606cacd', null, null, '0');
 INSERT INTO t_permission (id, permission_id, permission_name, url, create_time, pid, level, sort, icon, type, create_user, update_time, update_user) VALUES (39, 'p10038', '基本设置', '/user/set', '2018-03-18 18:13:14', '0', 1, 6, '&#xe652;', '1', '', '2018-05-15 22:33:54', '20180406823da5754261');

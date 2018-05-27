@@ -103,6 +103,9 @@ public class UserServiceImpl implements UserService{
 			UserRole userRole=new UserRole(userId, defaultRoleId);
 			userRole.setCreateTime(new Date());
 			this.addUserRole(userRole);
+			//用户验证,用明文密码验证
+			user.setPassword(password);
+			TokenUtils.setPrincipal(user);
 			return user;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("加密用户密码错误",e);
