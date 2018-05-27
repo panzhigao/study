@@ -50,10 +50,14 @@ public class FileUploadController {
 	/**
 	 * 图片保存路径
 	 */
-	@Value("${picture.dir}")
+	@Value("${picture.saveDir}")
 	private String pictureDir;
 	
-	private static final String PIC_BASE="http://www.pan.com/myimage/"; 
+	/**
+	 * 图片访问路径
+	 */
+	@Value("${picture.url}")
+	private String pictureUrl; 
 	
     @RequestMapping(value="/upload",headers=("content-type=multipart/*"),method=RequestMethod.POST)
     @ResponseBody
@@ -72,18 +76,19 @@ public class FileUploadController {
             String imageName=contentType.substring(contentType.indexOf("/")+1);  
             path=dateStr+"."+imageName;  
             File destFile=new File(pictureDir+path); 
+            destFile.setReadable(true);
             file.transferTo(destFile);  
             Picture picture=new Picture();
             String userId=CookieUtils.getLoginUserId(request);
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
-                 picture.setPicUrl(PIC_BASE+path);
+                 picture.setPicUrl(pictureUrl+path);
                  picture.setCreateTime(new Date());
                  pictureService.savePicture(picture);
-                 logger.info("图片输出路径:{}",PIC_BASE+path); 
+                 logger.info("图片输出路径:{}",pictureUrl+path); 
                  Map<String,Object> data=new HashMap<String, Object>(5);
-                 data.put("src", PIC_BASE+path);
+                 data.put("src", pictureUrl+path);
                  resultMsg=ResultMsg.build(ResultCodeEmun.UPLOAD_SUCCESS,ResultCodeEmun.UPLOAD_SUCCESS.getMsg(),data);
 			} catch (Exception e) {
 				logger.error("保存图片信息失败",e);
@@ -143,11 +148,11 @@ public class FileUploadController {
 					            String userId=CookieUtils.getLoginUserId(request);
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
-				                picture.setPicUrl(PIC_BASE+destFileName);
+				                picture.setPicUrl(pictureUrl+destFileName);
 				                picture.setCreateTime(new Date());
 				                pictureService.savePicture(picture);
 								file.transferTo(localFile);
-								data.add(PIC_BASE+destFileName);
+								data.add(pictureUrl+destFileName);
 							} catch (Exception e) {
 								e.printStackTrace();
 								map.put("errno", 1);

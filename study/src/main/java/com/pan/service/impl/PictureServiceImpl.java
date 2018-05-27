@@ -31,8 +31,8 @@ public class PictureServiceImpl implements PictureService{
 	@Autowired
 	private PictureMapper pictureMapper;
 	
-	@Value("${picture.dir}")
-	private String pictureDir;
+	@Value("${picture.saveDir}")
+	private String pictureSaveDir;
 	
 	@Override
 	public void savePicture(Picture picture) {
@@ -75,7 +75,7 @@ public class PictureServiceImpl implements PictureService{
 		}
 		String picUrl=pictureInDb.getPicUrl();
 		String fileName=picUrl.substring(picUrl.lastIndexOf("/"));
-		File file=new File(pictureDir+fileName);
+		File file=new File(pictureSaveDir+fileName);
 		if(file.exists()){
 			boolean deleted = file.delete();
 			if(deleted){
@@ -85,7 +85,7 @@ public class PictureServiceImpl implements PictureService{
 				throw new BusinessException("删除图片失败");
 			}
 		}else{
-			logger.error("删除图片失败，图片不存在",pictureDir+fileName);
+			logger.error("删除图片失败，图片不存在",pictureSaveDir+fileName);
 			throw new BusinessException("删除图片失败，图片不存在");
 		}
 		pictureMapper.deleteByPictureId(pictureId);

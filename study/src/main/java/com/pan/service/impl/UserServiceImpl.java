@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService{
 	/**
 	 * 图片保存路径
 	 */
-	@Value("${picture.dir}")
-	private String pictureDir;
+	@Value("${picture.saveDir}")
+	private String pictureSaveDir;
 	
 	@Autowired
 	private UserMapper userMapper;
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService{
 		if(StringUtils.isNotBlank(user.getUserPortrait())){
 			String temp=user.getUserPortrait();
 			temp=temp.replace("data:image/jpeg;base64,", "");
-			String generateImage = ImageUtils.generateImage(temp, pictureDir);
+			String generateImage = ImageUtils.generateImage(temp, pictureSaveDir);
 			if(generateImage!=null){
 				String newPortrait=imgUrl+generateImage;
 				user.setUserPortrait(newPortrait);
