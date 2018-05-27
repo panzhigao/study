@@ -190,9 +190,9 @@ public class UserServiceImpl implements UserService{
 			}
 		}
 		userMapper.updateUserByUserId(user);
+		User userInDb = userMapper.findByUserId(userId);
 		//重置用户登陆信息
-		User userInDb=this.findByUserId(userId);
-		TokenUtils.resetPrincipal(userInDb);
+		TokenUtils.setAttribute("user",userInDb);
 		String userBrief=userExtension.getUserBrief();
 		//当没用用户简介时新增，否则更新
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
@@ -305,7 +305,7 @@ public class UserServiceImpl implements UserService{
 			}
 			userMapper.addUserRole(list);
 			//清空该用户权限缓存
-			TokenUtils.clearAuth(user);
+			TokenUtils.clearAuthz(userId);
 		}
 	}
 
@@ -323,19 +323,13 @@ public class UserServiceImpl implements UserService{
 		if(User.STATUS_BLOCKED.equals(status)){
 			message="禁用账号成功";
 			userMapper.updateUserByUserId(user);
-			User loginUser = TokenUtils.getLoginUser();
-			if(loginUser!=null){
-				loginUser.setStatus(status);
-				CookieUtils.setLoginUser(loginUser);
-			}
+			//清空用户授权信息
+			TokenUtils.clearAuth(userId);
+			TokenUtils.clearAuthz(userId);
 		}else if(User.STATUS_NORMAL.equals(status)){
 			message="启用账号成功";
 			userMapper.updateUserByUserId(user);
-			User loginUser = TokenUtils.getLoginUser();
-			if(loginUser!=null){
-				loginUser.setStatus(status);
-				CookieUtils.setLoginUser(loginUser);
-			}
+			//TokenUtils.clearAuth(user);
 		}else{
 			message="操作错误，请稍后重试";
 		}	

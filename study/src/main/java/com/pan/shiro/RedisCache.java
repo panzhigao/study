@@ -4,14 +4,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.pan.entity.User;
 import com.pan.util.JedisUtils;
 import com.pan.util.SerializeUtils;
 
@@ -47,8 +45,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
             return preKey.getBytes();
         } else if(key instanceof PrincipalCollection){
         	PrincipalCollection principalCollection=(PrincipalCollection) key;
-        	User user=(User)principalCollection.getPrimaryPrincipal();
-            return (CACHE_PREFIX + user.getUserId()).getBytes();
+        	String userId=(String) principalCollection.getPrimaryPrincipal();
+            return (CACHE_PREFIX + userId).getBytes();
         }else{
             return SerializeUtils.serialize(key);
         }

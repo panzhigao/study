@@ -77,7 +77,7 @@ public class PermissionServiceImpl implements PermissionService {
 			rolePermissionService.addRolePermission(rolePermission);
 			List<User> users = userService.findUserByRoleId(roleId);
 			for (User user : users) {
-				TokenUtils.clearAuth(user);
+				TokenUtils.clearAuthz(user.getUserId());
 			}
 		}
 	}

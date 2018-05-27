@@ -48,7 +48,9 @@ public class ImageUtils {
 			destFile.setExecutable(true);
 			destFile.setWritable(true);
 			OutputStream out = new FileOutputStream(destFile);
-			Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
+			if(!SystemUtils.isWindows()){				
+				Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
+			}
 			out.write(b);
 			out.flush();
 			out.close();

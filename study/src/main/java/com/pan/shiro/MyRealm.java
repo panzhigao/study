@@ -83,11 +83,11 @@ public class MyRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-		User userInDb = (User) principals.getPrimaryPrincipal();
+		String userId = (String) principals.getPrimaryPrincipal();
 		// 角色信息
-		List<String> roles = roleService.getRoleByUserId(userInDb.getUserId());
+		List<String> roles = roleService.getRoleByUserId(userId);
 		// 权限信息
-		Set<String> permissions = loadMenus(userInDb.getUserId());
+		Set<String> permissions = loadMenus(userId);
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 		simpleAuthorizationInfo.addRoles(roles);
 		simpleAuthorizationInfo.addStringPermissions(permissions);
@@ -106,15 +106,18 @@ public class MyRealm extends AuthorizingRealm {
 		if (userInDb == null) {
 			throw new BusinessException("用户不存在");
 		}
+		if(User.STATUS_BLOCKED.equals(userInDb.getStatus())){
+			throw new BusinessException("账号已禁用");
+		}
 		try {
-			if (!PasswordUtils.validPassword(inputPassword,
-					userInDb.getPassword())) {
+			if (!PasswordUtils.validPassword(inputPassword,userInDb.getPassword())) {
 				throw new BusinessException("密码或账户错误");
 			}
 		} catch (Exception e) {
 			throw new IncorrectCredentialsException();
 		}
-		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb, inputPassword, getName());
+		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getUserId(), inputPassword, getName());
+		TokenUtils.setAttribute("user",userInDb);
 		// 加载菜单到session
 		loadMenus(userInDb.getUserId());
 		return authenticationInfo;
@@ -141,18 +144,38 @@ public class MyRealm extends AuthorizingRealm {
 	public void clearAuthz() {
 		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 	}
-
+	
 	/**
-	 * 删除指定用户权限信息
+	 * 删除指定用户认证信息
+	 * @param user 被删除人
 	 */
-	public void clearAuthz(User user) {
+	public void clearAuth(String userId) {
 		Subject subject = SecurityUtils.getSubject();
 		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(user, realmName);
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
 		subject.runAs(principals);
-		getAuthorizationCache().remove(subject.getPrincipals());
-		subject.releaseRunAs();
-		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+		if(getAuthenticationCache()!=null){
+			getAuthenticationCache().remove(subject.getPrincipals());
+			subject.releaseRunAs();
+			this.clearCachedAuthenticationInfo(subject.getPrincipals());
+		}
+	}
+	
+	
+	/**
+	 * 删除指定用户授权信息
+	 * @param user 被删除人
+	 */
+	public void clearAuthz(String userId) {
+		Subject subject = SecurityUtils.getSubject();
+		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
+		subject.runAs(principals);
+		if(getAuthorizationCache()!=null){
+			getAuthorizationCache().remove(subject.getPrincipals());
+			subject.releaseRunAs();
+			this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+		}
 	}
 
 	/**

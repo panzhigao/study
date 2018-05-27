@@ -5,8 +5,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import com.pan.entity.User;
@@ -19,12 +17,15 @@ public class TokenUtils {
 	} 
 	
 	public static User getLoginUser(){
-		User user= (User)SecurityUtils.getSubject().getPrincipal();
+		User user = (User)getSession().getAttribute("user");
 		return user;
 	} 
 	
 	public static String getLoingUserId(){
 		User loingUser = getLoginUser();
+		if(loingUser==null){
+			return null;
+		}
 		return loingUser.getUserId();
 	} 
 	
@@ -52,18 +53,27 @@ public class TokenUtils {
 	} 
 	
 	/**
-	 * 清空指定用户授权信息
+	 * 清空指定用户认证信息
 	 * @param user 用户信息
 	 */
-	public static void clearAuth(User user){  
+	public static void clearAuth(String userId){  
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
 	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
-	    realm.clearAuthz(user);  
+	    realm.clearAuth(userId);
 	}
 	
 	/**
-	 * 清空用户授权和验证信息
+	 * 清空指定用户授权信息
 	 * @param user 用户信息
+	 */
+	public static void clearAuthz(String userId){  
+	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
+	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
+	    realm.clearAuthz(userId);  
+	}
+	
+	/**
+	 * 清空当前用户授权和验证信息
 	 */
 	public static void clearPrincipal(){  
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
@@ -79,20 +89,7 @@ public class TokenUtils {
 	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
 	    realm.clearAllCachedAuthorizationInfo();  
 	}
-	
-	/**
-	 * 重置用户信息
-	 * @param user 修改后的用户信息
-	 */
-	public static void resetPrincipal(User user){
-		Subject subject = SecurityUtils.getSubject();  
-		PrincipalCollection principalCollection = subject.getPrincipals();  
-		String realmName = principalCollection.getRealmNames().iterator().next();  
-		PrincipalCollection newPrincipalCollection = new SimplePrincipalCollection(user, realmName);  
-		//重新加载Principal  
-		subject.runAs(newPrincipalCollection); 
-	}
-	
+		
 	/**
 	 * 将用户信息放入subject
 	 * @param user 新的用户信息

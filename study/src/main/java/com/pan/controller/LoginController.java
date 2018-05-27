@@ -54,10 +54,6 @@ public class LoginController{
 		//生成验证码
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
 		SecurityUtils.getSubject().getSession().setAttribute("vercode", vercode);
-		//String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		//String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
-		//JedisUtils.setStringExpire(MyConstant.USER_SESSION+cookieValue, vercode,3600);
-		//mav.addObject("vercode", vercode);
 		return mav;
 	}
 	
