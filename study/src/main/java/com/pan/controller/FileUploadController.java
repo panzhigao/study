@@ -21,14 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
-import com.pan.util.CookieUtils;
 import com.pan.util.DateUtils;
 import com.pan.util.IdUtils;
+import com.pan.util.TokenUtils;
 
 
 /**
@@ -78,7 +77,7 @@ public class FileUploadController {
             destFile.setWritable(true);
             file.transferTo(destFile);  
             Picture picture=new Picture();
-            String userId=CookieUtils.getLoginUserId(request);
+            String userId=TokenUtils.getLoingUserId();
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
@@ -142,7 +141,7 @@ public class FileUploadController {
 							}
 							try {
 								Picture picture=new Picture();
-					            String userId=CookieUtils.getLoginUserId(request);
+					            String userId=TokenUtils.getLoingUserId();
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPicUrl(pictureUrl+destFileName);

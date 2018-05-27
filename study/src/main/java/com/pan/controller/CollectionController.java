@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
 import com.pan.service.CollectionService;
-import com.pan.util.CookieUtils;
 import com.pan.util.TokenUtils;
 import com.pan.vo.QueryCollectionVO;
 
@@ -28,7 +27,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/add")
 	@ResponseBody
 	public ResultMsg addCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		Collection collection=new Collection();
 		collection.setArticleId(articleId);
 		collection.setUserId(loingUserId);
@@ -43,7 +42,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/remove")
 	@ResponseBody
 	public ResultMsg removeCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		collectionService.removeCollection(loingUserId, articleId);
 		return ResultMsg.ok("取消收藏成功");
 	}
@@ -55,7 +54,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.POST,value="/collection/find")
 	@ResponseBody
 	public ResultMsg findCollection(HttpServletRequest request,String articleId){
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		Collection collection = collectionService.findUserCollection(loingUserId, articleId);
 		if(collection!=null){
 			return ResultMsg.ok("已收藏",true);

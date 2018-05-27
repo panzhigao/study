@@ -252,21 +252,21 @@ public final class CookieUtils {
      * 获取登陆用户信息
      * @return
      */
-    public static User getLoginUser(HttpServletRequest request){
-    	User user=null;
-    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
-    	if(cookieValue!=null){
-    		String string = JedisUtils.getString(MyConstant.USER_LOGINED+cookieValue);
-    		if(string!=null){
-    			try {
-					user=(User) JsonUtils.fromJson(string, User.class);
-				} catch (Exception e) {
-					logger.error("reids获取登陆用户信息失败", e);
-				}	
-    		}
-    	}
-    	return user;
-    }
+//    public static User getLoginUser(HttpServletRequest request){
+//    	User user=null;
+//    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
+//    	if(cookieValue!=null){
+//    		String string = JedisUtils.getString(MyConstant.USER_LOGINED+cookieValue);
+//    		if(string!=null){
+//    			try {
+//					user=(User) JsonUtils.fromJson(string, User.class);
+//				} catch (Exception e) {
+//					logger.error("reids获取登陆用户信息失败", e);
+//				}	
+//    		}
+//    	}
+//    	return user;
+//    }
     
     /**
      * 获取登陆用户信息
@@ -288,18 +288,18 @@ public final class CookieUtils {
 //    	return getLoginUser(request);
 //    }
 
-    /**
-     * 获取登陆用户id
-     * @return
-     */
-    public static String getLoginUserId(HttpServletRequest request){
-    	User loginUser = getLoginUser(request);
-    	String userId=null;
-    	if(loginUser!=null){
-    		userId=loginUser.getUserId();
-    	}
-    	return userId;
-    }
+//    /**
+//     * 获取登陆用户id
+//     * @return
+//     */
+//    public static String getLoginUserId(HttpServletRequest request){
+//    	User loginUser = getLoginUser(request);
+//    	String userId=null;
+//    	if(loginUser!=null){
+//    		userId=loginUser.getUserId();
+//    	}
+//    	return userId;
+//    }
     
     public static void validateVercode(String vercode){
     	if(StringUtils.isBlank(vercode)){

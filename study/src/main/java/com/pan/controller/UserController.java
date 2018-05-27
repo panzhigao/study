@@ -1,7 +1,6 @@
 package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -10,16 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
-import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
+import com.pan.util.TokenUtils;
 
 /**
  * 
@@ -42,7 +37,7 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/edit")
 	public ModelAndView toUserEditPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/userEdit");
-		User user = CookieUtils.getLoginUser(request);
+		User user = TokenUtils.getLoginUser();
 		UserExtension userExtension=userService.findExtensionByUserId(user.getUserId());
 		mav.addObject("user",user);
 		mav.addObject("userExtension",userExtension);
@@ -75,13 +70,13 @@ public class UserController {
 	@ResponseBody
 	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		String userId = CookieUtils.getLoginUserId(request);
-		String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
+		String userId = TokenUtils.getLoingUserId();
+//		String token = CookieUtils.getCookieValue(request, MyConstant.TOKEN);
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
-		User userT = userService.findByUserId(userId);
-		String json=JsonUtils.toJson(userT);
-		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
+//		User userT = userService.findByUserId(userId);
+//		String json=JsonUtils.toJson(userT);
+//		JedisUtils.setStringExpire(MyConstant.USER_LOGINED+token, json, cookieMaxage);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
 		return resultMsg;
 	}

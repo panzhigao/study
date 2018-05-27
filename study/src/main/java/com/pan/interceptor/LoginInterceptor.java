@@ -2,19 +2,16 @@ package com.pan.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
-import com.pan.util.CookieUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.TokenUtils;
 
 /**
  * 登陆拦截器
@@ -31,14 +28,14 @@ public class LoginInterceptor implements HandlerInterceptor{
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
-		User loginUser = CookieUtils.getLoginUser(request);
+		User loginUser = TokenUtils.getLoginUser();
 		if(loginUser==null||User.STATUS_BLOCKED.equals(loginUser.getStatus())){
 			String message="";
 			if(loginUser==null){
 				message="用户未登录";
 			}else if(User.STATUS_BLOCKED.equals(loginUser.getStatus())){
 				message="用户被禁用";
-				CookieUtils.cleanUserLoginTrace();
+				TokenUtils.clearAuth();
 			}
 			logger.info(message);
 			if(isAjax(request)){

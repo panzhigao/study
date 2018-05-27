@@ -2,9 +2,7 @@ package com.pan.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import com.pan.dto.PasswordDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
 import com.pan.util.PasswordUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -120,7 +117,7 @@ public class UserSetController {
 	@ResponseBody
 	@HasPermission(value="/user/set")
 	public ResultMsg confirmBind(HttpServletRequest request,String telephone,String code){
-		String loginUserId = CookieUtils.getLoginUserId(request);
+		String loginUserId = TokenUtils.getLoingUserId();
 		User user=new User();
 		user.setUserId(loginUserId);
 		user.setTelephone(telephone);

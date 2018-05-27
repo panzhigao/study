@@ -16,7 +16,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.entity.User;
 import com.pan.service.PictureService;
-import com.pan.util.CookieUtils;
+import com.pan.util.TokenUtils;
 
 /**
  * 
@@ -24,9 +24,9 @@ import com.pan.util.CookieUtils;
  *
  */
 @Controller
-public class PicturesController {
+public class PictureController {
 	
-	private static final Logger logger=LoggerFactory.getLogger(PicturesController.class);
+	private static final Logger logger=LoggerFactory.getLogger(PictureController.class);
 	
 	@Autowired
 	private PictureService pictureService;
@@ -39,8 +39,7 @@ public class PicturesController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/my_pictures")
 	public ModelAndView toMyPictures(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("content/myPictures");
-		CookieUtils.getLoginUser(request);
-		User user = CookieUtils.getLoginUser(request);
+		User user = TokenUtils.getLoginUser();
 		mav.addObject("user", user);
 		return mav;
 	}
@@ -52,7 +51,7 @@ public class PicturesController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/get_pictures")
 	@ResponseBody
 	public List<Picture> getPictureList(HttpServletRequest request,Integer pageSize,Integer pageNo){
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		Map<String,Object> params=new HashMap<String, Object>(3);
 		params.put("userId", loingUserId);
 		Integer offset=(pageNo-1)*pageSize;
@@ -70,7 +69,7 @@ public class PicturesController {
 	@ResponseBody
 	public ResultMsg deletePicture(HttpServletRequest request,String pictureId){
 		logger.info("删除图片开始");
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		ResultMsg resultMsg=null;
 		pictureService.deleteByPictureId(loingUserId, pictureId);
 		resultMsg=ResultMsg.ok("删除图片成功");

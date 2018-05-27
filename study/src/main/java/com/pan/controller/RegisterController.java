@@ -21,6 +21,7 @@ import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -46,7 +47,7 @@ public class RegisterController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/register")
 	public ModelAndView toRegisterPage(HttpServletRequest request,HttpServletResponse response){
-		if(CookieUtils.getLoginUser(request)!=null){
+		if(TokenUtils.getLoginUser()!=null){
 			 ModelAndView mv = new ModelAndView("redirect:/user/home");
 			 return mv;
 		}

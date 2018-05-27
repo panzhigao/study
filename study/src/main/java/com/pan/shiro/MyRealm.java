@@ -119,7 +119,22 @@ public class MyRealm extends AuthorizingRealm {
 		loadMenus(userInDb.getUserId());
 		return authenticationInfo;
 	}
-
+	
+	/**
+	 * 清除当前用户验证和授权信息
+	 */
+	public void cleanAll(){
+		clearAuth();
+		clearAuthz();
+	}
+	
+	/**
+	 * 清除当前用户登陆信息
+	 */
+	public void clearAuth() {
+		this.clearCachedAuthenticationInfo(SecurityUtils.getSubject().getPrincipals());
+	}
+	
 	/**
 	 * 删除当前用户权限信息
 	 */

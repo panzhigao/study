@@ -2,21 +2,18 @@ package com.pan.common.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
-import com.pan.util.CookieUtils;
 import com.pan.util.JsonUtils;
+import com.pan.util.TokenUtils;
 
 /**
  * 异常类处理
@@ -75,7 +72,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		// 向前台返回错误信息
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("message", businessException.getMessage());
-		modelAndView.addObject("user", CookieUtils.getLoginUser(request));
+		modelAndView.addObject("user", TokenUtils.getLoginUser());
 		modelAndView.setViewName(viewName);
 		return modelAndView;
 

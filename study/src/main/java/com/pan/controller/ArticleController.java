@@ -18,9 +18,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.service.ArticleService;
-import com.pan.service.CollectionService;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
@@ -43,9 +41,6 @@ public class ArticleController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private CollectionService collectionService;
-	
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -54,7 +49,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/jie/add");
-		User user = CookieUtils.getLoginUser(request);
+		User user = TokenUtils.getLoginUser();
 		mav.addObject("user", user);
 		return mav;
 	}
@@ -89,14 +84,10 @@ public class ArticleController {
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setType(Article.TYPE_ARTICLE);
-		int articleCounts=articleService.getCount(queryArticleVO);
 		QueryCollectionVO collectionVO=new QueryCollectionVO();
 		collectionVO.setUserId(loingUserId);
 		collectionVO.setTitle(Article.TYPE_ARTICLE);
-		int collectionCounts = collectionService.getCount(collectionVO);
 		ModelAndView mav=new ModelAndView("html/user/article");
-		mav.addObject("articleCounts", articleCounts);
-		mav.addObject("collectionCounts", collectionCounts);
 		return mav;
 	}
 	
@@ -198,7 +189,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doDelete")
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
-		String userId=CookieUtils.getLoginUserId(request);
+		String userId=TokenUtils.getLoingUserId();
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
 	}

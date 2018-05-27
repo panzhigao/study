@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Praise;
 import com.pan.service.PraiseService;
-import com.pan.util.CookieUtils;
+import com.pan.util.TokenUtils;
 
 @Controller
 @RequestMapping("/api")
@@ -25,7 +25,7 @@ public class PraiseController {
 	@RequestMapping(value="/user/praise",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg praise(HttpServletRequest request,String commentId){
-		String loingUserId = CookieUtils.getLoginUserId(request);
+		String loingUserId = TokenUtils.getLoingUserId();
 		Praise praise=new Praise();
 		praise.setUserId(loingUserId);
 		praise.setCommentId(commentId);

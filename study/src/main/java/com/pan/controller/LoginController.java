@@ -19,7 +19,6 @@ import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -46,8 +45,8 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="login")
 	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
-		if(CookieUtils.getLoginUser(request)!=null){
-			 String loginUserId = CookieUtils.getLoginUserId(request);
+		if(TokenUtils.getLoingUserId()!=null){
+			 String loginUserId = TokenUtils.getLoingUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}

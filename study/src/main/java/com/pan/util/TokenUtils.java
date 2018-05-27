@@ -62,6 +62,16 @@ public class TokenUtils {
 	}
 	
 	/**
+	 * 清空用户授权和验证信息
+	 * @param user 用户信息
+	 */
+	public static void clearPrincipal(){  
+	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
+	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
+	    realm.cleanAll();
+	}
+	
+	/**
 	 * 清空所有用户授权信息
 	 */
 	public static void clearAllUserAuth(){  
@@ -72,7 +82,7 @@ public class TokenUtils {
 	
 	/**
 	 * 重置用户信息
-	 * @param user 新的用户信息
+	 * @param user 修改后的用户信息
 	 */
 	public static void resetPrincipal(User user){
 		Subject subject = SecurityUtils.getSubject();  
@@ -91,12 +101,5 @@ public class TokenUtils {
 		Subject subject = SecurityUtils.getSubject(); 
 	    UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());  
 		subject.login(token);
-//		
-//		RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
-//	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
-//	    SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(),realm.getName()); 
-//		PrincipalCollection newPrincipalCollection = new SimplePrincipalCollection(authenticationInfo, realm.getName());  
-//		//重新加载Principal  
-//		subject.runAs(newPrincipalCollection); 
 	}
 }
