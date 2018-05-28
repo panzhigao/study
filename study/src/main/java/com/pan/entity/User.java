@@ -28,6 +28,14 @@ public class User extends BaseEntity{
 	 */
 	public static final String STATUS_NORMAL="1";
 	/**
+	 * 不是管理员
+	 */
+	public static final String ADMIN_FALSE="0";
+	/**
+	 * 是管理员
+	 */
+	public static final String ADMIN_TRUE="1";
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2820248584713373399L;
@@ -81,6 +89,12 @@ public class User extends BaseEntity{
 	 * 用户头像
 	 */
 	private String userPortrait;
+	/**
+	 * 当前用户是否是管理员
+	 * 0-否,1-是
+	 */
+	private String adminFlag;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -147,15 +161,20 @@ public class User extends BaseEntity{
 		this.userId = userId;
 		this.status = status;
 	}
+	
+	public String getAdminFlag() {
+		return adminFlag;
+	}
+	public void setAdminFlag(String adminFlag) {
+		this.adminFlag = adminFlag;
+	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", sex=" + sex + ", username="
-				+ username + ", nickname=" + nickname + ", password="
-				+ password + ", lastLoginTime=" + lastLoginTime + ", status="
-				+ status + ", telephone=" + telephone + ", userPortrait="
-				+ userPortrait + ", getId()=" + getId() + ", getCreateTime()="
-				+ getCreateTime() + ", getUpdateTime()=" + getUpdateTime()
-				+ "]";
+		return "User [userId=" + userId + ", sex=" + sex + ", username=" + username + ", nickname=" + nickname
+				+ ", password=" + password + ", lastLoginTime=" + lastLoginTime + ", status=" + status + ", telephone="
+				+ telephone + ", userPortrait=" + userPortrait + ", adminFlag=" + adminFlag + ", id=" + id
+				+ ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime=" + updateTime
+				+ ", updateUser=" + updateUser + "]";
 	}
 
 }

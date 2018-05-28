@@ -50,8 +50,17 @@ public class UserServiceImpl implements UserService{
 	
 	private static final String DATEFORMAT="yyyyMMdd";
 	
+	/**
+	 * 默认角色id,新注册用户默认角色
+	 */
 	@Value("${system.defaultRoleId}")
 	private String defaultRoleId;
+	
+	/**
+	 * 管理员角色
+	 */
+	@Value("${system.adminRoleId}")
+	private String adminRoleId;
 	
 	/**
 	 * 图片访问路径
@@ -282,7 +291,12 @@ public class UserServiceImpl implements UserService{
 		}
 		return pageData;
 	}
-
+	
+	/**
+	 * 为用户分配角色
+	 * @param userId
+	 * @param roles 角色id数组
+	 */
 	@Override
 	public void allocateRoleToUser(String userId, String[] roles) {
 		User user=this.findByUserId(userId);
@@ -292,14 +306,25 @@ public class UserServiceImpl implements UserService{
 		//TODO 增加日志
 		//删除该用户下的所有角色，再重新添加
 		userMapper.deleteUserRoleByUserId(userId);
+		//是否给角色分配管理员角色
+		boolean hasAdmin=false;
 		if(ArrayUtils.isNotEmpty(roles)){
 			List<UserRole> list=new ArrayList<UserRole>();
-			for (String role : roles) {
+			for (String roleId : roles) {
+				if(StringUtils.equals(adminRoleId, roleId)){
+					hasAdmin=true;
+				}
 				UserRole userRole=new UserRole();
-				userRole.setRoleId(role);
+				userRole.setRoleId(roleId);
 				userRole.setUserId(userId);
 				userRole.setCreateTime(new Date());
 				list.add(userRole);
+			}
+			if(hasAdmin){				
+				user.setAdminFlag(User.ADMIN_TRUE);
+				user.setUpdateTime(new Date());
+				user.setUpdateUser(TokenUtils.getLoingUserId());
+				userMapper.updateUserByUserId(user);
 			}
 			userMapper.addUserRole(list);
 			//清空该用户权限缓存

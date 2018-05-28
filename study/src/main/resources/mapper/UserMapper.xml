@@ -15,6 +15,7 @@
     <result column="telephone"    		property="telephone"       jdbcType="VARCHAR" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
+    <result column="admin_flag"         property="adminFlag"         jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="MoreResultMap" type="com.pan.dto.UserDTO" extends="BaseResultMap">  
@@ -29,7 +30,8 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,update_time,user_portrait
+    id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,
+    update_time,user_portrait,admin_flag
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -83,6 +85,9 @@
   		</if>
   		<if test="updateUser !=null and updateUser !=''">
   			update_user=#{updateUser,jdbcType=VARCHAR},
+  		</if>
+  		<if test="adminFlag !=null and adminFlag !=''">
+  			admin_flag=#{adminFlag,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where user_id=#{userId}
