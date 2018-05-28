@@ -141,6 +141,7 @@ layui.config({
 				openTitle += '<i class="layui-icon">'+menu[i].icon+'</i>';
 			}
 			openTitle += '<cite>'+menu[i].title+'</cite>';
+			openTitle += '<i class="layui-icon layui-unselect layui-tab-reload" data-id="'+menu[i].layId+'">&#xe669;</i>';
 			openTitle += '<i class="layui-icon layui-unselect layui-tab-close" data-id="'+menu[i].layId+'">&#x1006;</i>';
 			element.tabAdd("bodyTab",{
 				title : openTitle,

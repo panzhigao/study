@@ -126,7 +126,7 @@ layui.use(['table','jquery'], function(){
 	    },
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	      {field: 'title', title: '文章标题', width:300,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'status', title: '状态', width:100, sort: true,templet:
@@ -141,6 +141,8 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
+		  {field: 'commentCount', title: '评论数', width:90, sort: true,align:'right'},
+		  {field: 'viewCount', title: '阅读数', width:90, sort: true,align:'right'},
 	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},

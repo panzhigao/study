@@ -87,6 +87,7 @@ layui.define(["element","jquery"],function(exports){
 						title += '<i class="layui-icon">'+_this.find("i.layui-icon").attr("data-icon")+'</i>';
 					}
 					title += '<cite>'+_this.find("cite").text()+'</cite>';
+					title += '<i class="layui-icon layui-unselect layui-tab-reload" data-id="'+tabIdIndex+'">&#xe669;</i>';
 					title += '<i class="layui-icon layui-unselect layui-tab-close" data-id="'+tabIdIndex+'">&#x1006;</i>';
 					element.tabAdd(tabFilter, {
 				        title : title,
@@ -164,7 +165,16 @@ layui.define(["element","jquery"],function(exports){
 		window.sessionStorage.setItem("menu",JSON.stringify(menu));
 		element.tabDelete("bodyTab",$(this).parent("li").attr("lay-id")).init();
 	})
-
+	
+	//刷新tab
+	$("body").on("click",".top_tab li i.layui-tab-reload",function(){
+		//alert($(this).data('id'));
+		var src=$(".layui-tab-item.layui-show").find("iframe").attr("src");
+		$(".layui-tab-item.layui-show").find("iframe").attr("src",src);
+		//window.location.reload();
+	})
+	
+	
 	var bodyTab = new Tab();
 	exports("bodyTab",function(option){
 		return bodyTab.set(option);

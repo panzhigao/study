@@ -42,7 +42,8 @@
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <i class="layui-badge fly-badge-vip layui-bg-green">VIP3</i>
+<!--           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i> -->
           <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
@@ -64,7 +65,7 @@
   <h1>
     $!{u.nickname}
     <i class="iconfont #if($u.sex==0) icon-nan #elseif($u.sex==1) icon-nv #end"></i>
-    <i class="layui-badge fly-badge-vip">VIP3</i>
+    <i class="layui-badge fly-badge-vip layui-bg-green">VIP3</i>
   </h1>
 
   <p style="padding: 10px 0; color: #5FB878;">认证信息：layui 作者</p>
