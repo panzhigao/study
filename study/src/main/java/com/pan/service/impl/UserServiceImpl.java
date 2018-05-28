@@ -28,7 +28,6 @@ import com.pan.entity.UserRole;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
 import com.pan.util.ImageUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -125,8 +124,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public User checkLogin(User user,String vercode) {
-		CookieUtils.validateVercode(vercode);
+	public User checkLogin(User user) {
 		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
 		String username=user.getUsername();
 		User userInDb=null;
@@ -325,7 +323,7 @@ public class UserServiceImpl implements UserService{
 			userMapper.updateUserByUserId(user);
 			//清空用户授权信息
 			TokenUtils.clearAuth(userId);
-			TokenUtils.clearAuthz(userId);
+			//TokenUtils.clearAuthz(userId);
 		}else if(User.STATUS_NORMAL.equals(status)){
 			message="启用账号成功";
 			userMapper.updateUserByUserId(user);

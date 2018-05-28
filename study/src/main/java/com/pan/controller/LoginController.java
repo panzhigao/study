@@ -2,6 +2,7 @@ package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
@@ -53,7 +56,7 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("html/user/login");
 		//生成验证码
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		SecurityUtils.getSubject().getSession().setAttribute("vercode", vercode);
+		TokenUtils.setAttribute("vercode", vercode);
 		return mav;
 	}
 	
@@ -66,7 +69,7 @@ public class LoginController{
 	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user,String vercode){
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
-		String vercodeInSession=(String)TokenUtils.getAttribute("vercode");
+		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
 		if(!StringUtils.equals(vercode, vercodeInSession)){
 			throw new BusinessException("验证码错误");
 		}
@@ -74,8 +77,6 @@ public class LoginController{
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
 		User userInDb = userService.findByUsername(user.getUsername());
-		//用户登录成功，将用户session添加到redis集合中
-		request.getSession().setAttribute("userId", userInDb.getUserId());
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}
 		

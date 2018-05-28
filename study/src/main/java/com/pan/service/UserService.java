@@ -42,10 +42,9 @@ public interface UserService {
 	 * 校验用户登陆
 	 * @param httpRequest
 	 * @param user
-	 * @param vercode
 	 * @return
 	 */
-	public User checkLogin(User user,String vercode);
+	public User checkLogin(User user);
 	/**
 	 * 更新用户登陆时间
 	 * @param userId

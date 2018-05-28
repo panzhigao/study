@@ -5,27 +5,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
-import com.pan.entity.Permission;
 import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
+import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
 import com.pan.service.PermissionService;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
-import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -127,8 +123,7 @@ public class RoleServiceImpl implements RoleService{
 			}
 			rolePermissionService.addRolePermission(list);
 		}
-		TokenUtils.clearAuth();
-		//recachePermissionByRoleId(roleId);
+		reCachePermissionByRoleId(roleId);
 	}
 
 	@Override
@@ -175,16 +170,15 @@ public class RoleServiceImpl implements RoleService{
 	
 	/**
 	 * 重新缓存指定角色用户权限
+	 * 通过roleId获取所有拥有该角色的用户，清空用户权限缓存
 	 * @param roleId
 	 */
 	@Override
-	public void recachePermissionByRoleId(String roleId){
+	public void reCachePermissionByRoleId(String roleId){
 		try {
-			List<Permission> permissionList = permissionService.getPermissionByRoleId(roleId);
-			//清除原有角色权限缓存
-			JedisUtils.delete("role_permissions:"+roleId);
-			if(CollectionUtils.isNotEmpty(permissionList)){				
-				JedisUtils.hmset("role_permissions:"+roleId, JsonUtils.listToMap(permissionList, "permissionId"));
+			List<User> list = userService.findUserByRoleId(roleId);
+			for (User user : list) {				
+				TokenUtils.clearAuthz(user.getUserId());
 			}
 		} catch (Exception e) {
 			logger.error("缓存角色权限失败,roleId:{}",roleId);

@@ -6,14 +6,8 @@ import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import com.pan.common.constant.MyConstant;
-import com.pan.common.exception.BusinessException;
-import com.pan.entity.User;
 
 /**
  * 
@@ -246,92 +240,5 @@ public final class CookieUtils {
             domainName = ary[0];
         }
         return domainName;
-    }
-    
-    /**
-     * 获取登陆用户信息
-     * @return
-     */
-//    public static User getLoginUser(HttpServletRequest request){
-//    	User user=null;
-//    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
-//    	if(cookieValue!=null){
-//    		String string = JedisUtils.getString(MyConstant.USER_LOGINED+cookieValue);
-//    		if(string!=null){
-//    			try {
-//					user=(User) JsonUtils.fromJson(string, User.class);
-//				} catch (Exception e) {
-//					logger.error("reids获取登陆用户信息失败", e);
-//				}	
-//    		}
-//    	}
-//    	return user;
-//    }
-    
-    /**
-     * 获取登陆用户信息
-     * @return
-     */
-    public static User setLoginUser(User user){
-    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	String cookieValue = getCookieValue(request, MyConstant.TOKEN);
-    	if(cookieValue!=null){
-    		String json=JsonUtils.toJson(user);
-    		JedisUtils.setString(MyConstant.USER_LOGINED+cookieValue, json);
-    	}
-    	return user;
-    }
-    
-    
-//    public static User getLoginUser(){
-//    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-//    	return getLoginUser(request);
-//    }
-
-//    /**
-//     * 获取登陆用户id
-//     * @return
-//     */
-//    public static String getLoginUserId(HttpServletRequest request){
-//    	User loginUser = getLoginUser(request);
-//    	String userId=null;
-//    	if(loginUser!=null){
-//    		userId=loginUser.getUserId();
-//    	}
-//    	return userId;
-//    }
-    
-    public static void validateVercode(String vercode){
-    	if(StringUtils.isBlank(vercode)){
-			throw new BusinessException("验证码不能为空");
-		}
-    	HttpServletRequest requset = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	String cookieValue = getCookieValue(requset, MyConstant.SESSION_ID);
-    	if(cookieValue==null){
-    		throw new BusinessException("验证码失效");
-    	}
-    	String redisVercode = JedisUtils.getString(MyConstant.USER_SESSION+cookieValue);
-    	if(redisVercode==null){
-    		throw new BusinessException("验证码失效");
-    	}
-    	if(!StringUtils.equalsIgnoreCase(vercode, redisVercode)){
-    		throw new BusinessException("验证码输入错误");
-    	}
-    }
-        
-    public static void cleanUserLoginTrace(){
-    	HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    	HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
-    	String token = CookieUtils.getCookieValue(request,MyConstant.TOKEN);
-		String sessionId = CookieUtils.getCookieValue(request,MyConstant.SESSION_ID);
-		if(token!=null){
-			//立即过期redis中的登录状态
-			JedisUtils.expire(MyConstant.USER_LOGINED+token, 0);
-		}
-		if(sessionId!=null){
-			//立即过期redis中的session
-			JedisUtils.expire(MyConstant.USER_SESSION+sessionId, 0);
-		}
-		CookieUtils.deleteCookie(request, response, MyConstant.TOKEN);
     }
 }

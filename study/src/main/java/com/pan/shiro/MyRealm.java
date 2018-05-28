@@ -1,6 +1,7 @@
 package com.pan.shiro;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,26 +9,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.entity.User;
 import com.pan.service.PermissionService;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
-import com.pan.util.PasswordUtils;
 import com.pan.util.TokenUtils;
 
 public class MyRealm extends AuthorizingRealm {
@@ -42,7 +41,10 @@ public class MyRealm extends AuthorizingRealm {
 
 	@Autowired
 	private PermissionService permissionService;
-
+	
+	@Autowired
+	private RedisSessionDAO redisSessionDAO;
+	
 	/**
 	 * 加载菜单
 	 * 
@@ -102,23 +104,13 @@ public class MyRealm extends AuthorizingRealm {
 			AuthenticationToken token)  {
 		String username = (String) token.getPrincipal();
 		String inputPassword = new String((char[]) token.getCredentials());
-		User userInDb = userService.findByUsername(username);
-		if (userInDb == null) {
-			throw new BusinessException("用户不存在");
-		}
-		if(User.STATUS_BLOCKED.equals(userInDb.getStatus())){
-			throw new BusinessException("账号已禁用");
-		}
-		try {
-			if (!PasswordUtils.validPassword(inputPassword,userInDb.getPassword())) {
-				throw new BusinessException("密码或账户错误");
-			}
-		} catch (Exception e) {
-			throw new IncorrectCredentialsException();
-		}
+		User inputUser=new User();
+		inputUser.setUsername(username);
+		inputUser.setPassword(inputPassword);
+		User userInDb=userService.checkLogin(inputUser);
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getUserId(), inputPassword, getName());
 		TokenUtils.setAttribute("user",userInDb);
-		// 加载菜单到session
+		//加载菜单到session
 		loadMenus(userInDb.getUserId());
 		return authenticationInfo;
 	}
@@ -146,18 +138,22 @@ public class MyRealm extends AuthorizingRealm {
 	}
 	
 	/**
-	 * 删除指定用户认证信息
+	 * 删除指定用户认证信息,即删除用户session信息
 	 * @param user 被删除人
 	 */
 	public void clearAuth(String userId) {
-		Subject subject = SecurityUtils.getSubject();
-		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
-		subject.runAs(principals);
-		if(getAuthenticationCache()!=null){
-			getAuthenticationCache().remove(subject.getPrincipals());
-			subject.releaseRunAs();
-			this.clearCachedAuthenticationInfo(subject.getPrincipals());
+//		Subject subject = SecurityUtils.getSubject();
+//		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+//		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
+//		subject.runAs(principals);
+//		subject.logout();
+//		subject.releaseRunAs();
+		Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
+		for (Session session : activeSessions) {
+			User user=(User) session.getAttribute("user");
+			if(user!=null&&StringUtils.equals(user.getUserId(), userId)){
+				redisSessionDAO.delete(session);
+			}
 		}
 	}
 	
@@ -173,9 +169,9 @@ public class MyRealm extends AuthorizingRealm {
 		subject.runAs(principals);
 		if(getAuthorizationCache()!=null){
 			getAuthorizationCache().remove(subject.getPrincipals());
-			subject.releaseRunAs();
 			this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 		}
+		subject.releaseRunAs();
 	}
 
 	/**

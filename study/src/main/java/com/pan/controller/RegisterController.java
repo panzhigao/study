@@ -2,8 +2,11 @@ package com.pan.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.annotation.CheckUsernameGroup;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
-import com.pan.util.CookieUtils;
-import com.pan.util.JedisUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
@@ -51,10 +53,8 @@ public class RegisterController {
 			 ModelAndView mv = new ModelAndView("redirect:/user/home");
 			 return mv;
 		}
-		String cookieValue = CookieUtils.getCookieValue(request, MyConstant.SESSION_ID);
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		JedisUtils.setString(MyConstant.USER_SESSION+cookieValue, vercode);
-		JedisUtils.setStringExpire(MyConstant.USER_SESSION+cookieValue, vercode, 3600);
+		TokenUtils.setAttribute(MyConstant.VERCODE, vercode);
 		ModelAndView mav=new ModelAndView("html/user/reg");
 		mav.addObject("vercode", vercode);
 		return mav;
@@ -66,8 +66,12 @@ public class RegisterController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doRegister")
 	@ResponseBody
-	public ResultMsg register(HttpServletRequest request,HttpServletResponse response,User user){
+	public ResultMsg register(User user,String vercode){
 		logger.info("注册开始,用户信息为：{}",user);
+		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
+		if(!StringUtils.equals(vercode, vercodeInSession)){
+			throw new BusinessException("验证码错误");
+		}
 		userService.saveUser(user);
 		return ResultMsg.ok("用户注册成功");
 	}

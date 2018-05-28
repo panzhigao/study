@@ -9,11 +9,15 @@ public class MyConstant {
 	
 	public static final String TOKEN="token";
 	
-	public static final String SESSION_ID="JSESSIONID";
+	public static final String SESSION_NAEM="JSESSIONID";
 	
-	public static final String USER_LOGINED="user_login:";
-	
-	public static final String USER_SESSION="user_session:";
+	/**
+	 * 验证码
+	 */
+	public static final String VERCODE="vercode";
+//	public static final String USER_LOGINED="user_login:";
+//	
+//	public static final String USER_SESSION="user_session:";
 	
 	/**
 	 * 消息已读

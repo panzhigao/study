@@ -67,7 +67,7 @@ public interface RoleService {
 	 * 重新缓存指定角色用户权限
 	 * @param roleId
 	 */
-	public void recachePermissionByRoleId(String roleId);
+	public void reCachePermissionByRoleId(String roleId);
 	/**
 	 * 编辑角色
 	 * @param role
