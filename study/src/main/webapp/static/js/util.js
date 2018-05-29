@@ -1,5 +1,18 @@
-function dateFormat(fmt,date)   
-{ 
+/*$("body").on('error','img',function(){
+	$(this).attr('src','/static/images/404.jpg');
+});*/
+
+$(window).load(function() { 
+	  $('img').each(function() {
+	    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
+	      this.src = '/static/images/404.jpg'; 
+	      } 
+	   });
+});
+
+
+//格式化时间
+function dateFormat(fmt,date){ 
   var o = {   
     "M+" : date.getMonth()+1,                 //月份   
     "d+" : date.getDate(),                    //日   
