@@ -15,15 +15,18 @@ import com.pan.entity.Article;
 import com.pan.entity.Comment;
 import com.pan.entity.Message;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
 import com.pan.mapper.CommentMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.service.MessageService;
+import com.pan.service.UserExtensionService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
+import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
 /**
@@ -47,8 +50,14 @@ public class CommentServiceImpl implements CommentService{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserExtensionService userExtensionService;
 	/**
 	 * 添加评论
+	 * 1.新增评论记录
+	 * 2.发送消息
+	 * 3.增加用户评论数
 	 */
 	@Override
 	public Comment addComment(Comment comment) {
@@ -87,6 +96,13 @@ public class CommentServiceImpl implements CommentService{
 		messageService.addMessage(message);
 		//String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
 		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
+		//修改当前人的评论数
+		String loingUserId = TokenUtils.getLoingUserId();
+		UserExtension userExtensionInDb=new UserExtension();
+		userExtensionInDb.setUserId(loingUserId);
+		userExtensionInDb.setCommentCounts(1);
+		userExtensionInDb.setScore(2);
+		userExtensionService.updateById(userExtensionInDb);
 		return comment;
 	}
 	

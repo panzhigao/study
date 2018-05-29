@@ -10,7 +10,15 @@ public class QueryVO {
 	 */
 	protected Integer pageSize;
 	protected Integer pageNo;
-	
+	/**
+	 * 排序条件
+	 * @return
+	 */
+	protected String orderByCondition;
+	/**
+	 * 查询条件
+	 */
+	protected String whereCondition;
 	public Integer getPageSize() {
 		return pageSize;
 	}
@@ -35,4 +43,17 @@ public class QueryVO {
 	public Integer getRow(){
 		return this.pageSize;
 	}
+	public String getOrderByCondition() {
+		return orderByCondition;
+	}
+	public void setOrderByCondition(String orderByCondition) {
+		this.orderByCondition = orderByCondition;
+	}
+	public String getWhereCondition() {
+		return whereCondition;
+	}
+	public void setWhereCondition(String whereCondition) {
+		this.whereCondition = whereCondition;
+	}
+	
 }

@@ -2,7 +2,6 @@ package com.pan.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +27,7 @@ import com.pan.entity.UserRole;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.service.UserService;
+import com.pan.util.DateUtils;
 import com.pan.util.ImageUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(UserServiceImpl.class);
 	
-	private static final String DATEFORMAT="yyyyMMdd";
 	
 	/**
 	 * 默认角色id,新注册用户默认角色
@@ -74,6 +73,12 @@ public class UserServiceImpl implements UserService{
 	@Value("${picture.saveDir}")
 	private String pictureSaveDir;
 	
+	/**
+	 * 新注册用户默认头像
+	 */
+	@Value("${system.defaultPortrait}")
+	private String defaultPortrait;
+	
 	@Autowired
 	private UserMapper userMapper;
 	
@@ -92,8 +97,7 @@ public class UserServiceImpl implements UserService{
 			logger.info("用户名已注册{}",userInDb);
 			throw new BusinessException("用户名已注册");
 		}
-		SimpleDateFormat sdf=new SimpleDateFormat(DATEFORMAT);
-		String dateStr=sdf.format(new Date());
+		String dateStr = DateUtils.getDateStr(DateUtils.FORMAT_DATE2);
 		String password=user.getPassword();
 		//用户密码加密
 		try {
@@ -107,6 +111,15 @@ public class UserServiceImpl implements UserService{
 			user.setCreateTime(new Date());
 			user.setStatus(User.STATUS_NORMAL);
 			userMapper.saveUser(user);
+			//新增用户拓展信息
+			UserExtension userExtensionTemp=new UserExtension();
+			userExtensionTemp.setUserId(userId);
+			Date now=new Date();
+			userExtensionTemp.setCreateTime(now);
+			userExtensionTemp.setUpdateTime(now);
+			userExtensionTemp.setUserPortrait(defaultPortrait);
+			userExtensionMapper.saveUserExtension(userExtensionTemp);
+			
 			//为用户添加用户角色信息
 			UserRole userRole=new UserRole(userId, defaultRoleId);
 			userRole.setCreateTime(new Date());
@@ -185,12 +198,13 @@ public class UserServiceImpl implements UserService{
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{UserEditGroup.class});
 		String userId=user.getUserId();
 		user.setUpdateTime(new Date());
+		String newPortrait=null;
 		if(StringUtils.isNotBlank(user.getUserPortrait())){
 			String temp=user.getUserPortrait();
 			temp=temp.replace("data:image/jpeg;base64,", "");
 			String generateImage = ImageUtils.generateImage(temp, pictureSaveDir);
 			if(generateImage!=null){
-				String newPortrait=imgUrl+generateImage;
+				newPortrait=imgUrl+generateImage;
 				user.setUserPortrait(newPortrait);
 			}else{
 				user.setUserPortrait(null);
@@ -201,18 +215,15 @@ public class UserServiceImpl implements UserService{
 		//重置用户登陆信息
 		TokenUtils.setAttribute("user",userInDb);
 		String userBrief=userExtension.getUserBrief();
-		//当没用用户简介时新增，否则更新
+		//更新用户拓展信息
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
-		UserExtension userExtensionTemp=new UserExtension();
-		userExtensionTemp.setUserId(userId);
-		userExtensionTemp.setUserBrief(userBrief);
-		if(userExtensionInDb!=null){
-			userExtensionTemp.setUpdateTime(new Date());
-			userExtensionMapper.updateUserExtensionByUserId(userExtensionTemp);	
-		}else{
-			userExtensionTemp.setCreateTime(new Date());
-			userExtensionMapper.saveUserExtension(userExtensionTemp);
-		}	
+		if(StringUtils.isNoneBlank(userBrief)){
+			userExtensionInDb.setUserBrief(userBrief);
+		}
+		Date now=new Date();
+		userExtensionInDb.setUserPortrait(newPortrait);
+		userExtensionInDb.setUpdateTime(now);
+		userExtensionMapper.updateUserExtensionByUserId(userExtensionInDb);	
 	}
 	
 	@Override

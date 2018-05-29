@@ -171,17 +171,6 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
 DROP TABLE
-    t_test;
-CREATE TABLE
-    t_test
-    (
-        id bigint NOT NULL AUTO_INCREMENT,
-        value DECIMAL(16,4),
-        PRIMARY KEY (id),
-        CONSTRAINT t_test_ix1 UNIQUE (id)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;
-DROP TABLE
     t_user;
 CREATE TABLE
     t_user
@@ -205,17 +194,18 @@ CREATE TABLE
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 DROP TABLE
     t_user_extension;
-CREATE TABLE
-    t_user_extension
-    (
-        id bigint unsigned NOT NULL AUTO_INCREMENT,
-        user_id VARCHAR(64) NOT NULL COMMENT '用户id',
-        user_brief VARCHAR(500) COMMENT '用户简介',
-        create_time DATETIME NOT NULL COMMENT '创建时间',
-        update_time DATETIME COMMENT '修改时间',
-        PRIMARY KEY (id)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
+CREATE TABLE `t_user_extension` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(64) NOT NULL COMMENT '用户id',
+  `user_portrait` varchar(256) DEFAULT NULL,
+  `user_brief` varchar(500) DEFAULT NULL COMMENT '用户简介',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `article_counts` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
+  `comment_counts` int(11) NOT NULL DEFAULT '0' COMMENT '评论数',
+  `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
 DROP TABLE
     t_user_role;
 CREATE TABLE

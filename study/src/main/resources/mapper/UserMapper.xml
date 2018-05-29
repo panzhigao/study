@@ -94,35 +94,17 @@
   </update>
   
   <select id="getCountByParams" resultType="int">
-  	select count(0) from t_user
-  	<where> 
-  		<if test="sex !=null and sex !='' ">
-  			and sex=#{sex}
-  		</if>
-  		<if test="status !=null and status !=''">
-  			and status=#{status}
-  		</if>
-  		<if test="telephone !=null and telephone!=''">
-  			and telephone=#{telephone}
-  		</if>
-  		<if test="username !=null and username!=''">
-  			and username like CONCAT('%','${username}','%')
-  		</if>
-  		<if test="nickname !=null and nickname!=''">
-  			and nickname=#{nickname}
-  		</if>
-  	</where>
+  	select count(0) from t_user tu
+  	<include refid="whereSql"/>
   </select>
-  	
-  <select id="findByParams" resultMap="MoreResultMap">
-  	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.password,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names 
-  	from t_user tu left join t_user_role tur on tu.user_id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
+  
+  <sql id="whereSql">
   	<where> 
   		<if test="sex !=null and sex !='' ">
   			and tu.sex=#{sex}
   		</if>
   		<if test="status !=null and status !=''">
-  			and tu.astatus=#{status}
+  			and tu.status=#{status}
   		</if>
   		<if test="telephone !=null and telephone!=''">
   			and tu.telephone=#{telephone}
@@ -134,6 +116,12 @@
   			and tu.nickname=#{nickname}
   		</if>
   	</where>
+  </sql>
+  	
+  <select id="findByParams" resultMap="MoreResultMap">
+  	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.password,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names 
+  	from t_user tu left join t_user_role tur on tu.user_id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
+  	<include refid="whereSql"/>
   	group by tu.user_id
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}

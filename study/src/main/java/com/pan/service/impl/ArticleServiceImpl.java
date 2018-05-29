@@ -7,11 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
@@ -19,10 +21,12 @@ import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.EsClientService;
+import com.pan.service.UserExtensionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -48,7 +52,10 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	private ArticleCheckService articleCheckService;
-
+	
+	@Autowired
+	private UserExtensionService userExtensionService;
+	
 	/**
 	 * 校验当前操作码状态是否正常 1-草稿，2-审核中
 	 * 
@@ -77,6 +84,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 新增文章
+	 * 1.文章表新增一条数据
+	 * 2.文章审核表里新增一条数据
 	 */
 	@Override
 	public void saveArticle(Article article) {
@@ -99,6 +108,14 @@ public class ArticleServiceImpl implements ArticleService {
 		articleCheck.setContent(article.getContent());
 		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
 		articleCheckService.addArticleCheck(articleCheck);
+		//修改文章数
+		//修改当前人的评论数
+		String loingUserId = TokenUtils.getLoingUserId();
+		UserExtension userExtensionInDb=new UserExtension();
+		userExtensionInDb.setUserId(loingUserId);
+		userExtensionInDb.setCommentCounts(1);
+		userExtensionInDb.setScore(2);
+		userExtensionService.updateById(userExtensionInDb);
 	}
 
 	@Override
