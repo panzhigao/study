@@ -1,27 +1,26 @@
 DROP TABLE
     t_article;
-CREATE TABLE
-    t_article
-    (
-        id INT(10) unsigned NOT NULL AUTO_INCREMENT,
-        article_id VARCHAR(64) NOT NULL COMMENT '文章id',
-        user_id VARCHAR(64) NOT NULL COMMENT '用户id',
-        status CHAR(1) NOT NULL COMMENT '0-审核未通过，1-草稿，2-审核中，3-发布成功',
-        create_time DATETIME NOT NULL COMMENT '创建时间',
-        update_time DATETIME COMMENT '修改时间',
-        publish_time DATETIME COMMENT '发布时间',
-        title VARCHAR(64) NOT NULL,
-        content text NOT NULL COMMENT '文章内容',
-        outline VARCHAR(300) COMMENT '文章概要',
-        image VARCHAR(100) COMMENT '缩略图',
-        comment_count INT DEFAULT '0' COMMENT '评论数',
-        view_count INT DEFAULT '0' COMMENT '阅读数',
-        type CHAR(1) DEFAULT '1' COMMENT '1-文章 2系统消息',
-        PRIMARY KEY (id),
-        CONSTRAINT article_id UNIQUE (article_id),
-        INDEX t_article_ix2 (user_id, status, create_time, type)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
+CREATE TABLE `t_article` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `article_id` varchar(64) NOT NULL COMMENT '文章id',
+  `user_id` varchar(64) NOT NULL COMMENT '用户id',
+  `status` char(1) NOT NULL COMMENT '0-审核未通过，1-草稿，2-审核中，3-发布成功',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `publish_time` datetime DEFAULT NULL COMMENT '发布时间',
+  `title` varchar(64) NOT NULL,
+  `content` text NOT NULL COMMENT '文章内容',
+  `outline` varchar(300) DEFAULT NULL COMMENT '文章概要',
+  `image` varchar(100) DEFAULT NULL COMMENT '缩略图',
+  `comment_count` int(11) DEFAULT '0' COMMENT '评论数',
+  `view_count` int(11) DEFAULT '0' COMMENT '阅读数',
+  `type` char(1) DEFAULT '1' COMMENT '1-文章 2系统消息',
+  `stick` int(11) NOT NULL DEFAULT '0' COMMENT '置顶系数',
+  `high_quality` char(1) NOT NULL DEFAULT '0' COMMENT '是否是精品贴，0-否，1-是',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_id` (`article_id`),
+  KEY `t_article_ix2` (`user_id`,`status`,`create_time`,`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='文章表';
 DROP TABLE
     t_article_check;
 CREATE TABLE

@@ -323,4 +323,9 @@ public class ArticleServiceImpl implements ArticleService {
 		queryArticleVO.setTitle(title);
 		return queryFromEsByCondition(queryArticleVO);
 	}
+
+	@Override
+	public List<Article> findByCondition(QueryArticleVO queryArticleVO) {
+		return articleMapper.findByParams(queryArticleVO);
+	}
 }

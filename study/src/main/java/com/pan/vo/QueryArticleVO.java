@@ -40,6 +40,14 @@ public class QueryArticleVO extends QueryVO{
 	 * 排序规则
 	 */
 	private String orderCondition;
+	/**
+	 * 置顶系数
+	 */
+	private Integer stick;
+	/**
+	 * 是否是精品贴
+	 */
+	private String highQuality;
 	
 	public String getArticleId() {
 		return articleId;
@@ -85,11 +93,26 @@ public class QueryArticleVO extends QueryVO{
 	public void setOrderCondition(String orderCondition) {
 		this.orderCondition = orderCondition;
 	}
+	public Integer getStick() {
+		return stick;
+	}
+	public void setStick(Integer stick) {
+		this.stick = stick;
+	}
+	public String getHighQuality() {
+		return highQuality;
+	}
+	public void setHighQuality(String highQuality) {
+		this.highQuality = highQuality;
+	}
 	@Override
 	public String toString() {
 		return "QueryArticleVO [articleId=" + articleId + ", userId=" + userId
 				+ ", status=" + status + ", title=" + title + ", type=" + type
 				+ ", isHot=" + isHot + ", orderCondition=" + orderCondition
-				+ "]";
+				+ ", stick=" + stick + ", highQuality=" + highQuality
+				+ ", pageSize=" + pageSize + ", pageNo=" + pageNo
+				+ ", orderByCondition=" + orderByCondition
+				+ ", whereCondition=" + whereCondition + "]";
 	}	
 }

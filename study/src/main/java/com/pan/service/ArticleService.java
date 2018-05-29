@@ -96,4 +96,10 @@ public interface ArticleService {
 	 * @return
 	 */
 	public List<ArticleDTO> searchArticleByTitle(String title);
+	/**
+	 * 根据文章标题搜索文章
+	 * @param title
+	 * @return
+	 */
+	public List<Article> findByCondition(QueryArticleVO queryArticleVO);
 }

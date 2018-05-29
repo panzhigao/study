@@ -1,13 +1,9 @@
 package com.pan.entity;
 
 import java.util.Date;
-
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.pan.common.annotation.UnescapeHtml;
-import com.pan.util.JsonUtils;
 
 
 /**
@@ -93,6 +89,14 @@ public class Article extends BaseEntity{
 	 * 1-文章 2-系统消息
 	 */
 	private String type;
+	/**
+	 * 置顶系数
+	 */
+	private Integer stick;
+	/**
+	 * 是否是精品贴,0-否，1-是
+	 */
+	private String highQuality;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -179,9 +183,33 @@ public class Article extends BaseEntity{
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public Integer getStick() {
+		return stick;
+	}
+
+	public void setStick(Integer stick) {
+		this.stick = stick;
+	}
+
+	public String getHighQuality() {
+		return highQuality;
+	}
+
+	public void setHighQuality(String highQuality) {
+		this.highQuality = highQuality;
+	}
 
 	@Override
 	public String toString() {
-		return JsonUtils.toJson(this);
+		return "Article [articleId=" + articleId + ", userId=" + userId
+				+ ", status=" + status + ", publishTime=" + publishTime
+				+ ", title=" + title + ", content=" + content + ", outline="
+				+ outline + ", image=" + image + ", commentCount="
+				+ commentCount + ", viewCount=" + viewCount + ", type=" + type
+				+ ", stick=" + stick + ", highQuality=" + highQuality + ", id="
+				+ id + ", createTime=" + createTime + ", createUser="
+				+ createUser + ", updateTime=" + updateTime + ", updateUser="
+				+ updateUser + "]";
 	}
 }

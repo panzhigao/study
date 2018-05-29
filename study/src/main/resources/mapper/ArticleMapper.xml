@@ -17,6 +17,8 @@
     <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
     <result column="view_count"         property="viewCount"       jdbcType="INTEGER" />
     <result column="type"               property="type"            jdbcType="VARCHAR" />
+    <result column="stick"              property="stick"           jdbcType="INTEGER" />
+    <result column="high_quality"       property="highQuality"     jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="MoreResultMap" type="com.pan.dto.ArticleDTO" extends="BaseResultMap">  
@@ -25,12 +27,14 @@
   </resultMap> 
   
   <sql id="Base_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,outline,image,comment_count,view_count,type
+    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,
+    outline,image,comment_count,view_count,type,stick,high_quality
   </sql>
   
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,image,comment_count,view_count,type
+    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,
+    image,comment_count,view_count,type,stick,high_quality
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
