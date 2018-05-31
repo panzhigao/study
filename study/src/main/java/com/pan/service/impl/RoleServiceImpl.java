@@ -17,7 +17,6 @@ import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
-import com.pan.service.PermissionService;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
@@ -34,9 +33,6 @@ public class RoleServiceImpl implements RoleService{
 
 	@Autowired
 	private RoleMapper roleMapper;
-	
-	@Autowired
-	private PermissionService permissionService;
 	
 	@Autowired
 	private RolePermissionService rolePermissionService;
