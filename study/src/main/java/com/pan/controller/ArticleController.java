@@ -247,6 +247,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
+	@RequiresPermissions("/user/article/set")
 	public ResultMsg set(String articleId,String stick,String highQuality){
 		articleService.setArticle(articleId, stick, highQuality);
 		return ResultMsg.ok();

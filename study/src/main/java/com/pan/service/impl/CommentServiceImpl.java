@@ -99,6 +99,7 @@ public class CommentServiceImpl implements CommentService{
 		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
 		//修改当前人的评论数
 		String loingUserId = TokenUtils.getLoingUserId();
+		//发表评论加2分
 		UserExtension userExtensionInDb=new UserExtension();
 		userExtensionInDb.setUserId(loingUserId);
 		userExtensionInDb.setCommentCounts(1);
@@ -141,8 +142,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public List<Comment> loadUserComments() {
-		String loingUserId = TokenUtils.getLoingUserId();
-		return commentMapper.findByUserId(loingUserId);
+	public List<Comment> loadUserComments(String userId) {
+		return commentMapper.findByUserId(userId);
 	}
 }

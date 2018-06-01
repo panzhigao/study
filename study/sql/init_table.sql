@@ -171,26 +171,25 @@ CREATE TABLE
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
 DROP TABLE
     t_user;
-CREATE TABLE
-    t_user
-    (
-        id INT(10) unsigned NOT NULL AUTO_INCREMENT,
-        user_id VARCHAR(64) NOT NULL COMMENT '用户id',
-        sex CHAR(1) COMMENT '性别 0 男 1女',
-        username VARCHAR(64) NOT NULL COMMENT '昵称',
-        nickname VARCHAR(64) NOT NULL,
-        password VARCHAR(64) NOT NULL COMMENT '密码',
-        create_time DATETIME NOT NULL COMMENT '创建时间',
-        last_login_time DATETIME COMMENT '最近登陆时间',
-        status CHAR(1) NOT NULL COMMENT '0-禁用，1-正常',
-        telephone VARCHAR(11) COMMENT '手机号',
-        update_time DATETIME COMMENT '修改时间',
-        user_portrait text COMMENT '用户头像',
-        update_user VARCHAR(64),
-        PRIMARY KEY (id),
-        CONSTRAINT telephone UNIQUE (telephone)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+CREATE TABLE `t_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(64) NOT NULL COMMENT '用户id',
+  `sex` char(1) DEFAULT NULL COMMENT '性别 0 男 1女',
+  `username` varchar(64) NOT NULL COMMENT '昵称',
+  `nickname` varchar(64) NOT NULL,
+  `password` varchar(64) NOT NULL COMMENT '密码',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最近登陆时间',
+  `status` char(1) NOT NULL COMMENT '0-禁用，1-正常',
+  `telephone` varchar(11) DEFAULT NULL COMMENT '手机号',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `user_portrait` varchar(256) DEFAULT NULL COMMENT '用户头像',
+  `update_user` varchar(64) DEFAULT NULL,
+  `admin_flag` char(1) DEFAULT '0',
+  `address` varchar(100) DEFAULT NULL COMMENT '地址',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `telephone` (`telephone`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户表';
 DROP TABLE
     t_user_extension;
 CREATE TABLE `t_user_extension` (

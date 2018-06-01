@@ -24,10 +24,69 @@
   </select>
   
   <insert id="saveUserExtension" parameterType="com.pan.entity.UserExtension">
-  	insert into t_user_extension (<include refid="Base_Column_List"/>) values 
-  	(null,#{userId,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{userPortrait,jdbcType=VARCHAR},#{userBrief,jdbcType=VARCHAR},
-  	#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{articleCounts,jdbcType=INTEGER},
-  	#{commentCounts,jdbcType=INTEGER},#{score,jdbcType=INTEGER})
+  	insert into t_user_extension (
+  	<trim suffixOverrides=",">
+  		<if test="userId !=null and userId !='' ">
+  			user_id,
+  		</if>
+  		<if test="nickname !=null and nickname !='' ">
+  			nickname,
+  		</if>
+  		<if test="userPortrait !=null and userPortrait !='' ">
+  			user_portrait,
+  		</if>
+  		<if test="userBrief !=null and userBrief !='' ">
+  			user_brief,
+  		</if>
+  		<if test="createTime !=null">
+  			create_time,
+  		</if>
+  		<if test="updateTime !=null">
+  			update_time,
+  		</if>
+  		<if test="articleCounts !=null">
+  			article_counts,
+  		</if>
+  		<if test="commentCounts !=null">
+  			comment_counts,
+  		</if>
+  		<if test="score !=null">
+  			score,
+  		</if>
+  	</trim>
+  	) 
+  	values 
+  	(
+  	<trim suffixOverrides=",">
+  		<if test="userId !=null and userId !='' ">
+  			#{userId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="nickname !=null and nickname !='' ">
+  			#{nickname,jdbcType=VARCHAR},
+  		</if>
+  		<if test="userPortrait !=null and userPortrait !='' ">
+  			#{userPortrait,jdbcType=VARCHAR},
+  		</if>
+  		<if test="userBrief !=null and userBrief !='' ">
+  			#{userBrief,jdbcType=VARCHAR},
+  		</if>
+  		<if test="createTime !=null">
+  			#{createTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="updateTime !=null">
+  			#{updateTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="articleCounts !=null and articleCounts !='' ">
+  			#{articleCounts,jdbcType=INTEGER},
+  		</if>
+  		<if test="commentCounts !=null and commentCounts !='' ">
+  			#{commentCounts,jdbcType=INTEGER},
+  		</if>
+  		<if test="score !=null and score !='' ">
+  			#{score,jdbcType=INTEGER},
+  		</if>
+  	</trim>
+  	)
   </insert>
   
   <update id="updateUserExtensionByUserId" parameterType="com.pan.entity.UserExtension">

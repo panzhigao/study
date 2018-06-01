@@ -72,15 +72,10 @@
   <p class="fly-home-info">
     <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
     <i class="iconfont icon-shijian"></i><span>$!date.format('yyyy-MM-dd',$!u.createTime) 加入</span>
-    <i class="iconfont icon-chengshi"></i><span>来自杭州</span>
+    <i class="iconfont icon-chengshi"></i><span>来自$!u.address</span>
   </p>
 
   <p class="fly-home-sign">#if($!{uExtension.userBrief}) $!{uExtension.userBrief} #else 暂无简介 #end</p>
-
-  <div class="fly-sns" data-user="">
-    <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>
-    <a href="javascript:;" class="layui-btn layui-btn-normal fly-imActive" data-type="chat">发起会话</a>
-  </div>
 
 </div>
 
@@ -107,12 +102,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
+  <p><a href="/" target="_blank">好好学习社区</a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a></p>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -172,6 +162,7 @@ function loadUserComment(){
 	$.ajax({
 		url:'$!{rc.contextPath}/api/u/loadUserComment',
 		type:'POST',
+		data:{userId:userId},
 		success:function(res){
 			var length=res.data.length;
 			if(length>0){

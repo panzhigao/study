@@ -110,7 +110,7 @@
   <insert id="saveArticle" parameterType="com.pan.entity.Article">
   	insert into t_article (<include refid="Base_Column_List"/>) values 
   	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0,#{type,jdbcType=VARCHAR})
+  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0,#{type,jdbcType=VARCHAR},0,0)
   </insert>
   
   <update id="updateArticle" parameterType="com.pan.entity.Article">

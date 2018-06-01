@@ -110,6 +110,8 @@ public class UserServiceImpl implements UserService{
 			user.setUserId(userId);
 			user.setCreateTime(new Date());
 			user.setStatus(User.STATUS_NORMAL);
+			//默认头像
+			user.setUserPortrait(defaultPortrait);
 			userMapper.saveUser(user);
 			//新增用户拓展信息
 			UserExtension userExtensionTemp=new UserExtension();
@@ -117,6 +119,7 @@ public class UserServiceImpl implements UserService{
 			Date now=new Date();
 			userExtensionTemp.setCreateTime(now);
 			userExtensionTemp.setUpdateTime(now);
+			userExtensionTemp.setNickname(user.getNickname());
 			userExtensionTemp.setUserPortrait(defaultPortrait);
 			userExtensionMapper.saveUserExtension(userExtensionTemp);
 			
@@ -169,6 +172,11 @@ public class UserServiceImpl implements UserService{
 				throw new BusinessException("用户名或密码错误");
 			}
 			updateUserLastLoginTime(userInDb.getUserId());
+			//登录加5分
+			UserExtension userExtension=new UserExtension();
+			userExtension.setUserId(user.getUserId());
+			userExtension.setScore(5);
+			userExtensionMapper.updateUserExtensionByUserId(userExtension);
 			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			logger.error("验证用户和数据库密码出错",e);

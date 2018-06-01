@@ -1,12 +1,9 @@
 package com.pan.entity;
 
 import java.util.Date;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
-
 import com.pan.common.annotation.CheckUsernameGroup;
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
@@ -94,6 +91,11 @@ public class User extends BaseEntity{
 	 * 0-否,1-是
 	 */
 	private String adminFlag;
+	/**
+	 * 地址
+	 */
+	@Size(message="地址不能超过100个字",max=100,groups={UserEditGroup.class})
+	private String address;
 	
 	public String getUserId() {
 		return userId;
@@ -168,13 +170,21 @@ public class User extends BaseEntity{
 	public void setAdminFlag(String adminFlag) {
 		this.adminFlag = adminFlag;
 	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", sex=" + sex + ", username=" + username + ", nickname=" + nickname
-				+ ", password=" + password + ", lastLoginTime=" + lastLoginTime + ", status=" + status + ", telephone="
-				+ telephone + ", userPortrait=" + userPortrait + ", adminFlag=" + adminFlag + ", id=" + id
-				+ ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime=" + updateTime
+		return "User [userId=" + userId + ", sex=" + sex + ", username="
+				+ username + ", nickname=" + nickname + ", password="
+				+ password + ", lastLoginTime=" + lastLoginTime + ", status="
+				+ status + ", telephone=" + telephone + ", userPortrait="
+				+ userPortrait + ", adminFlag=" + adminFlag + ", address="
+				+ address + ", id=" + id + ", createTime=" + createTime
+				+ ", createUser=" + createUser + ", updateTime=" + updateTime
 				+ ", updateUser=" + updateUser + "]";
 	}
-
 }

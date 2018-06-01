@@ -111,10 +111,11 @@ public class ArticleServiceImpl implements ArticleService {
 		//修改文章数
 		//修改当前人的评论数
 		String loingUserId = TokenUtils.getLoingUserId();
+		//发表文章加5分
 		UserExtension userExtensionInDb=new UserExtension();
 		userExtensionInDb.setUserId(loingUserId);
 		userExtensionInDb.setCommentCounts(1);
-		userExtensionInDb.setScore(2);
+		userExtensionInDb.setScore(5);
 		userExtensionService.updateById(userExtensionInDb);
 	}
 

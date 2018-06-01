@@ -37,5 +37,5 @@ public interface CommentService {
 	 * @param articleId
 	 * @return
 	 */
-	public List<Comment> loadUserComments();
+	public List<Comment> loadUserComments(String userId);
 }

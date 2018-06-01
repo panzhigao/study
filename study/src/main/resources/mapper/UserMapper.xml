@@ -15,7 +15,8 @@
     <result column="telephone"    		property="telephone"       jdbcType="VARCHAR" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
-    <result column="admin_flag"         property="adminFlag"         jdbcType="VARCHAR" />
+    <result column="admin_flag"         property="adminFlag"       jdbcType="VARCHAR" />
+    <result column="address"            property="address"         jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="MoreResultMap" type="com.pan.dto.UserDTO" extends="BaseResultMap">  
@@ -31,7 +32,7 @@
   
   <sql id="Base_Column_List" >
     id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,
-    update_time,user_portrait,admin_flag
+    update_time,user_portrait,admin_flag,address
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -50,7 +51,7 @@
   	insert into t_user (<include refid="Base_Column_List"/>) values 
   	(null,#{userId,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
   	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},
-  	#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR})
+  	#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR},#{adminFlag,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR})
   </insert>
   
   <update id="updateUserByUserId" parameterType="com.pan.entity.User">
@@ -88,6 +89,9 @@
   		</if>
   		<if test="adminFlag !=null and adminFlag !=''">
   			admin_flag=#{adminFlag,jdbcType=VARCHAR},
+  		</if>
+  		<if test="address !=null and address !=''">
+  			address=#{address,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where user_id=#{userId}

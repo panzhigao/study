@@ -40,7 +40,7 @@ public class CommentController {
 		commentVO.setUserPortrait(loginUser.getUserPortrait());
 		commentVO.setNickname(loginUser.getNickname());
 		TransFieldUtils.transEntity(addComment);
-		return ResultMsg.ok("评论成功",addComment);
+		return ResultMsg.ok("评论成功",commentVO);
 	}
 	
 	/**
@@ -75,8 +75,8 @@ public class CommentController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/u/loadUserComment")
 	@ResponseBody
-	public ResultMsg loadUserComments(){
-		List<Comment> loadUserComments = commentService.loadUserComments();
+	public ResultMsg loadUserComments(String userId){
+		List<Comment> loadUserComments = commentService.loadUserComments(userId);
 		return ResultMsg.ok("加载用户评论成功",loadUserComments);
 	}
 }
