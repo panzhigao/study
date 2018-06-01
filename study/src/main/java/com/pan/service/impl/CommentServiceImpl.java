@@ -28,6 +28,7 @@ import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.vo.CommentVO;
 
 /**
  * 
@@ -112,11 +113,11 @@ public class CommentServiceImpl implements CommentService{
 	 * @return
 	 */
 	@Override
-	public List<Comment> loadComments(String userId,String articleId){
+	public List<CommentVO> loadComments(String userId,String articleId){
 		Comment comment=new Comment();
 		comment.setUserId(userId);
 		comment.setArticleId(articleId);
-		return commentMapper.findByArticleId(comment);
+		return commentMapper.findVOByArticleId(comment);
 	}
 	
 	@Override
@@ -137,5 +138,11 @@ public class CommentServiceImpl implements CommentService{
 	public int getCommnetCount(String articleId) {
 		int total=commentMapper.countComment(articleId);
 		return total;
+	}
+
+	@Override
+	public List<Comment> loadUserComments() {
+		String loingUserId = TokenUtils.getLoingUserId();
+		return commentMapper.findByUserId(loingUserId);
 	}
 }

@@ -238,4 +238,17 @@ public class ArticleController {
 		articleVO.setType(type);
 		return articleService.getCount(articleVO);
 	}
+	
+	/**
+	 * 修改文章状态
+	 * 置顶或取消
+	 * 加精或取消
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
+	@ResponseBody
+	public ResultMsg set(String articleId,String stick,String highQuality){
+		articleService.setArticle(articleId, stick, highQuality);
+		return ResultMsg.ok();
+	}
 }

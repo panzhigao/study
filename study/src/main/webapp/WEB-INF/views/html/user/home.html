@@ -90,7 +90,7 @@
       <div class="fly-panel">
         <h3 class="fly-panel-title"> $!{u.nickname} 最近的文章</h3>
         <ul class="jie-row">
-          <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;display:none;"><i style="font-size:14px;">没有发表任何文章</i></div>
+          <div id="article-none" class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有发表任何文章</i></div>
         </ul>
       </div>
     </div>
@@ -99,30 +99,7 @@
       <div class="fly-panel">
         <h3 class="fly-panel-title"> $!{u.nickname} 最近的回答</h3>
         <ul class="home-jieda">
-          <li>
-          <p>
-          <span>1分钟前</span>
-          在<a href="" target="_blank">tips能同时渲染多个吗?</a>中回答：
-          </p>
-          <div class="home-dacontent">
-            尝试给layer.photos加上这个属性试试：
-<pre>
-full: true         
-</pre>
-            文档没有提及
-          </div>
-        </li>
-        <li>
-          <p>
-          <span>5分钟前</span>
-          在<a href="" target="_blank">在Fly社区用的是什么系统啊?</a>中回答：
-          </p>
-          <div class="home-dacontent">
-            Fly社区采用的是NodeJS。分享出来的只是前端模版
-          </div>
-        </li>
-        
-          <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有回答任何问题</span></div> -->
+          <div id="comment-none" class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有回答任何问题</span></div>
         </ul>
       </div>
     </div>
@@ -160,23 +137,23 @@ var pageNo=1;
 var pageSize=10;
 var userId='$!{u.userId}';
 layui.use(['laypage', 'layer','jquery'], function(){
-	var $ = layui.$ ;
-	getData($);
+	getData();
+	loadUserComment();
 	#if(${user})
 	websocketConnect();
 	#end
 })
 
 
-function getData($){
+function getData(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
 		type:'get',
 		data:{pageNo:pageNo,pageSize:pageSize,userId:userId},
 		success:function(res){
 			var length=res.data.length;
-			if(length==0){
-				$('.fly-none').show();
+			if(length>0){
+				$('#article-none').hide();
 			}
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
@@ -186,6 +163,32 @@ function getData($){
 	            '<em class="layui-hide-xs">'+one.viewCount+'阅/'+one.commentCount+'评论</em>'+
 	          '</li>';
 				$('.jie-row').append(info);
+			}
+		}
+	});
+}
+
+function loadUserComment(){
+	$.ajax({
+		url:'$!{rc.contextPath}/api/u/loadUserComment',
+		type:'POST',
+		success:function(res){
+			var length=res.data.length;
+			if(length>0){
+				$('#comment-none').hide();
+			}
+			for(var i=0;i<length;i++){
+				var one=res.data[i];
+				var info='<li>'+
+		          '<p>'+
+		          '<span>'+tranTime(one.createTime)+'</span>'+
+		          '在<a href="$!{rc.contextPath}/article/'+one.articleId+'" target="_blank">'+one.title+'</a>中回答：'+
+		          '</p>'+
+		          '<div class="home-dacontent">'+
+		           one.commentContent+
+		          '</div>'+
+		          '</li>';
+				$('.home-jieda').append(info);
 			}
 		}
 	});

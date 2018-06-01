@@ -58,4 +58,9 @@ public interface ArticleMapper {
 	 * @return
 	 */
 	public int deleteByUserIdAndArticleId(@Param("userId")String userId,@Param("articleId")String articleId);
+	/**
+	 * 获取最大置顶值
+	 * @return
+	 */
+	public int getMaxStick();
 }

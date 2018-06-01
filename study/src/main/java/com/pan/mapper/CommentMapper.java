@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pan.entity.Comment;
+import com.pan.vo.CommentVO;
 
 /**
  * 
@@ -14,7 +15,7 @@ public interface CommentMapper {
 	
 	public void addComment(Comment comment);
 	
-	public List<Comment> findByArticleId(Comment comment);
+	public List<CommentVO> findVOByArticleId(Comment comment);
 	
 	public Comment findByCommentId(String commentId);
 	
@@ -25,4 +26,6 @@ public interface CommentMapper {
 	public int countComment(String articleId);
 	
 	public List<Comment> findByParam(Map<String,Object> params);
+	
+	public List<Comment> findByUserId(String userId);
 }

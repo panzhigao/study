@@ -2,13 +2,13 @@
 	$(this).attr('src','/static/images/404.jpg');
 });*/
 
-$(window).load(function() { 
-	  $('img').each(function() {
-	    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
-	      this.src = '/static/images/404.jpg'; 
-	      } 
-	   });
-});
+//$(window).load(function() { 
+//	  $('img').each(function() {
+//	    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
+//	      this.src = '/static/images/404.jpg'; 
+//	      } 
+//	   });
+//});
 
 
 //格式化时间

@@ -40,18 +40,6 @@ public class Comment extends BaseEntity{
 	 */
 	private String replyToUserId;
 	/**
-	 * 用户头像
-	 */
-	private String userPortrait;
-	/**
-	 * 用户名
-	 */
-	private String nickname;
-	/**
-	 * 是否已点赞
-	 */
-	private String isChecked;
-	/**
 	 * 赞的数目,默认0
 	 */
 	private Integer praiseCounts=0;
@@ -86,28 +74,6 @@ public class Comment extends BaseEntity{
 	public void setReplyToUserId(String replyToUserId) {
 		this.replyToUserId = replyToUserId;
 	}
-	
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
-	
-	public String getNickname() {
-		return nickname;
-	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	
-	public String getIsChecked() {
-		return isChecked;
-	}
-	public void setIsChecked(String isChecked) {
-		this.isChecked = isChecked;
-	}
-	
 	public Integer getPraiseCounts() {
 		return praiseCounts;
 	}

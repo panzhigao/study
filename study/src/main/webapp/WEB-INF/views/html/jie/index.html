@@ -295,6 +295,15 @@ function getData(obj){
  			}
  			for(var i=0;i<length;i++){
  				var article=articles[i];
+ 				//精帖
+				var temp='<div class="fly-list-badge">';
+				if(article.stick>0){
+					temp+='<span class="layui-badge layui-bg-black">置顶</span>';
+				}
+				if(article.highQuality=='1'){
+					temp+='<span class="layui-badge layui-bg-red">精帖</span>';
+				}
+				temp+='</div>';
  				var one='<li>'+
  	            '<a href="$!{rc.contextPath}/u/'+article.userId+'" class="fly-avatar">'+
  	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
@@ -314,6 +323,7 @@ function getData(obj){
  	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
  	              '</span>'+
  	            '</div>'+
+ 	            temp+
  	          '</li>';	
  			$('.fly-list').append(one);
  			}

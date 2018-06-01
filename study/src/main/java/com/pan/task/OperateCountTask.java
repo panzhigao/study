@@ -47,12 +47,12 @@ public class OperateCountTask {
 						JedisUtils.delete(string);
 					}
 				}
-				lock.unlock();
 			}
 		} catch (InterruptedException e) {
 			logger.error("执行定时任务,更新文章数据库评论数异常",e);
+		}finally{
+			lock.unlock();
 		}
-
 	}
 	
 	/**
@@ -74,10 +74,11 @@ public class OperateCountTask {
 						JedisUtils.delete(string);
 					}
 				}
-				lock.unlock();
 			}
 		} catch (InterruptedException e) {
 			logger.error("执行定时任务,更新文章数据库阅读数异常",e);
+		}finally{
+			lock.unlock();
 		}
 	}
 }

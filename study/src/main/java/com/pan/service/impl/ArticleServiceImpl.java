@@ -328,4 +328,40 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<Article> findByCondition(QueryArticleVO queryArticleVO) {
 		return articleMapper.findByParams(queryArticleVO);
 	}
+
+	@Override
+	public int getMaxStick() {
+		return articleMapper.getMaxStick();
+	}
+
+	@Override
+	public void setArticle(String articleId, String stick, String highQuality) {
+		Article articleInDb = getByArticleId(articleId);
+		if(articleInDb==null){
+			throw new BusinessException("文章不存在");
+		}
+		boolean flag=false;
+		Article article=new Article();
+		article.setArticleId(articleInDb.getArticleId());
+		//取消置顶
+		if("0".equals(stick)){
+			article.setStick(0);
+			flag=true;
+		}else if("1".equals(stick)){//置顶
+			int maxStick = getMaxStick();
+			maxStick++;
+			article.setStick(maxStick);
+			flag=true;
+		}
+		//加精或取消加精
+		if("0".equals(highQuality)||"1".equals(highQuality)){
+			flag=true;
+			article.setHighQuality(highQuality);
+		}
+		if(!flag){
+			throw new BusinessException("参数有误");
+		}
+		article.setUpdateTime(new Date());
+		articleMapper.updateArticle(article);
+	}
 }

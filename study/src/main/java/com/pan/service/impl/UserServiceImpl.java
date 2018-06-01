@@ -352,6 +352,9 @@ public class UserServiceImpl implements UserService{
 		}
 		User user=new User(userId,status);
 		String loginUserId = TokenUtils.getLoingUserId();
+		if(StringUtils.equals(userId, loginUserId)){
+			throw new BusinessException("不能修改自己的状态");
+		}
 		user.setUpdateUser(loginUserId);
 		user.setUpdateTime(new Date());
 		if(User.STATUS_BLOCKED.equals(status)){

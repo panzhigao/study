@@ -65,13 +65,13 @@
   	<include refid="whereSql"/>
   	<choose>
   		<when  test="isHot !=null and isHot !=''">
-  			order by comment_count desc,view_count desc,publish_time desc
+  			order by stick desc,comment_count desc,view_count desc,publish_time desc
   		</when >
   		<when test="orderCondition !=null and orderCondition !=''">
   			order by ${orderCondition}
   		</when>
   		<otherwise>
-  			order by create_time desc
+  			order by stick desc,create_time desc
   		</otherwise>
   	</choose>
   	<if test="offset!=null and row !=null">
@@ -143,6 +143,12 @@
   		<if test="viewCount != null and viewCount !=''">
   			view_count=view_count+#{viewCount},
   		</if>
+  		<if test="stick != null">
+  			stick=#{stick},
+  		</if>
+  		<if test="highQuality != null and highQuality !=''">
+  			high_quality=#{highQuality},
+  		</if>
   	</set>
   	where article_id=#{articleId}
   </update>
@@ -151,4 +157,7 @@
   	delete from t_article where user_id=#{userId} and article_id=#{articleId}
   </delete>
   
+  <select id="getMaxStick" resultType="int">
+  	select max(stick) from t_article
+  </select>
 </mapper>

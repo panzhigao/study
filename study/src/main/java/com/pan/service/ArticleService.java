@@ -2,7 +2,9 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
+
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
 import com.pan.vo.QueryArticleVO;
@@ -102,4 +104,17 @@ public interface ArticleService {
 	 * @return
 	 */
 	public List<Article> findByCondition(QueryArticleVO queryArticleVO);
+	/**
+	 * 获取文章最大置顶值
+	 * @return
+	 */
+	public int getMaxStick();
+	/**
+	 * 设置文章置顶或加精
+	 * @param articleId
+	 * @param stick
+	 * @param highQuality
+	 * @return
+	 */
+	public void setArticle(String articleId,String stick,String highQuality);
 }

@@ -3,6 +3,7 @@ package com.pan.service;
 import java.util.List;
 
 import com.pan.entity.Comment;
+import com.pan.vo.CommentVO;
 
 /**
  * 
@@ -19,7 +20,7 @@ public interface CommentService {
 	 * @param articleId
 	 * @return
 	 */
-	public List<Comment> loadComments(String userId,String articleId);
+	public List<CommentVO> loadComments(String userId,String articleId);
 	/**
 	 * 删除评论
 	 * @param commentId
@@ -31,4 +32,10 @@ public interface CommentService {
 	 * @return
 	 */
 	public int getCommnetCount(String articleId);
+	/**
+	 * 根据用户评论
+	 * @param articleId
+	 * @return
+	 */
+	public List<Comment> loadUserComments();
 }

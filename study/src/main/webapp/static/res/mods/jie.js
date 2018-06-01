@@ -90,7 +90,36 @@ layui.define('fly', function(exports){
     
     //设置置顶、状态
     ,set: function(div){
-      var othis = $(this);
+      var othis = $(this),type = othis.data('type');
+      $.ajax({
+    	  url:'/user/article/set',
+    	  data:{articleId: div.data('id'),stick: othis.attr('stick'),highQuality: othis.attr('highquality')},
+    	  type:'post',
+    	  success:function(res){
+    		  if(res.code=='200'){
+    			if(othis.attr('stick')=='0'){
+    				othis.attr('stick', '1');
+    				othis.html('置顶').removeClass('grey');
+    			}else  if(othis.attr('stick')=='1'){
+    				othis.attr('stick', '0');
+    				othis.html('取消置顶').addClass('grey');
+    			}
+    			if(othis.attr('highQuality')=='0'){
+    				othis.attr('highquality', '1');
+    				othis.html('加精').removeClass('grey');
+    			}else  if(othis.attr('highQuality')=='1'){
+    				othis.attr('highquality', '0');
+    				othis.html('取消加精').addClass('grey');
+    			} 
+    		  }else{
+    			  layer.msg('操作失败');
+    		  }
+    	  },
+    	  error:function(){
+    		  layer.msg('操作失败');
+    	  }
+      });
+      /*
       fly.json('/api/jie-set/', {
         id: div.data('id')
         ,rank: othis.attr('rank')
@@ -100,6 +129,7 @@ layui.define('fly', function(exports){
           location.reload();
         }
       });
+      */
     }
 
     //收藏
