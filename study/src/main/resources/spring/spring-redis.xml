@@ -22,9 +22,10 @@
 	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg index="0" ref="jedisPoolConfig" />
 		<!-- 端口，默认6379 -->
+	    <constructor-arg index="1" value="${jedis.host}" name="host" type="java.lang.String"/>
 	    <constructor-arg index="2" value="${jedis.port}"  name="port" type="int"/>
 	    <constructor-arg index="3" value="${jedis.timeout}"  name="timeout" type="int"/>
-	    <constructor-arg index="1" value="${jedis.host}" name="host" type="java.lang.String"/>
+	    <constructor-arg index="4" value="${jedis.password}"  name="password" type="java.lang.String"/>
 	</bean>
 	
 	<!--redis连接工厂 -->  
@@ -35,7 +36,7 @@
         <!--端口号  -->  
         <property name="port" value="${redis.port}"></property>   
         <!--如果Redis设置有密码  -->  
-<!--         <property name="password" value="${redis.password}" />   -->
+        <property name="password" value="${redis.password}" />  
         <!--客户端超时时间单位是毫秒  -->  
         <property name="timeout" value="${redis.timeout}"></property>   
     </bean>    
