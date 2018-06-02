@@ -1,4 +1,4 @@
-DROP TABLE
+DROP TABLE IF EXISTS
     t_article;
 CREATE TABLE `t_article` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,8 @@ CREATE TABLE `t_article` (
   UNIQUE KEY `article_id` (`article_id`),
   KEY `t_article_ix2` (`user_id`,`status`,`create_time`,`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='文章表';
-DROP TABLE
+
+DROP TABLE IF EXISTS
     t_article_check;
 CREATE TABLE
     t_article_check
@@ -40,7 +41,8 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章审核表';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_collection;
 CREATE TABLE
     t_collection
@@ -55,7 +57,8 @@ CREATE TABLE
         CONSTRAINT user_id UNIQUE (user_id, article_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收藏表';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_comment;
 CREATE TABLE
     t_comment
@@ -71,7 +74,8 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论信息';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_message;
 CREATE TABLE
     t_message
@@ -91,7 +95,8 @@ CREATE TABLE
         CONSTRAINT message_id UNIQUE (message_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息通知表';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_permission;
 CREATE TABLE
     t_permission
@@ -112,8 +117,9 @@ CREATE TABLE
         PRIMARY KEY (id),
         CONSTRAINT permission_id UNIQUE (permission_id)
     )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;
-DROP TABLE
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
+    
+DROP TABLE IF EXISTS
     t_picture;
 CREATE TABLE
     t_picture
@@ -127,7 +133,8 @@ CREATE TABLE
         CONSTRAINT picture_id UNIQUE (picture_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_praise;
 CREATE TABLE
     t_praise
@@ -140,7 +147,8 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='点赞表';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_role;
 CREATE TABLE
     t_role
@@ -157,7 +165,8 @@ CREATE TABLE
         CONSTRAINT role_id UNIQUE (role_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
-DROP TABLE
+    
+DROP TABLE IF EXISTS
     t_role_permission;
 CREATE TABLE
     t_role_permission
@@ -168,15 +177,16 @@ CREATE TABLE
         create_time DATETIME NOT NULL COMMENT '创建时间',
         PRIMARY KEY (id)
     )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
-DROP TABLE
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+    
+DROP TABLE IF EXISTS
     t_user;
 CREATE TABLE `t_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(64) NOT NULL COMMENT '用户id',
   `sex` char(1) DEFAULT NULL COMMENT '性别 0 男 1女',
-  `username` varchar(64) NOT NULL COMMENT '昵称',
-  `nickname` varchar(64) NOT NULL,
+  `username` varchar(64) NOT NULL COMMENT '用户名',
+  `nickname` varchar(64) NOT NULL COMMENT '昵称',
   `password` varchar(64) NOT NULL COMMENT '密码',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `last_login_time` datetime DEFAULT NULL COMMENT '最近登陆时间',
@@ -190,11 +200,13 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `telephone` (`telephone`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户表';
-DROP TABLE
+
+DROP TABLE IF EXISTS
     t_user_extension;
 CREATE TABLE `t_user_extension` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(64) NOT NULL COMMENT '用户id',
+  `nickname` varchar(64) NOT NULL COMMENT '昵称',
   `user_portrait` varchar(256) DEFAULT NULL,
   `user_brief` varchar(500) DEFAULT NULL COMMENT '用户简介',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -204,7 +216,8 @@ CREATE TABLE `t_user_extension` (
   `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
-DROP TABLE
+
+DROP TABLE IF EXISTS
     t_user_role;
 CREATE TABLE
     t_user_role
@@ -215,8 +228,10 @@ CREATE TABLE
         create_time DATETIME COMMENT '创建时间',
         PRIMARY KEY (id)
     )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
-INSERT INTO t_user (id, user_id, sex, username, nickname, password, create_time, last_login_time, status, telephone, update_time, user_portrait, update_user) VALUES (1, '20180406823da5754261', '0', 'admin', '管理员', 'B8126D979040396255441D6133A8B3A28265BED4DF055A6525D52877', '2018-04-06 21:17:33', '2018-05-05 13:26:38', '1', null, '2018-05-27 10:14:55', null, null);
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+    
+INSERT INTO t_user (id, user_id, sex, username, nickname, password, create_time, last_login_time, status, telephone, update_time, user_portrait, update_user) VALUES (1, '20180406823da5754261', '0', 'admin', '管理员', 'B8126D979040396255441D6133A8B3A28265BED4DF055A6525D52877', '2018-04-06 21:17:33', '2018-05-05 13:26:38', '1', null, '2018-05-27 10:14:55', '/static/images/default_portrait.jpg', null);
+INSERT INTO t_user_extension (id, user_id, user_portrait, nickname, user_brief, create_time, update_time, article_counts, comment_counts, score) VALUES (10, '20180406823da5754261', '/static/images/default_portrait.jpg', '管理员', '今天下雨了', '2018-04-06 21:27:04', '2018-06-02 20:38:32', 0, 0, 0);
 INSERT INTO t_user_role (id, user_id, role_id, create_time) VALUES (1, '20180406823da5754261', 'r10006', null);
 INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (7, 'r10006', '超级管理员', '2018-03-19 22:52:20', '', '2018-04-01 20:42:57', '20180107a049b606cacd', '1');
 INSERT INTO t_role (id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag) VALUES (8, 'r1001308', '普通用户', '2018-04-01 20:46:46', '20180107a049b606cacd', null, null, '0');

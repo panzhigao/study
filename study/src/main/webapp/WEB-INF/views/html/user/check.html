@@ -112,7 +112,7 @@ layui.use(['table','jquery'], function(){
 	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
 	    done: function(res, curr, count){
-	    	$('#completeCount').html(count);
+	    	$('#notCompleteCount').html(count);
 	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
@@ -165,10 +165,10 @@ layui.use(['table','jquery'], function(){
 	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
 	    page: true ,//开启分页
 	    done: function(res, curr, count){
-	    	$('#notCompleteCount').html(count);
+	    	$('#completeCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
@@ -183,16 +183,25 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
-	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
+	      {field: 'createTime', title: '创建时间', width:160, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
-	      {field: 'checkTime', title: '审核时间', width:200, sort: true,templet:function(d){
+	      {field: 'checkTime', title: '审核时间', width:160, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.checkTime));
 	      }},
-	      {field: 'checkUsername', title: '审核人', width:200,templet:function(d){
+	      {field: 'checkUsername', title: '审核人', width:100,templet:function(d){
 	    	  return d.checkUsername;
 	      }},
-	      {title:'操作',width:260,templet:function(row){
+	      {field: 'approveFlag', title: '是否通过', width:100, sort: true,templet:
+	    	  function(d){
+	    	  	switch(d.checkType){
+		    	  	case '0':temp='未通过';break;
+		    	  	case '1':temp='通过';break;
+	    	  	}
+	    	  	return temp;
+	      	  }
+	       },
+	      {title:'操作',width:100,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  if(row.completeFlag=='1'){
 	    		  return detail;

@@ -147,8 +147,8 @@ public class ArticleCheck extends BaseEntity{
 	}
 	
 	public enum ApproveFlagEnum{
-		APPROVED("通过","0"),
-		NOT_APPROVED("未通过","1");
+		APPROVED("通过","1"),
+		NOT_APPROVED("未通过","0");
 		private String name;
 		private String code;
 		
