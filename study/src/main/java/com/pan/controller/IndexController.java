@@ -51,6 +51,7 @@ public class IndexController {
 		QueryArticleVO queryArticleVO=new QueryArticleVO();
 		queryArticleVO.setPageNo(1);
 		queryArticleVO.setPageSize(4);
+		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
 		queryArticleVO.setWhereCondition("stick>0");
 		List<Article> list = articleService.findByCondition(queryArticleVO);
 		return ResultMsg.ok("获取活跃用户成功", list);

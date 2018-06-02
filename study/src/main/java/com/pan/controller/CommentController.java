@@ -39,7 +39,7 @@ public class CommentController {
 		BeanUtils.copyProperties(addComment, commentVO);
 		commentVO.setUserPortrait(loginUser.getUserPortrait());
 		commentVO.setNickname(loginUser.getNickname());
-		TransFieldUtils.transEntity(addComment);
+		TransFieldUtils.transEntity(commentVO);
 		return ResultMsg.ok("评论成功",commentVO);
 	}
 	

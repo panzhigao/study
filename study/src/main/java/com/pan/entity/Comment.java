@@ -1,5 +1,7 @@
 package com.pan.entity;
 
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.pan.common.annotation.UnescapeHtml;
@@ -33,6 +35,7 @@ public class Comment extends BaseEntity{
 	 * 评论内容
 	 */
 	@NotEmpty(message="评论内容不能为空")
+	@Size(max=300,message="评论内容不能超过300个字")
 	@UnescapeHtml
 	private String commentContent;
 	/**

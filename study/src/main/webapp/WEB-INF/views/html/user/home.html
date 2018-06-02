@@ -72,7 +72,7 @@
   <p class="fly-home-info">
     <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
     <i class="iconfont icon-shijian"></i><span>$!date.format('yyyy-MM-dd',$!u.createTime) 加入</span>
-    <i class="iconfont icon-chengshi"></i><span>来自$!u.address</span>
+    #if($!u.address)<i class="iconfont icon-chengshi"></i><span>来自$!u.address</span>#end
   </p>
 
   <p class="fly-home-sign">#if($!{uExtension.userBrief}) $!{uExtension.userBrief} #else 暂无简介 #end</p>
