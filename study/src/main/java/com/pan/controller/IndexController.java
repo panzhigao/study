@@ -54,7 +54,7 @@ public class IndexController {
 		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
 		queryArticleVO.setWhereCondition("stick>0");
 		List<Article> list = articleService.findByCondition(queryArticleVO);
-		return ResultMsg.ok("获取活跃用户成功", list);
+		return ResultMsg.ok("获取置顶帖成功", list);
 	}
 	
 	/**
@@ -67,7 +67,8 @@ public class IndexController {
 		QueryUserExtensionVO extensionVO=new QueryUserExtensionVO();
 		extensionVO.setPageNo(1);
 		extensionVO.setPageSize(12);
-		extensionVO.setOrderByCondition("score");
+		extensionVO.setOrderByCondition("comment_counts desc");
+		extensionVO.setWhereCondition("comment_counts>0");
 		List<UserExtension> list = userExtensionService.findByParams(extensionVO);
 		return ResultMsg.ok("获取活跃用户成功", list);
 	}

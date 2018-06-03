@@ -64,7 +64,7 @@ function tranTime(fromTime){
 function websocketConnect(){
 	$.post('/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://www.pan.com/myHandler")
+	var ws = new WebSocket("ws://www.panzhigao.vip/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
@@ -80,8 +80,8 @@ function websocketConnect(){
 	  //系统消息
 	  if(message&&message.messageType==3){
 		  //showMessage(message);
-		  showNotice(message.commentContent);
-		  window.sessionStorage.setItem('message',message.commentContent);
+		  showNotice(message);
+		  window.sessionStorage.setItem('message',JSON.stringify(message));
 	  }else{//个人消息树增加
 		  var count=$("#messageCount").html()|0;
 	      $("#messageCount").html(++count);
@@ -89,7 +89,14 @@ function websocketConnect(){
 	}
 }
 
-function showMessage(message){
+function showNotice(message){
+	var obj;
+	if(!message||typeof(message)=='string'){
+		obj=new Object();
+		obj['contentName']='消息';
+		obj['commentContent']='暂无消息';
+		message=obj;
+	}
 	//示范一个公告层
 	layer.open({
 	  type: 1

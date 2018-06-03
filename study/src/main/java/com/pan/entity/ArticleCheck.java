@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.pan.common.annotation.UnescapeHtml;
+
 public class ArticleCheck extends BaseEntity{
 	/**
 	 * 
@@ -46,6 +48,7 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 文章内容
 	 */
+	@UnescapeHtml
 	private String content;
 	public String getArticleId() {
 		return articleId;

@@ -21,6 +21,8 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.entity.User;
@@ -110,6 +112,7 @@ public class MyRealm extends AuthorizingRealm {
 		User userInDb=userService.checkLogin(inputUser);
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getUserId(), inputPassword, getName());
 		TokenUtils.setAttribute("user",userInDb);
+		TokenUtils.setAttribute(MyConstant.USER_ID, userInDb.getUserId());
 		//加载菜单到session
 		loadMenus(userInDb.getUserId());
 		return authenticationInfo;
@@ -142,12 +145,6 @@ public class MyRealm extends AuthorizingRealm {
 	 * @param user 被删除人
 	 */
 	public void clearAuth(String userId) {
-//		Subject subject = SecurityUtils.getSubject();
-//		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-//		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
-//		subject.runAs(principals);
-//		subject.logout();
-//		subject.releaseRunAs();
 		Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
 		for (Session session : activeSessions) {
 			User user=(User) session.getAttribute("user");

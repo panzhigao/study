@@ -107,6 +107,7 @@
           
           #hasPermission('/user/article/set')
           <div class="fly-admin-box" data-id="$!{article.articleId}">
+          	#if($article.status=='3')
             #if($article.stick==0)
             <span class="layui-btn layui-btn-xs jie-admin" type="set" stick="1">置顶</span> 
             #else
@@ -116,6 +117,7 @@
             <span class="layui-btn layui-btn-xs jie-admin" type="set" highquality="1">加精</span> 
             #else
             <span class="layui-btn layui-btn-xs jie-admin grey" type="set" highquality="0">取消加精</span>
+            #end
             #end
           </div>
           #end
@@ -188,53 +190,11 @@
       #end
     </div>
     <div class="layui-col-md4">
-      <dl class="fly-panel fly-list-one">
+      <dl class="fly-panel fly-list-one" id="hotList">
         <dt class="fly-panel-title">本周热议</dt>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-          <a href="">基于 layui 的极简社区页面模版</a>
-          <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
 
         <!-- 无数据时 -->
-        <!--
-        <div class="fly-none">没有相关数据</div>
-        -->
+        <div class="fly-none" id="hot-none">没有相关数据</div>
       </dl>
 
       <div class="fly-panel">
@@ -288,6 +248,7 @@ layui.config({
   var form = layui.form;
   var articleId='${article.articleId}';
   loadComments(articleId);
+  getHotArticleList();
   
   #if(${user})
   websocketConnect();
@@ -389,6 +350,36 @@ function addComment(comment){
 	}
 	commentPart+='</div></li>';  
 	$('#jieda').prepend(commentPart);
+}
+
+function getHotArticleList(){
+	$.ajax({
+		url:'$!{rc.contextPath}/article/getPageData',
+		type:'GET',
+		data:{pageNo:1,pageSize:10,isHot:"1"},
+		success:function(res){
+			if(res.code=='200'){
+				var articles=res.data;
+				var length=articles.length;
+				if(length>0){
+					$('#hot-none').hide();
+				}
+				for(var i=0;i<length;i++){
+					var article=articles[i];
+					//精帖
+					var temp='';
+					if(article.highQuality=='1'){
+						temp='<div class="fly-list-badge"> <span class="layui-badge layui-bg-red">精帖</span></div>';
+					}
+					var one='<dd>'+
+			          '<a href="$!{rc.contextPath}/article/'+article.articleId+'">'+article.title+'</a>'+
+			          '<span><i class="iconfont icon-pinglun1"></i> '+article.commentCount+'</span>'+
+			          '</dd>';
+			        $('#hotList').append(one);
+				}	     
+			}
+		}
+	})
 }
 </script>
 </body>

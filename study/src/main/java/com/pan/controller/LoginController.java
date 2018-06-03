@@ -66,7 +66,7 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
-	public ResultMsg doLogin(HttpServletRequest request,HttpServletResponse response,User user,String vercode){
+	public ResultMsg doLogin(HttpServletRequest request,User user,String vercode){
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
@@ -76,6 +76,7 @@ public class LoginController{
 		UsernamePasswordToken passwordToken=new UsernamePasswordToken(user.getUsername(),user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
+		request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
 		User userInDb = userService.findByUsername(user.getUsername());
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}

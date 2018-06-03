@@ -67,19 +67,12 @@ layui.config({
 	//判断是否处于锁屏状态(如果关闭以后则未关闭浏览器之前不再显示)
 	if(window.sessionStorage.getItem("lockcms") != "true" && window.sessionStorage.getItem("showNotice") != "true"){
 		var message=window.sessionStorage.getItem("message");
-		if(message){			
-			showNotice(message);
-		}else{
-			showNotice('暂无消息');
-		}
+		showNotice(message);
 	}
+	
 	$(".showNotice").on("click",function(){
 		var message=window.sessionStorage.getItem("message");
-		if(message){			
-			showNotice(message);
-		}else{
-			showNotice('暂无消息');
-		}
+		showNotice(message);
 	})
 	
 	//if(window.sessionStorage.getItem("menu") == null||window.sessionStorage.getItem("curmenu") == '"undefined"'){

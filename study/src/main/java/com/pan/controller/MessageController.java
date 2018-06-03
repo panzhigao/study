@@ -37,7 +37,7 @@ public class MessageController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/message")
 	@HasPermission
 	public ModelAndView toIndex(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("html/user/message");
+		ModelAndView mav=new ModelAndView("html//message/messagePage");
 		return mav;
 	}
 	
@@ -76,7 +76,7 @@ public class MessageController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemMessage")
 	@HasPermission
 	public ModelAndView toSendMessageIndex(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("html/user/sendMessage");
+		ModelAndView mav=new ModelAndView("html/sendMessage/sendMessagePage");
 		return mav;
 	}
 	

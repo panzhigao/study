@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
+import com.pan.entity.ArticleCheck;
 import com.pan.service.ArticleCheckService;
+import com.pan.util.TransFieldUtils;
 import com.pan.vo.QueryArticleCheckVO;
 
 @Controller
@@ -28,7 +30,7 @@ public class ArticleCheckController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/check")
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView toIndex(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("html/user/check");
+		ModelAndView mav=new ModelAndView("html/articleCheck/articleCheck");
 		return mav;
 	}
 	
@@ -70,5 +72,22 @@ public class ArticleCheckController {
 	public ResultMsg articleNotPass(String id,String reason){
 		articleCheckService.notPassArticle(id, reason);
 		return ResultMsg.ok("文章未通过审核");
+	}
+	
+	/**
+	 * 文章审核详情
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/check/detail")
+	@RequiresPermissions(value="/user/check")
+	public ModelAndView articleCheckDetail(String id){
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("html/articleCheck/articleCheckDetail");
+		ArticleCheck articleCheck = articleCheckService.findById(id);
+		if(articleCheck!=null){
+			TransFieldUtils.transEntity(articleCheck);
+		}
+		mav.addObject("articleCheck", articleCheck);
+		return mav;
 	}
 }

@@ -37,7 +37,7 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/manage")
 	@RequiresPermissions(value="/user/manage")
 	public ModelAndView toUserEditPage(){
-		ModelAndView mav=new ModelAndView("html/user/userManage");
+		ModelAndView mav=new ModelAndView("html/userManage/userManagePage");
 		return mav;
 	}
 	

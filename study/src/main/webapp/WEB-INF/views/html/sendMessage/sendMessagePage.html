@@ -7,15 +7,8 @@
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
   <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
-<!--   <link href="$!{rc.contextPath}/static/css/font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
-<!--   <link href="$!{rc.contextPath}/static/css/cropper.min.css" rel="stylesheet"> -->
-<!--   <link href="$!{rc.contextPath}/static/css/sitelogo.css" rel="stylesheet"> -->
-<!--   <script src="$!{rc.contextPath}/static/js/cropper.js"></script> -->
-<!--   <script src="$!{rc.contextPath}/static/js/sitelogo.js"></script> -->
-<!--   <script src="$!{rc.contextPath}/static/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script> -->
 </head>
 <body class="childrenBody" >
-
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
@@ -126,7 +119,8 @@ layui.use(['table','jquery', 'form','layedit'], function(){
 	      }},
 	      {field: 'createTime', title: '发送时间', width:250, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
-	      }}
+	      }},
+	      {field: 'nickname', title: '发送人', width:100},
 	    ]]
 	  });	
 });

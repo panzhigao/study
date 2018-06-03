@@ -16,10 +16,10 @@
       
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-	    	<table id="completeTable" lay-filter="tab1"></table>
+	    	<table id="table1" lay-filter="tab1"></table>
 	    </div>
 	    <div class="layui-tab-item">
-          <table id="notCompleteTable" lay-filter="tab2"></table>
+          <table id="table2" lay-filter="tab2"></table>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@ layui.use(['table','jquery'], function(){
 	  table.on('tool(tab1)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'detail'){
-	      window.open("$!{rc.contextPath}/article/"+data.articleId, '_blank').location;
+	      view(data.id);
 	    } else if(obj.event === 'notPass'){
     	  layer.prompt({title: '请输入未审核通过原因，并确认', formType: 2}, function(reason, index){
     		  layer.close(index);
@@ -59,14 +59,12 @@ layui.use(['table','jquery'], function(){
   	    		url:"$!{rc.contextPath}/user/check/notPass",
   	    		type:"post",
   	    		data:{id:data.id,reason:reason},
-  	    		success:function(data){
-  	    			if(data.code=='200'){
-  	    				layer.alert(data.msg);
-  	    				table.reload('completeTab');
-  	    				var counts=$('#articleCounts').html()|0;
-  	    				$('#articleCounts').html(--counts);
+  	    		success:function(res){
+  	    			if(res.code=='200'){
+  	    				layer.alert(res.msg);
+  	    				table.reload('notCompleteTab');
   	    			}else{	    				
-  	    				layer.alert(data.msg);
+  	    				layer.alert(res.msg);
   	    			}
   	    		}
   	    	});
@@ -81,9 +79,7 @@ layui.use(['table','jquery'], function(){
 	    			success:function(res){
 	    				if(res.code=='200'){
 	    					layer.msg(res.msg);
-	    					table.reload('completeTab');
-	    					var counts=$('#articleCounts').html()|0;
-		    				$('#articleCounts').html(--counts);
+	    					table.reload('notCompleteTab');
 	    				}else{
 	    					layer.msg(res.msg);
 	    				}
@@ -93,11 +89,19 @@ layui.use(['table','jquery'], function(){
 	    }
 	  });
 	  
+	  //监听工具条
+	  table.on('tool(tab2)', function(obj){
+		  var data = obj.data;
+		  if(obj.event === 'detail'){
+			  view(data.id);
+		  }
+	  });
+	  
 	  //第一个实例
 	  table.render({
-		id: 'completeTab',  
+		id: 'notCompleteTab',  
 	    method: 'post',  
-	    elem: '#completeTable',
+	    elem: '#table1',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -148,9 +152,9 @@ layui.use(['table','jquery'], function(){
 	  
 	  //第二个实例
 	  table.render({
-		id: 'notCompleteTab',  
+		id: 'completeTab',  
 	    method: 'post',  
-	    elem: '#notCompleteTable',
+	    elem: '#table2',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -169,7 +173,7 @@ layui.use(['table','jquery'], function(){
 	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'articleId', title: '文章ID', width:100, sort: true},
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
@@ -194,14 +198,14 @@ layui.use(['table','jquery'], function(){
 	      }},
 	      {field: 'approveFlag', title: '是否通过', width:100, sort: true,templet:
 	    	  function(d){
-	    	  	switch(d.checkType){
+	    	  	switch(d.approveFlag){
 		    	  	case '0':temp='未通过';break;
 		    	  	case '1':temp='通过';break;
 	    	  	}
 	    	  	return temp;
 	      	  }
 	       },
-	      {title:'操作',width:100,templet:function(row){
+	      {title:'操作',width:100,fixed: 'right',templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  if(row.completeFlag=='1'){
 	    		  return detail;
@@ -212,8 +216,21 @@ layui.use(['table','jquery'], function(){
 	      }}
 	    ]]
 	  });
-	      	  
 });
+
+function view(id){
+var index=layer.open({
+	type: 2,
+	title: '查看',
+	content: '/user/check/detail?id='+id,
+	btn: ['关闭'],
+	closeBtn: 0,
+	maxmin: true,
+	shade: false,
+	offset: ['50px', '20%'],
+	area: ['800px', '400px']
+})		
+}
 </script>
 </body>
 </html>

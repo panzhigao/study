@@ -27,7 +27,7 @@ public class SearchController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="/search")
 	public ModelAndView getSearchContent(String q){
-		ModelAndView mav=new ModelAndView("html/search/index");
+		ModelAndView mav=new ModelAndView("html/search/searchPage");
 		mav.addObject("q", q);
 		return mav;
 	}

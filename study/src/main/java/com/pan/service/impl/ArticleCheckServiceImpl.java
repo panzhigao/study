@@ -16,10 +16,12 @@ import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.User;
+import com.pan.entity.UserExtension;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.MessageService;
+import com.pan.service.UserExtensionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -40,6 +42,9 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private UserExtensionService userExtensionService;
 	
 	@Override
 	public Map<String,Object> findByParams(QueryArticleCheckVO queryArticleCheckVO) {
@@ -116,6 +121,13 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
+		//文章数加1，发表文章加5分
+		String loingUserId = TokenUtils.getLoingUserId();
+		UserExtension userExtensionInDb=new UserExtension();
+		userExtensionInDb.setUserId(loingUserId);
+		userExtensionInDb.setArticleCounts(1);
+		userExtensionInDb.setScore(5);
+		userExtensionService.updateById(userExtensionInDb);
 	}
 
 	@Override
@@ -163,5 +175,10 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		message.setSenderUserId(user.getUserId());
 		messageService.addMessage(message);
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
+	}
+
+	@Override
+	public ArticleCheck findById(String id) {
+		return articleCheckMapper.findById(id);
 	}
 }

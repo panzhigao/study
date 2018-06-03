@@ -86,7 +86,7 @@ CREATE TABLE
         receiver_user_id VARCHAR(64) NOT NULL COMMENT '接收者id',
         sender_name VARCHAR(64) COMMENT '发送者姓名',
         sender_user_id VARCHAR(64) COMMENT '发送消息者id',
-        message_type CHAR(1) NOT NULL COMMENT '消息类别 1-评论 2-点赞 3-系统消息',
+        message_type CHAR(1) NOT NULL COMMENT '消息类别 1-评论 2-系统消息 3-公告',
         content_id VARCHAR(64) COMMENT '内容id',
         content_name VARCHAR(64) COMMENT '内容名称',
         create_time DATETIME NOT NULL COMMENT '创建时间',

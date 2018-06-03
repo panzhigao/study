@@ -7,13 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
@@ -21,12 +19,10 @@ import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.User;
-import com.pan.entity.UserExtension;
 import com.pan.mapper.ArticleMapper;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.EsClientService;
-import com.pan.service.UserExtensionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -52,9 +48,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	private ArticleCheckService articleCheckService;
-	
-	@Autowired
-	private UserExtensionService userExtensionService;
 	
 	/**
 	 * 校验当前操作码状态是否正常 1-草稿，2-审核中
@@ -102,21 +95,15 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setArticleId(IdUtils.generateArticleId());
 		article.setType("1");
 		articleMapper.saveArticle(article);
-		ArticleCheck articleCheck = new ArticleCheck();
-		articleCheck.setArticleId(article.getArticleId());
-		articleCheck.setTitle(article.getTitle());
-		articleCheck.setContent(article.getContent());
-		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
-		articleCheckService.addArticleCheck(articleCheck);
-		//修改文章数
-		//修改当前人的评论数
-		String loingUserId = TokenUtils.getLoingUserId();
-		//发表文章加5分
-		UserExtension userExtensionInDb=new UserExtension();
-		userExtensionInDb.setUserId(loingUserId);
-		userExtensionInDb.setCommentCounts(1);
-		userExtensionInDb.setScore(5);
-		userExtensionService.updateById(userExtensionInDb);
+		//发布文章,新增审核记录
+		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+			ArticleCheck articleCheck = new ArticleCheck();
+			articleCheck.setArticleId(article.getArticleId());
+			articleCheck.setTitle(article.getTitle());
+			articleCheck.setContent(article.getContent());
+			articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
+			articleCheckService.addArticleCheck(articleCheck);
+		}
 	}
 
 	@Override
@@ -169,6 +156,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 更新文章信息 要校验当前文章是否是当前登录用户下的文章
+	 * 发布中文章不能修改
 	 */
 	@Override
 	public void updateArticle(Article article) {
@@ -183,10 +171,10 @@ public class ArticleServiceImpl implements ArticleService {
 			logger.error("根据文章id未查询到数据,articleId:{}", articleId);
 			throw new BusinessException("修改文章信息有误，文章已不存在");
 		}
-//		if (Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())) {
-//			logger.error("当前文章处于发布状态,不可修改", articleInDb);
-//			throw new BusinessException("当前文章处于发布状态,不可修改");
-//		}
+		if (Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())) {
+			logger.error("当前文章处于发布状态,不可修改", articleInDb);
+			throw new BusinessException("当前文章处于发布状态,不可修改");
+		}
 		if (Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())) {
 			logger.error("系统消息不可修改", articleInDb);
 			throw new BusinessException("系统消息不可修改");
@@ -199,13 +187,16 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
-		//新增审核记录
-		ArticleCheck articleCheck = new ArticleCheck();
-		articleCheck.setArticleId(article.getArticleId());
-		articleCheck.setTitle(article.getTitle());
-		articleCheck.setContent(article.getContent());
-		articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.UPDATE.getCode());
-		articleCheckService.addArticleCheck(articleCheck);
+		//文章处于审核状态，新增审核记录
+		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+			//新增审核记录
+			ArticleCheck articleCheck = new ArticleCheck();
+			articleCheck.setArticleId(article.getArticleId());
+			articleCheck.setTitle(article.getTitle());
+			articleCheck.setContent(article.getContent());
+			articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.UPDATE.getCode());
+			articleCheckService.addArticleCheck(articleCheck);
+		}
 	}
 
 	@Override
@@ -334,7 +325,10 @@ public class ArticleServiceImpl implements ArticleService {
 	public int getMaxStick() {
 		return articleMapper.getMaxStick();
 	}
-
+	
+	/**
+	 * 文章置顶/加精
+	 */
 	@Override
 	public void setArticle(String articleId, String stick, String highQuality) {
 		Article articleInDb = getByArticleId(articleId);

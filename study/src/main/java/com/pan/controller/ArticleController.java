@@ -48,7 +48,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView writeArticle(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("html/jie/add");
+		ModelAndView mav=new ModelAndView("html/article/add");
 		User user = TokenUtils.getLoginUser();
 		mav.addObject("user", user);
 		return mav;
@@ -87,7 +87,7 @@ public class ArticleController {
 		QueryCollectionVO collectionVO=new QueryCollectionVO();
 		collectionVO.setUserId(loingUserId);
 		collectionVO.setTitle(Article.TYPE_ARTICLE);
-		ModelAndView mav=new ModelAndView("html/user/article");
+		ModelAndView mav=new ModelAndView("html/article/articleManage");
 		return mav;
 	}
 	
@@ -116,10 +116,9 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
 	@ResponseBody
-	//@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
 		//不存在抛出异常
-		ModelAndView mav=new ModelAndView("html/jie/detail");
+		ModelAndView mav=new ModelAndView("html/article/detail");
 		String loginUserId=null;
 		if(TokenUtils.isAuthenticated()){
 			loginUserId = TokenUtils.getLoingUserId();
@@ -135,8 +134,12 @@ public class ArticleController {
 		}
 		TransFieldUtils.transEntity(article);
 		mav.addObject("article", article);
-		long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
-		mav.addObject("viewCount",viewCount+article.getViewCount());
+		if(Article.STATUS_PUBLISHED.equals(article.getStatus())){			
+			long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
+			mav.addObject("viewCount",viewCount+article.getViewCount());
+		}else{
+			mav.addObject("viewCount",article.getViewCount());
+		}
 		User articleUser=userService.findByUserId(article.getUserId());
 		mav.addObject("articleUser", articleUser);
 		return mav;
@@ -150,7 +153,7 @@ public class ArticleController {
 	@ResponseBody
 	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
-		ModelAndView mav=new ModelAndView("html/jie/edit");
+		ModelAndView mav=new ModelAndView("html/article/edit");
 		String loingUserId = TokenUtils.getLoingUserId();
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		if(article==null){
@@ -200,7 +203,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/index")
 	public ModelAndView toArticleIndex(){
-		ModelAndView mav=new ModelAndView("html/jie/index");
+		ModelAndView mav=new ModelAndView("html/article/index");
 		return mav;
 	}
 	

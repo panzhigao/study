@@ -13,4 +13,6 @@ public interface ArticleCheckService {
 	public void passArticleCheck(String id);
 	
 	public void notPassArticle(String id,String reason);
+	
+	public ArticleCheck findById(String id);
 }

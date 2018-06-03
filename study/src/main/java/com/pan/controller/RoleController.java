@@ -32,7 +32,7 @@ public class RoleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/role")
 	@HasPermission
 	public String toRolePage(){
-		return "html/user/role";
+		return "html/role/rolePage";
 	}
 	
 	/**

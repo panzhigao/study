@@ -2,13 +2,12 @@ package com.pan.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.pan.common.annotation.HasPermission;
 import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
@@ -32,9 +31,9 @@ public class PermissionController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permission")
-	@HasPermission
+	@RequiresPermissions("/user/permission")
 	public String toPermissionPage(){
-		return "html/user/permission";
+		return "html/permission/permissionPage";
 	}
 	
 	/**
@@ -42,9 +41,9 @@ public class PermissionController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permission/addPage")
-	@HasPermission("/user/permission/doAdd")
+	@RequiresPermissions("/user/permission/doAdd")
 	public String toPermissionAddPage(){
-		return "html/user/permissionAdd";
+		return "html/permission/permissionAdd";
 	}
 	
 	/**
@@ -52,9 +51,9 @@ public class PermissionController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/permissionEdit")
-	@HasPermission("/user/permission/doEdit")
+	@RequiresPermissions("/user/permission/doEdit")
 	public String toPermissionEditPage(){
-		return "html/user/permissionEdit";
+		return "html/permission/permissionEdit";
 	}
 	
 	/**
@@ -64,7 +63,7 @@ public class PermissionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doAdd")
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/permission/doAdd")
 	public ResultMsg addPermission(Permission permission){
 		permissionService.addPermission(permission);
 		return ResultMsg.ok("新增权限成功");
@@ -76,7 +75,7 @@ public class PermissionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/getData")
 	@ResponseBody
-	@HasPermission(value="/user/permission")
+	@RequiresPermissions(value="/user/permission")
 	public ResultMsg loadPermissions(){
 		List<TreeNode> nodes=permissionService.getTreeData();
 		return ResultMsg.build(ResultCodeEmun.SUCCESS, ResultCodeEmun.SUCCESS.getMsg(),nodes);
@@ -84,7 +83,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/permission/doDelete")
 	public ResultMsg deletePermissions(String permissionId){
 		permissionService.deletePermission(permissionId);
 		return ResultMsg.ok("删除权限成功");
@@ -97,14 +96,14 @@ public class PermissionController {
 	 */
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/getPermissionTree")
 	@ResponseBody
-	@HasPermission(value="/user/permission")
+	@RequiresPermissions(value="/user/permission")
 	public List<Tree> loadRoleTree(String roleId){
 		return permissionService.getPermissionTreeData(roleId);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
 	@ResponseBody
-	@HasPermission(value="/user/permission/doEdit")
+	@RequiresPermissions(value="/user/permission/doEdit")
 	public ResultMsg loadPermissionDetail(String permissionId){
 		Permission permission = permissionService.getByPermissionId(permissionId);
 		return ResultMsg.ok("获取权限信息成功", permission);
@@ -112,7 +111,7 @@ public class PermissionController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doEdit")
 	@ResponseBody
-	@HasPermission
+	@RequiresPermissions("/user/permission/doEdit")
 	public ResultMsg editPermission(Permission permission){
 		permissionService.updatePermission(permission);
 		return ResultMsg.ok();
