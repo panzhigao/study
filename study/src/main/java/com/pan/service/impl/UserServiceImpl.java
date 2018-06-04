@@ -221,7 +221,7 @@ public class UserServiceImpl implements UserService{
 		userMapper.updateUserByUserId(user);
 		User userInDb = userMapper.findByUserId(userId);
 		//重置用户登陆信息
-		TokenUtils.setAttribute("user",userInDb);
+		TokenUtils.setAttribute(MyConstant.USER,userInDb);
 		String userBrief=userExtension.getUserBrief();
 		//更新用户拓展信息
 		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
@@ -280,7 +280,10 @@ public class UserServiceImpl implements UserService{
 			throw new BusinessException("验证码有误");
 		}
 		user.setUpdateTime(new Date());
+		User loginUser = TokenUtils.getLoginUser();
 		userMapper.updateUserByUserId(user);
+		loginUser.setTelephone(user.getTelephone());
+		TokenUtils.setAttribute(MyConstant.USER, loginUser);
 		JedisUtils.existsKey(redisCode);
 	}
 

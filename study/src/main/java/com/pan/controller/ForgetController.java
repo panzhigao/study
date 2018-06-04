@@ -2,13 +2,17 @@ package com.pan.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
@@ -16,6 +20,11 @@ import com.pan.service.UserService;
 import com.pan.util.JedisUtils;
 import com.pan.util.PasswordUtils;
 
+/**
+ * 找回密码
+ * @author panzhigao-wb
+ *
+ */
 @Controller
 public class ForgetController {
 	
@@ -36,7 +45,7 @@ public class ForgetController {
 	public ResultMsg sendValidationCode(HttpServletRequest request,String telephone){
 		User user=new User();
 		user.setTelephone(telephone);
-		String sendValidationCode = userService.sendValidationCode(user,"findPassword");
+		String sendValidationCode = userService.sendValidationCode(user,MyConstant.OPERATETYPE_FINDPASSWORD);
 		return ResultMsg.ok("发送验证码成功",sendValidationCode);
 	}
 	

@@ -137,6 +137,7 @@
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -153,7 +154,6 @@ layui.config({
   fly: 'index'
 }).use('fly');
 layui.use(['jquery', 'form'], function(){
-	  var $ = layui.$ ;
 	  var form = layui.form;  
 	    //修改密码
 		form.on('submit(findPassword)', function(data){
@@ -168,7 +168,7 @@ layui.use(['jquery', 'form'], function(){
 			   layer.msg('请输入手机号');
 			   return;
 		   }
-		   send($,tel);
+		   send(tel);
 		});
 });
 
@@ -176,7 +176,7 @@ layui.use(['jquery', 'form'], function(){
 var countdown=5; 
 
 //发送验证码
-function send($,tel){
+function send(tel){
 		$.ajax({
 			url:"$!{rc.contextPath}/sendForgetValidationCode",
 			type:"post",
@@ -198,7 +198,7 @@ function send($,tel){
 	});
 }
 
-function settime($) { //发送验证码倒计时
+function settime() { //发送验证码倒计时
     if (countdown == 0) { 
     	$('#sendCode').removeClass('layui-btn-disabled');
     	$('#sendCode').removeAttr("disabled");
@@ -216,7 +216,7 @@ function settime($) { //发送验证码倒计时
 }
 
 //发送验证码
-function resetPassword($,params){
+function resetPassword(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/resetPassword",
 			type:"post",

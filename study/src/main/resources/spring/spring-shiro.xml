@@ -26,6 +26,9 @@
 				/register=anon
 				/doRegister=anon
 				/checkUnique=anon
+				/forget=anon
+				/sendForgetValidationCode=anon
+				/resetPassword=anon
 				/static/**=anon
 				/article/**=anon
 				/api/**=anon
