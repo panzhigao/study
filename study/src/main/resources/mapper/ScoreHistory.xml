@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.mapper.ScoreHistoryMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pan.entity.ScoreHistory">
+    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="score"       	    property="score"           jdbcType="INTEGER" />
+    <result column="type"               property="type"            jdbcType="VARCHAR" />
+    <result column="score_date"         property="scoreDate"       jdbcType="DATE" />
+    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,user_id,score,type,score_date,create_time
+  </sql>
+  
+
+  <insert id="save" parameterType="com.pan.entity.ScoreHistory">
+  	insert into t_score_history (<include refid="Base_Column_List"/>) values 
+  	(null,#{userId,jdbcType=VARCHAR},#{score,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},
+  	#{scoreDate,jdbcType=DATE},#{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryScoreHistoryVO">
+  	select count(0) from t_score_history 
+  	<include refid="whereSql"/>
+  </select>
+  
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.vo.QueryScoreHistoryVO">
+  	select <include refid="Base_Column_List"/> from t_score_history
+  	<include refid="whereSql"/>
+  </select>
+  
+  <sql id="whereSql">
+  	<where> 
+  		1=1
+  		<if test="userId !=null and userId !='' ">
+  			and user_id=#{userId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="type !=null and type !=''">
+  			and type=#{type,jdbcType=VARCHAR}
+  		</if>
+  		<if test="scoreDate !=null">
+  			and score_date=#{scoreDate,jdbcType=DATE}
+  		</if>
+  	</where>
+  </sql>
+ 
+</mapper>

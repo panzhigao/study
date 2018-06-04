@@ -229,7 +229,19 @@ CREATE TABLE
         PRIMARY KEY (id)
     )
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
-    
+
+DROP TABLE IF EXISTS
+    t_score_history;
+CREATE TABLE `t_score_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` varchar(64) NOT NULL COMMENT '用户id',
+  `type` char(1) NOT NULL COMMENT '积分类型，1-登陆，2-发表文章成功，3-回帖',
+  `score` int(11) NOT NULL COMMENT '积分',
+  `score_date` date NOT NULL COMMENT '积分获取日期',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
 INSERT INTO t_user (id, user_id, sex, username, nickname, password, create_time, last_login_time, status, telephone, update_time, user_portrait, update_user) VALUES (1, '20180406823da5754261', '0', 'admin', '管理员', 'B8126D979040396255441D6133A8B3A28265BED4DF055A6525D52877', '2018-04-06 21:17:33', '2018-05-05 13:26:38', '1', null, '2018-05-27 10:14:55', '/static/images/default_portrait.jpg', null);
 INSERT INTO t_user_extension (id, user_id, user_portrait, nickname, user_brief, create_time, update_time, article_counts, comment_counts, score) VALUES (10, '20180406823da5754261', '/static/images/default_portrait.jpg', '管理员', '今天下雨了', '2018-04-06 21:27:04', '2018-06-02 20:38:32', 0, 0, 0);
 INSERT INTO t_user_role (id, user_id, role_id, create_time) VALUES (1, '20180406823da5754261', 'r10006', null);

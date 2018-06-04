@@ -100,7 +100,7 @@
   <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryArticleVO">
 	  	select count(0) from t_article a
 	  	<include refid="whereSql"/>
-    </select>
+  </select>
   
   
   <select id="findListByUserId" resultMap="BaseResultMap">
