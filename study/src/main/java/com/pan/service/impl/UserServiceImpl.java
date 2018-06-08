@@ -21,11 +21,13 @@ import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
+import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.entity.UserRole;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
+import com.pan.service.ScoreHistoryService;
 import com.pan.service.UserService;
 import com.pan.util.DateUtils;
 import com.pan.util.ImageUtils;
@@ -84,6 +86,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
+	
+	@Autowired
+	private ScoreHistoryService scoreHistoryService;
 	
 	/**
 	 * 新增用户,默认新增用户拥有普通用户权限
@@ -172,11 +177,8 @@ public class UserServiceImpl implements UserService{
 				throw new BusinessException("用户名或密码错误");
 			}
 			updateUserLastLoginTime(userInDb.getUserId());
-			//登录加5分
-			UserExtension userExtension=new UserExtension();
-			userExtension.setUserId(user.getUserId());
-			userExtension.setScore(5);
-			userExtensionMapper.updateUserExtensionByUserId(userExtension);
+			//积分历史表
+			scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreHistory.ScoreType.LOGIN);
 			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			logger.error("验证用户和数据库密码出错",e);

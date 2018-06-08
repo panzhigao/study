@@ -8,19 +8,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Comment;
 import com.pan.entity.Message;
+import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
-import com.pan.entity.UserExtension;
 import com.pan.mapper.CommentMapper;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.service.MessageService;
-import com.pan.service.UserExtensionService;
+import com.pan.service.ScoreHistoryService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
@@ -53,7 +52,8 @@ public class CommentServiceImpl implements CommentService{
 	private UserService userService;
 	
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private ScoreHistoryService scoreHistoryService;
+	
 	/**
 	 * 添加评论
 	 * 1.新增评论记录
@@ -100,11 +100,7 @@ public class CommentServiceImpl implements CommentService{
 		//修改当前人的评论数
 		String loingUserId = TokenUtils.getLoingUserId();
 		//发表评论加2分
-		UserExtension userExtensionInDb=new UserExtension();
-		userExtensionInDb.setUserId(loingUserId);
-		userExtensionInDb.setCommentCounts(1);
-		userExtensionInDb.setScore(2);
-		userExtensionService.updateById(userExtensionInDb);
+		scoreHistoryService.addScoreHistory(loingUserId,ScoreType.COMMENT);
 		return comment;
 	}
 	

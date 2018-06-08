@@ -23,6 +23,6 @@ public interface UserExtensionService {
 	 * 修改
 	 * @param userExtension
 	 */
-	public void updateById(UserExtension userExtension);
+	public void updateByUserId(UserExtension userExtension);
 	
 }

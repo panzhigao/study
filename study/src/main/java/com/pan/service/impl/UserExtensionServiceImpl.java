@@ -28,7 +28,7 @@ public class UserExtensionServiceImpl implements UserExtensionService{
 	}
 
 	@Override
-	public void updateById(UserExtension userExtension) {
+	public void updateByUserId(UserExtension userExtension) {
 		userExtensionMapper.updateUserExtensionByUserId(userExtension);
 	}
 

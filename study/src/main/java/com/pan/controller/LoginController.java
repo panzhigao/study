@@ -86,7 +86,7 @@ public class LoginController{
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/quit")
-	public String quit(HttpServletRequest request,HttpServletResponse response){
+	public String quit(){
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "redirect:/login";

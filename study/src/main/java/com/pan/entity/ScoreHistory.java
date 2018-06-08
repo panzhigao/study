@@ -82,7 +82,5 @@ public class ScoreHistory extends BaseEntity{
 		public Integer getScore() {
 			return score;
 		}
-		
-		
 	}
 }
