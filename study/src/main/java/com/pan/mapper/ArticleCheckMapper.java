@@ -2,7 +2,7 @@ package com.pan.mapper;
 
 import java.util.List;
 import com.pan.entity.ArticleCheck;
-import com.pan.vo.QueryArticleCheckVO;
+import com.pan.query.QueryArticleCheck;
 
 /**
  * 
@@ -26,13 +26,13 @@ public interface ArticleCheckMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<QueryArticleCheckVO> findByParams(QueryArticleCheckVO queryArticleCheckVO);
+	public List<QueryArticleCheck> findByParams(QueryArticleCheck queryArticleCheckVO);
 	/**
 	 * 查询文章详细,支持分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(QueryArticleCheckVO QueryArticleCheckVO);
+	public int getCountByParams(QueryArticleCheck QueryArticleCheckVO);
 	/**
 	 * 更新文章
 	 * @param article

@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
+import com.pan.query.QueryCollection;
 import com.pan.service.CollectionService;
 import com.pan.util.TokenUtils;
-import com.pan.vo.QueryCollectionVO;
 
 @Controller
 public class CollectionController {
@@ -68,7 +68,7 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
-	public Map<String,Object> getUserCollectionList(QueryCollectionVO collectionVO){
+	public Map<String,Object> getUserCollectionList(QueryCollection collectionVO){
 		String loingUserId = TokenUtils.getLoingUserId();
 		collectionVO.setUserId(loingUserId);
 		Map<String,Object> pageData=collectionService.findByParams(collectionVO);

@@ -1,6 +1,7 @@
 package com.pan.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -12,8 +13,10 @@ import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.ScoreHistoryMapper;
 import com.pan.mapper.UserExtensionMapper;
+import com.pan.query.QueryScoreHistory;
 import com.pan.service.ScoreHistoryService;
-import com.pan.vo.QueryScoreHistoryVO;
+import com.pan.util.DateUtils;
+import com.pan.vo.ScoreHistoryVO;
 
 @Service
 public class ScoreHistoryServiceImpl implements ScoreHistoryService{
@@ -36,7 +39,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	 */
 	@Override
 	public void checkIn(String userId) {
-		QueryScoreHistoryVO query=new QueryScoreHistoryVO();
+		QueryScoreHistory query=new QueryScoreHistory();
 		query.setUserId(userId);
 		query.setScoreDate(new Date());
 		int count = scoreHistoryMapper.getCountByParams(query);
@@ -54,7 +57,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 
 	@Override
 	public void addLoginScore(String userId) {
-		QueryScoreHistoryVO vo=new QueryScoreHistoryVO();
+		QueryScoreHistory vo=new QueryScoreHistory();
 		vo.setUserId(userId);
 		vo.setType(ScoreHistory.ScoreType.LOGIN.getCode());
 		vo.setScoreDate(new Date());
@@ -82,25 +85,62 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	 * @param scoreType 积分类型
 	 */
 	@Override
-	public void addScoreHistory(String userId, ScoreType scoreType) {
-		//登陆积分
-		if(ScoreHistory.ScoreType.LOGIN==scoreType){
-			QueryScoreHistoryVO vo=new QueryScoreHistoryVO();
+	public ScoreHistory addScoreHistory(String userId, ScoreType scoreType) {
+		//签到积分
+		Integer checkInScore=null;
+		boolean continuousCheckInFlag=false;
+		boolean continuousLoginFlag=false;
+		//签到积分
+		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){
+			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
 			vo.setScoreDate(new Date());
 			int counts = scoreHistoryMapper.getCountByParams(vo);
+			//今日获取过签到积分，不能再次获取
+			if(counts>0){
+				logger.debug("{}今日已获取过签到积分",userId);
+				throw new BusinessException("今日已签到过了");
+			}
+			//查询昨日是否签到
+			vo.setScoreDate(DateUtils.getLastDate());
+			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
+			//昨日没有签到过，按5积分算,用户连续签到天数置为0
+			if(lastDayCount>0){
+				continuousCheckInFlag=true;
+				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
+				Integer continuousLoginDays = userExtension.getContinuousLoginDays();
+				continuousLoginDays=continuousLoginDays==null?0:continuousLoginDays;
+				checkInScore=getTodayCheckInScore(continuousLoginDays);	
+			}
+		}else if(ScoreHistory.ScoreType.LOGIN==scoreType){//登陆积分
+			QueryScoreHistory vo=new QueryScoreHistory();
+			vo.setUserId(userId);
+			vo.setType(scoreType.getCode());
+			vo.setScoreDate(new Date());
+			int counts = scoreHistoryMapper.getCountByParams(vo);
+			//今日获取过登陆积分，不能再次获取
 			if(counts>0){
 				logger.debug("{}今日已获取过登陆积分",userId);
-				return;
+				return null;
+			}
+			//查询昨日是否登陆过
+			vo.setScoreDate(DateUtils.getLastDate());
+			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
+			if(lastDayCount>0){
+				continuousLoginFlag=true;
 			}
 		}
 		ScoreHistory history=new ScoreHistory();
 		history.setUserId(userId);
 		history.setType(scoreType.getCode());
+		history.setTypeName(scoreType.getName());
 		history.setCreateTime(new Date());
 		history.setScoreDate(new Date());
 		history.setScore(scoreType.getScore());
+		if(checkInScore!=null){
+			history.setScore(checkInScore);
+		}
 		//保存积分历史
 		scoreHistoryMapper.save(history);
 		//用户拓展表增加积分
@@ -108,6 +148,53 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		userExtension.setUserId(userId);
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(scoreType.getScore());
+		if(checkInScore!=null){
+			userExtension.setScore(checkInScore);
+		}
+		userExtensionMapper.updateCounts(userExtension);
+		//如果是登陆操作且没有连续登陆，将连续登陆天数置为1
+		if(ScoreHistory.ScoreType.LOGIN==scoreType&&!continuousLoginFlag){
+			userExtension.setContinuousLoginDays(1);
+		}
+		//如果是签到操作且没有连续签到，将连续签到天数置为1
+		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&!continuousCheckInFlag){
+			userExtension.setContinuousCheckInDays(1);
+		}
 		userExtensionMapper.updateUserExtensionByUserId(userExtension);
+		return history;
+	}
+
+	@Override
+	public int getCountByParams(QueryScoreHistory historyVO) {
+		return scoreHistoryMapper.getCountByParams(historyVO);
+	}
+
+	@Override
+	public List<ScoreHistory> findByParams(QueryScoreHistory historyVO) {
+		return scoreHistoryMapper.findByParams(historyVO);
+	}
+
+	@Override
+	public int getTodayCheckInScore(int continuousLoginDays) {
+	    int checkInScore;
+		if(continuousLoginDays<5){
+			checkInScore=5;
+		}else if(continuousLoginDays>=5&&continuousLoginDays<15){
+			checkInScore=10;
+		}else if(continuousLoginDays>=15&&continuousLoginDays<30){
+			checkInScore=15;
+		}else if(continuousLoginDays>=30&&continuousLoginDays<100){
+			checkInScore=20;
+		}else if(continuousLoginDays>=100&&continuousLoginDays<365){
+			checkInScore=30;
+		}else{
+			checkInScore=50;
+		}	
+		return checkInScore;
+	}
+
+	@Override
+	public List<ScoreHistoryVO> findVOByParams(QueryScoreHistory historyVO) {
+		return scoreHistoryMapper.findVOByParams(historyVO);
 	}
 }

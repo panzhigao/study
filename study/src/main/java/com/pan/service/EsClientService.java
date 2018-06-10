@@ -1,8 +1,7 @@
 package com.pan.service;
 
 import java.util.List;
-
-import com.pan.vo.QueryVO;
+import com.pan.query.QueryBase;
 
 /**
  * @author 作者
@@ -21,7 +20,7 @@ public interface EsClientService {
 	 * @param highLightFlag 为true时表示高亮字段
 	 * @return
 	 */
-	public <T>List<T> queryByParamsWithHightLight(String index,String type,QueryVO queryVO,boolean highLightFlag,Class<?> T);
+	public <T>List<T> queryByParamsWithHightLight(String index,String type,QueryBase queryBase,boolean highLightFlag,Class<?> T);
 	/**
 	 * 
 	 * @param index
@@ -29,5 +28,5 @@ public interface EsClientService {
 	 * @param queryVO
 	 * @return
 	 */
-	public long queryCountByParams(String index,String type,QueryVO queryVO);
+	public long queryCountByParams(String index,String type,QueryBase queryVO);
 }

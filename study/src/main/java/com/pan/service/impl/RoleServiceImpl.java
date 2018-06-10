@@ -17,6 +17,7 @@ import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
+import com.pan.query.QueryRole;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
@@ -24,7 +25,6 @@ import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.vo.QueryRoleVO;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -53,7 +53,7 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public Map<String, Object> findPageData(QueryRoleVO queryRoleVO) {
+	public Map<String, Object> findPageData(QueryRole queryRoleVO) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Role> list = new ArrayList<Role>();
 		try {
@@ -124,7 +124,7 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public Role findByRoleId(String roleId) {
-		QueryRoleVO queryRoleVO=new QueryRoleVO();
+		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setRoleId(roleId);
 		List<Role> list = roleMapper.findByParams(queryRoleVO);
 		if(list.size()==1){
@@ -156,7 +156,7 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public List<Role> findAll() {
-		return roleMapper.findByParams(new QueryRoleVO());
+		return roleMapper.findByParams(new QueryRole());
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public List<Role> findByParams(QueryRoleVO queryRoleVO) {
+	public List<Role> findByParams(QueryRole queryRoleVO) {
 		return roleMapper.findByParams(queryRoleVO);
 	}
 }

@@ -198,8 +198,10 @@ CREATE TABLE `t_user` (
   `admin_flag` char(1) DEFAULT '0',
   `address` varchar(100) DEFAULT NULL COMMENT '地址',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `telephone` (`telephone`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE,
+  UNIQUE KEY `idx_username` (`username`) USING BTREE,
+  UNIQUE KEY `idx_telephone` (`telephone`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 DROP TABLE IF EXISTS
     t_user_extension;
@@ -214,8 +216,11 @@ CREATE TABLE `t_user_extension` (
   `article_counts` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
   `comment_counts` int(11) NOT NULL DEFAULT '0' COMMENT '评论数',
   `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
+  `continuous_login_days` int(11) NOT NULL DEFAULT '0' COMMENT '连续登陆天数',
+  `continuous_check_in_days` int(11) NOT NULL DEFAULT '0' COMMENT '连续签到天数',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
 
 DROP TABLE IF EXISTS
     t_user_role;
@@ -235,12 +240,14 @@ DROP TABLE IF EXISTS
 CREATE TABLE `t_score_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `user_id` varchar(64) NOT NULL COMMENT '用户id',
-  `type` char(1) NOT NULL COMMENT '积分类型，1-登陆，2-发表文章成功，3-回帖',
+  `type` char(1) NOT NULL COMMENT '积分类型，1-登陆，2-发表文章成功，3-回帖,4-签到.5-注册',
   `score` int(11) NOT NULL COMMENT '积分',
   `score_date` date NOT NULL COMMENT '积分获取日期',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `idex_user_id_type_score_date` (`user_id`,`type`,`score_date`) USING BTREE,
+  KEY `idx_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='积分历史表';
 
 INSERT INTO t_user (id, user_id, sex, username, nickname, password, create_time, last_login_time, status, telephone, update_time, user_portrait, update_user) VALUES (1, '20180406823da5754261', '0', 'admin', '管理员', 'B8126D979040396255441D6133A8B3A28265BED4DF055A6525D52877', '2018-04-06 21:17:33', '2018-05-05 13:26:38', '1', null, '2018-05-27 10:14:55', '/static/images/default_portrait.jpg', null);
 INSERT INTO t_user_extension (id, user_id, user_portrait, nickname, user_brief, create_time, update_time, article_counts, comment_counts, score) VALUES (10, '20180406823da5754261', '/static/images/default_portrait.jpg', '管理员', '今天下雨了', '2018-04-06 21:27:04', '2018-06-02 20:38:32', 0, 0, 0);

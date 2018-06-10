@@ -3,8 +3,8 @@ package com.pan.test;
 import java.lang.reflect.Field;
 import org.junit.Test;
 import com.pan.common.annotation.QueryParam;
+import com.pan.query.QueryArticle;
 import com.pan.test.base.BaseTest;
-import com.pan.vo.QueryArticleVO;
 
 /**
  * 
@@ -16,7 +16,7 @@ public class ArticleTest extends BaseTest{
 	
 	@Test
 	public void test1(){
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setType("1");
 		queryArticleVO.setTitle("wo");
 	}
@@ -24,7 +24,7 @@ public class ArticleTest extends BaseTest{
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void test2(){
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticle queryArticleVO=new QueryArticle();
 		Class clazz=queryArticleVO.getClass();
 		Field[] declaredFields = clazz.getDeclaredFields();
 		for (Field field : declaredFields) {

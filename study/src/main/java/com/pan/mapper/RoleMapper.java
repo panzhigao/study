@@ -2,7 +2,7 @@ package com.pan.mapper;
 
 import java.util.List;
 import com.pan.entity.Role;
-import com.pan.vo.QueryRoleVO;
+import com.pan.query.QueryRole;
 
 /**
  * 
@@ -15,13 +15,13 @@ public interface RoleMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<Role> findByParams(QueryRoleVO queryRoleVO);
+	public List<Role> findByParams(QueryRole queryRoleVO);
 	/**
 	 * 查询分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(QueryRoleVO queryRoleVO);
+	public int getCountByParams(QueryRole queryRoleVO);
 	/**
 	 * 新增角色
 	 * @param collection

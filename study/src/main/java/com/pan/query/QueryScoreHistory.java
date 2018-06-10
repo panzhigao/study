@@ -1,4 +1,4 @@
-package com.pan.vo;
+package com.pan.query;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import java.util.Date;
  * @version 创建时间：2018年4月3日 下午3:49:39
  * 类说明
  */
-public class QueryScoreHistoryVO extends QueryVO{
+public class QueryScoreHistory extends QueryBase{
 	/**
 	 * 用户id
 	 */

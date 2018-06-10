@@ -1,6 +1,9 @@
 package com.pan.service;
 
+import java.util.List;
 import com.pan.entity.ScoreHistory;
+import com.pan.query.QueryScoreHistory;
+import com.pan.vo.ScoreHistoryVO;
 
 public interface ScoreHistoryService {
 	/**
@@ -22,5 +25,28 @@ public interface ScoreHistoryService {
 	 * @param userId 用户id
 	 * @param scoreType 积分类型
 	 */
-	public void addScoreHistory(String userId,ScoreHistory.ScoreType scoreType);
+	public ScoreHistory addScoreHistory(String userId,ScoreHistory.ScoreType scoreType);
+	/**
+	 * 查询条数
+	 * @param historyVO
+	 * @return
+	 */
+	public int getCountByParams(QueryScoreHistory historyVO);
+	/**
+	 * 多条件查询，支持分页
+	 * @param historyVO
+	 * @return
+	 */
+	public List<ScoreHistory> findByParams(QueryScoreHistory historyVO);
+	/**
+	 * 多条件查询，支持分页
+	 * @param historyVO
+	 * @return
+	 */
+	public List<ScoreHistoryVO> findVOByParams(QueryScoreHistory historyVO);
+	/**
+	 * 获取今日签到积分
+	 * @return
+	 */
+	public int getTodayCheckInScore(int continuousLoginDays);
 }

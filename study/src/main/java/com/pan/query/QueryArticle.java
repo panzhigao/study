@@ -1,4 +1,4 @@
-package com.pan.vo;
+package com.pan.query;
 
 import com.pan.common.annotation.QueryParam;
 
@@ -8,7 +8,7 @@ import com.pan.common.annotation.QueryParam;
  * @version 创建时间：2018年4月3日 下午3:49:39
  * 类说明
  */
-public class QueryArticleVO extends QueryVO{
+public class QueryArticle extends QueryBase{
 	/**
 	 * 文章id
 	 */

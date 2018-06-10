@@ -64,7 +64,7 @@ function tranTime(fromTime){
 function websocketConnect(){
 	$.post('/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
-	var ws = new WebSocket("ws://www.panzhigao.top/myHandler")
+	var ws = new WebSocket("ws://www.panzhigao.vip/myHandler")
 	
 	ws.onopen = function () {
 	   console.log("websocket连接成功");

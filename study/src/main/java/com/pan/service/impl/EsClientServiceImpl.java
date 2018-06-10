@@ -25,12 +25,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.QueryParam;
 import com.pan.common.enums.QueryTypeEnum;
+import com.pan.query.QueryBase;
 import com.pan.service.EsClientService;
 import com.pan.util.JsonUtils;
-import com.pan.vo.QueryVO;
 
 /**
  * @author 作者
@@ -69,19 +68,19 @@ public class EsClientServiceImpl implements EsClientService {
 	/**
 	 * 构建查询条件 遍历字段，获取字段上的注解，当查询类型为MATCH时，分词匹配 当查询类型为TERM时，不分词匹配
 	 * 
-	 * @param queryVO
+	 * @param queryBase
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	private BoolQueryBuilder generate(QueryVO queryVO) {
+	private BoolQueryBuilder generate(QueryBase queryBase) {
 		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
-		Class clazz = queryVO.getClass();
+		Class clazz = queryBase.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			Object value = null;
 			try {
-				value = field.get(queryVO);
+				value = field.get(queryBase);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 				continue;
@@ -149,19 +148,19 @@ public class EsClientServiceImpl implements EsClientService {
 	/**
 	 * 构造高亮查询参数
 	 * 
-	 * @param queryVO
+	 * @param queryBase
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	private HighlightBuilder highParams(QueryVO queryVO,List<String> fieldList) {
+	private HighlightBuilder highParams(QueryBase queryBase,List<String> fieldList) {
 		HighlightBuilder highlightBuilder = null;
-		Class clazz = queryVO.getClass();
+		Class clazz = queryBase.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			Object value = null;
 			try {
-				value = field.get(queryVO);
+				value = field.get(queryBase);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 				continue;
@@ -186,10 +185,10 @@ public class EsClientServiceImpl implements EsClientService {
 
 
 	@Override
-	public long queryCountByParams(String index, String type, QueryVO queryVO) {
+	public long queryCountByParams(String index, String type, QueryBase queryBase) {
 		// 查询条件
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		BoolQueryBuilder boolQueryBuilder = generate(queryVO);
+		BoolQueryBuilder boolQueryBuilder = generate(queryBase);
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.size(0);
 
@@ -201,7 +200,7 @@ public class EsClientServiceImpl implements EsClientService {
 		try {
 			response = client.search(request);
 		} catch (IOException e) {
-			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryVO));
+			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryBase));
 		}
 		long totalHits = response.getHits().getTotalHits();
 		return totalHits;
@@ -209,20 +208,20 @@ public class EsClientServiceImpl implements EsClientService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> queryByParamsWithHightLight(String index, String type, QueryVO queryVO, boolean highLightFlag,
+	public <T> List<T> queryByParamsWithHightLight(String index, String type, QueryBase queryBase, boolean highLightFlag,
 			Class<?> T) {
 		// 查询条件
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		if (queryVO.getOffset() != null && queryVO.getRow() != null) {
-			searchSourceBuilder.from(queryVO.getOffset());
-			searchSourceBuilder.size(queryVO.getRow());
+		if (queryBase.getOffset() != null && queryBase.getRow() != null) {
+			searchSourceBuilder.from(queryBase.getOffset());
+			searchSourceBuilder.size(queryBase.getRow());
 		}
-		BoolQueryBuilder boolQueryBuilder = generate(queryVO);
+		BoolQueryBuilder boolQueryBuilder = generate(queryBase);
 		searchSourceBuilder.query(boolQueryBuilder);
 		
 		List<String> fieldList=new ArrayList<String>();
 		if (highLightFlag) {
-			HighlightBuilder hiBuilder = highParams(queryVO,fieldList);
+			HighlightBuilder hiBuilder = highParams(queryBase,fieldList);
 			if (hiBuilder != null) {
 				searchSourceBuilder.highlighter(hiBuilder);
 			}
@@ -237,7 +236,7 @@ public class EsClientServiceImpl implements EsClientService {
 		try {
 			response = client.search(request);
 		} catch (IOException e) {
-			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryVO), e);
+			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryBase), e);
 			return list;
 		}
 		SearchHit[] hits = response.getHits().getHits();

@@ -39,8 +39,15 @@ public class UserExtension extends BaseEntity{
 	 * 用户简介
 	 */
 	private String userBrief;
+	/**
+	 * 连续登陆天数
+	 */
+	private Integer continuousLoginDays;
+	/**
+	 * 连续签到天数
+	 */
+	private Integer continuousCheckInDays;
 
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -84,14 +91,26 @@ public class UserExtension extends BaseEntity{
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	
+	public Integer getContinuousLoginDays() {
+		return continuousLoginDays;
+	}
+	public void setContinuousLoginDays(Integer continuousLoginDays) {
+		this.continuousLoginDays = continuousLoginDays;
+	}
+	
+	public Integer getContinuousCheckInDays() {
+		return continuousCheckInDays;
+	}
+	public void setContinuousCheckInDays(Integer continuousCheckInDays) {
+		this.continuousCheckInDays = continuousCheckInDays;
+	}
 	@Override
 	public String toString() {
-		return "UserExtension [userId=" + userId + ", nickname=" + nickname
-				+ ", userPortrait=" + userPortrait + ", articleCounts="
-				+ articleCounts + ", commentCounts=" + commentCounts
-				+ ", score=" + score + ", userBrief=" + userBrief + ", id="
-				+ id + ", createTime=" + createTime + ", createUser="
-				+ createUser + ", updateTime=" + updateTime + ", updateUser="
-				+ updateUser + "]";
+		return "UserExtension [userId=" + userId + ", nickname=" + nickname + ", userPortrait=" + userPortrait
+				+ ", articleCounts=" + articleCounts + ", commentCounts=" + commentCounts + ", score=" + score
+				+ ", userBrief=" + userBrief + ", continuousLoginDays=" + continuousLoginDays
+				+ ", continuousCheckInDays=" + continuousCheckInDays + ", id=" + id + ", createTime=" + createTime
+				+ ", createUser=" + createUser + ", updateTime=" + updateTime + ", updateUser=" + updateUser + "]";
 	}
 }

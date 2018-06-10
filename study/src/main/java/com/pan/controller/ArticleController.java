@@ -17,13 +17,13 @@ import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
+import com.pan.query.QueryArticle;
+import com.pan.query.QueryCollection;
 import com.pan.service.ArticleService;
 import com.pan.service.UserService;
 import com.pan.util.JedisUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
-import com.pan.vo.QueryArticleVO;
-import com.pan.vo.QueryCollectionVO;
 
 /**
  * 用户创作
@@ -81,10 +81,10 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/mine")
 	public ModelAndView toArticleList(){
 		String loingUserId = TokenUtils.getLoingUserId();
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setType(Article.TYPE_ARTICLE);
-		QueryCollectionVO collectionVO=new QueryCollectionVO();
+		QueryCollection collectionVO=new QueryCollection();
 		collectionVO.setUserId(loingUserId);
 		collectionVO.setTitle(Article.TYPE_ARTICLE);
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
@@ -100,7 +100,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
 		String loingUserId = TokenUtils.getLoingUserId();
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setPageSize(pageSize);
 		queryArticleVO.setPageNo(pageNo);
@@ -214,7 +214,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,String type){
-		QueryArticleVO articleVO=new QueryArticleVO();
+		QueryArticle articleVO=new QueryArticle();
 		articleVO.setUserId(userId);
 		articleVO.setPageSize(pageSize);
 		articleVO.setPageNo(pageNo);
@@ -236,7 +236,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/article/getCount")
 	@ResponseBody
 	public int getCount(String status,String type){
-		QueryArticleVO articleVO=new QueryArticleVO();
+		QueryArticle articleVO=new QueryArticle();
 		articleVO.setStatus(status);
 		articleVO.setType(type);
 		return articleService.getCount(articleVO);

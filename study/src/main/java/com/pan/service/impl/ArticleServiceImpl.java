@@ -20,6 +20,7 @@ import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
+import com.pan.query.QueryArticle;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.EsClientService;
@@ -28,7 +29,6 @@ import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.vo.QueryArticleVO;
 
 /**
  * 
@@ -113,7 +113,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Object> findByParams(QueryArticleVO queryArticleVO) {
+	public Map<String, Object> findByParams(QueryArticle queryArticleVO) {
 		Map<String, Object> pageData = new HashMap<String, Object>(2);
 		List<Article> list = new ArrayList<Article>();
 		try {
@@ -240,7 +240,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public int getCount(QueryArticleVO queryArticleVO) {
+	public int getCount(QueryArticle queryArticleVO) {
 		logger.info("查询文章条数条件：{}", JsonUtils.toJson(queryArticleVO));
 		return articleMapper.getCountByParams(queryArticleVO);
 	}
@@ -302,8 +302,8 @@ public class ArticleServiceImpl implements ArticleService {
 	 * 根据条件查询es中的文章信息
 	 */
 	@Override
-	public List<ArticleDTO> queryFromEsByCondition(QueryArticleVO queryArticleVO) {
-		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticleVO, true, ArticleDTO.class);
+	public List<ArticleDTO> queryFromEsByCondition(QueryArticle queryArticle) {
+		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticle, true, ArticleDTO.class);
 	}
 
 	/**
@@ -311,13 +311,13 @@ public class ArticleServiceImpl implements ArticleService {
 	 */
 	@Override
 	public List<ArticleDTO> searchArticleByTitle(String title) {
-		QueryArticleVO queryArticleVO = new QueryArticleVO();
+		QueryArticle queryArticleVO = new QueryArticle();
 		queryArticleVO.setTitle(title);
 		return queryFromEsByCondition(queryArticleVO);
 	}
 
 	@Override
-	public List<Article> findByCondition(QueryArticleVO queryArticleVO) {
+	public List<Article> findByCondition(QueryArticle queryArticleVO) {
 		return articleMapper.findByParams(queryArticleVO);
 	}
 

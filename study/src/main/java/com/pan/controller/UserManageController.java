@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
+import com.pan.query.QueryUser;
 import com.pan.service.RoleService;
 import com.pan.service.UserService;
-import com.pan.vo.QueryUserVO;
 
 /**
  * 
@@ -48,8 +48,8 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.POST,value={"/user/userList"})
 	@ResponseBody
 	@RequiresPermissions(value="/user/manage")
-	public Map<String,Object> getUserList(QueryUserVO queryUserVO){
-		Map<String,Object> pageData=userService.findPageData(queryUserVO);
+	public Map<String,Object> getUserList(QueryUser queryUser){
+		Map<String,Object> pageData=userService.findPageData(queryUser);
 		return pageData;
 	}
 	

@@ -3,7 +3,7 @@ package com.pan.mapper;
 import java.util.List;
 import com.pan.entity.User;
 import com.pan.entity.UserRole;
-import com.pan.vo.QueryUserVO;
+import com.pan.query.QueryUser;
 
 /**
  * 
@@ -44,12 +44,12 @@ public interface UserMapper {
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(QueryUserVO queryUserVO);
+	public int getCountByParams(QueryUser queryUserVO);
 	/**
 	 * 分页查询用户信息
 	 * @return
 	 */
-	public List<User> findByParams(QueryUserVO queryUserVO);
+	public List<User> findByParams(QueryUser queryUserVO);
 	/**
 	 * 新增用户角色
 	 * @param list

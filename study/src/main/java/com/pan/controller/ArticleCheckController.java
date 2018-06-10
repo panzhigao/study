@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ArticleCheck;
+import com.pan.query.QueryArticleCheck;
 import com.pan.service.ArticleCheckService;
 import com.pan.util.TransFieldUtils;
-import com.pan.vo.QueryArticleCheckVO;
 
 @Controller
 public class ArticleCheckController {
@@ -42,7 +42,7 @@ public class ArticleCheckController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/check")
 	public Map<String,Object> getArticleCheckList(Integer pageSize,Integer pageNo,String completeFlag){
-		QueryArticleCheckVO queryArticleCheckVO=new QueryArticleCheckVO();
+		QueryArticleCheck queryArticleCheckVO=new QueryArticleCheck();
 		queryArticleCheckVO.setPageSize(pageSize);
 		queryArticleCheckVO.setPageNo(pageNo);
 		queryArticleCheckVO.setCompleteFlag(completeFlag);

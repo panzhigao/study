@@ -1,9 +1,9 @@
-package com.pan.vo;
+package com.pan.query;
 
 /**
  * 查询用户拓展表VO
  */
-public class QueryUserExtensionVO extends QueryVO{
+public class QueryUserExtension extends QueryBase{
 	/**
 	 * 用户id
 	 */

@@ -3,7 +3,7 @@ package com.pan.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.pan.entity.Collection;
-import com.pan.vo.QueryCollectionVO;
+import com.pan.query.QueryCollection;
 
 /**
  * 
@@ -16,13 +16,13 @@ public interface CollectionMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<Collection> findByParams(QueryCollectionVO queryCollectionVO);
+	public List<Collection> findByParams(QueryCollection queryCollectionVO);
 	/**
 	 * 查询分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(QueryCollectionVO queryCollectionVO);
+	public int getCountByParams(QueryCollection queryCollectionVO);
 	/**
 	 * 新增收藏
 	 * @param collection

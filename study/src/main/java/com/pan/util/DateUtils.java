@@ -1,6 +1,7 @@
 package com.pan.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
@@ -18,4 +19,19 @@ public class DateUtils {
 		return sdf.format(new Date());
 	}
 	
+	/**
+	 * 获取昨日日期
+	 * @return
+	 */
+	public static Date getLastDate(){
+		Calendar cal=Calendar.getInstance();
+		cal.add(Calendar.DATE,-1);
+		Date time=cal.getTime();
+		return time;
+	}
+	
+	public static void main(String[] args) {
+		Date lastDate = getLastDate();
+		System.out.println(lastDate);
+	}
 }

@@ -19,6 +19,7 @@ import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
+import com.pan.query.QueryRole;
 import com.pan.service.PermissionService;
 import com.pan.service.RolePermissionService;
 import com.pan.service.RoleService;
@@ -27,7 +28,6 @@ import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.vo.QueryRoleVO;
 
 
 /**
@@ -67,7 +67,7 @@ public class PermissionServiceImpl implements PermissionService {
 		permission.setCreateUser(loginUserId);
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
-		QueryRoleVO queryRoleVO=new QueryRoleVO();
+		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setSuperAdminFlag("1");
 		//自动为超级管理员添加权限
 		List<Role> list = roleService.findByParams(queryRoleVO);

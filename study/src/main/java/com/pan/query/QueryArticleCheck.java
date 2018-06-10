@@ -1,13 +1,11 @@
-package com.pan.vo;
-
-
+package com.pan.query;
 
 /**
  * @author 作者
  * @version 创建时间：2018年4月3日 下午3:49:39
  * 类说明
  */
-public class QueryCollectionVO extends QueryVO{
+public class QueryArticleCheck extends QueryBase{
 	/**
 	 * 文章id
 	 */
@@ -17,9 +15,9 @@ public class QueryCollectionVO extends QueryVO{
 	 */
 	private String userId;
 	/**
-	 * 收藏
+	 * 文章状态 0-审核未通过，1-草稿，2-发布中
 	 */
-	private String collectionId;
+	private String completeFlag;
 	/**
 	 * 文章标题
 	 */
@@ -36,11 +34,11 @@ public class QueryCollectionVO extends QueryVO{
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getCollectionId() {
-		return collectionId;
+	public String getCompleteFlag() {
+		return completeFlag;
 	}
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
+	public void setCompleteFlag(String completeFlag) {
+		this.completeFlag = completeFlag;
 	}
 	public String getTitle() {
 		return title;
@@ -50,8 +48,7 @@ public class QueryCollectionVO extends QueryVO{
 	}
 	@Override
 	public String toString() {
-		return "QueryCollectionVO [articleId=" + articleId + ", userId=" + userId + ", collectionId=" + collectionId
+		return "QueryArticleCheckVO [articleId=" + articleId + ", userId=" + userId + ", completeFlag=" + completeFlag
 				+ ", title=" + title + "]";
 	}
-	
 }

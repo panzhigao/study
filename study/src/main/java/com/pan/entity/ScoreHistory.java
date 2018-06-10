@@ -22,6 +22,10 @@ public class ScoreHistory extends BaseEntity{
 	 */
 	private String type;
 	/**
+	 * 积分类型，1-登陆，2-发表文章成功，3-回帖，4-签到
+	 */
+	private String typeName;
+	/**
 	 * 积分
 	 */
 	private Integer score;
@@ -53,18 +57,26 @@ public class ScoreHistory extends BaseEntity{
 	public void setScoreDate(Date scoreDate) {
 		this.scoreDate = scoreDate;
 	}
+	
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 	@Override
 	public String toString() {
-		return "ScoreHistory [userId=" + userId + ", type=" + type + ", score=" + score + ", scoreDate=" + scoreDate
-				+ ", id=" + id + ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime="
-				+ updateTime + ", updateUser=" + updateUser + "]";
+		return "ScoreHistory [userId=" + userId + ", type=" + type + ", typeName=" + typeName + ", score=" + score
+				+ ", scoreDate=" + scoreDate + ", id=" + id + ", createTime=" + createTime + ", createUser="
+				+ createUser + ", updateTime=" + updateTime + ", updateUser=" + updateUser + "]";
 	}
 	
 	public static enum ScoreType{
 		LOGIN("1","登陆",5),
 		PUBLISH_ARTICLE("2","发表文章成功",5),
 		COMMENT("3","回帖",2),
-		CHECK_IN("4","签到",5);
+		CHECK_IN("4","签到",5),
+		REGISTER("5","注册",20);
 		String code;
 		String name;
 		Integer score;

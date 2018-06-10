@@ -59,7 +59,7 @@
   	</where>
   </select>
   
-  <select id="findByParams" resultMap="MoreResultMap" parameterType="com.pan.vo.QueryArticleVO">
+  <select id="findByParams" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
   	on a.user_id=u.user_id 
   	<include refid="whereSql"/>
@@ -97,7 +97,7 @@
   	</where>
   </sql>
   
-  <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryArticleVO">
+  <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryArticle">
 	  	select count(0) from t_article a
 	  	<include refid="whereSql"/>
   </select>

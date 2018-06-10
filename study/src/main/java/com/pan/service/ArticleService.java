@@ -2,12 +2,10 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
-import com.pan.vo.QueryArticleVO;
+import com.pan.query.QueryArticle;
 
 
 /**
@@ -32,7 +30,7 @@ public interface ArticleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public Map<String,Object> findByParams(QueryArticleVO queryArticleVO);
+	public Map<String,Object> findByParams(QueryArticle queryArticleVO);
 	/**
 	 * 获取用户的文章详细信息
 	 * @param userId
@@ -63,7 +61,7 @@ public interface ArticleService {
 	 * @param params
 	 * @return
 	 */
-	public int getCount(QueryArticleVO queryArticleVO);
+	public int getCount(QueryArticle queryArticleVO);
 	/**
 	 * 根据文章id和状态查找唯一文章信息
 	 * @param articleId
@@ -91,7 +89,7 @@ public interface ArticleService {
 	 * 
 	 * @return
 	 */
-	public List<ArticleDTO> queryFromEsByCondition(QueryArticleVO queryArticleVO);
+	public List<ArticleDTO> queryFromEsByCondition(QueryArticle queryArticleVO);
 	/**
 	 * 根据文章标题搜索文章
 	 * @param title
@@ -103,7 +101,7 @@ public interface ArticleService {
 	 * @param title
 	 * @return
 	 */
-	public List<Article> findByCondition(QueryArticleVO queryArticleVO);
+	public List<Article> findByCondition(QueryArticle queryArticleVO);
 	/**
 	 * 获取文章最大置顶值
 	 * @return

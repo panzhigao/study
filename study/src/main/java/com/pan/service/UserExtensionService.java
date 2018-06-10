@@ -1,9 +1,8 @@
 package com.pan.service;
 
 import java.util.List;
-
 import com.pan.entity.UserExtension;
-import com.pan.vo.QueryUserExtensionVO;
+import com.pan.query.QueryUserExtension;
 
 /**
  * @author 作者
@@ -18,7 +17,7 @@ public interface UserExtensionService {
 	 * @param queryUserExtensionVO
 	 * @return
 	 */
-	public List<UserExtension> findByParams(QueryUserExtensionVO queryUserExtensionVO);
+	public List<UserExtension> findByParams(QueryUserExtension queryUserExtensionVO);
 	/**
 	 * 修改
 	 * @param userExtension

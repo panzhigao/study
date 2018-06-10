@@ -2,9 +2,10 @@ package com.pan.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.pan.query.QueryArticle;
 import com.pan.service.EsClientService;
 import com.pan.test.base.BaseTest;
-import com.pan.vo.QueryArticleVO;
 
 
 
@@ -20,7 +21,7 @@ public class ElasticsearchTest extends BaseTest{
 	
 	@Test
 	public void test1(){
-		QueryArticleVO articleVO=new QueryArticleVO();
+		QueryArticle articleVO=new QueryArticle();
 		articleVO.setTitle("刚刚");
 		long queryCountByParams = esClientService.queryCountByParams("article", "doc", articleVO);
 		System.out.println(queryCountByParams+"-----------------");

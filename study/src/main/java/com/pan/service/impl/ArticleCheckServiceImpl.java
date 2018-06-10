@@ -19,6 +19,7 @@ import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
+import com.pan.query.QueryArticleCheck;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.MessageService;
 import com.pan.service.ScoreHistoryService;
@@ -27,7 +28,6 @@ import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.vo.QueryArticleCheckVO;
 
 @Service
 public class ArticleCheckServiceImpl implements ArticleCheckService{
@@ -47,15 +47,15 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	private ScoreHistoryService scoreHistoryService;
 	
 	@Override
-	public Map<String,Object> findByParams(QueryArticleCheckVO queryArticleCheckVO) {
+	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
-		List<QueryArticleCheckVO> list = new ArrayList<QueryArticleCheckVO>();
+		List<QueryArticleCheck> list = new ArrayList<QueryArticleCheck>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleCheckVO));
-			int total=articleCheckMapper.getCountByParams(queryArticleCheckVO);
+			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleCheck));
+			int total=articleCheckMapper.getCountByParams(queryArticleCheck);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = articleCheckMapper.findByParams(queryArticleCheckVO);
+				list = articleCheckMapper.findByParams(queryArticleCheck);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);

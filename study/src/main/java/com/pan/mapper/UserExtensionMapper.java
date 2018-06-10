@@ -1,9 +1,8 @@
 package com.pan.mapper;
 
 import java.util.List;
-
 import com.pan.entity.UserExtension;
-import com.pan.vo.QueryUserExtensionVO;
+import com.pan.query.QueryUserExtension;
 
 /**
  * 
@@ -31,5 +30,10 @@ public interface UserExtensionMapper {
 	 * 多条件查询用户拓展信息，支持分页
 	 * @param extensionVO
 	 */
-	public List<UserExtension> findByParams(QueryUserExtensionVO extensionVO);
+	public List<UserExtension> findByParams(QueryUserExtension extensionVO);
+	/**
+	 * 更新条数
+	 * @param userExtension
+	 */
+	public void updateCounts(UserExtension userExtension);
 }

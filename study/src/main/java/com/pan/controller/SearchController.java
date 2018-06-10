@@ -1,7 +1,6 @@
 package com.pan.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
+import com.pan.query.QueryArticle;
 import com.pan.service.ArticleService;
-import com.pan.vo.QueryArticleVO;
 
 /**
  * @author 作者
@@ -39,7 +38,7 @@ public class SearchController {
 	@RequestMapping(method=RequestMethod.POST,value="/doSearch")
 	@ResponseBody
 	public ResultMsg returnSearchContent(String q){
-		QueryArticleVO queryArticleVO=new QueryArticleVO();
+		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setTitle(q);
 		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
 		List<ArticleDTO> searchContent = articleService.queryFromEsByCondition(queryArticleVO);

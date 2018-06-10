@@ -1,14 +1,12 @@
 package com.pan.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
+import com.pan.query.QueryUserExtension;
 import com.pan.service.UserExtensionService;
-import com.pan.vo.QueryUserExtensionVO;
 
 /**
  * @author 作者
@@ -22,8 +20,7 @@ public class UserExtensionServiceImpl implements UserExtensionService{
 	private UserExtensionMapper userExtensionMapper;
 	
 	@Override
-	public List<UserExtension> findByParams(
-			QueryUserExtensionVO queryUserExtensionVO) {
+	public List<UserExtension> findByParams(QueryUserExtension queryUserExtensionVO) {
 		return userExtensionMapper.findByParams(queryUserExtensionVO);
 	}
 

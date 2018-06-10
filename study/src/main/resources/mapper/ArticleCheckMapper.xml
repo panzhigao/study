@@ -15,7 +15,7 @@
     <result column="approve_flag"       property="approveFlag"     jdbcType="VARCHAR" />
   </resultMap>
   
-   <resultMap id="MoreResultMap" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
+  <resultMap id="MoreResultMap" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
     <result column="content"    		property="content"        jdbcType="VARCHAR" />
   </resultMap> 
     
@@ -27,7 +27,7 @@
   	select <include refid="Base_Column_List"/> from t_article_check where id=#{id}
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.vo.QueryArticleVO">
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
   	select <include refid="Base_Column_List"/> from t_article_check
   	<include refid="whereSql"/>
   	<if test="offset!=null and row !=null">
@@ -47,7 +47,7 @@
   	</where>
   </sql>
   
-  <select id="getCountByParams" resultType="int" parameterType="com.pan.vo.QueryArticleVO">
+  <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryArticleCheck">
 	  	select count(0) from t_article_check 
 	  	<include refid="whereSql"/>
   </select>

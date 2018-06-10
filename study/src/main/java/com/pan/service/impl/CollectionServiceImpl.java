@@ -13,11 +13,11 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Collection;
 import com.pan.mapper.CollectionMapper;
+import com.pan.query.QueryCollection;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
-import com.pan.vo.QueryCollectionVO;
 
 
 /**
@@ -37,14 +37,14 @@ public class CollectionServiceImpl implements CollectionService {
 	private CollectionMapper collectionMapper;
 	
 	@Override
-	public Map<String, Object> findByParams(QueryCollectionVO queryCollectionVO) {
+	public Map<String, Object> findByParams(QueryCollection queryCollection) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Collection> list = new ArrayList<Collection>();
 		try {
-			logger.info("分页查询收藏参数为:{}", JsonUtils.toJson(queryCollectionVO));
-			list = collectionMapper.findByParams(queryCollectionVO);
+			logger.info("分页查询收藏参数为:{}", JsonUtils.toJson(queryCollection));
+			list = collectionMapper.findByParams(queryCollection);
 			pageData.put("data", list);
-			int total=collectionMapper.getCountByParams(queryCollectionVO);
+			int total=collectionMapper.getCountByParams(queryCollection);
 			pageData.put("total", total);
 			pageData.put("code", "200");
 			pageData.put("msg", "");
@@ -86,7 +86,7 @@ public class CollectionServiceImpl implements CollectionService {
 	}
 
 	@Override
-	public int getCount(QueryCollectionVO queryCollectionVO) {
+	public int getCount(QueryCollection queryCollectionVO) {
 		return collectionMapper.getCountByParams(queryCollectionVO);
 	}	
 }

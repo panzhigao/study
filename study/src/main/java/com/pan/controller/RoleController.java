@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.annotation.HasPermission;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
+import com.pan.query.QueryRole;
 import com.pan.service.RoleService;
-import com.pan.vo.QueryRoleVO;
 
 /**
  * 角色管理
@@ -50,14 +49,14 @@ public class RoleController {
 	
 	/**
 	 * 获取分页角色信息
-	 * @param queryRoleVO
+	 * @param queryRole
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/getPageData")
 	@ResponseBody
 	@HasPermission(value="/user/role")
-	public Map<String,Object> loadRoles(QueryRoleVO queryRoleVO){
-		Map<String,Object> pageData=roleService.findPageData(queryRoleVO);
+	public Map<String,Object> loadRoles(QueryRole queryRole){
+		Map<String,Object> pageData=roleService.findPageData(queryRole);
 		return pageData;
 	}
 	

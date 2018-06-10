@@ -27,6 +27,7 @@ import com.pan.entity.UserExtension;
 import com.pan.entity.UserRole;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
+import com.pan.query.QueryUser;
 import com.pan.service.ScoreHistoryService;
 import com.pan.service.UserService;
 import com.pan.util.DateUtils;
@@ -38,7 +39,6 @@ import com.pan.util.RegexUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.util.VerifyCodeUtils;
-import com.pan.vo.QueryUserVO;
 
 /**
  * 
@@ -296,15 +296,15 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Map<String, Object> findPageData(QueryUserVO queryUserVO) {
+	public Map<String, Object> findPageData(QueryUser queryUser) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<User> list = new ArrayList<User>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryUserVO));
-			int total=userMapper.getCountByParams(queryUserVO);
+			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryUser));
+			int total=userMapper.getCountByParams(queryUser);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = userMapper.findByParams(queryUserVO);
+				list = userMapper.findByParams(queryUser);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
