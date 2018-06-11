@@ -241,6 +241,7 @@ CREATE TABLE `t_score_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `user_id` varchar(64) NOT NULL COMMENT '用户id',
   `type` char(1) NOT NULL COMMENT '积分类型，1-登陆，2-发表文章成功，3-回帖,4-签到.5-注册',
+  `type_name` varchar(64) DEFAULT NULL COMMENT '类型名',
   `score` int(11) NOT NULL COMMENT '积分',
   `score_date` date NOT NULL COMMENT '积分获取日期',
   `create_time` datetime NOT NULL COMMENT '创建时间',
