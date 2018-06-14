@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
@@ -74,6 +75,8 @@ public class CommentServiceImpl implements CommentService{
 		commentMapper.addComment(comment);
 		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		
+		//发表评论加2分,修改当前登录人评论数
+		scoreHistoryService.addScoreHistory(TokenUtils.getLoingUserId(),ScoreType.COMMENT);
 		//发送消息
 		//当文章用户评论自己的文章时，不发送消息
 		if(StringUtils.equals(articleInDb.getUserId(),comment.getUserId())){
@@ -97,10 +100,6 @@ public class CommentServiceImpl implements CommentService{
 		messageService.addMessage(message);
 		//String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
 		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
-		//修改当前人的评论数
-		String loingUserId = TokenUtils.getLoingUserId();
-		//发表评论加2分
-		scoreHistoryService.addScoreHistory(loingUserId,ScoreType.COMMENT);
 		return comment;
 	}
 	

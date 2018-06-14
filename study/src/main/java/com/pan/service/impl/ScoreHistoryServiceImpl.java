@@ -159,18 +159,30 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&continuousCheckInFlag){
 			userExtension.setContinuousCheckInDays(1);
 		}
+		//评论
+		if(ScoreHistory.ScoreType.COMMENT==scoreType){
+			userExtension.setCommentCounts(1);
+		}
+		//发表文章
+		if(ScoreHistory.ScoreType.PUBLISH_ARTICLE==scoreType){
+			userExtension.setArticleCounts(1);
+		}
 		userExtensionMapper.updateCounts(userExtension);
+		
+		boolean countUpdate=false;
 		UserExtension userExtensionCount=new UserExtension();
 		userExtensionCount.setUserId(userId);
 		//如果是登陆操作且没有连续登陆，将连续登陆天数置为1
 		if(ScoreHistory.ScoreType.LOGIN==scoreType&&!continuousLoginFlag){
+			countUpdate=true;
 			userExtensionCount.setContinuousLoginDays(1);
 		}
 		//如果是签到操作且没有连续签到，将连续签到天数置为1
 		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&!continuousCheckInFlag){
+			countUpdate=true;
 			userExtensionCount.setContinuousCheckInDays(1);
 		}
-		if(userExtensionCount.getContinuousCheckInDays()!=null||userExtensionCount.getContinuousLoginDays()!=null){			
+		if(countUpdate){			
 			userExtensionMapper.updateUserExtensionByUserId(userExtension);
 		}
 		return history;
