@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.annotation.HasPermission;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.PasswordDTO;
@@ -43,7 +42,6 @@ public class UserSetController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/set")
-	//@HasPermission
 	@RequiresPermissions("/user/set")
 	public ModelAndView toSetPage(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/user/set");
@@ -101,7 +99,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/sendValidationCode")
 	@ResponseBody
-	@HasPermission(value="/user/set")
+	@RequiresPermissions(value="/user/set")
 	public ResultMsg sendValidationCode(HttpServletRequest request,String telephone){
 		User user=new User();
 		user.setTelephone(telephone);
@@ -115,7 +113,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/confirmBind")
 	@ResponseBody
-	@HasPermission(value="/user/set")
+	@RequiresPermissions(value="/user/set")
 	public ResultMsg confirmBind(HttpServletRequest request,String telephone,String code){
 		String loginUserId = TokenUtils.getLoingUserId();
 		User user=new User();

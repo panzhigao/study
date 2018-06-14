@@ -109,9 +109,9 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			if(lastDayCount>0){
 				continuousCheckInFlag=true;
 				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
-				Integer continuousLoginDays = userExtension.getContinuousLoginDays();
-				continuousLoginDays=continuousLoginDays==null?0:continuousLoginDays;
-				checkInScore=getTodayCheckInScore(continuousLoginDays);	
+				Integer continuousCheckInDays = userExtension.getContinuousCheckInDays();
+				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
+				checkInScore=getTodayCheckInScore(continuousCheckInDays);	
 			}
 		}else if(ScoreHistory.ScoreType.LOGIN==scoreType){//登陆积分
 			QueryScoreHistory vo=new QueryScoreHistory();
@@ -151,16 +151,28 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		if(checkInScore!=null){
 			userExtension.setScore(checkInScore);
 		}
-		userExtensionMapper.updateCounts(userExtension);
-		//如果是登陆操作且没有连续登陆，将连续登陆天数置为1
-		if(ScoreHistory.ScoreType.LOGIN==scoreType&&!continuousLoginFlag){
+		//如果是登陆操作且有连续登陆，将连续登陆天数置为加1
+		if(ScoreHistory.ScoreType.LOGIN==scoreType&&continuousLoginFlag){
 			userExtension.setContinuousLoginDays(1);
 		}
 		//如果是签到操作且没有连续签到，将连续签到天数置为1
-		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&!continuousCheckInFlag){
+		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&continuousCheckInFlag){
 			userExtension.setContinuousCheckInDays(1);
 		}
-		userExtensionMapper.updateUserExtensionByUserId(userExtension);
+		userExtensionMapper.updateCounts(userExtension);
+		UserExtension userExtensionCount=new UserExtension();
+		userExtensionCount.setUserId(userId);
+		//如果是登陆操作且没有连续登陆，将连续登陆天数置为1
+		if(ScoreHistory.ScoreType.LOGIN==scoreType&&!continuousLoginFlag){
+			userExtensionCount.setContinuousLoginDays(1);
+		}
+		//如果是签到操作且没有连续签到，将连续签到天数置为1
+		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&!continuousCheckInFlag){
+			userExtensionCount.setContinuousCheckInDays(1);
+		}
+		if(userExtensionCount.getContinuousCheckInDays()!=null||userExtensionCount.getContinuousLoginDays()!=null){			
+			userExtensionMapper.updateUserExtensionByUserId(userExtension);
+		}
 		return history;
 	}
 
@@ -175,17 +187,17 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	}
 
 	@Override
-	public int getTodayCheckInScore(int continuousLoginDays) {
+	public int getTodayCheckInScore(int continuousCheckInDays) {
 	    int checkInScore;
-		if(continuousLoginDays<5){
+		if(continuousCheckInDays<5){
 			checkInScore=5;
-		}else if(continuousLoginDays>=5&&continuousLoginDays<15){
+		}else if(continuousCheckInDays>=5&&continuousCheckInDays<15){
 			checkInScore=10;
-		}else if(continuousLoginDays>=15&&continuousLoginDays<30){
+		}else if(continuousCheckInDays>=15&&continuousCheckInDays<30){
 			checkInScore=15;
-		}else if(continuousLoginDays>=30&&continuousLoginDays<100){
+		}else if(continuousCheckInDays>=30&&continuousCheckInDays<100){
 			checkInScore=20;
-		}else if(continuousLoginDays>=100&&continuousLoginDays<365){
+		}else if(continuousCheckInDays>=100&&continuousCheckInDays<365){
 			checkInScore=30;
 		}else{
 			checkInScore=50;

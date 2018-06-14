@@ -94,6 +94,9 @@
   		<if test="type !=null and type !=''">
   			and a.type=#{type}
   		</if>
+  		<if test="whereCondition !=null">
+  			and ${whereCondition}
+  		</if>
   	</where>
   </sql>
   

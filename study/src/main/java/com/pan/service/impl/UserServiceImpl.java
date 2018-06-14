@@ -127,7 +127,8 @@ public class UserServiceImpl implements UserService{
 			userExtensionTemp.setNickname(user.getNickname());
 			userExtensionTemp.setUserPortrait(defaultPortrait);
 			userExtensionMapper.saveUserExtension(userExtensionTemp);
-			
+			//新增积分信息
+			scoreHistoryService.addScoreHistory(userId, ScoreHistory.ScoreType.REGISTER);
 			//为用户添加用户角色信息
 			UserRole userRole=new UserRole(userId, defaultRoleId);
 			userRole.setCreateTime(new Date());
@@ -177,7 +178,7 @@ public class UserServiceImpl implements UserService{
 				throw new BusinessException("用户名或密码错误");
 			}
 			updateUserLastLoginTime(userInDb.getUserId());
-			//积分历史表
+			//积分历史表新增登录积分
 			scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreHistory.ScoreType.LOGIN);
 			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
@@ -225,15 +226,15 @@ public class UserServiceImpl implements UserService{
 		//重置用户登陆信息
 		TokenUtils.setAttribute(MyConstant.USER,userInDb);
 		String userBrief=userExtension.getUserBrief();
+		userExtension.setUserId(userId);
 		//更新用户拓展信息
-		UserExtension userExtensionInDb = userExtensionMapper.findByUserId(userId);
-		if(StringUtils.isNoneBlank(userBrief)){
-			userExtensionInDb.setUserBrief(userBrief);
+		if(StringUtils.isBlank(userBrief)){
+			userExtension.setUserBrief(null);
 		}
 		Date now=new Date();
-		userExtensionInDb.setUserPortrait(newPortrait);
-		userExtensionInDb.setUpdateTime(now);
-		userExtensionMapper.updateUserExtensionByUserId(userExtensionInDb);	
+		userExtension.setUserPortrait(newPortrait);
+		userExtension.setUpdateTime(now);
+		userExtensionMapper.updateUserExtensionByUserId(userExtension);	
 	}
 	
 	@Override

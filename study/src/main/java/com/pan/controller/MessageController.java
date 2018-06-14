@@ -3,6 +3,7 @@ package com.pan.controller;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.annotation.HasPermission;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -34,7 +34,7 @@ public class MessageController {
 	private ArticleService articleService;
 	
 	@RequestMapping(method=RequestMethod.GET,value="/user/message")
-	@HasPermission
+	@RequiresPermissions("/user/message")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html//message/messagePage");
 		return mav;
@@ -42,7 +42,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/load")
 	@ResponseBody
-	@HasPermission(value="/user/message")
+	@RequiresPermissions(value="/user/message")
 	public ResultMsg loadMessages(){
 		String loginUserId = TokenUtils.getLoingUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);
@@ -51,7 +51,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/count")
 	@ResponseBody
-	@HasPermission(value="/user/message")
+	@RequiresPermissions(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
 		String loginUserId = TokenUtils.getLoingUserId();
 		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
@@ -60,7 +60,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/clean")
 	@ResponseBody
-	@HasPermission(value="/user/message")
+	@RequiresPermissions(value="/user/message")
 	public ResultMsg cleanMessage(String messageId){
 		String loginUserId = TokenUtils.getLoingUserId();
 		int count=messageService.cleanMessage(loginUserId, messageId);
@@ -73,7 +73,7 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemMessage")
-	@HasPermission
+	@RequiresPermissions("/user/systemMessage")
 	public ModelAndView toSendMessageIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/sendMessage/sendMessagePage");
 		return mav;
@@ -87,7 +87,7 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/send")
 	@ResponseBody
-	@HasPermission(value="/user/systemMessage")
+	@RequiresPermissions(value="/user/systemMessage")
 	public ResultMsg sendMessage(Article article){
 		logger.info("发布消息开始");
 		String userId=TokenUtils.getLoingUserId();
@@ -102,7 +102,7 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/message/getMessages")
 	@ResponseBody
-	@HasPermission(value="/user/systemMessage")
+	@RequiresPermissions(value="/user/systemMessage")
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
 		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setPageSize(pageSize);
