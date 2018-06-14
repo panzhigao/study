@@ -70,7 +70,7 @@ public class LoginController{
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
-		if(!StringUtils.equals(vercode, vercodeInSession)){
+		if(!StringUtils.equalsIgnoreCase(vercode, vercodeInSession)){
 			throw new BusinessException("验证码错误");
 		}
 		UsernamePasswordToken passwordToken=new UsernamePasswordToken(user.getUsername(),user.getPassword());
