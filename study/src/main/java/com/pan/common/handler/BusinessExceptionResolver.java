@@ -23,7 +23,7 @@ import com.pan.util.TokenUtils;
  */
 public class BusinessExceptionResolver implements HandlerExceptionResolver {
 	
-	private String deaultMessage="系统未知错误";
+	private String deaultMessage="不好意思，出错了";
 	
 	private String viewName="html/error/500";
 	
