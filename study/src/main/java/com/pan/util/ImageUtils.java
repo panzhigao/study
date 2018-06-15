@@ -42,7 +42,7 @@ public class ImageUtils {
 			String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
 			// 新生成的图片
 			String fileName=dateStr+".jpg";
-			String imgFilePath = fileDir+"/"+fileName;
+			String imgFilePath = fileDir+fileName;
 			File destFile=new File(imgFilePath);
 			destFile.setReadable(true);
 			destFile.setExecutable(true);
