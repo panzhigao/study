@@ -77,6 +77,7 @@ public class CommentController {
 	@ResponseBody
 	public ResultMsg loadUserComments(String userId){
 		List<Comment> loadUserComments = commentService.loadUserComments(userId);
+		TransFieldUtils.transEntityCollection(loadUserComments);
 		return ResultMsg.ok("加载用户评论成功",loadUserComments);
 	}
 }

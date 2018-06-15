@@ -102,7 +102,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="/" target="_blank">好好学习社区</a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a></p>
+  <p><a href="/" target="_blank">好好学习社区 </a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -126,7 +126,9 @@ layui.config({
 var pageNo=1;
 var pageSize=10;
 var userId='$!{u.userId}';
-layui.use(['laypage', 'layer','jquery'], function(){
+var fly;
+layui.use(['fly','laypage', 'layer','jquery'], function(){
+	fly=layui.fly;
 	getData();
 	loadUserComment();
 	#if(${user})
@@ -170,13 +172,14 @@ function loadUserComment(){
 			}
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
+				var commentContent=one.commentContent;
 				var info='<li>'+
 		          '<p>'+
 		          '<span>'+tranTime(one.createTime)+'</span>'+
 		          '在<a href="$!{rc.contextPath}/article/'+one.articleId+'" target="_blank">'+one.title+'</a>中回答：'+
 		          '</p>'+
 		          '<div class="home-dacontent">'+
-		           one.commentContent+
+		          commentContent+
 		          '</div>'+
 		          '</li>';
 				$('.home-jieda').append(info);

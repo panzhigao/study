@@ -2,7 +2,9 @@ package com.pan.controller;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
@@ -20,6 +23,7 @@ import com.pan.query.QueryArticle;
 import com.pan.service.ArticleService;
 import com.pan.service.MessageService;
 import com.pan.util.TokenUtils;
+import com.pan.util.TransFieldUtils;
 
 
 @Controller
@@ -46,6 +50,7 @@ public class MessageController {
 	public ResultMsg loadMessages(){
 		String loginUserId = TokenUtils.getLoingUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);
+		TransFieldUtils.transEntityCollection(list);
 		return ResultMsg.ok("加载消息成功", list);
 	}
 	
