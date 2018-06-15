@@ -183,7 +183,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			userExtensionCount.setContinuousCheckInDays(1);
 		}
 		if(countUpdate){			
-			userExtensionMapper.updateUserExtensionByUserId(userExtension);
+			userExtensionMapper.updateUserExtensionByUserId(userExtensionCount);
 		}
 		return history;
 	}

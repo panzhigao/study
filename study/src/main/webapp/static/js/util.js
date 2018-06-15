@@ -61,6 +61,7 @@ function tranTime(fromTime){
     return str;
 }
 
+var interval;
 function websocketConnect(){
 	$.post('/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	
@@ -69,9 +70,13 @@ function websocketConnect(){
 	ws.onopen = function () {
 	   console.log("websocket连接成功");
 	   ws.send("{}");
+	   interval=setInterval(function(){
+			ws.send("{}");
+	   },20000);
 	}
 	ws.onclose = function () {
 	   console.log("websocket连接断开");
+	   clearInterval(interval);
 	}
 
 	ws.onmessage = function (msg) {	

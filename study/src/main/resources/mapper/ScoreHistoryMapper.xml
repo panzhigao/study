@@ -40,6 +40,9 @@
   	<if test="orderByCondition !=null and orderByCondition !=''">
   		order by ${orderByCondition}
   	</if>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
   </select>
   
   <select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryScoreHistory">

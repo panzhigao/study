@@ -1,5 +1,6 @@
 package com.pan.entity;
 
+import com.pan.common.annotation.UnescapeHtml;
 import com.pan.util.JsonUtils;
 
 /**
@@ -48,6 +49,7 @@ public class Message extends BaseEntity{
 	/**
 	 * 评论内容
 	 */
+	@UnescapeHtml
 	private String commentContent;
 	public String getMessageId() {
 		return messageId;

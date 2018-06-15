@@ -10,17 +10,12 @@
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
 <body class="childrenBody">
-  <div class="fly-panel fly-panel-user" pad20>
-	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
-	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">全部标为已读</button>
-	    <div  id="LAY_minemsg" style="margin-top: 10px;">
-        <div class="fly-none" style="display:none;">您暂时没有最新消息</div>
-        <ul class="mine-msg">
-        </ul>
-      </div>
-	  </div>
- </div>
-
+ <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;margin-left:60px;">
+       <ul class="layui-timeline"></ul>
+     </div>
+  </div>
+</div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
@@ -45,50 +40,36 @@ layui.config({
 
 function loadMessages(){
 	$.ajax({
-		url:"$!{rc.contextPath}/user/message/load",
+		url:"$!{rc.contextPath}/user/scoreHistory/getPageData",
 		type:"post",
+		dataType:'json',
 		success:function(result){
 			if(result.code=='200'){
 				var data=result.data;
 				var length=data.length;
-				if(length==0){
-					$('.fly-none').show();
-					return;
-				}
 				for(var i=0;i<length;i++){
-					var tag='';
-					var message=data[i];
-					//未读
-					if(message.status==0){
-						tag='<a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">标为已读</a><a class="readed" style="float:right;color:#c2c2c2;display:none;">已读</a></p>';
+					var history=data[i];
+					var scoreShow;
+					if(history.score>0){
+						scoreShow='<span>+'+history.score+'积分</span>';
 					}else{
-						tag='<a class="readed" style="float:right;color:#c2c2c2;">已读</a>';
+						scoreShow='<span>-'+history.score+'积分<span>';
 					}
-					var one='';
-					if(message.messageType=='1'){
-					   one='<li data-messageid="'+message.messageId+'">'+
-			            '<blockquote class="layui-elem-quote">'+
-			              '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'"><cite>'+message.contentName+'</cite></a>'+
-			              '<cite style="color:black;">['+message.commentContent+']</cite>'+
-			            '</blockquote>'+
-			            '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
-			            '</li>';
-					}else if(message.messageType=='2'){
-						one='<li data-messageid="'+message.messageId+'">'+
-			            '<blockquote class="layui-elem-quote">'+
-			              '您发表的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'"><cite>'+message.contentName+'</cite></a>因'+
-			              message.commentContent+
-			            '未通过审核</blockquote>'+
-			            '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
-			            '</li>';
-					}
-					$('.mine-msg').append(one);
-				}
-				if($('.fly-delete').length==0){
-					$('#LAY_delallmsg').remove();
+					var one='<li class="layui-timeline-item">'+
+				    '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'+
+				    '<div class="layui-timeline-content layui-text">'+
+				      '<h3 class="layui-timeline-title">'+dateFormat('yyyy-MM-dd hh:mm',new Date(history.createTime))+'</h3>'+
+				      '<p>'+
+				      	history.typeName+
+				        '<i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+
+				        scoreShow+
+				      '</p>'+
+				     '</div>'+
+				    '</li>';
+					$('.layui-timeline').append(one);
 				}
 			}else{
-				layer.msg("加载消息失败");
+				layer.msg("加载积分历史失败");
 			}
 		}
 	});

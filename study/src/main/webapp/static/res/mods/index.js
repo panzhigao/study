@@ -354,6 +354,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     			layer.msg(res.msg);
     			$('#LAY_signin').html('今日已签到');
     			$('#checkInMsg').html('获得了<cite>'+res.data.score+'</cite>积分');
+    			var checkInDays=$('#checkInDays').html()|0;
+    			$('#checkInDays').html(parseInt(checkInDays)+1);
     			othis.addClass(DISABLED);
     		}else{
     			layer.msg(res.msg);
