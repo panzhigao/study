@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
 import com.pan.util.DateUtils;
 import com.pan.util.IdUtils;
+import com.pan.util.SystemUtils;
 import com.pan.util.TokenUtils;
 
 
@@ -71,7 +75,11 @@ public class FileUploadController {
             //获得文件后缀名称  
             String imageName=contentType.substring(contentType.indexOf("/")+1);  
             path=dateStr+"."+imageName;  
+            String imgFilePath = pictureDir+path;
             File destFile=new File(pictureDir+path); 
+			if(!SystemUtils.isWindows()){				
+				Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
+			}
             destFile.setReadable(true);
             destFile.setExecutable(true);
             destFile.setWritable(true);
