@@ -1,8 +1,6 @@
 package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -16,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
+import com.pan.util.RegexUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -46,8 +44,8 @@ public class LoginController{
 	 * 跳转登录页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="login")
-	public ModelAndView toLogin(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(method=RequestMethod.GET,value="/login")
+	public ModelAndView toLogin(){
 		if(TokenUtils.getLoingUserId()!=null){
 			 String loginUserId = TokenUtils.getLoingUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
@@ -56,7 +54,7 @@ public class LoginController{
 		ModelAndView mav=new ModelAndView("html/user/login");
 		//生成验证码
 		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		TokenUtils.setAttribute("vercode", vercode);
+		TokenUtils.setAttribute(MyConstant.VERCODE, vercode);
 		return mav;
 	}
 	
@@ -77,7 +75,13 @@ public class LoginController{
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
 		request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
-		User userInDb = userService.findByUsername(user.getUsername());
+		//手机号登陆
+		User userInDb=null;
+		if(RegexUtils.checkTelephone(user.getUsername())){
+			userInDb = userService.findByUserTelephone(user.getUsername());
+		}else{
+			userInDb = userService.findByUsername(user.getUsername());
+		}
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}
 		

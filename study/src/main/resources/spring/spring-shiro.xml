@@ -16,12 +16,13 @@
 
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/index"></property>
+		<property name="loginUrl" value="/login"></property>
 		<property name="unauthorizedUrl" value="/unauth"></property>
 		<property name="filterChainDefinitions">
 			<value>
-				/index=anon
 				/login=anon
+				/=anon
+				/index=anon
 				/doLogin=anon
 				/register=anon
 				/doRegister=anon

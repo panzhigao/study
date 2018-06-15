@@ -128,12 +128,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
+  <p><a href="/" target="_blank">好好学习社区</a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -158,7 +153,7 @@ layui.use(['jquery', 'form'], function(){
 	    //修改密码
 		form.on('submit(findPassword)', function(data){
 			params = data.field;
-			resetPassword($,params);
+			resetPassword(params);
 			return false;
 		});
 		//发送验证码
@@ -215,7 +210,7 @@ function settime() { //发送验证码倒计时
     ,1000) 
 }
 
-//发送验证码
+//重置密码
 function resetPassword(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/resetPassword",
