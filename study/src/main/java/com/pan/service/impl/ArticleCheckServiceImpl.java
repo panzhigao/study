@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
@@ -28,6 +30,7 @@ import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
+import com.pan.vo.ArticleCheckVO;
 
 @Service
 public class ArticleCheckServiceImpl implements ArticleCheckService{
@@ -49,13 +52,13 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	@Override
 	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
-		List<QueryArticleCheck> list = new ArrayList<QueryArticleCheck>();
+		List<ArticleCheckVO> list = new ArrayList<ArticleCheckVO>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleCheck));
 			int total=articleCheckMapper.getCountByParams(queryArticleCheck);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = articleCheckMapper.findByParams(queryArticleCheck);
+				list = articleCheckMapper.findVOByParams(queryArticleCheck);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);

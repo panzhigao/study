@@ -12,6 +12,10 @@ public class ArticleCheck extends BaseEntity{
 	 */
 	private static final long serialVersionUID = 4213601853452299514L;
 	/**
+	 * 用户id
+	 */
+	private String userId;
+	/**
 	 * 文章id
 	 */
 	@NotNull(message="文章id不能为空")
@@ -106,11 +110,22 @@ public class ArticleCheck extends BaseEntity{
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	@Override
 	public String toString() {
-		return "ArticleCheck [articleId=" + articleId + ", title=" + title + ", completeFlag=" + completeFlag
-				+ ", checkType=" + checkType + ", checkUserId=" + checkUserId + ", checkUsername=" + checkUsername
-				+ ", checkTime=" + checkTime + ", approveFlag=" + approveFlag + ", content=" + content + "]";
+		return "ArticleCheck [userId=" + userId + ", articleId=" + articleId
+				+ ", title=" + title + ", completeFlag=" + completeFlag
+				+ ", checkType=" + checkType + ", checkUserId=" + checkUserId
+				+ ", checkUsername=" + checkUsername + ", checkTime="
+				+ checkTime + ", approveFlag=" + approveFlag + ", content="
+				+ content + ", id=" + id + ", createTime=" + createTime
+				+ ", createUser=" + createUser + ", updateTime=" + updateTime
+				+ ", updateUser=" + updateUser + "]";
 	}
 	
 	public enum CompleteFlagEnum{

@@ -119,7 +119,10 @@ layui.use(['table','jquery'], function(){
 	    	$('#notCompleteCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+	      {field: 'nickname', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
+	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
+	      }},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:400,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
@@ -173,7 +176,9 @@ layui.use(['table','jquery'], function(){
 	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'nickname', title: '用户', width:80, sort: true, fixed: 'left'},
+	      {field: 'nickname', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
+	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
+	      }},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true},
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";

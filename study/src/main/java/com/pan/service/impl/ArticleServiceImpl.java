@@ -98,6 +98,7 @@ public class ArticleServiceImpl implements ArticleService {
 		//发布文章,新增审核记录
 		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
 			ArticleCheck articleCheck = new ArticleCheck();
+			articleCheck.setUserId(article.getUserId());
 			articleCheck.setArticleId(article.getArticleId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());

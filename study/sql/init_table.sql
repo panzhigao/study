@@ -28,6 +28,7 @@ CREATE TABLE
     t_article_check
     (
         id INT(10) unsigned NOT NULL AUTO_INCREMENT,
+        user_id varchar(64) DEFAULT NULL COMMENT '用户id',
         article_id VARCHAR(64) NOT NULL,
         title VARCHAR(64) NOT NULL,
         content text COMMENT '文章内容',

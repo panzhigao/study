@@ -4,6 +4,7 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.ArticleCheck">
     <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
     <result column="complete_flag"      property="completeFlag"    jdbcType="VARCHAR" />
@@ -18,17 +19,31 @@
   <resultMap id="MoreResultMap" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
     <result column="content"    		property="content"        jdbcType="VARCHAR" />
   </resultMap> 
-    
-  <sql id="Base_Column_List" >
-    id,article_id,title,complete_flag,check_type,check_user_id,check_username,create_time,check_time,approve_flag,content
-  </sql>
   
+  <resultMap id="DetailResultMap" type="com.pan.vo.ArticleCheckVO" extends="BaseResultMap">  
+    <result column="username"    		property="username"        jdbcType="VARCHAR" />
+    <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
+  </resultMap> 
+  
+  <sql id="Less_Columns_List">
+  c.id,c.user_id,c.article_id,c.title,c.complete_flag,c.check_type,c.check_user_id,
+  c.check_username,c.create_time,c.check_time,c.approve_flag
+  </sql>  
+      
   <select id="findById" resultMap="MoreResultMap">
-  	select <include refid="Base_Column_List"/> from t_article_check where id=#{id}
+  	select <include refid="Less_Columns_List"/>,c.content from t_article_check c where id=#{id}
   </select>
   
   <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
-  	select <include refid="Base_Column_List"/> from t_article_check
+  	select <include refid="Less_Columns_List"/> from t_article_check c
+  	<include refid="whereSql"/>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>
+  
+    <select id="findVOByParams" resultMap="DetailResultMap" parameterType="com.pan.query.QueryArticleCheck">
+  	select <include refid="Less_Columns_List"/>,user.nickname,user.username from t_article_check c left join t_user user on c.user_id=user.user_id
   	<include refid="whereSql"/>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
@@ -37,25 +52,100 @@
   
   <sql id="whereSql">
   	<where> 
-  		    1=1
-  		<if test="articleId !=null and articleId!='' ">
-  			and article_id=#{articleId}
+  		1=1
+  		<if test="userId !=null and userId !='' ">
+  			and c.user_id=#{userId}
+  		</if>    
+  		<if test="articleId !=null and articleId !='' ">
+  			and c.article_id=#{articleId}
   		</if>
-  		<if test="completeFlag !=null and completeFlag !=''">
-  			and complete_flag=#{completeFlag}
+  		<if test="completeFlag !=null and completeFlag !='' ">
+  			and c.complete_flag=#{completeFlag}
   		</if>
   	</where>
   </sql>
   
   <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryArticleCheck">
-	  	select count(0) from t_article_check 
+	  	select count(0) from t_article_check c
 	  	<include refid="whereSql"/>
   </select>
   
   <insert id="saveArticleCheck" parameterType="com.pan.entity.ArticleCheck">
-  	insert into t_article_check (<include refid="Base_Column_List"/>) values 
-  	(null,#{articleId,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{completeFlag,jdbcType=VARCHAR},#{checkType,jdbcType=VARCHAR},
-  	#{checkUserId,jdbcType=VARCHAR},#{checkUsername,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{checkTime,jdbcType=TIMESTAMP},#{approveFlag,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR})
+  	insert into t_article_check (
+  	<trim suffixOverrides=",">
+  		<if test="userId !=null">
+  			user_id,
+  		</if>
+  		<if test="articleId !=null">
+  			article_id,
+  		</if>
+  		<if test="title !=null">
+  			title,
+  		</if>
+  		<if test="completeFlag !=null">
+  			complete_flag,
+  		</if>
+  		<if test="checkType !=null">
+  			check_type,
+  		</if>
+  		<if test="checkUserId !=null">
+  			check_user_id,
+  		</if>
+  		<if test="checkUsername !=null">
+  			check_username,
+  		</if>
+  		<if test="createTime !=null">
+  			create_time,
+  		</if>
+  		<if test="checkTime !=null">
+  			check_time,
+  		</if>
+  		<if test="approveFlag !=null">
+  			approve_flag,
+  		</if>
+  		<if test="content !=null">
+  			content,
+  		</if>
+  	</trim>
+  	) 
+  	values 
+  	(
+  	<trim suffixOverrides=",">
+  		<if test="userId !=null">
+  			#{userId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="articleId !=null">
+  			#{articleId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="title !=null">
+  			#{title,jdbcType=VARCHAR},
+  		</if>
+  		<if test="completeFlag !=null">
+  			#{completeFlag,jdbcType=VARCHAR},
+  		</if>
+  		<if test="checkType !=null">
+  			#{checkType,jdbcType=VARCHAR},
+  		</if>
+  		<if test="checkUserId !=null">
+  			#{checkUserId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="checkUsername !=null">
+  			#{checkUsername,jdbcType=VARCHAR},
+  		</if>
+  		<if test="createTime !=null">
+  			#{createTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="checkTime !=null">
+  			#{checkTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="approveFlag !=null">
+  			#{approveFlag,jdbcType=VARCHAR},
+  		</if>
+  		<if test="content !=null">
+  			#{content,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  	)
   </insert>
   
   <update id="updateArticleCheck" parameterType="com.pan.entity.ArticleCheck">

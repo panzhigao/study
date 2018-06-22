@@ -156,13 +156,13 @@ function publish(params){
 					},1000);
 				}else{
 					layer.msg(data.msg);
-					$('.layui-btn').remove('layui-btn-disabled');
+					$('.layui-btn').removeClass('layui-btn-disabled');
 					$('.layui-btn').removeAttr("disabled");
 				}
 			},
 			error:function(){
 				layer.msg('保存文章失败');
-				$('.layui-btn').remove('layui-btn-disabled');
+				$('.layui-btn').removeClass('layui-btn-disabled');
 				$('.layui-btn').removeAttr("disabled");
 			}
 	});
