@@ -66,35 +66,35 @@ public class FileUploadController {
     	logger.info("上传文件开始");
         //获得物理路径webapp所在路径  
     	ResultMsg resultMsg=null;
-        String path="";  
+        String fileName="";  
         if(!file.isEmpty()){  
             //生成时间戳作为文件名称  
             String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
             //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
             //获得文件后缀名称  
-            String imageName=contentType.substring(contentType.indexOf("/")+1);  
-            path=dateStr+"."+imageName;  
-            String imgFilePath = pictureDir+path;
-            File destFile=new File(pictureDir+path); 
+            String imageType=contentType.substring(contentType.indexOf("/")+1);  
+            fileName=dateStr+"."+imageType;  
+            String imgFilePath = pictureDir+fileName;
+            File destFile=new File(imgFilePath); 
+            destFile.setReadable(true);
+			destFile.setExecutable(true);
+			destFile.setWritable(true);
 			if(!SystemUtils.isWindows()){				
 				Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
 			}
-            destFile.setReadable(true);
-            destFile.setExecutable(true);
-            destFile.setWritable(true);
             file.transferTo(destFile);  
             Picture picture=new Picture();
             String userId=TokenUtils.getLoingUserId();
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
-                 picture.setPicUrl(pictureUrl+path);
+                 picture.setPicUrl(pictureUrl+fileName);
                  picture.setCreateTime(new Date());
                  pictureService.savePicture(picture);
-                 logger.info("图片输出路径:{}",pictureUrl+path); 
+                 logger.info("图片输出路径:{}",pictureUrl+fileName); 
                  Map<String,Object> data=new HashMap<String, Object>(5);
-                 data.put("src", pictureUrl+path);
+                 data.put("src", pictureUrl+fileName);
                  resultMsg=ResultMsg.build(ResultCodeEmun.UPLOAD_SUCCESS,ResultCodeEmun.UPLOAD_SUCCESS.getMsg(),data);
 			} catch (Exception e) {
 				logger.error("保存图片信息失败",e);
