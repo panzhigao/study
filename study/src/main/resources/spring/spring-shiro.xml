@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
@@ -12,17 +13,26 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
 	http://www.springframework.org/schema/aop
-	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+	<bean id="myauth" class="com.pan.common.filter.MyAuthenticationFilter"/>
+	
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login"></property>
-		<property name="unauthorizedUrl" value="/unauth"></property>
+		<property name="loginUrl" value="/login"/>
+		<property name="unauthorizedUrl" value="/unauth"/>
+		<property name="filters">
+            <util:map>
+                <entry key="myauth" value-ref="myauth"/>
+            </util:map>
+        </property>
 		<property name="filterChainDefinitions">
 			<value>
-				/login=anon
 				/=anon
 				/index=anon
+				/login=anon
 				/doLogin=anon
 				/register=anon
 				/doRegister=anon
@@ -37,6 +47,8 @@
 				/404=anon
 				/500=anon
 				/unauth=anon
+				/api/user/**=myauth,authc
+				/user/**=myauth,authc
 				/**=authc
 			</value>
 		</property>
