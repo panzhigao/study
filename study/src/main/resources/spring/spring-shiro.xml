@@ -31,8 +31,8 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/=anon
-				/index=anon
 				/login=anon
+				/index=anon
 				/doLogin=anon
 				/register=anon
 				/doRegister=anon
@@ -42,12 +42,12 @@
 				/resetPassword=anon
 				/static/**=anon
 				/article/**=anon
+				/api/user/**=myauth,authc
 				/api/**=anon
 				/u/**=anon
 				/404=anon
 				/500=anon
 				/unauth=anon
-				/api/user/**=myauth,authc
 				/user/**=myauth,authc
 				/**=authc
 			</value>
@@ -81,6 +81,6 @@
 		<property name="httpOnly" value="true" />
 		<!--cookie的有效时间 -->
 		<property name="maxAge" value="-1" />
-		<property name="domain" value="www.pan.com" />
+		<property name="domain" value="${domain}" />
 	</bean>
 </beans>
