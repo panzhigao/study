@@ -21,7 +21,7 @@
 	
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login"/>
+		<property name="loginUrl" value="/loginPage"/>
 		<property name="unauthorizedUrl" value="/unauth"/>
 		<property name="filters">
             <util:map>
@@ -31,7 +31,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/=anon
-				/login=anon
+				/loginPage=anon
 				/index=anon
 				/doLogin=anon
 				/register=anon

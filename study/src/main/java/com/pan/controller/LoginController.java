@@ -44,7 +44,7 @@ public class LoginController{
 	 * 跳转登录页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/login")
+	@RequestMapping(method=RequestMethod.GET,value="/loginPage")
 	public ModelAndView toLogin(){
 		if(TokenUtils.getLoingUserId()!=null){
 			 String loginUserId = TokenUtils.getLoingUserId();
