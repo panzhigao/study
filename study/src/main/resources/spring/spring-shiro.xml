@@ -21,7 +21,7 @@
 	
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/loginPage"/>
+		<property name="loginUrl" value="/login"/>
 		<property name="unauthorizedUrl" value="/unauth"/>
 		<property name="filters">
             <util:map>
@@ -30,8 +30,8 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+			    /login=anon
 				/=anon
-				/loginPage=anon
 				/index=anon
 				/doLogin=anon
 				/register=anon
@@ -81,6 +81,6 @@
 		<property name="httpOnly" value="true" />
 		<!--cookie的有效时间 -->
 		<property name="maxAge" value="-1" />
-		<property name="domain" value="${domain}" />
+<!-- 		<property name="domain" value="${domain}" /> -->
 	</bean>
 </beans>

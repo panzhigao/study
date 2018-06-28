@@ -20,7 +20,6 @@ import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.util.VerifyCodeUtils;
 
 /**
  * 注册
@@ -49,10 +48,7 @@ public class RegisterController {
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}
-		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		TokenUtils.setAttribute(MyConstant.VERCODE, vercode);
 		ModelAndView mav=new ModelAndView("html/user/reg");
-		mav.addObject("vercode", vercode);
 		return mav;
 	}
 	

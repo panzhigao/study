@@ -80,7 +80,7 @@
 
 	<servlet-mapping>
 		<servlet-name>springMvc</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
 	<error-page>

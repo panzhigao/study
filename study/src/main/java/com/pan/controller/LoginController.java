@@ -21,7 +21,6 @@ import com.pan.entity.User;
 import com.pan.service.UserService;
 import com.pan.util.RegexUtils;
 import com.pan.util.TokenUtils;
-import com.pan.util.VerifyCodeUtils;
 
 
 /**
@@ -44,7 +43,7 @@ public class LoginController{
 	 * 跳转登录页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/loginPage")
+	@RequestMapping(method=RequestMethod.GET,value="/login")
 	public ModelAndView toLogin(){
 		if(TokenUtils.getLoingUserId()!=null){
 			 String loginUserId = TokenUtils.getLoingUserId();
@@ -52,9 +51,6 @@ public class LoginController{
 			 return mv;
 		}
 		ModelAndView mav=new ModelAndView("html/user/login");
-		//生成验证码
-		String vercode=VerifyCodeUtils.generateVerifyCode(4);
-		TokenUtils.setAttribute(MyConstant.VERCODE, vercode);
 		return mav;
 	}
 	

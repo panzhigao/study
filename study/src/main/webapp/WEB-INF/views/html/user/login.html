@@ -28,7 +28,7 @@
         <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
       </li>
       <li class="layui-nav-item">
-        <a href="$!{rc.contextPath}/loginPage">登入</a>
+        <a href="$!{rc.contextPath}/login">登入</a>
       </li>
       <li class="layui-nav-item">
         <a href="$!{rc.contextPath}/register">注册</a>
@@ -66,7 +66,7 @@
                   <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">
-                  <span style="color: #c00;">$!{vercode}</span>
+                  <img id="validateCodeImg" src="$!{rc.contextPath}/api/validateCode" />&nbsp;&nbsp;<a onclick="reloadValidateCode();">看不清？</a>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -74,11 +74,6 @@
                 <span style="padding-left:20px;">
                   <a href="$!{rc.contextPath}/forget">忘记密码？</a>
                 </span>
-              </div>
-              <div class="layui-form-item fly-form-app">
-                <span>或者使用社交账号登入</span>
-                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
               </div>
             </form>
           </div>
@@ -91,8 +86,8 @@
 <div class="fly-footer">
   <p><a href="/" target="_blank">好好学习社区 </a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
 </div>
-
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -155,7 +150,12 @@ function login($,params){
 				}
 			}
 	});
-}	
+}
+
+//点击更换验证码
+function reloadValidateCode(){
+    $("#validateCodeImg").attr("src","$!{rc.contextPath}/api/validateCode?data=" + new Date() + Math.floor(Math.random()*24));
+}
 </script>
 </body>
 </html>
