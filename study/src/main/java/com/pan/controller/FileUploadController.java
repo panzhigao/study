@@ -40,7 +40,7 @@ import com.pan.util.TokenUtils;
  *
  */
 @Controller  
-@RequestMapping("/api")  
+@RequestMapping("/api/user")  
 public class FileUploadController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(FileUploadController.class);

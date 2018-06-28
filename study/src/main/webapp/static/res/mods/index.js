@@ -156,7 +156,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
               //执行上传实例
               upload.render({
                 elem: '#uploadImg'
-                ,url: '/api/upload/'
+                ,url: '/api/user/upload/'
                 ,size: 1000
                 ,done: function(res){
                   if(res.code == 0){
