@@ -7,11 +7,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import redis.clients.jedis.Jedis;
+
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
@@ -25,6 +29,7 @@ import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.EsClientService;
 import com.pan.util.IdUtils;
+import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
@@ -39,7 +44,11 @@ import com.pan.util.ValidationUtils;
 public class ArticleServiceImpl implements ArticleService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
-
+	/**
+	 * 缓存时间,单位秒
+	 */
+	private static final int CACHE_SECONDS=120;
+	
 	@Autowired
 	private EsClientService esClientService;
 
@@ -359,5 +368,52 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
+	}
+	
+	/**
+	 * 获取文章信息，校验是否有当前文章信息的权限
+	 * 先从redis中读取，如果不存在，则从数据库读取，如果数据库存在，加入redis缓存，如果数据库不存在，添加一个默认缓存，缓存过期时间60秒
+	 * @param queryArticleVO
+	 * @return
+	 */
+	@Override
+	public Article checkAndGetArticle(QueryArticle queryArticleVO) {
+		Jedis jedis =null;
+		Article article=null;
+		try {
+			jedis= JedisUtils.getJedis();
+			if(jedis.exists(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId())){//存在缓存
+				String string = jedis.get(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId());
+				logger.debug("从缓存读取数据,{}",string);
+				if(MyConstant.REDIS_NULL.equals(string)){
+					throw new BusinessException("文章不存在");
+				}else{
+					article=(Article) JsonUtils.fromJson(string, Article.class);
+					//如果文章不为发布状态，且不属于当前用户的文章，不能浏览
+					if(!Article.STATUS_PUBLISHED.equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+						logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
+						throw new BusinessException("文章不存在");
+					}
+				}
+			}else{//不存在缓存
+				article=articleMapper.findByArticleId(queryArticleVO.getArticleId());
+				logger.debug("从缓存读取数据,{}",article);
+				if(article==null){
+					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
+					throw new BusinessException("文章不存在");
+				}
+				jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,JsonUtils.toJson(article));
+			}	
+		}catch(BusinessException ex){
+			throw new BusinessException(ex.getMessage());
+		}catch (Exception e) {
+			logger.error("获取文章信息失败",e);
+			throw new BusinessException("获取文章信息失败");
+		}finally{
+			if(jedis!=null){
+				jedis.close();
+			}
+		}
+		return article;
 	}
 }

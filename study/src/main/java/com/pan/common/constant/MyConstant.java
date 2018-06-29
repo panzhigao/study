@@ -10,15 +10,10 @@ public class MyConstant {
 	public static final String TOKEN="token";
 	
 	public static final String SESSION_NAEM="JSESSIONID";
-	
 	/**
 	 * 验证码
 	 */
 	public static final String VERCODE="vercode";
-//	public static final String USER_LOGINED="user_login:";
-//	
-//	public static final String USER_SESSION="user_session:";
-	
 	/**
 	 * 消息已读
 	 */
@@ -63,4 +58,12 @@ public class MyConstant {
 	 * 用户id
 	 */
 	public static final String USER_ID="userId";
+	/**
+	 * 文章前缀
+	 */
+	public static final String ARTICLE_PREFIX="article:";
+	/**
+	 * redis空值
+	 */
+	public static final String REDIS_NULL="###";
 }

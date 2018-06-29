@@ -115,4 +115,10 @@ public interface ArticleService {
 	 * @return
 	 */
 	public void setArticle(String articleId,String stick,String highQuality);
+	/**
+	 * 查询并校验文章信息，判断是否有当前文章的权限
+	 * @param queryArticleVO
+	 * @return
+	 */
+	public Article checkAndGetArticle(QueryArticle queryArticleVO);
 }

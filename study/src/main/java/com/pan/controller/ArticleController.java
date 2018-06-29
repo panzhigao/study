@@ -123,15 +123,11 @@ public class ArticleController {
 		if(TokenUtils.isAuthenticated()){
 			loginUserId = TokenUtils.getLoingUserId();
 		}
-		String status=Article.STATUS_PUBLISHED;
-		Article article=articleService.findByArticleIdAndStatus(articleId,status);
-		//登录状态
-		if(loginUserId!=null&&article==null){
-			article=articleService.getByUserIdAndArticleId(loginUserId, articleId);
-		}
-		if(article==null){
-			throw new BusinessException("文章不存在");
-		}
+		//查询文章信息
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setArticleId(articleId);
+		queryArticle.setUserId(loginUserId);
+		Article article=articleService.checkAndGetArticle(queryArticle);
 		TransFieldUtils.transEntity(article);
 		mav.addObject("article", article);
 		if(Article.STATUS_PUBLISHED.equals(article.getStatus())){			
