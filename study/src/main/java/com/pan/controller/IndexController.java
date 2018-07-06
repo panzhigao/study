@@ -124,6 +124,7 @@ public class IndexController {
 		QueryUserExtension extensionVO=new QueryUserExtension();
 		extensionVO.setPageNo(1);
 		extensionVO.setPageSize(10);
+		extensionVO.setWhereCondition("continuous_check_in_days>0");
 		extensionVO.setOrderByCondition("continuous_check_in_days desc");
 		List<UserExtension> rankingList = userExtensionService.findByParams(extensionVO);
 		Map<String,Object> map=new HashMap<>();

@@ -34,4 +34,9 @@ public class UserExtensionServiceImpl implements UserExtensionService{
 		return userExtensionMapper.findByUserId(userId);
 	}
 
+	@Override
+	public int countByParams(QueryUserExtension extensionVO) {
+		return userExtensionMapper.countByParams(extensionVO);
+	}
+
 }

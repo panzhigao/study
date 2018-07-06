@@ -117,7 +117,7 @@
   	where user_id=#{userId}
   </update>
   
-  <update id="updateCounts" parameterType="com.pan.entity.UserExtension">
+  <update id="increaseCounts" parameterType="com.pan.entity.UserExtension">
   	update t_user_extension 
   	<set>
   		<if test="updateTime !=null ">
@@ -151,6 +151,11 @@
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>
+  </select>
+  
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryUserExtension">
+  	select count(0) from t_user_extension
+  	<include refid="whereSql"/>
   </select>
   
   <sql id="whereSql">

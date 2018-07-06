@@ -23,5 +23,11 @@ public interface UserExtensionService {
 	 * @param userExtension
 	 */
 	public void updateByUserId(UserExtension userExtension);
+	/**
+	 * 查询条数
+	 * @param extensionVO
+	 * @return
+	 */
+	public int countByParams(QueryUserExtension extensionVO);
 	
 }

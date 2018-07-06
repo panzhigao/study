@@ -88,8 +88,6 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	public ScoreHistory addScoreHistory(String userId, ScoreType scoreType) {
 		//签到积分
 		Integer checkInScore=null;
-		boolean continuousCheckInFlag=false;
-		boolean continuousLoginFlag=false;
 		//签到积分
 		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){
 			QueryScoreHistory vo=new QueryScoreHistory();
@@ -107,7 +105,6 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
 			//昨日没有签到过，按5积分算,用户连续签到天数置为0
 			if(lastDayCount>0){
-				continuousCheckInFlag=true;
 				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
 				Integer continuousCheckInDays = userExtension.getContinuousCheckInDays();
 				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
@@ -123,12 +120,6 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			if(counts>0){
 				logger.debug("{}今日已获取过登陆积分",userId);
 				return null;
-			}
-			//查询昨日是否登陆过
-			vo.setScoreDate(DateUtils.getLastDate());
-			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
-			if(lastDayCount>0){
-				continuousLoginFlag=true;
 			}
 		}
 		ScoreHistory history=new ScoreHistory();
@@ -151,40 +142,13 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		if(checkInScore!=null){
 			userExtension.setScore(checkInScore);
 		}
-		//如果是登陆操作且有连续登陆，将连续登陆天数置为加1
-		if(ScoreHistory.ScoreType.LOGIN==scoreType&&continuousLoginFlag){
-			userExtension.setContinuousLoginDays(1);
-		}
-		//如果是签到操作且没有连续签到，将连续签到天数置为1
-		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&continuousCheckInFlag){
+		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){//如果是签到，签到天数加一
 			userExtension.setContinuousCheckInDays(1);
 		}
-		//评论
-		if(ScoreHistory.ScoreType.COMMENT==scoreType){
-			userExtension.setCommentCounts(1);
+		if(ScoreHistory.ScoreType.LOGIN==scoreType){//如果是登录，登录天数加一
+			userExtension.setContinuousLoginDays(1);
 		}
-		//发表文章
-		if(ScoreHistory.ScoreType.PUBLISH_ARTICLE==scoreType){
-			userExtension.setArticleCounts(1);
-		}
-		userExtensionMapper.updateCounts(userExtension);
-		
-		boolean countUpdate=false;
-		UserExtension userExtensionCount=new UserExtension();
-		userExtensionCount.setUserId(userId);
-		//如果是登陆操作且没有连续登陆，将连续登陆天数置为1
-		if(ScoreHistory.ScoreType.LOGIN==scoreType&&!continuousLoginFlag){
-			countUpdate=true;
-			userExtensionCount.setContinuousLoginDays(1);
-		}
-		//如果是签到操作且没有连续签到，将连续签到天数置为1
-		if(ScoreHistory.ScoreType.CHECK_IN==scoreType&&!continuousCheckInFlag){
-			countUpdate=true;
-			userExtensionCount.setContinuousCheckInDays(1);
-		}
-		if(countUpdate){			
-			userExtensionMapper.updateUserExtensionByUserId(userExtensionCount);
-		}
+		userExtensionMapper.increaseCounts(userExtension);
 		return history;
 	}
 
@@ -197,7 +161,10 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	public List<ScoreHistory> findByParams(QueryScoreHistory historyVO) {
 		return scoreHistoryMapper.findByParams(historyVO);
 	}
-
+	
+	/**
+	 * 计算今天签到分数
+	 */
 	@Override
 	public int getTodayCheckInScore(int continuousCheckInDays) {
 	    int checkInScore;

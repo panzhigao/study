@@ -35,5 +35,10 @@ public interface UserExtensionMapper {
 	 * 更新条数
 	 * @param userExtension
 	 */
-	public void updateCounts(UserExtension userExtension);
+	public int increaseCounts(UserExtension userExtension);
+	/**
+	 * 查询条数
+	 * @return
+	 */
+	public int countByParams(QueryUserExtension extensionVO);
 }

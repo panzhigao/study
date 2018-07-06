@@ -47,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
 	/**
 	 * 缓存时间,单位秒
 	 */
-	private static final int CACHE_SECONDS=120;
+	private static final int CACHE_SECONDS=1800;
 	
 	@Autowired
 	private EsClientService esClientService;
