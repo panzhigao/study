@@ -1,7 +1,10 @@
 package com.pan.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -187,5 +190,28 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	@Override
 	public List<ScoreHistoryVO> findVOByParams(QueryScoreHistory historyVO) {
 		return scoreHistoryMapper.findVOByParams(historyVO);
+	}
+	
+	/**
+	 * 获取积分数据，按日期分组，用于前端展示
+	 * @return
+	 */
+	@Override
+	public Map<String,List<ScoreHistory>> findShowData(QueryScoreHistory historyVO) {
+		List<ScoreHistory> list = scoreHistoryMapper.findByParams(historyVO);
+		Map<String,List<ScoreHistory>> resultMap=new LinkedHashMap<String, List<ScoreHistory>>(list.size());
+		for (ScoreHistory scoreHistory : list) {
+			Date scoreDate = scoreHistory.getScoreDate();
+			String dateStr = DateUtils.getDateStr(scoreDate,DateUtils.FORMAT_DATE);
+			if(resultMap.get(dateStr)!=null){
+				List<ScoreHistory> histories=resultMap.get(dateStr);
+				histories.add(scoreHistory);
+			}else{
+				List<ScoreHistory> list2=new ArrayList<>();
+				list2.add(scoreHistory);
+				resultMap.put(dateStr,list2);
+			}	
+		}
+		return resultMap;
 	}
 }

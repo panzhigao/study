@@ -46,28 +46,55 @@ function loadMessages(){
 		success:function(result){
 			if(result.code=='200'){
 				var data=result.data;
-				var length=data.length;
-				for(var i=0;i<length;i++){
-					var history=data[i];
-					var scoreShow;
-					if(history.score>0){
-						scoreShow='<span>+'+history.score+'积分</span>';
-					}else{
-						scoreShow='<span>-'+history.score+'积分<span>';
-					}
+				for(var key in data){
+					//alert(key);
+					var list=data[key];
 					var one='<li class="layui-timeline-item">'+
 				    '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'+
 				    '<div class="layui-timeline-content layui-text">'+
-				      '<h3 class="layui-timeline-title">'+dateFormat('yyyy-MM-dd hh:mm',new Date(history.createTime))+'</h3>'+
-				      '<p>'+
-				      	history.typeName+
-				        '<i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+
-				        scoreShow+
-				      '</p>'+
-				     '</div>'+
-				    '</li>';
+				    '<h3 class="layui-timeline-title">'+key+'</h3>';
+					var length=list.length;
+					for(var i=0;i<length;i++){
+						var history=list[i];
+						var scoreShow;
+						if(history.score>0){
+	 						scoreShow='<span>+'+history.score+'积分</span>';
+	 					}else{
+	 						scoreShow='<span>-'+history.score+'积分<span>';
+	 					}
+						one+='<p style="width:300px;height:30px;"><span>'+history.typeName+'</span>'+
+								'<span>'+scoreShow+'</span>'+
+								'<span style="float:right;">'+dateFormat('hh:mm',new Date(history.createTime))+'</span>'
+							 '</p>';
+					}
+					one+='</div></li>';
 					$('.layui-timeline').append(one);
 				}
+				
+				
+				
+// 				var length=data.length;
+// 				for(var i=0;i<length;i++){
+// 					var history=data[i];
+// 					var scoreShow;
+// 					if(history.score>0){
+// 						scoreShow='<span>+'+history.score+'积分</span>';
+// 					}else{
+// 						scoreShow='<span>-'+history.score+'积分<span>';
+// 					}
+// 					var one='<li class="layui-timeline-item">'+
+// 				    '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'+
+// 				    '<div class="layui-timeline-content layui-text">'+
+// 				      '<h3 class="layui-timeline-title">'+dateFormat('yyyy-MM-dd hh:mm',new Date(history.createTime))+'</h3>'+
+// 				      '<p>'+
+// 				      	history.typeName+
+// 				        '<i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+
+// 				        scoreShow+
+// 				      '</p>'+
+// 				     '</div>'+
+// 				    '</li>';
+// 					$('.layui-timeline').append(one);
+// 				}
 			}else{
 				layer.msg("加载积分历史失败");
 			}

@@ -9,10 +9,6 @@ public class ScoreHistoryVO extends ScoreHistory{
 	 */
 	private static final long serialVersionUID = -431889301381801069L;
 	/**
-	 * 用户id
-	 */
-	private String userId;
-	/**
 	 * 用户头像
 	 */
 	private String userPortrait;
@@ -20,12 +16,6 @@ public class ScoreHistoryVO extends ScoreHistory{
 	 * 用户昵称
 	 */
 	private String nickname;
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 	public String getUserPortrait() {
 		return userPortrait;
 	}
@@ -41,8 +31,9 @@ public class ScoreHistoryVO extends ScoreHistory{
 	}
 	@Override
 	public String toString() {
-		return "ScoreHistoryVO [userId=" + userId + ", userPortrait=" + userPortrait + ", nickname=" + nickname
-				+ ", id=" + id + ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime="
-				+ updateTime + ", updateUser=" + updateUser + "]";
+		return "ScoreHistoryVO [userPortrait=" + userPortrait + ", nickname="
+				+ nickname + ", id=" + id + ", createTime=" + createTime
+				+ ", createUser=" + createUser + ", updateTime=" + updateTime
+				+ ", updateUser=" + updateUser + "]";
 	}
 }

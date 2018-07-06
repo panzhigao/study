@@ -1,7 +1,10 @@
 package com.pan.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ScoreHistory;
 import com.pan.query.QueryScoreHistory;
@@ -51,7 +55,7 @@ public class ScoreHistoryController {
 		queryScoreHistory.setPageSize(pageSize);
 		queryScoreHistory.setPageNo(pageNo);
 		queryScoreHistory.setOrderByCondition("create_time desc");
-		List<ScoreHistory> findByParams = scoreHistoryService.findByParams(queryScoreHistory);
-		return ResultMsg.ok("获取积分历史数据成功", findByParams);
+		Map<String, List<ScoreHistory>> findShowData = scoreHistoryService.findShowData(queryScoreHistory);
+		return ResultMsg.ok("获取积分历史数据成功", findShowData);
 	}
 }

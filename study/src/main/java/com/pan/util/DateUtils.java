@@ -14,9 +14,18 @@ public class DateUtils {
 	
 	public static final String FORMAT_TIME_MILLS="yyyyMMddHHmmssSSS";
 	
+	/**
+	 * 获取当前时间格式化成字符串
+	 * @param format 日期字符串格式
+	 * @return
+	 */
 	public static String getDateStr(String format){
 		SimpleDateFormat sdf=new SimpleDateFormat(format);
 		return sdf.format(new Date());
+	}
+	
+	public static String getDateStr(Date date,String format){
+		return new SimpleDateFormat(format).format(date);
 	}
 	
 	/**

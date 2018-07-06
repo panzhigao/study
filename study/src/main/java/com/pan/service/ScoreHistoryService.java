@@ -1,6 +1,8 @@
 package com.pan.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.pan.entity.ScoreHistory;
 import com.pan.query.QueryScoreHistory;
 import com.pan.vo.ScoreHistoryVO;
@@ -49,4 +51,9 @@ public interface ScoreHistoryService {
 	 * @return
 	 */
 	public int getTodayCheckInScore(int continuousLoginDays);
+	/**
+	 * 获取积分数据，按日期分组，用于前端展示
+	 * @return
+	 */
+	public Map<String,List<ScoreHistory>> findShowData(QueryScoreHistory historyVO);
 }
