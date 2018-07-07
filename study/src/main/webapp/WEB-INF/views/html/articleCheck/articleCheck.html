@@ -146,7 +146,7 @@ layui.use(['table','jquery'], function(){
 	    		  return detail;
 	    	  }
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="pass">通过</a>';
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="notPass">未通过</a>';
+	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="notPass">拒绝</a>';
 	    	  return detail+edit+t_delete;
 	      }}
 	    ]]
@@ -230,7 +230,6 @@ var index=layer.open({
 	title: '查看',
 	content: '/user/check/detail?id='+id,
 	btn: ['关闭'],
-	closeBtn: 0,
 	maxmin: true,
 	shade: false,
 	offset: ['50px', '20%'],
