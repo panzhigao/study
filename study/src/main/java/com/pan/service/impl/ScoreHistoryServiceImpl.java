@@ -151,6 +151,12 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		if(ScoreHistory.ScoreType.LOGIN==scoreType){//如果是登录，登录天数加一
 			userExtension.setContinuousLoginDays(1);
 		}
+		if(ScoreHistory.ScoreType.PUBLISH_ARTICLE==scoreType){//文章发表成功，文章数加一
+			userExtension.setArticleCounts(1);
+		}
+		if(ScoreHistory.ScoreType.COMMENT==scoreType){//发表评论，评论数加一
+			userExtension.setCommentCounts(1);
+		}
 		userExtensionMapper.increaseCounts(userExtension);
 		return history;
 	}
