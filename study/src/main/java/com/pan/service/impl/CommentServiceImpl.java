@@ -14,6 +14,8 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Comment;
 import com.pan.entity.Message;
+import com.pan.entity.ScoreHistory;
+import com.pan.entity.UserExtension;
 import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
 import com.pan.mapper.CommentMapper;
@@ -21,6 +23,7 @@ import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.service.MessageService;
 import com.pan.service.ScoreHistoryService;
+import com.pan.service.UserExtensionService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
@@ -55,6 +58,9 @@ public class CommentServiceImpl implements CommentService{
 	@Autowired
 	private ScoreHistoryService scoreHistoryService;
 	
+	@Autowired
+	private UserExtensionService userExtensionService;
+	
 	/**
 	 * 添加评论
 	 * 1.新增评论记录
@@ -75,8 +81,17 @@ public class CommentServiceImpl implements CommentService{
 		commentMapper.addComment(comment);
 		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		
-		//发表评论加2分,修改当前登录人评论数
-		scoreHistoryService.addScoreHistory(TokenUtils.getLoingUserId(),ScoreType.COMMENT);
+		//发表评论加2分,
+		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(TokenUtils.getLoingUserId(),ScoreType.COMMENT);
+		//修改当前登录人评论数
+		//用户拓展表增加积分
+		UserExtension userExtension=new UserExtension();
+		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setUpdateTime(new Date());
+		userExtension.setScore(addScoreHistory.getScore());
+		userExtension.setCommentCounts(1);
+		userExtensionService.increaseCounts(userExtension);
+		
 		//发送消息
 		//当文章用户评论自己的文章时，不发送消息
 		if(StringUtils.equals(articleInDb.getUserId(),comment.getUserId())){

@@ -32,8 +32,8 @@ public interface UserExtensionMapper {
 	 */
 	public List<UserExtension> findByParams(QueryUserExtension extensionVO);
 	/**
-	 * 更新条数
-	 * @param userExtension
+	 * 用户评论数，连续登录天数，连续签到天数，文章数变更
+	 * @return
 	 */
 	public int increaseCounts(UserExtension userExtension);
 	/**

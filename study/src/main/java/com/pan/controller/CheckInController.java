@@ -1,15 +1,14 @@
 package com.pan.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ScoreHistory;
-import com.pan.entity.ScoreHistory.ScoreType;
-import com.pan.service.ScoreHistoryService;
+import com.pan.service.UserService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -21,7 +20,7 @@ import com.pan.util.TokenUtils;
 public class CheckInController {
 	
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private UserService userService;
 	
 	/**
 	 * 用户签到
@@ -31,7 +30,7 @@ public class CheckInController {
 	@ResponseBody
 	public ResultMsg checkIn(){
 		String loingUserId = TokenUtils.getLoingUserId();
-		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(loingUserId, ScoreType.CHECK_IN);
-		return ResultMsg.ok("签到成功",addScoreHistory);
+		ScoreHistory scoreHistory = userService.checkIn(loingUserId);
+		return ResultMsg.ok("签到成功",scoreHistory);
 	}
 }

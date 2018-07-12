@@ -91,10 +91,10 @@ public class TokenUtils {
 	}
 		
 	/**
-	 * 将用户信息放入subject
+	 * 将用户信息放入subject,使用户自动登录
 	 * @param user 新的用户信息
 	 */
-	public static void setPrincipal(User user){
+	public static void userAutoLogin(User user){
 		Subject subject = SecurityUtils.getSubject(); 
 	    UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());  
 		subject.login(token);

@@ -29,5 +29,9 @@ public interface UserExtensionService {
 	 * @return
 	 */
 	public int countByParams(QueryUserExtension extensionVO);
-	
+	/**
+	 * 用户评论数，连续登录天数，连续签到天数，文章数变更
+	 * @return
+	 */
+	public int increaseCounts(UserExtension userExtension);
 }

@@ -90,7 +90,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	@Override
 	public ScoreHistory addScoreHistory(String userId, ScoreType scoreType) {
 		//签到积分
-		Integer checkInScore=null;
+		Integer score=scoreType.getScore();
 		//签到积分
 		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){
 			QueryScoreHistory vo=new QueryScoreHistory();
@@ -111,7 +111,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
 				Integer continuousCheckInDays = userExtension.getContinuousCheckInDays();
 				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
-				checkInScore=getTodayCheckInScore(continuousCheckInDays);	
+				score=getTodayCheckInScore(continuousCheckInDays);	
 			}
 		}else if(ScoreHistory.ScoreType.LOGIN==scoreType){//登陆积分
 			QueryScoreHistory vo=new QueryScoreHistory();
@@ -131,33 +131,9 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		history.setTypeName(scoreType.getName());
 		history.setCreateTime(new Date());
 		history.setScoreDate(new Date());
-		history.setScore(scoreType.getScore());
-		if(checkInScore!=null){
-			history.setScore(checkInScore);
-		}
+		history.setScore(score);
 		//保存积分历史
 		scoreHistoryMapper.save(history);
-		//用户拓展表增加积分
-		UserExtension userExtension=new UserExtension();
-		userExtension.setUserId(userId);
-		userExtension.setUpdateTime(new Date());
-		userExtension.setScore(scoreType.getScore());
-		if(checkInScore!=null){
-			userExtension.setScore(checkInScore);
-		}
-		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){//如果是签到，签到天数加一
-			userExtension.setContinuousCheckInDays(1);
-		}
-		if(ScoreHistory.ScoreType.LOGIN==scoreType){//如果是登录，登录天数加一
-			userExtension.setContinuousLoginDays(1);
-		}
-		if(ScoreHistory.ScoreType.PUBLISH_ARTICLE==scoreType){//文章发表成功，文章数加一
-			userExtension.setArticleCounts(1);
-		}
-		if(ScoreHistory.ScoreType.COMMENT==scoreType){//发表评论，评论数加一
-			userExtension.setCommentCounts(1);
-		}
-		userExtensionMapper.increaseCounts(userExtension);
 		return history;
 	}
 

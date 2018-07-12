@@ -52,6 +52,7 @@
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="publish*" />
+			<tx:method name="register*" />
 			<tx:method name="save*" />
 			<tx:method name="add*" />
 			<tx:method name="update*" />

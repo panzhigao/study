@@ -48,7 +48,7 @@ public class UserTest extends BaseTest{
 		user.setCreateTime(new Date());
 		user.setStatus(User.STATUS_NORMAL);
 		//userMapper.saveUser(user);
-		userService.saveUser(user);
+		userService.registerUser(user);
 	}
 	
 }

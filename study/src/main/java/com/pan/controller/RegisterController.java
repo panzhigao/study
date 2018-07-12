@@ -64,7 +64,7 @@ public class RegisterController {
 		if(!StringUtils.equalsIgnoreCase(vercode, vercodeInSession)){
 			throw new BusinessException("验证码错误");
 		}
-		userService.saveUser(user);
+		userService.registerUser(user);
 		return ResultMsg.ok("用户注册成功");
 	}
 	

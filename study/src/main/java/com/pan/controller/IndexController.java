@@ -115,7 +115,7 @@ public class IndexController {
 		historyVO.setScoreDate(new Date());
 		historyVO.setOrderByCondition("create_time desc");
 		historyVO.setPageNo(1);
-		historyVO.setPageSize(10);
+		historyVO.setPageSize(20);
 		List<ScoreHistoryVO> newList = scoreHistoryService.findVOByParams(historyVO);
 		//最快签到
 		historyVO.setOrderByCondition("create_time asc");
@@ -123,7 +123,7 @@ public class IndexController {
 		//总签到榜
 		QueryUserExtension extensionVO=new QueryUserExtension();
 		extensionVO.setPageNo(1);
-		extensionVO.setPageSize(10);
+		extensionVO.setPageSize(20);
 		extensionVO.setWhereCondition("continuous_check_in_days>0");
 		extensionVO.setOrderByCondition("continuous_check_in_days desc");
 		List<UserExtension> rankingList = userExtensionService.findByParams(extensionVO);

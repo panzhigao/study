@@ -17,6 +17,8 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
+import com.pan.entity.ScoreHistory;
+import com.pan.entity.UserExtension;
 import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
@@ -25,6 +27,7 @@ import com.pan.query.QueryArticleCheck;
 import com.pan.service.ArticleCheckService;
 import com.pan.service.MessageService;
 import com.pan.service.ScoreHistoryService;
+import com.pan.service.UserExtensionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -48,6 +51,9 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		
 	@Autowired
 	private ScoreHistoryService scoreHistoryService;
+	
+	@Autowired
+	private UserExtensionService userExtensionService;
 	
 	@Override
 	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
@@ -125,7 +131,14 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
 		//文章数加1，发表文章加5分
-		scoreHistoryService.addScoreHistory(article.getUserId(),ScoreType.PUBLISH_ARTICLE);
+		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(),ScoreType.PUBLISH_ARTICLE);
+		//用户拓展表增加积分和文章数
+		UserExtension userExtension=new UserExtension();
+		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setUpdateTime(new Date());
+		userExtension.setScore(addScoreHistory.getScore());
+		userExtension.setArticleCounts(1);
+		userExtensionService.increaseCounts(userExtension);
 	}
 
 	@Override

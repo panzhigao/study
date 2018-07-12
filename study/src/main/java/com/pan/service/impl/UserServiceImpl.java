@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
@@ -25,10 +27,12 @@ import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.entity.UserRole;
+import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.query.QueryUser;
 import com.pan.service.ScoreHistoryService;
+import com.pan.service.UserExtensionService;
 import com.pan.service.UserService;
 import com.pan.util.DateUtils;
 import com.pan.util.ImageUtils;
@@ -49,7 +53,6 @@ import com.pan.util.VerifyCodeUtils;
 public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(UserServiceImpl.class);
-	
 	
 	/**
 	 * 默认角色id,新注册用户默认角色
@@ -88,13 +91,21 @@ public class UserServiceImpl implements UserService{
 	private UserExtensionMapper userExtensionMapper;
 	
 	@Autowired
+	private UserExtensionService userExtensionService;
+	
+	@Autowired
 	private ScoreHistoryService scoreHistoryService;
 	
+	
 	/**
-	 * 新增用户,默认新增用户拥有普通用户权限
+	 * 用户注册,默认新增用户拥有普通用户权限
+	 * 1.校验用户注册字段，校验用户名是否已经注册
+	 * 2.密码加密，保存用户信息，用户拓展信息，新增注册积分历史
+	 * 3.为用户添加用户角色信息
+	 * 4.讲用户登录信息写入subject，用户自动登录
 	 */
 	@Override
-	public User saveUser(User user){
+	public User registerUser(User user){
 		ValidationUtils.validateEntityWithGroups(user,new Class[]{RegisterGroup.class});
 		String username=user.getUsername();
 		User userInDb = findByUsername(username);
@@ -128,14 +139,20 @@ public class UserServiceImpl implements UserService{
 			userExtensionTemp.setUserPortrait(defaultPortrait);
 			userExtensionMapper.saveUserExtension(userExtensionTemp);
 			//新增积分信息
-			scoreHistoryService.addScoreHistory(userId, ScoreHistory.ScoreType.REGISTER);
+			ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreHistory.ScoreType.REGISTER);
+			//用户拓展表增加积分
+			UserExtension userExtension=new UserExtension();
+			userExtension.setUserId(addScoreHistory.getUserId());
+			userExtension.setUpdateTime(new Date());
+			userExtension.setScore(addScoreHistory.getScore());
+			userExtensionService.increaseCounts(userExtension);
 			//为用户添加用户角色信息
 			UserRole userRole=new UserRole(userId, defaultRoleId);
 			userRole.setCreateTime(new Date());
 			this.addUserRole(userRole);
 			//用户验证,用明文密码验证
 			user.setPassword(password);
-			TokenUtils.setPrincipal(user);
+			TokenUtils.userAutoLogin(user);
 			return user;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("加密用户密码错误",e);
@@ -179,7 +196,15 @@ public class UserServiceImpl implements UserService{
 			}
 			updateUserLastLoginTime(userInDb.getUserId());
 			//积分历史表新增登录积分
-			scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreHistory.ScoreType.LOGIN);
+			ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreHistory.ScoreType.LOGIN);
+			if(addScoreHistory!=null){//如果不是今日首次登录，连续登录天数加1
+				UserExtension userExtension=new UserExtension();
+				userExtension.setUserId(addScoreHistory.getUserId());
+				userExtension.setUpdateTime(new Date());
+				userExtension.setScore(addScoreHistory.getScore());
+				userExtension.setContinuousLoginDays(1);
+				userExtensionService.increaseCounts(userExtension);
+			}
 			return userInDb;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			logger.error("验证用户和数据库密码出错",e);
@@ -402,5 +427,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> findUserByRoleId(String roleId) {
 		return userMapper.findUserByRoleId(roleId);
+	}
+
+	@Override
+	public ScoreHistory checkIn(String userId) {
+		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreType.CHECK_IN);
+		//用户拓展表增加积分,增加用户签到天数
+		UserExtension userExtension=new UserExtension();
+		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setUpdateTime(new Date());
+		userExtension.setScore(addScoreHistory.getScore());
+		userExtension.setContinuousCheckInDays(1);
+		userExtensionService.increaseCounts(userExtension);
+		return addScoreHistory;
 	}
 }

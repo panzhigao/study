@@ -2,6 +2,8 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
+
+import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.entity.UserRole;
@@ -14,11 +16,11 @@ import com.pan.query.QueryUser;
  */
 public interface UserService {
 	/**
-	 * 保存用户信息
+	 * 注册用户信息
 	 * @param user
 	 * @return
 	 */
-	public User saveUser(User user);
+	public User registerUser(User user);
 	/**
 	 * 根据用户名查找唯一用户信息
 	 * @param username
@@ -114,4 +116,8 @@ public interface UserService {
 	 * @return
 	 */
 	public List<User> findUserByRoleId(String roleId);
+	/**
+	 * 用户签到
+	 */
+	public ScoreHistory checkIn(String userId);
 }
