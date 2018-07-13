@@ -96,7 +96,7 @@ public class IndexController {
 		QueryUserExtension extensionVO=new QueryUserExtension();
 		extensionVO.setPageNo(1);
 		extensionVO.setPageSize(12);
-		extensionVO.setOrderByCondition("comment_counts desc");
+		extensionVO.setOrderCondition("comment_counts desc");
 		extensionVO.setWhereCondition("comment_counts>0");
 		List<UserExtension> list = userExtensionService.findByParams(extensionVO);
 		return ResultMsg.ok("获取活跃用户成功", list);
@@ -113,19 +113,19 @@ public class IndexController {
 		QueryScoreHistory historyVO=new QueryScoreHistory();
 		historyVO.setType(ScoreType.CHECK_IN.getCode());
 		historyVO.setScoreDate(new Date());
-		historyVO.setOrderByCondition("create_time desc");
+		historyVO.setOrderCondition("create_time desc");
 		historyVO.setPageNo(1);
 		historyVO.setPageSize(20);
 		List<ScoreHistoryVO> newList = scoreHistoryService.findVOByParams(historyVO);
 		//最快签到
-		historyVO.setOrderByCondition("create_time asc");
+		historyVO.setOrderCondition("create_time asc");
 		List<ScoreHistoryVO> fastList = scoreHistoryService.findVOByParams(historyVO);
 		//总签到榜
 		QueryUserExtension extensionVO=new QueryUserExtension();
 		extensionVO.setPageNo(1);
 		extensionVO.setPageSize(20);
 		extensionVO.setWhereCondition("continuous_check_in_days>0");
-		extensionVO.setOrderByCondition("continuous_check_in_days desc");
+		extensionVO.setOrderCondition("continuous_check_in_days desc");
 		List<UserExtension> rankingList = userExtensionService.findByParams(extensionVO);
 		Map<String,Object> map=new HashMap<>();
 		map.put("0", newList);

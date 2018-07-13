@@ -145,8 +145,8 @@
   <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryUserExtension">
   	select <include refid="Base_Column_List"/> from t_user_extension 
   	<include refid="whereSql"/>
-  	<if test="orderByCondition !=null and orderByCondition !=''">
-  		order by ${orderByCondition}
+  	<if test="orderCondition !=null and orderCondition !=''">
+  		order by ${orderCondition}
   	</if>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}

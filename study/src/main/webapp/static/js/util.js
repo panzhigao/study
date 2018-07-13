@@ -30,8 +30,8 @@ function dateFormat(fmt,date){
   return fmt;   
 } 
 
-//fromTime 为时间戳
-function tranTime(fromTime){
+//fromTime 为时间戳,format为时间格式化，默认为yyyy-MM-dd hh:mm:ss
+function tranTime(fromTime,format){
 	var nowTime=Math.round(new Date()/1000);    
     var tempTime = nowTime - fromTime/1000;    
     var str="";	
@@ -56,7 +56,10 @@ function tranTime(fromTime){
         	str = '前天 '+time;
         }
     }else{
-        str = dateFormat('yyyy-MM-dd hh:mm:ss',new Date(fromTime));
+    	if(!format){
+    		format='yyyy-MM-dd hh:mm:ss';
+    	}
+        str = dateFormat(format,new Date(fromTime));
     }
     return str;
 }

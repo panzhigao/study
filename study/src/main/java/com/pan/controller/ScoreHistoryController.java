@@ -54,7 +54,7 @@ public class ScoreHistoryController {
 		queryScoreHistory.setUserId(loingUserId);
 		queryScoreHistory.setPageSize(pageSize);
 		queryScoreHistory.setPageNo(pageNo);
-		queryScoreHistory.setOrderByCondition("create_time desc");
+		queryScoreHistory.setOrderCondition("create_time desc");
 		Map<String, List<ScoreHistory>> findShowData = scoreHistoryService.findShowData(queryScoreHistory);
 		return ResultMsg.ok("获取积分历史数据成功", findShowData);
 	}

@@ -36,8 +36,8 @@
   <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryScoreHistory">
   	select <include refid="Base_Column_List"/> from t_score_history
   	<include refid="whereSql"/>
-  	<if test="orderByCondition !=null and orderByCondition !=''">
-  		order by ${orderByCondition}
+  	<if test="orderCondition !=null and orderCondition !=''">
+  		order by ${orderCondition}
   	</if>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
@@ -47,8 +47,8 @@
   <select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryScoreHistory">
   	select score.user_id,score.create_time,user.nickname,user_portrait from t_score_history score join t_user user on score.user_id=user.user_id
   	<include refid="whereSql"/>
-  	<if test="orderByCondition !=null and orderByCondition !=''">
-  		order by ${orderByCondition}
+  	<if test="orderCondition !=null and orderCondition !=''">
+  		order by ${orderCondition}
   	</if>
   </select>
   

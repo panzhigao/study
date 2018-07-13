@@ -18,7 +18,6 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.query.QueryArticle;
-import com.pan.query.QueryCollection;
 import com.pan.service.ArticleService;
 import com.pan.service.UserService;
 import com.pan.util.JedisUtils;
@@ -80,13 +79,13 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
 	@RequiresPermissions("/user/article/mine")
 	public ModelAndView toArticleList(){
-		String loingUserId = TokenUtils.getLoingUserId();
-		QueryArticle queryArticleVO=new QueryArticle();
-		queryArticleVO.setUserId(loingUserId);
-		queryArticleVO.setType(Article.TYPE_ARTICLE);
-		QueryCollection collectionVO=new QueryCollection();
-		collectionVO.setUserId(loingUserId);
-		collectionVO.setTitle(Article.TYPE_ARTICLE);
+//		String loingUserId = TokenUtils.getLoingUserId();
+//		QueryArticle queryArticleVO=new QueryArticle();
+//		queryArticleVO.setUserId(loingUserId);
+//		queryArticleVO.setType(Article.TYPE_ARTICLE);
+//		QueryCollection collectionVO=new QueryCollection();
+//		collectionVO.setUserId(loingUserId);
+//		collectionVO.setTitle(Article.TYPE_ARTICLE);
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
 		return mav;
 	}
@@ -106,6 +105,7 @@ public class ArticleController {
 		queryArticleVO.setPageNo(pageNo);
 		queryArticleVO.setStatus(status);
 		queryArticleVO.setType(Article.TYPE_ARTICLE);
+		queryArticleVO.setOrderCondition("create_time desc");
 		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
 		return pageData;
 	}

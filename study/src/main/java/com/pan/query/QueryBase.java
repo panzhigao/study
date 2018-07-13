@@ -14,7 +14,7 @@ public class QueryBase {
 	 * 排序条件
 	 * @return
 	 */
-	protected String orderByCondition;
+	protected String orderCondition;
 	/**
 	 * 查询条件
 	 */
@@ -47,11 +47,11 @@ public class QueryBase {
 	public Integer getRow(){
 		return this.pageSize;
 	}
-	public String getOrderByCondition() {
-		return orderByCondition;
+	public String getOrderCondition() {
+		return orderCondition;
 	}
-	public void setOrderByCondition(String orderByCondition) {
-		this.orderByCondition = orderByCondition;
+	public void setOrderCondition(String orderCondition) {
+		this.orderCondition = orderCondition;
 	}
 	public String getWhereCondition() {
 		return whereCondition;

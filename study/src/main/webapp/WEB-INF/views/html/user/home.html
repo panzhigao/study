@@ -149,9 +149,13 @@ function getData(){
 			}
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
-				var info='<li>'+
+				var jing='';
+				if(one.highQuality==1){
+					jing='<span class="fly-jing">精</span>';
+				}
+				var info='<li>'+jing+
 	            '<a style="max-width: 60%;" target="_blank" href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
-	            '<i>'+tranTime(one.createTime)+'</i>'+
+	            '<i>'+tranTime(one.createTime,'yyyy-MM-dd')+'</i>'+
 	            '<em class="layui-hide-xs">'+one.viewCount+'阅/'+one.commentCount+'评论</em>'+
 	          '</li>';
 				$('.jie-row').append(info);

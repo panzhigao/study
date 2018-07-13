@@ -25,3 +25,7 @@
     background-color: #FF5722;
     color: #fff
 }
+.layui-table-page{
+	position:relative;
+	top:-50px;
+}

@@ -45,6 +45,9 @@
     <select id="findVOByParams" resultMap="DetailResultMap" parameterType="com.pan.query.QueryArticleCheck">
   	select <include refid="Less_Columns_List"/>,user.nickname,user.username from t_article_check c left join t_user user on c.user_id=user.user_id
   	<include refid="whereSql"/>
+  	<if test="orderCondition !=null and orderCondition !='' ">
+  		order by ${orderCondition}
+  	</if>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>

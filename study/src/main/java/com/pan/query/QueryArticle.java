@@ -37,10 +37,6 @@ public class QueryArticle extends QueryBase{
 	 */
 	private String isHot;
 	/**
-	 * 排序规则
-	 */
-	private String orderCondition;
-	/**
 	 * 置顶系数
 	 */
 	private Integer stick;
@@ -107,12 +103,11 @@ public class QueryArticle extends QueryBase{
 	}
 	@Override
 	public String toString() {
-		return "QueryArticleVO [articleId=" + articleId + ", userId=" + userId
+		return "QueryArticle [articleId=" + articleId + ", userId=" + userId
 				+ ", status=" + status + ", title=" + title + ", type=" + type
-				+ ", isHot=" + isHot + ", orderCondition=" + orderCondition
-				+ ", stick=" + stick + ", highQuality=" + highQuality
-				+ ", pageSize=" + pageSize + ", pageNo=" + pageNo
-				+ ", orderByCondition=" + orderByCondition
-				+ ", whereCondition=" + whereCondition + "]";
-	}	
+				+ ", isHot=" + isHot + ", stick=" + stick + ", highQuality="
+				+ highQuality + ", pageSize=" + pageSize + ", pageNo=" + pageNo
+				+ ", orderCondition=" + orderCondition + ", whereCondition="
+				+ whereCondition + "]";
+	}
 }

@@ -40,6 +40,8 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	
+	private static final String COMPLETE_CHECK="1";
+	
 	@Autowired
 	private ArticleCheckMapper articleCheckMapper;
 	
@@ -60,7 +62,12 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<ArticleCheckVO> list = new ArrayList<ArticleCheckVO>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticleCheck));
+			logger.info("分页查询文章审核信息，参数为:{}", JsonUtils.toJson(queryArticleCheck));
+			if(COMPLETE_CHECK.equals(queryArticleCheck.getCompleteFlag())){//审核完成
+				queryArticleCheck.setOrderCondition("check_time desc");
+			}else{
+				queryArticleCheck.setOrderCondition("create_time desc");
+			}
 			int total=articleCheckMapper.getCountByParams(queryArticleCheck);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
