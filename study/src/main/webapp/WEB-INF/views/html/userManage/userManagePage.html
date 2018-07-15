@@ -140,7 +140,9 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/userList', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'username', title: '用户账号', width:150, fixed: 'left'},
+	      {field: 'username', title: '用户账号', width:150, fixed: 'left',templet:function(d){
+	    	  return '<a href="/u/'+d.userId+'" target="_blank">'+d.username+'</a>';
+	      }},
 	      {field: 'sex', title: '用户性别', width:100, fixed: 'left',templet:function(d){
 	    	  var sex='无';
 	    	  if(d.sex==0){
