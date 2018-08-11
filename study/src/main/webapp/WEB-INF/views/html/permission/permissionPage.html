@@ -14,10 +14,14 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-btn-group">
- 
 		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
-				
 	  		</div>
+	  		
+	  		<div class="layui-inline">
+	    		<input placeholder="权限名" class="layui-input" id="searchKey" autocomplete="off">
+	    	</div>
+	    
+	    	<button class="layui-btn" data-type="reload" id="btn-search">搜索</button>
 	    </div>
       	<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
       </div>
@@ -44,7 +48,7 @@ layui.config({
 
 var treeTable;
 //table
-layui.use(['table','jquery','treeGrid','form'], function(){
+layui.use(['table','jquery','treeGrid','form','layer'], function(){
 	  var form=layui.form;
 	  var treeGrid = layui.treeGrid; 
 	  var table=layui.table;
@@ -64,10 +68,10 @@ layui.use(['table','jquery','treeGrid','form'], function(){
           treeShowName:'name',//以树形式显示的字段
           method: 'post',
           cols: [[
+			  {type: 'numbers'},
 			  {field:'icon',width:'80', title: '图标',templet:function(row){
 				var temp=row.level*10;
-				var css='padding-left:'+temp+'px;';
-				return '<i class="layui-icon" style='+css+'>'+row.icon+'</i>';
+				return '<i class="layui-icon" style="padding:0 20px;">'+row.icon+'</i>';
 			  }},
               {field:'id', width:'100', title: 'id'},
               {field:'name',width:'160', title: '权限名'},
@@ -108,9 +112,28 @@ layui.use(['table','jquery','treeGrid','form'], function(){
           page:false
       });
 	  
-	  
 	  $('#btnAdd').on('click', function() {
 		  showTab('添加权限',null,1);
+	  });
+	  
+	  $('#btn-search').click(function () {
+		  var keyword=$('#searchKey').val();
+          if (!keyword) {
+              layer.msg("请输入搜索内容");
+              return;
+          }
+          var count=0
+          $('#treeTable').next('.layui-table-view').find('.layui-table-body tbody tr').each(function () {
+        	    $(this).css('background-color', 'transparent');
+        	 	var content=$(this).find('td').eq(3).text();
+        	 	if(content.indexOf(keyword)>-1){
+        	 		 $(this).css('background-color', 'rgba(250,230,160,0.5)');
+        	 		 count++;
+        	 	}
+          });
+          if(count==0){
+        	  layer.msg("没有匹配项");
+          }
 	  });
 	  
 });

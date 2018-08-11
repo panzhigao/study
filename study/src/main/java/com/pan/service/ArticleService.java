@@ -61,7 +61,7 @@ public interface ArticleService {
 	 * @param params
 	 * @return
 	 */
-	public int getCount(QueryArticle queryArticleVO);
+	public int getCount(QueryArticle queryArticle);
 	/**
 	 * 根据文章id和状态查找唯一文章信息
 	 * @param articleId
