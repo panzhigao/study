@@ -1,6 +1,7 @@
 package com.pan.controller;
 
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,13 +14,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.constant.MyConstant;
 import com.pan.dto.Tree;
 import com.pan.entity.Article;
+import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
 import com.pan.query.QueryCollection;
+import com.pan.query.QueryPraise;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
 import com.pan.service.MessageService;
+import com.pan.service.PraiseService;
 import com.pan.service.UserExtensionService;
+import com.pan.util.DateUtils;
 import com.pan.util.TokenUtils;
 
 /**
@@ -42,6 +47,9 @@ public class AdminController {
 	@Autowired
 	private UserExtensionService userExtensionService;
 	
+	@Autowired
+	private PraiseService praiseService;
+	
 	/**
 	 * 跳转用户后台
 	 * @return
@@ -59,26 +67,36 @@ public class AdminController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/main")
 	public ModelAndView toMainPage(HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mav=new ModelAndView("html/main/mainPage");
-		String loingUserId = TokenUtils.getLoingUserId();
+		User loginUser = TokenUtils.getLoginUser();
+		String loingUserId = loginUser.getUserId();
 		//未读消息数
 		int unReadMessageCount = messageService.countMessage(loingUserId, MyConstant.MESSAGE_NOT_READED);
+		//文章总数
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setUserId(loingUserId);
-		//文章总数
+		queryArticle.setType(Article.TYPE_ARTICLE);
 		int articleTotalCount = articleService.getCount(queryArticle);
-		queryArticle.setStatus(Article.STATUS_IN_REVIEW);
 		//待审核文章数
+		queryArticle.setStatus(Article.STATUS_IN_REVIEW);
 		int articleWaitReviewCount = articleService.getCount(queryArticle);
+		//收藏数
 		QueryCollection queryCollection=new QueryCollection();
 		queryCollection.setUserId(loingUserId);
 		int collectionCount = collectionService.getCount(queryCollection);
 		UserExtension findByUserId = userExtensionService.findByUserId(loingUserId);
 		Integer score = findByUserId.getScore();
+		QueryPraise queryPraise=new QueryPraise();
+		queryPraise.setUserId(loingUserId);
+		int praiseCount = praiseService.getCount(queryPraise);
+		Date lastLoginTime = loginUser.getLastLoginTime();
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
 		mav.addObject("articleWaitReviewCount", articleWaitReviewCount);
 		mav.addObject("collectionCount", collectionCount);
 		mav.addObject("score", score);
+		mav.addObject("praiseCount", praiseCount);
+		mav.addObject("ss", lastLoginTime);
+		mav.addObject("lastLoginTime", DateUtils.getDateStr(lastLoginTime, DateUtils.FORMAT_DATE3));
 		return mav;
 	}
 	

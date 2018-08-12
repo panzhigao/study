@@ -12,6 +12,8 @@ public class DateUtils {
 	
 	public static final String FORMAT_DATE2="yyyyMMdd";
 	
+	public static final String FORMAT_DATE3="yyyy-MM-dd HH:mm";
+	
 	public static final String FORMAT_TIME_MILLS="yyyyMMddHHmmssSSS";
 	
 	/**
@@ -19,7 +21,7 @@ public class DateUtils {
 	 * @param format 日期字符串格式
 	 * @return
 	 */
-	public static String getDateStr(String format){
+	public static String getNowDateStr(String format){
 		SimpleDateFormat sdf=new SimpleDateFormat(format);
 		return sdf.format(new Date());
 	}
@@ -32,7 +34,7 @@ public class DateUtils {
 	 * 获取昨日日期
 	 * @return
 	 */
-	public static Date getLastDate(){
+	public static Date getYesterdayDate(){
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE,-1);
 		Date time=cal.getTime();
@@ -40,7 +42,7 @@ public class DateUtils {
 	}
 	
 	public static void main(String[] args) {
-		Date lastDate = getLastDate();
+		Date lastDate = getYesterdayDate();
 		System.out.println(lastDate);
 	}
 }

@@ -7,7 +7,9 @@ layui.config({
 		$ = layui.jquery;
 
 	$(".panel a").on("click",function(){
-		window.parent.addTab($(this));
+		var _this=this;
+		$(_this).find('cite').text($(_this).find('input').val());
+		window.parent.addTab($(_this));
 	})
 
 	//动态获取文章总数和待审核文章数量,最新文章

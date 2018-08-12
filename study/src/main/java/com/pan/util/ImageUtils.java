@@ -39,7 +39,7 @@ public class ImageUtils {
 				}
 			}
 			// 生成jpeg图片
-			String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
+			String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
 			// 新生成的图片
 			String fileName=dateStr+".jpg";
 			String imgFilePath = fileDir+fileName;

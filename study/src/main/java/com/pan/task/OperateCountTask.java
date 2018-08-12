@@ -122,7 +122,7 @@ public class OperateCountTask {
 					List<UserExtension> resultList = userExtensionService.findByParams(queryUserExtensionVO);
 					UserExtension updateExtension=new UserExtension();
 					QueryScoreHistory historyVO=new QueryScoreHistory();
-					historyVO.setScoreDate(DateUtils.getLastDate());
+					historyVO.setScoreDate(DateUtils.getYesterdayDate());
 					for (UserExtension userExtension : resultList) {
 						updateExtension.setUserId(userExtension.getUserId());
 						//查询昨日是否签到

@@ -107,6 +107,43 @@ layui.use(['table','jquery','form'], function(){
 	  form.on('switch(userStatus)', function(data){
 		  var userId=$(data.elem).attr('userid');
 		  var new_status =this.checked ? '1' : '0';
+		  var tipText = '确定封禁该用户？';
+          if(data.elem.checked){
+              tipText = '确定解封该用户？'
+          }
+          layer.confirm(tipText,{
+              icon: 3,
+              title:'系统提示',
+              cancel : function(index){
+                  data.elem.checked = !data.elem.checked;
+                  form.render();
+                  layer.close(index);
+              }
+          },function(index){//确认
+    		  $.ajax({
+    			  url:'$!{rc.contextPath}/user/manage/changeStatus',
+    			  data:{userId:userId,status:new_status},
+    			  dataType:'json',
+    			  type:'post',
+    			  success:function(res){
+    				  if(res.code=='200'){
+    					  layer.alert(res.msg);
+    				  }else{
+    					  data.elem.checked = !data.elem.checked;
+    		              form.render();
+    					  layer.alert(res.msg);
+    				  }
+    				  layer.close(index);
+    			  }
+    		  });
+          
+          },function(index){//取消
+              data.elem.checked = !data.elem.checked;
+              form.render();
+              layer.close(index);
+          });
+		  
+          	/*
 		  $.ajax({
 			  url:'$!{rc.contextPath}/user/manage/changeStatus',
 			  data:{userId:userId,status:new_status},
@@ -119,7 +156,7 @@ layui.use(['table','jquery','form'], function(){
 					  layer.alert(res.msg);
 				  }
 			  }
-		  });
+		  });*/
 	  }); 
 	  
 	  //第一个实例

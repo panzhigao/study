@@ -69,7 +69,7 @@ public class FileUploadController {
         String fileName="";  
         if(!file.isEmpty()){  
             //生成时间戳作为文件名称  
-            String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
+            String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
             //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
             //获得文件后缀名称  
@@ -135,7 +135,7 @@ public class FileUploadController {
 						String myFileName = file.getOriginalFilename();
 						//如果名称不为“”,说明该文件存在，否则说明该文件不存在
 						if(myFileName.trim() !=""){
-				            String dateStr=DateUtils.getDateStr(DateUtils.FORMAT_TIME_MILLS);
+				            String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
 							String contentType=file.getContentType();
 							//后缀名
 							String fileType=contentType.substring(contentType.indexOf("/")+1);

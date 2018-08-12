@@ -1,8 +1,8 @@
 package com.pan.mapper;
 
-import java.util.Map;
 
 import com.pan.entity.Praise;
+import com.pan.query.QueryPraise;
 
 /**
  * 
@@ -10,7 +10,10 @@ import com.pan.entity.Praise;
  *
  */
 public interface PraiseMapper {
+	
 	public void addPraise(Praise praise);
 	
-	public Praise findByParams(Map<String,Object> params);
+	public Praise findByParams(QueryPraise queryPraise);
+	
+	public int getCount(QueryPraise queryPraise);
 }

@@ -318,6 +318,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 通过文章标题查询文章信息
+	 * 查询es
 	 */
 	@Override
 	public List<ArticleDTO> searchArticleByTitle(String title) {
@@ -327,8 +328,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<Article> findByCondition(QueryArticle queryArticleVO) {
-		return articleMapper.findByParams(queryArticleVO);
+	public List<Article> findByCondition(QueryArticle queryArticle) {
+		return articleMapper.findByParams(queryArticle);
 	}
 
 	@Override

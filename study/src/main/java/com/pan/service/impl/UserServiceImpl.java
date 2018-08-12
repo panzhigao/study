@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService{
 			logger.info("用户名已注册{}",userInDb);
 			throw new BusinessException("用户名已注册");
 		}
-		String dateStr = DateUtils.getDateStr(DateUtils.FORMAT_DATE2);
+		String dateStr = DateUtils.getNowDateStr(DateUtils.FORMAT_DATE2);
 		String password=user.getPassword();
 		//用户密码加密
 		try {

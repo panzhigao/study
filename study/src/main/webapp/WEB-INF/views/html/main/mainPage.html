@@ -22,44 +22,48 @@
 				<div class="panel_word newMessage">
 					<span>$!{unReadMessageCount}</span>
 					<cite>未读消息</cite>
+					<input type="hidden" value="我的消息">
 				</div>
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/message/message.html">
+			<a href="javascript:;" data-url="/user/article/mine#index">
 				<div class="panel_icon" style="background-color:#FF5722;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word newMessage">
 					<span>$!{articleTotalCount}</span>
 					<cite>文章数</cite>
+					<input type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/news/newsList.html">
+			<a href="javascript:;" data-url="/user/article/mine?status=2#index">
 				<div class="panel_icon" style="background-color:#F7B824;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
 					<span>$!{articleWaitReviewCount}</span>
 					<cite>审核中文章数</cite>
+					<input type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/news/newsList.html">
+			<a href="javascript:;" data-url="/user/article/mine#collection">
 				<div class="panel_icon" style="background-color:#2F4056;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
 					<span>$!{collectionCount}</span>
 					<cite>收藏文章数</cite>
+					<input type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/user/allUsers.html">
+			<a href="javascript:;" data-url="/user/scoreHistory">
 				<div class="panel_icon" style="background-color:#009688;">
 					<i class="layui-icon" data-icon="&#xe600;">&#xe600;</i>
 				</div>
@@ -70,12 +74,12 @@
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/user/allUsers.html">
+			<a href="javascript:;" style="pointer-events:none">
 				<div class="panel_icon" style="background-color:#c789c9">
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span></span>
+					<span>${praiseCount}</span>
 					<cite>我的点赞数</cite>
 				</div>
 			</a>
@@ -92,13 +96,13 @@
 			</a>
 		</div>
 		<div class="panel col">
-			<a href="javascript:;" data-url="page/news/newsList.html">
+			<a href="javascript:;" style="pointer-events:none">
 				<div class="panel_icon layui-bg-blue">
 					<i class="layui-icon" data-icon="&#xe60e;">&#xe60e;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>2018-9-9</span>
-					<cite>上次登录时间</cite>
+					<span style="font-size:1em;">${lastLoginTime}</span>
+					<cite>最近登录时间</cite>
 				</div>
 			</a>
 		</div>

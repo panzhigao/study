@@ -1,6 +1,7 @@
 package com.pan.service;
 
 import com.pan.entity.Praise;
+import com.pan.query.QueryPraise;
 
 /**
  * 
@@ -13,4 +14,10 @@ public interface PraiseService {
 	 * @param praise
 	 */
 	public void addPraise(Praise praise);
+	/**
+	 * 查询条数
+	 * @param queryPraise
+	 * @return
+	 */
+	public int getCount(QueryPraise queryPraise);
 }

@@ -104,7 +104,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 				throw new BusinessException("今日已签到过了");
 			}
 			//查询昨日是否签到
-			vo.setScoreDate(DateUtils.getLastDate());
+			vo.setScoreDate(DateUtils.getYesterdayDate());
 			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
 			//昨日没有签到过，按5积分算,用户连续签到天数置为0
 			if(lastDayCount>0){

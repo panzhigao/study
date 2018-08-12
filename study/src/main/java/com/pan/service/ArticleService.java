@@ -30,7 +30,7 @@ public interface ArticleService {
 	 * @param params 条件有userId,articleId
 	 * @return
 	 */
-	public Map<String,Object> findByParams(QueryArticle queryArticleVO);
+	public Map<String,Object> findByParams(QueryArticle queryArticle);
 	/**
 	 * 获取用户的文章详细信息
 	 * @param userId
@@ -101,7 +101,7 @@ public interface ArticleService {
 	 * @param title
 	 * @return
 	 */
-	public List<Article> findByCondition(QueryArticle queryArticleVO);
+	public List<Article> findByCondition(QueryArticle queryArticle);
 	/**
 	 * 获取文章最大置顶值
 	 * @return

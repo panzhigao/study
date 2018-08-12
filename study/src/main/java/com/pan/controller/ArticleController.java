@@ -78,7 +78,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
 	@RequiresPermissions("/user/article/mine")
-	public ModelAndView toArticleList(){
+	public ModelAndView toArticleList(String status){
 //		String loingUserId = TokenUtils.getLoingUserId();
 //		QueryArticle queryArticleVO=new QueryArticle();
 //		queryArticleVO.setUserId(loingUserId);
@@ -87,6 +87,7 @@ public class ArticleController {
 //		collectionVO.setUserId(loingUserId);
 //		collectionVO.setTitle(Article.TYPE_ARTICLE);
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
+		mav.addObject("status", status);
 		return mav;
 	}
 	
@@ -94,7 +95,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article/getPageData")
+	@RequestMapping(method=RequestMethod.POST,value="/user/article/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){

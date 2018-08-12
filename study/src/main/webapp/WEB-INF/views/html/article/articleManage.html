@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>我的文章</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
@@ -25,11 +25,11 @@
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-tab-content">
 		       <span class="layui-breadcrumb" lay-separator="|">
-		  		<a href="javascript:;" class="category-item selected" status="">全部</a>
-		  		<a href="javascript:;" class="category-item" status="3">已发表</a>
-		  		<a href="javascript:;" class="category-item" status="0">未通过</a>
-		  		<a href="javascript:;" class="category-item" status="1">草稿</a>
-		  		<a href="javascript:;" class="category-item" status="2">审核中</a>
+		  		<a href="javascript:;" class="category-item #if(!$status) selected #end" status="">全部</a>
+		  		<a href="javascript:;" class="category-item #if($status==3) selected #end" status="3">已发表</a>
+		  		<a href="javascript:;" class="category-item #if($status==0) selected #end" status="0">未通过</a>
+		  		<a href="javascript:;" class="category-item #if($status==1) selected #end" status="1">草稿</a>
+		  		<a href="javascript:;" class="category-item #if($status==2) selected #end" status="2">审核中</a>
 				</span>
 		    </div>
 	    	<table id="myArticles" lay-filter="myTable"></table>
@@ -108,7 +108,7 @@ layui.use(['table','jquery'], function(){
 	  //第一个实例
 	  table.render({
 		id: 'articlesTab',  
-	    //method: 'post',  
+	    method: 'post',  
 	    elem: '#myArticles',
 	    height: 500,
 	    request: {
@@ -125,6 +125,7 @@ layui.use(['table','jquery'], function(){
 	    done: function(res, curr, count){
 	    	$('#articleCounts').html(count);
 	    },
+	    where:{status:'$!{status}'},
 	    cols: [[ //表头
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:300,templet:function(d){

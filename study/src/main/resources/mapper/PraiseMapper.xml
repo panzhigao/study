@@ -18,8 +18,12 @@
   	insert into t_praise (<include refid="Base_Column_List"/>) values (null,#{praiseId},#{commentId},#{userId},#{createTime})
   </insert>
   
-  <select id="findByParams" resultMap="BaseResultMap">
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPraise">
   	select <include refid="Base_Column_List"/> from t_praise
+  	<include refid="whereSql"/>
+  </select>
+  
+  <sql id="whereSql">
   	<where>
   		<if test="commentId != null and commentId!=''">
   			and comment_id=#{commentId}
@@ -28,5 +32,10 @@
   			and user_id=#{userId}
   		</if>
   	</where>
+  </sql>
+  
+  <select id="getCount" parameterType="com.pan.query.QueryPraise" resultType="int">
+  	select count(0) from t_praise
+  	<include refid="whereSql"/>
   </select>
 </mapper>
