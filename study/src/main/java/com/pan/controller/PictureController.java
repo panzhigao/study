@@ -3,7 +3,7 @@ package com.pan.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
-import com.pan.entity.User;
+import com.pan.query.QueryPicture;
 import com.pan.service.PictureService;
 import com.pan.util.TokenUtils;
 
@@ -36,42 +37,44 @@ public class PictureController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/my_pictures")
-	public ModelAndView toMyPictures(HttpServletRequest request){
-		ModelAndView mav=new ModelAndView("content/myPictures");
-		User user = TokenUtils.getLoginUser();
-		mav.addObject("user", user);
+	@RequestMapping(method=RequestMethod.GET,value="/user/myPicturePage")
+	public ModelAndView toMyPictures(){
+		logger.info("进入我的相册页...");
+		ModelAndView mav=new ModelAndView("html/picture/pictureManage");
 		return mav;
 	}
 	
 	/**
-	 * 加载文章列数据，分页查询
+	 * 加载图片数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/get_pictures")
+	@RequestMapping(method=RequestMethod.POST,value="/user/getPictures")
 	@ResponseBody
-	public List<Picture> getPictureList(HttpServletRequest request,Integer pageSize,Integer pageNo){
+	public ResultMsg getPictureList(Integer pageSize,Integer pageNo){
 		String loingUserId = TokenUtils.getLoingUserId();
-		Map<String,Object> params=new HashMap<String, Object>(3);
-		params.put("userId", loingUserId);
-		Integer offset=(pageNo-1)*pageSize;
-		params.put("offset", offset);
-		params.put("row", pageSize);
-		List<Picture> list=pictureService.findByParams(params);
-		return list;
+		QueryPicture queryPicture=new QueryPicture();
+		queryPicture.setUserId(loingUserId);
+		queryPicture.setPageSize(pageSize);
+		queryPicture.setPageNo(pageNo);
+		List<Picture> list=pictureService.findByParams(queryPicture);
+		int total = pictureService.getCountByParams(queryPicture);
+		Map<String,Object> data=new HashMap<String, Object>(2);
+		data.put("total", total);
+		data.put("list", list);
+		return ResultMsg.ok("获取用户图片列表信息成功", data);
 	}
 	
 	/**
 	 * 删除图片
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/delete_picture")
+	@RequestMapping(method=RequestMethod.POST,value="/user/deletePicture")
 	@ResponseBody
-	public ResultMsg deletePicture(HttpServletRequest request,String pictureId){
+	public ResultMsg deletePicture(String pictureIds){
 		logger.info("删除图片开始");
 		String loingUserId = TokenUtils.getLoingUserId();
 		ResultMsg resultMsg=null;
-		pictureService.deleteByPictureId(loingUserId, pictureId);
+		pictureService.deleteByPictureIds(loingUserId, pictureIds);
 		resultMsg=ResultMsg.ok("删除图片成功");
 		return resultMsg;
 	}

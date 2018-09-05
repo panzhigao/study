@@ -18,8 +18,33 @@
   	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap">
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
   	select <include refid="Base_Column_List"/> from t_picture 
+  	<include refid="whereSql"/>
+  	order by create_time desc
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>
+  
+  <insert id="savePicture" parameterType="com.pan.entity.Picture">
+  	insert into t_picture (<include refid="Base_Column_List"/>) values 
+  	(null,#{pictureId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{picUrl,jdbcType=VARCHAR})
+  </insert>
+  
+  <delete id="deleteByPictureIds">
+  	delete from t_picture where user_id=#{userId} and picture_id in
+  	<foreach collection="picIds" item="picId" open="(" close=")" separator=",">
+  		#{picId}
+  	</foreach>
+  </delete>
+  
+  <select id="getCountByParams" resultType="int">
+  	select count(0) from t_picture tp
+  	<include refid="whereSql"/>
+  </select>
+  
+  <sql id="whereSql">
   	<where>
   		<if test="pictureId !=null and pictureId!='' ">
   			and picture_id=#{pictureId}
@@ -28,22 +53,5 @@
   			and user_id=#{userId}
   		</if>
   	</where>
-  	order by create_time desc
-  	<if test="offset!=null and row !=null">
-  		limit #{offset},#{row}
-  	</if>
-  </select>
-  
-  <select id="findListByUserId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_picture where user_id=#{userId} order by create_time desc
-  </select>
-  
-  <insert id="savePicture" parameterType="com.pan.entity.Picture">
-  	insert into t_picture (<include refid="Base_Column_List"/>) values 
-  	(null,#{pictureId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{picUrl,jdbcType=VARCHAR})
-  </insert>
-  
-  <delete id="deleteByPictureId">
-  	delete from t_picture where picture_id=#{pictureId}
-  </delete>
+  </sql>
 </mapper>

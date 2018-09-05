@@ -2,25 +2,24 @@ package com.pan.service.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Picture;
 import com.pan.mapper.PictureMapper;
+import com.pan.query.QueryPicture;
 import com.pan.service.PictureService;
 import com.pan.util.JsonUtils;
 
 /**
  * 
- * @author Administrator
+ * 图片方法
  *
  */
 @Service
@@ -40,16 +39,16 @@ public class PictureServiceImpl implements PictureService{
 	}
 	
 	@Override
-	public List<Picture> findByParams(Map<String, Object> params) {
+	public List<Picture> findByParams(QueryPicture queryPicture) {
 		List<Picture> list = new ArrayList<Picture>();
 		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(params));
-			String userId=(String) params.get("userId");
+			logger.info("分页查询图片参数为:{}", JsonUtils.toJson(queryPicture));
+			String userId=queryPicture.getUserId();
 			if(StringUtils.isBlank(userId)){
 				logger.info("用户id有误",userId);
 				return list;
 			}
-			list = pictureMapper.findByParams(params);
+			list = pictureMapper.findByParams(queryPicture);
 		} catch (Exception e) {
 			logger.error("分页查询文章异常", e);
 		}
@@ -57,25 +56,28 @@ public class PictureServiceImpl implements PictureService{
 	}
 	
 	@Override
-	public void deleteByPictureId(String userId,String pictureId) {
-		logger.info("删除的图片id为{}",pictureId);
-		if(StringUtils.isBlank(pictureId)){
+	public void deleteByPictureIds(String userId,String pictureIds) {
+		logger.info("删除的图片ids为{}",pictureIds);
+		if(StringUtils.isBlank(pictureIds)){
 			logger.info("图片id不能为空",userId);
 			throw new BusinessException("图片id不能为空");
 		}
-		Picture pictureInDb = pictureMapper.findByPictureId(pictureId);
-		if(pictureInDb==null){
-			logger.info("图片信息不存在",userId);
-			throw new BusinessException("图片信息不存在");
+		List<String> list=Arrays.asList(pictureIds.split(","));
+		int length=list.size();
+		int deleteCount = pictureMapper.deleteByPictureIds(list,userId);
+		if(deleteCount!=length){
+			logger.error("用户删除图片数：{}，实际删除图片数：{}",length,deleteCount);
+			throw new BusinessException("删除图片信息失败，请重试");
 		}
-		//判断当前删除的图片是否属于当前登录用户
-		if(!StringUtils.equals(pictureInDb.getUserId(), userId)){
-			logger.info("图片信息不属于当前用户,不能删除,用户id：{}，图片所属用户id：{}",userId,pictureInDb.getUserId());
-			throw new BusinessException("图片信息不属于当前用户,不能删除");
-		}
-		String picUrl=pictureInDb.getPicUrl();
-		String fileName=picUrl.substring(picUrl.lastIndexOf("/"));
-		File file=new File(pictureSaveDir+fileName);
+	}
+	
+	/**
+	 * 删除图片
+	 * @param filePath 图片实际路径
+	 * @return
+	 */
+	private void deletePicture(String filePath){
+		File file=new File(filePath);
 		if(file.exists()){
 			boolean deleted = file.delete();
 			if(deleted){
@@ -85,9 +87,13 @@ public class PictureServiceImpl implements PictureService{
 				throw new BusinessException("删除图片失败");
 			}
 		}else{
-			logger.error("删除图片失败，图片不存在",pictureSaveDir+fileName);
+			logger.error("删除图片失败，图片不存在，图片路径：{}",filePath);
 			throw new BusinessException("删除图片失败，图片不存在");
 		}
-		pictureMapper.deleteByPictureId(pictureId);
+	}
+	
+	@Override
+	public int getCountByParams(QueryPicture queryPicture) {
+		return pictureMapper.getCountByParams(queryPicture);
 	}
 }

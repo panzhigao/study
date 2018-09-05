@@ -1,8 +1,8 @@
 package com.pan.service;
 
 import java.util.List;
-import java.util.Map;
 import com.pan.entity.Picture;
+import com.pan.query.QueryPicture;
 
 /**
  * 
@@ -20,11 +20,17 @@ public interface PictureService {
 	 * @param params 条件有userId
 	 * @return
 	 */
-	public List<Picture> findByParams(Map<String,Object> params);
+	public List<Picture> findByParams(QueryPicture queryPicture);
 	/**
-	 * 删除用户下的图片
+	 * 批量删除用户下的图片
 	 * @param userId
 	 * @param pictureId
 	 */
-	public void deleteByPictureId(String userId,String pictureId);
+	public void deleteByPictureIds(String userId,String pictureId);
+	/**
+	 * 获取图片数
+	 * @param queryPicture
+	 * @return
+	 */
+	public int getCountByParams(QueryPicture queryPicture);
 }

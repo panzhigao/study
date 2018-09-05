@@ -48,8 +48,8 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView writeArticle(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/article/add");
-		User user = TokenUtils.getLoginUser();
-		mav.addObject("user", user);
+//		User user = TokenUtils.getLoginUser();
+//		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -79,13 +79,6 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
 	@RequiresPermissions("/user/article/mine")
 	public ModelAndView toArticleList(String status){
-//		String loingUserId = TokenUtils.getLoingUserId();
-//		QueryArticle queryArticleVO=new QueryArticle();
-//		queryArticleVO.setUserId(loingUserId);
-//		queryArticleVO.setType(Article.TYPE_ARTICLE);
-//		QueryCollection collectionVO=new QueryCollection();
-//		collectionVO.setUserId(loingUserId);
-//		collectionVO.setTitle(Article.TYPE_ARTICLE);
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
 		mav.addObject("status", status);
 		return mav;

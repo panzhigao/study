@@ -1,8 +1,11 @@
 package com.pan.mapper;
 
 import java.util.List;
-import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.pan.entity.Picture;
+import com.pan.query.QueryPicture;
 
 /**
  * 
@@ -17,12 +20,6 @@ public interface PictureMapper {
 	 */
 	public Picture findByPictureId(String pictureId);
 	/**
-	 * 根据userId查找图片信息集合
-	 * @param userId
-	 * @return
-	 */
-	public List<Picture> findListByUserId(String userId);
-	/**
 	 * 保存图片信息
 	 * @param picture
 	 */
@@ -32,10 +29,15 @@ public interface PictureMapper {
 	 * @param params
 	 * @return
 	 */
-	public List<Picture> findByParams(Map<String,Object> params);
+	public List<Picture> findByParams(QueryPicture queryPicture);
 	/**
-	 * 根据图片id删除图片
+	 * 根据图片ids删除图片
 	 * @param pictureId
 	 */
-	public void deleteByPictureId(String pictureId);
+	public int deleteByPictureIds(@Param("picIds")List<String> picIds,@Param("userId")String userId);
+	/**
+	 * 查询条数
+	 * @return
+	 */
+	public int getCountByParams(QueryPicture queryPicture);
 }
