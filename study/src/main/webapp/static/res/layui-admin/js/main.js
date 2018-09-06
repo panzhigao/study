@@ -11,7 +11,8 @@ layui.config({
 		$(_this).find('cite').text($(_this).find('input').val());
 		window.parent.addTab($(_this));
 	})
-
+	
+	/*
 	//动态获取文章总数和待审核文章数量,最新文章
 	$.get("../json/newsList.json",
 		function(data){
@@ -34,35 +35,39 @@ layui.config({
 			}
 			$(".hot_news").html(hotNewsHtml);
 		}
-	)
-
+	)*/
+	
+	/*
 	//图片总数
 	$.get("../json/images.json",
 		function(data){
 			$(".imgAll span").text(data.length);
 		}
-	)
-
+	)*/
+	
+	/*
 	//用户数
 	$.get("../json/usersList.json",
 		function(data){
 			$(".userAll span").text(data.length);
 		}
-	)
-
+	)*/
+	
+	/*
 	//新消息
 	$.get("../json/message.json",
 		function(data){
 			$(".newMessage span").text(data.length);
 		}
-	)
+	)*/
 
 
 	//数字格式化
 	$(".panel span").each(function(){
 		$(this).html($(this).text()>9999 ? ($(this).text()/10000).toFixed(2) + "<em>万</em>" : $(this).text());	
 	})
-
+	
+	/*
 	//系统基本参数
 	if(window.sessionStorage.getItem("systemParameter")){
 		var systemParameter = JSON.parse(window.sessionStorage.getItem("systemParameter"));
@@ -76,7 +81,7 @@ layui.config({
 				fillParameter(data);
 			}
 		})
-	}
+	}*/
 
 	//填充数据方法
  	function fillParameter(data){
