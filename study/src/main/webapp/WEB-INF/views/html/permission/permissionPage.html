@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-
+<input type="hidden" id="iconPicker">
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
@@ -57,7 +57,6 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 		  $('#selectPId').val('');
 	  });
 	  
- 
 	  treeTable =treeGrid.render({
 		  id: 'tab', 
           elem: '#treeTable',
@@ -71,7 +70,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 			  {type: 'numbers'},
 			  {field:'icon',width:'80', title: '图标',templet:function(row){
 				var temp=row.level*10;
-				return '<i class="layui-icon" style="padding:0 20px;">'+row.icon+'</i>';
+				return '<i class="layui-icon '+row.icon+'" style="padding:0 20px;"></i>';
 			  }},
               {field:'id', width:'100', title: 'id'},
               {field:'name',width:'160', title: '权限名'},
@@ -139,6 +138,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 });
 
 function showTab(title,pId,level){
+	layer.closeAll();
 	$.get('$!{rc.contextPath}/user/permission/addPage', null, function(form) {
 	if(form.code=='400'){
 		layer.msg(form.msg);
@@ -237,6 +237,7 @@ function addSub(pId){
 }
 
 function edit(id){
+	layer.closeAll();
 	$.get('$!{rc.contextPath}/user/permissionEdit', null, function(form) {
 		var index=layer.open({
 				type: 1,
@@ -244,8 +245,9 @@ function edit(id){
 				content: form,
 				btn: ['保存', '取消'],
 				shade: false,
+				maxmin: true,
 				offset: ['50px', '20%'],
-				area: ['800px', '400px'],
+				area: ['800px', '500px'],
 			yes: function(index) {
 				//触发表单的提交事件
 				$('form.layui-form').find('button[lay-filter=edit]').click();
@@ -276,7 +278,30 @@ function edit(id){
 				    		$('#url').val(res.data.url);
 				    		$('#sort').val(res.data.sort);
 				    		$('#permissionId').val(res.data.permissionId);
-				    		$('#icon').val(res.data.icon);
+				    		layui.use(['iconPicker'], function () {
+				    		    var iconPicker = layui.iconPicker;
+				    		        iconPicker.render({
+				    		            // 选择器，推荐使用input
+				    		            elem: '#editIconPicker',
+				    		            // 数据类型：fontClass/unicode，推荐使用fontClass
+				    		            type: 'fontClass',
+				    		            // 是否开启搜索：true/false
+				    		            search: true,
+				    		            // 点击回调
+				    		            click: function (data) {
+				    		                console.log(data);
+				    		                $('#iconPicker').val(data.icon);
+				    		            }
+				    		        });
+				    		        /**
+				    		         * 选中图标 （常用于更新时默认选中图标）
+				    		         * @param filter lay-filter
+				    		         * @param iconName 图标名称，自动识别fontClass/unicode
+				    		         */
+				    		         $('#iconPicker').val(res.data.icon);
+				    		        iconPicker.checkIcon('iconPicker', res.data.icon);
+				    		});
+				    		
 				    		$(':radio').each(function(){
 				    			if($(this).val()==res.data.type){
 				    				this.checked=true;
@@ -305,6 +330,7 @@ function edit(id){
 					console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
 					console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
 					console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+					data.field['icon']=$('#iconPicker').val();
 					 $.ajax({
 						 url:'$!{rc.contextPath}/user/permission/doEdit',
 						 type:'post',

@@ -9,10 +9,10 @@ function navBar(data){
 		if(data[i].data != undefined && data[i].data.length > 0){
 			ulHtml += '<a href="javascript:;">';
 			if(data[i].icon != undefined && data[i].icon != ''){
-				if(data[i].icon.indexOf("icon-") != -1){
-					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
+				if(data[i].icon.indexOf("layui-icon") != -1){
+					ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'"></i>';
 				}else{
-					ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'">'+data[i].icon+'</i>';
+					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
 				}
 			}
 			ulHtml += '<cite>'+data[i].title+'</cite>';
@@ -34,10 +34,10 @@ function navBar(data){
 		}else{
 			ulHtml += '<a href="javascript:;" data-url="'+data[i].url+'">';
 			if(data[i].icon != undefined && data[i].icon != ''){
-				if(data[i].icon.indexOf("icon-") != -1){
-					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
+				if(data[i].icon.indexOf("layui-icon") != -1){
+					ulHtml += '<i class="layui-icon '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
 				}else{
-					ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'">'+data[i].icon+'</i>';
+					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
 				}
 			}
 			ulHtml += '<cite>'+data[i].title+'</cite></a>';
