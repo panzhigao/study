@@ -10,7 +10,7 @@ function navBar(data){
 			ulHtml += '<a href="javascript:;">';
 			if(data[i].icon != undefined && data[i].icon != ''){
 				if(data[i].icon.indexOf("layui-icon") != -1){
-					ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'"></i>';
+					ulHtml += '<i class="layui-icon '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
 				}else{
 					ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
 				}
@@ -22,10 +22,10 @@ function navBar(data){
 			for(var j=0;j<data[i].data.length;j++){
 				ulHtml += '<dd><a href="javascript:;" data-url="'+data[i].data[j].url+'">';
 				if(data[i].data[j].icon != undefined && data[i].data[j].icon != ''){
-					if(data[i].data[j].icon.indexOf("icon-") != -1){
-						ulHtml += '<i class="iconfont '+data[i].data[j].icon+'" data-icon="'+data[i].data[j].icon+'"></i>';
+					if(data[i].data[j].icon.indexOf("layui-icon") != -1){
+						ulHtml += '<i class="layui-icon '+data[i].data[j].icon+'" data-icon="'+data[i].data[j].icon+'"></i>';
 					}else{
-						ulHtml += '<i class="layui-icon" data-icon="'+data[i].data[j].icon+'">'+data[i].data[j].icon+'</i>';
+						ulHtml += '<i class="iconfont '+data[i].data[j].icon+'" data-icon="'+data[i].data[j].icon+'"></i>';
 					}
 				}
 				ulHtml += '<cite>'+data[i].data[j].title+'</cite></a></dd>';

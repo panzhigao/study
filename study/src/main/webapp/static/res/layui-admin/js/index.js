@@ -128,10 +128,10 @@ layui.config({
 		var openTitle = '';
 		for(var i=0;i<menu.length;i++){
 			openTitle = '';
-			if(menu[i].icon.split("-")[0] == 'icon'){
-				openTitle += '<i class="iconfont '+menu[i].icon+'"></i>';
+			if(menu[i].icon.split("-")[0] == 'layui'){
+				openTitle += '<i class="layui-icon '+menu[i].icon+'"></i>';
 			}else{
-				openTitle += '<i class="layui-icon">'+menu[i].icon+'</i>';
+				openTitle += '<i class="iconfont '+menu[i].icon+'"></i>';
 			}
 			openTitle += '<cite>'+menu[i].title+'</cite>';
 			openTitle += '<i class="layui-icon layui-unselect layui-tab-reload" data-id="'+menu[i].layId+'">&#xe669;</i>';

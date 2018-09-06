@@ -81,10 +81,11 @@ layui.define(["element","jquery"],function(exports){
 						return;
 					}
 					tabIdIndex++;
-					if(_this.find("i.iconfont").attr("data-icon") != undefined){
-						title += '<i class="iconfont '+_this.find("i.iconfont").attr("data-icon")+'"></i>';
+					if(_this.find("i.layui-icon").attr("data-icon") != undefined){
+						title += '<i class="layui-icon '+_this.find("i.layui-icon").attr("data-icon")+'"></i>';
+						
 					}else{
-						title += '<i class="layui-icon">'+_this.find("i.layui-icon").attr("data-icon")+'</i>';
+						title += '<i class="iconfont '+_this.find("i.iconfont").attr("data-icon")+'"></i>';
 					}
 					title += '<cite>'+_this.find("cite").text()+'</cite>';
 					title += '<i class="layui-icon layui-unselect layui-tab-reload" data-id="'+tabIdIndex+'">&#xe669;</i>';
