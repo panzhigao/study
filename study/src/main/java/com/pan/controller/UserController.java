@@ -2,7 +2,6 @@ package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,23 +23,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@Value("${cookie.maxAge}")
-	private int cookieMaxage;
-	
-	/**
-	 * 跳转用户编辑个人信息页面
-	 * @return
-	 */
-//	@RequestMapping(method=RequestMethod.GET,value="/user/edit")
-//	public ModelAndView toUserEditPage(HttpServletRequest request){
-//		ModelAndView mav=new ModelAndView("content/userEdit");
-//		User user = TokenUtils.getLoginUser();
-//		UserExtension userExtension=userService.findExtensionByUserId(user.getUserId());
-//		mav.addObject("user",user);
-//		mav.addObject("userExtension",userExtension);
-//		return mav;
-//	}
-	
 	/**
 	 * 跳转用户主页
 	 * @return
@@ -59,18 +41,4 @@ public class UserController {
 		return mav;
 	}
 	
-	/**
-	 * 修改个人信息
-	 * @return
-	 */
-//	@RequestMapping(method=RequestMethod.POST,value="/user/doEdit")
-//	@ResponseBody
-//	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
-//		ResultMsg resultMsg=null;
-//		String userId = TokenUtils.getLoingUserId();
-//		user.setUserId(userId);
-//		userService.updateUserInfo(user, userExtension);
-//		resultMsg=ResultMsg.ok("修改用户信息成功");
-//		return resultMsg;
-//	}
 }

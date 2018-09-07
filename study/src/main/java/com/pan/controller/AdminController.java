@@ -73,7 +73,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/main")
-	public ModelAndView toMainPage(HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toMainPage(){
 		ModelAndView mav=new ModelAndView("html/main/mainPage");
 		User loginUser = TokenUtils.getLoginUser();
 		String loingUserId = loginUser.getUserId();
