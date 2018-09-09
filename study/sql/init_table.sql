@@ -110,7 +110,7 @@ CREATE TABLE
         pid VARCHAR(64) DEFAULT '0' NOT NULL COMMENT '父级id',
         level INT(10) unsigned DEFAULT '1' NOT NULL COMMENT '层级数',
         sort bigint unsigned DEFAULT '0' COMMENT '排序',
-        icon VARCHAR(20) COMMENT '图标',
+        icon VARCHAR(64) COMMENT '图标',
         type CHAR(1) NOT NULL COMMENT '类型 0-菜单 1-链接',
         create_user VARCHAR(64) NOT NULL COMMENT '创建者id',
         update_time DATETIME COMMENT '更新时间',
