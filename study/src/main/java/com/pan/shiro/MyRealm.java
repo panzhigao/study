@@ -111,7 +111,7 @@ public class MyRealm extends AuthorizingRealm {
 		inputUser.setPassword(inputPassword);
 		User userInDb=userService.checkLogin(inputUser);
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getUserId(), inputPassword, getName());
-		TokenUtils.setAttribute("user",userInDb);
+		TokenUtils.setAttribute(MyConstant.USER,userInDb);
 		TokenUtils.setAttribute(MyConstant.USER_ID, userInDb.getUserId());
 		//加载菜单到session
 		loadMenus(userInDb.getUserId());

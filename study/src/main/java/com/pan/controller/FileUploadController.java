@@ -158,7 +158,7 @@ public class FileUploadController {
 								file.transferTo(localFile);
 								data.add(pictureUrl+destFileName);
 							} catch (Exception e) {
-								e.printStackTrace();
+								logger.error("上传图片失败",e);
 								map.put("errno", 1);
 								map.put("data", data);
 								return map;

@@ -21,7 +21,11 @@ public enum ResultCodeEmun {
 	/**
 	 * 
 	 */
-	SUCCESS("0","操作成功！");
+	SUCCESS("0","操作成功！"),
+	/**
+	 * 
+	 */
+	REDIRECT("300","重定向");
 	private String code;
 	
 	private String msg;

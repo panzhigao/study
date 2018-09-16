@@ -2,12 +2,12 @@ package com.pan.common.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.pan.common.vo.ResultMsg;
@@ -33,6 +33,9 @@ public class MyAuthenticationFilter extends AccessControlFilter{
 	
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request,ServletResponse response, Object mappedValue) throws Exception {
+		if(!SecurityUtils.getSubject().isAuthenticated()){			
+			WebUtils.saveRequest(request);
+		}
 		if(isAjax((HttpServletRequest)request)){//是ajax请求
 			User loginUser = TokenUtils.getLoginUser();
 			if(loginUser==null||User.STATUS_BLOCKED.equals(loginUser.getStatus())){//用户未登录

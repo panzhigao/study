@@ -3,6 +3,7 @@ package com.pan.task;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +51,10 @@ public class OperateCountTask {
 	 */
 	@Scheduled(cron = "0 0/5 * * * ?")
 	public void updateCommentCount(){
-		RedisLock lock=new RedisLock(LOCK_COMMENT_COUNT);
+		String value=UUID.randomUUID().toString();
 		try {
-			if(lock.lock()){
-				logger.info("------------------执行定时任务,更新文章数据库评论数start------------------");
+			if(RedisLock.tryGetDistributedLock(LOCK_COMMENT_COUNT,value, 10000)){
+				logger.info("执行定时任务,更新文章数据库评论数start,锁[key={},value={}]",LOCK_COMMENT_COUNT,value);
 				Set<String> keys = JedisUtils.keys("comment_count:*");
 				for (String string : keys) {
 					String articleId=string.substring(14);
@@ -64,12 +65,14 @@ public class OperateCountTask {
 						JedisUtils.delete(string);
 					}
 				}
-				logger.info("------------------执行定时任务,更新文章数据库评论数end------------------");
+				logger.info("执行定时任务,更新文章数据库评论数end");
 			}
-		} catch (InterruptedException e) {
-			logger.error("执行定时任务,更新文章数据库评论数异常",e);
 		}finally{
-			lock.unlock();
+			if(RedisLock.releaseDistributedLock(LOCK_COMMENT_COUNT, value)){
+				logger.info("执行定时任务,更新文章数据库评论数,释放锁[key={},value={}]成功",LOCK_COMMENT_COUNT,value);
+			}else{
+				logger.info("执行定时任务,更新文章数据库评论数,释放锁[key={},value={}]失败",LOCK_COMMENT_COUNT,value);
+			}
 		}
 	}
 	
@@ -78,10 +81,10 @@ public class OperateCountTask {
 	 */
 	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateViewCount(){
-		RedisLock lock=new RedisLock(LOCK_VIEW_COUNT);
+		String value=UUID.randomUUID().toString();
 		try {
-			if(lock.lock()){
-				logger.info("------------------执行定时任务,更新文章数据库阅读数start------------------");
+			if(RedisLock.tryGetDistributedLock(LOCK_VIEW_COUNT,value, 10000)){
+				logger.info("-------执行定时任务,更新文章数据库阅读数start,锁[key={},value={}]------",LOCK_VIEW_COUNT,value);
 				Set<String> keys = JedisUtils.keys("article_view_count:*");
 				for (String string : keys) {
 					String articleId=string.substring(19);
@@ -94,10 +97,12 @@ public class OperateCountTask {
 				}
 				logger.info("------------------执行定时任务,更新文章数据库阅读数end------------------");
 			}
-		} catch (InterruptedException e) {
-			logger.error("执行定时任务,更新文章数据库阅读数异常",e);
 		}finally{
-			lock.unlock();
+			if(RedisLock.releaseDistributedLock(LOCK_VIEW_COUNT, value)){
+				logger.info("执行定时任务,更新文章数据库阅读数,释放锁[key={},value={}]成功",LOCK_VIEW_COUNT,value);
+			}else{
+				logger.info("执行定时任务,更新文章数据库阅读数,释放锁[key={},value={}]失败",LOCK_VIEW_COUNT,value);
+			}
 		}
 	}
 	
@@ -107,12 +112,11 @@ public class OperateCountTask {
 	 * 每天凌晨0点更新登录天数和签到天数
 	 */
 	@Scheduled(cron = "0 0 0 * * ?")
-	//@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateLoginAndCheckInCount(){
-		RedisLock lock=new RedisLock(LOCK_LOGIN_AND_CHECK_IN);
+		String value=UUID.randomUUID().toString();
 		try {
-			if(lock.lock()){
-				logger.info("------------------执行定时任务,更新登录天数和签到天数start------------------");
+			if(RedisLock.tryGetDistributedLock(LOCK_LOGIN_AND_CHECK_IN,value, 10000)){
+				logger.info("------执行定时任务,更新登录天数和签到天数start,锁[key={},value={}]------",LOCK_LOGIN_AND_CHECK_IN,value);
 				QueryUserExtension queryUserExtensionVO=new QueryUserExtension();
 				int total = userExtensionService.countByParams(queryUserExtensionVO);
 				int pageTotal=total%PAGE_SIZE==0?total/PAGE_SIZE:total/PAGE_SIZE+1;
@@ -147,10 +151,12 @@ public class OperateCountTask {
 				}	
 				logger.info("------------------执行定时任务,更新登录天数和签到天数end------------------");
 			}
-		} catch (InterruptedException e) {
-			logger.error("执行定时任务,更新登录天数和签到天数发生异常",e);
 		}finally{
-			lock.unlock();
+			if(RedisLock.releaseDistributedLock(LOCK_LOGIN_AND_CHECK_IN, value)){
+				logger.info("执行定时任务,更新登录天数和签到天数,释放锁[key={},value={}]成功",LOCK_LOGIN_AND_CHECK_IN,value);
+			}else{
+				logger.info("执行定时任务,更新登录天数和签到天数,释放锁[key={},value={}]失败",LOCK_LOGIN_AND_CHECK_IN,value);
+			}
 		}
 	}
 }

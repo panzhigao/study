@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.SavedRequest;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.ResultCodeEmun;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
@@ -77,6 +80,16 @@ public class LoginController{
 			userInDb = userService.findByUserTelephone(user.getUsername());
 		}else{
 			userInDb = userService.findByUsername(user.getUsername());
+		}
+		//获取跳转前的url
+		String redirectUrl="";
+		SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+		if(savedRequest!=null){
+			redirectUrl=savedRequest.getRequestUrl();
+			logger.info("跳转登陆页前的url:{}",redirectUrl);
+		}
+		if(StringUtils.isNotBlank(redirectUrl)){
+			return ResultMsg.build(ResultCodeEmun.REDIRECT, "用户登陆成功",redirectUrl);
 		}
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}

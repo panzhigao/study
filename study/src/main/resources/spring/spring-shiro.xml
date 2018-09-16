@@ -18,7 +18,7 @@
 	http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<bean id="myauth" class="com.pan.common.filter.MyAuthenticationFilter"/>
-	
+		
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login"/>

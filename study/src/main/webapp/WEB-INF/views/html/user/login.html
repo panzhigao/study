@@ -128,13 +128,13 @@ layui.use(['jquery', 'form'], function(){
 		}); 
 	  form.on('submit(login)', function(data){
 			params = data.field;
-			login($,params);
+			login(params);
 			return false;
 	  });
 });
 
 //提交
-function login($,params){
+function login(params){
 		$.ajax({
 			url:"$!{rc.contextPath}/doLogin",
 			type:"post",
@@ -144,6 +144,11 @@ function login($,params){
 					layer.msg(res.msg);
 					setTimeout(function(){
 						location.href='$!{rc.contextPath}/u/'+res.data;
+					},1000);
+				}else if(res.code=='300'){
+					layer.msg(res.msg);
+					setTimeout(function(){
+						location.href=res.data;
 					},1000);
 				}else{
 					layer.msg(res.msg);
@@ -157,6 +162,8 @@ function reloadValidateCode(){
     $("#validateCodeImg").attr("src","$!{rc.contextPath}/api/validateCode?data=" + new Date() + Math.floor(Math.random()*24));
 }
 </script>
-<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+<div style="display:none">
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
 </body>
 </html>
