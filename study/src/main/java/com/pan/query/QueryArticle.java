@@ -82,13 +82,7 @@ public class QueryArticle extends QueryBase{
 	public void setIsHot(String isHot) {
 		this.isHot = isHot;
 	}
-	
-	public String getOrderCondition() {
-		return orderCondition;
-	}
-	public void setOrderCondition(String orderCondition) {
-		this.orderCondition = orderCondition;
-	}
+
 	public Integer getStick() {
 		return stick;
 	}
