@@ -88,7 +88,7 @@ public class LoginController{
 			redirectUrl=savedRequest.getRequestUrl();
 			logger.info("跳转登陆页前的url:{}",redirectUrl);
 		}
-		if(StringUtils.isNotBlank(redirectUrl)){
+		if(StringUtils.isNotBlank(redirectUrl)&&!"/favicon.ico".equals(redirectUrl)){
 			return ResultMsg.build(ResultCodeEmun.REDIRECT, "用户登陆成功",redirectUrl);
 		}
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());

@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS study default charset utf8 COLLATE utf8_general_ci;
+use study;
 DROP TABLE IF EXISTS
     t_article;
 CREATE TABLE `t_article` (
@@ -20,7 +22,7 @@ CREATE TABLE `t_article` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_id` (`article_id`),
   KEY `t_article_ix2` (`user_id`,`status`,`create_time`,`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='文章表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='文章表';
 
 DROP TABLE IF EXISTS
     t_article_check;

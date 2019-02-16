@@ -48,10 +48,66 @@
   </select>
   
   <insert id="saveUser" parameterType="com.pan.entity.User">
-  	insert into t_user (<include refid="Base_Column_List"/>) values 
-  	(null,#{userId,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
-  	#{createTime,jdbcType=TIMESTAMP},#{lastLoginTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},
-  	#{updateTime,jdbcType=TIMESTAMP},#{userPortrait,jdbcType=VARCHAR},#{adminFlag,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR})
+  	insert into t_user
+  	<trim suffixOverrides="," prefix="(" suffix=")">
+  		<if test="userId != null">
+  			user_id,
+  		</if>
+  		<if test="sex != null">
+  			sex,
+  		</if>
+  		<if test="username != null">
+  			username,
+  		</if>
+  		<if test="nickname != null">
+  			nickname,
+  		</if>
+  		<if test="password != null">
+  			password,
+  		</if>
+  		<if test="createTime != null">
+  			create_time,
+  		</if>
+  		<if test="status != null">
+  			status,
+  		</if>
+  		<if test="telephone != null">
+  			telephone,
+  		</if>
+  		<if test="userPortrait != null">
+  			user_portrait,
+  		</if>
+  	</trim>
+  		values 
+  	<trim suffixOverrides="," prefix="(" suffix=")">
+  		<if test="userId != null">
+  			#{userId,jdbcType=VARCHAR},
+  		</if>
+  		<if test="sex != null">
+  			#{sex,jdbcType=VARCHAR},
+  		</if>
+  		<if test="username != null">
+  			#{username,jdbcType=VARCHAR},
+  		</if>
+  		<if test="nickname != null">
+  			#{nickname,jdbcType=VARCHAR},
+  		</if>
+  		<if test="password != null">
+  			#{password,jdbcType=VARCHAR},
+  		</if>
+  		<if test="createTime != null">
+  			#{createTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="status != null">
+  			#{status,jdbcType=VARCHAR},
+  		</if>
+  		<if test="telephone != null">
+  			#{telephone,jdbcType=VARCHAR},
+  		</if>
+  		<if test="userPortrait != null">
+  			#{userPortrait,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
   </insert>
   
   <update id="updateUserByUserId" parameterType="com.pan.entity.User">

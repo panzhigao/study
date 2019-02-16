@@ -195,7 +195,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -210,7 +210,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -225,7 +225,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return smembers;
 	}
@@ -247,7 +247,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -269,7 +269,7 @@ public class JedisUtils {
 			e.printStackTrace();
 			return 0L;
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 	}
 	
@@ -290,7 +290,7 @@ public class JedisUtils {
 			e.printStackTrace();
 			return 0L;
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 	}
 	
@@ -310,7 +310,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -326,7 +326,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -348,7 +348,7 @@ public class JedisUtils {
 			e.printStackTrace();
 			return 0L;
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 	}
 	
@@ -362,7 +362,7 @@ public class JedisUtils {
 			e.printStackTrace();
 			return null;
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 	}
 	
@@ -376,7 +376,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return list;
 	}
@@ -391,7 +391,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -406,7 +406,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -421,7 +421,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
@@ -436,7 +436,7 @@ public class JedisUtils {
 			jedis.close();
 			e.printStackTrace();
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return map;
 	}
@@ -450,12 +450,17 @@ public class JedisUtils {
 		} catch (Exception e) {
 			jedis.close();
 			e.printStackTrace();
-			throw new BusinessException("redis hset操作失败 ");
 		} finally {
-			jedis.close();
+			closeJedis(jedis);
 		}
 		return res;
 	}
+	
+	public static void closeJedis(Jedis jedis) {
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
 	
 	public static Boolean hexists(String key,String field) {
 		Boolean res=false;
