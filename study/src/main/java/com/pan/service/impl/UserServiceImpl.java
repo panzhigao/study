@@ -22,6 +22,8 @@ import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.AdminFlagEnum;
+import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
@@ -125,7 +127,8 @@ public class UserServiceImpl implements UserService{
 			String userId=dateStr+uuid;
 			user.setUserId(userId);
 			user.setCreateTime(new Date());
-			user.setStatus(User.STATUS_NORMAL);
+			//用户状态正常
+			user.setStatus(UserStatusEnum.STATUS_NORMAL.getCode());
 			//默认头像
 			user.setUserPortrait(defaultPortrait);
 			userMapper.saveUser(user);
@@ -185,7 +188,7 @@ public class UserServiceImpl implements UserService{
 		if(userInDb==null){
 			throw new BusinessException("用户名或密码错误");
 		}
-		if(User.STATUS_BLOCKED.equals(userInDb.getStatus())){
+		if(UserStatusEnum.STATUS_BLOCKED.getCode().equals(userInDb.getStatus())){
 			throw new BusinessException("用户账号已锁定");
 		}
 		String passwordInDb=userInDb.getPassword();
@@ -351,6 +354,7 @@ public class UserServiceImpl implements UserService{
 	public void allocateRoleToUser(String userId, String[] roles) {
 		User user=this.findByUserId(userId);
 		if(user==null){
+			logger.error("为用户分配角色,根据userId({})未查询到用户信息",userId);
 			throw new BusinessException("该用户不存在");
 		}
 		//TODO 增加日志
@@ -371,7 +375,7 @@ public class UserServiceImpl implements UserService{
 				list.add(userRole);
 			}
 			if(hasAdmin){				
-				user.setAdminFlag(User.ADMIN_TRUE);
+				user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
 				user.setUpdateTime(new Date());
 				user.setUpdateUser(TokenUtils.getLoingUserId());
 				userMapper.updateUserByUserId(user);
@@ -396,16 +400,14 @@ public class UserServiceImpl implements UserService{
 		}
 		user.setUpdateUser(loginUserId);
 		user.setUpdateTime(new Date());
-		if(User.STATUS_BLOCKED.equals(status)){
+		if(UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)){
 			message="禁用账号成功";
 			userMapper.updateUserByUserId(user);
 			//清空用户授权信息
 			TokenUtils.clearAuth(userId);
-			//TokenUtils.clearAuthz(userId);
-		}else if(User.STATUS_NORMAL.equals(status)){
+		}else if(UserStatusEnum.STATUS_NORMAL.getCode().equals(status)){
 			message="启用账号成功";
 			userMapper.updateUserByUserId(user);
-			//TokenUtils.clearAuth(user);
 		}else{
 			message="操作错误，请稍后重试";
 		}	

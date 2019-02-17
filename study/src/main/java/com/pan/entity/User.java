@@ -16,22 +16,22 @@ import com.pan.common.annotation.UserEditGroup;
  *
  */
 public class User extends BaseEntity{
-	/**
-	 * 禁用状态
-	 */
-	public static final String STATUS_BLOCKED="0";
-	/**
-	 * 正常状态
-	 */
-	public static final String STATUS_NORMAL="1";
-	/**
-	 * 不是管理员
-	 */
-	public static final String ADMIN_FALSE="0";
-	/**
-	 * 是管理员
-	 */
-	public static final String ADMIN_TRUE="1";
+//	/**
+//	 * 禁用状态
+//	 */
+//	public static final String STATUS_BLOCKED="0";
+//	/**
+//	 * 正常状态
+//	 */
+//	public static final String STATUS_NORMAL="1";
+//	/**
+//	 * 不是管理员
+//	 */
+//	public static final String ADMIN_FALSE="0";
+//	/**
+//	 * 是管理员
+//	 */
+//	public static final String ADMIN_TRUE="1";
 	/**
 	 * 
 	 */

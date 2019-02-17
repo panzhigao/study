@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
@@ -52,6 +53,9 @@ public class PermissionServiceImpl implements PermissionService {
 	@Autowired
 	private UserService userService;
 	
+	/**
+	 * 新增权限，同时为自动为超级管理员添加该权限
+	 */
 	@Override
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
@@ -68,7 +72,7 @@ public class PermissionServiceImpl implements PermissionService {
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
 		QueryRole queryRoleVO=new QueryRole();
-		queryRoleVO.setSuperAdminFlag("1");
+		queryRoleVO.setSuperAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
 		//自动为超级管理员添加权限
 		List<Role> list = roleService.findByParams(queryRoleVO);
 		if(list.size()>0){

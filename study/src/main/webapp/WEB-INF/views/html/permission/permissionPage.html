@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>权限管理</title>
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
   <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 </head>
-<body class="childrenBody" style="height:2500px;">
+<body class="childrenBody">
 
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
@@ -67,7 +67,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
           treeShowName:'name',//以树形式显示的字段
           method: 'post',
           cols: [[
-			  {type: 'numbers'},
+			  {type: 'numbers',title:'序号'},
 			  {field:'icon',width:'80', title: '图标',templet:function(row){
 				var temp=row.level*10;
 				return '<i class="layui-icon '+row.icon+'" style="padding:0 20px;"></i>';
@@ -118,16 +118,17 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 	  $('#btn-search').click(function () {
 		  var keyword=$('#searchKey').val();
           if (!keyword) {
-              layer.msg("请输入搜索内容");
+              $('#treeTable').next('.layui-table-view').find('.layui-table-body tbody tr').show();
               return;
           }
           var count=0
           $('#treeTable').next('.layui-table-view').find('.layui-table-body tbody tr').each(function () {
-        	    $(this).css('background-color', 'transparent');
         	 	var content=$(this).find('td').eq(3).text();
         	 	if(content.indexOf(keyword)>-1){
-        	 		 $(this).css('background-color', 'rgba(250,230,160,0.5)');
+        	 		 $(this).show();
         	 		 count++;
+        	 	}else{
+        	 		$(this).hide();
         	 	}
           });
           if(count==0){

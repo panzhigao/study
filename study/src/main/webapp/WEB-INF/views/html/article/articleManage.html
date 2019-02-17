@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
-<body class="childrenBody" style="height:1100px;">
+<body class="childrenBody">
 	<div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
     	<div class="layui-btn-group">
@@ -24,12 +24,12 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-tab-content">
-		       <span class="layui-breadcrumb" lay-separator="|">
-		  		<a href="javascript:;" class="category-item #if(!$status) selected #end" status="">全部</a>
-		  		<a href="javascript:;" class="category-item #if($status==3) selected #end" status="3">已发表</a>
-		  		<a href="javascript:;" class="category-item #if($status==0) selected #end" status="0">未通过</a>
-		  		<a href="javascript:;" class="category-item #if($status==1) selected #end" status="1">草稿</a>
-		  		<a href="javascript:;" class="category-item #if($status==2) selected #end" status="2">审核中</a>
+		       <span class="layui-breadcrumb" id="status-items" lay-separator="|">
+			  		<a href="javascript:;" class="#if(!$status) selected #end" status="">全部</a>
+			  		<a href="javascript:;" class="#if($status==3) selected #end" status="3">已发表</a>
+			  		<a href="javascript:;" class="#if($status==0) selected #end" status="0">未通过</a>
+			  		<a href="javascript:;" class="#if($status==1) selected #end" status="1">草稿</a>
+			  		<a href="javascript:;" class="#if($status==2) selected #end" status="2">审核中</a>
 				</span>
 		    </div>
 	    	<table id="myArticles" lay-filter="myTable"></table>
@@ -177,13 +177,12 @@ layui.use(['table','jquery'], function(){
 		 }); 
 	  }
 	  
-	  //切换文章类型状态
-	  $('.category-item').click(function(obj){
+	  //切换文章状态
+	  $('#status-items a').click(function(obj){
 		if($(this).hasClass('selected')){
 			return;	  
 		}
-	  	$('.category-item').removeClass('selected');
-	  	$(this).addClass('selected');
+	  	$(this).addClass('selected').siblings().removeClass('selected');
 	  	status=$(this).attr('status');
 	  	reload('articlesTab');
 	  });	

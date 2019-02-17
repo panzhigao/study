@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.util.JsonUtils;
@@ -29,11 +31,11 @@ public class LoginInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		User loginUser = TokenUtils.getLoginUser();
-		if(loginUser==null||User.STATUS_BLOCKED.equals(loginUser.getStatus())){
+		if(loginUser==null||UserStatusEnum.STATUS_BLOCKED.getCode().equals(loginUser.getStatus())){
 			String message="";
 			if(loginUser==null){
 				message="用户未登录";
-			}else if(User.STATUS_BLOCKED.equals(loginUser.getStatus())){
+			}else if(UserStatusEnum.STATUS_BLOCKED.getCode().equals(loginUser.getStatus())){
 				message="用户被禁用";
 				TokenUtils.clearAuth();
 			}

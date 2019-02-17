@@ -10,6 +10,8 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.util.JsonUtils;
@@ -38,11 +40,12 @@ public class MyAuthenticationFilter extends AccessControlFilter{
 		}
 		if(isAjax((HttpServletRequest)request)){//是ajax请求
 			User loginUser = TokenUtils.getLoginUser();
-			if(loginUser==null||User.STATUS_BLOCKED.equals(loginUser.getStatus())){//用户未登录
+			//用户未登录或者用户被禁用
+			if(loginUser==null||UserStatusEnum.STATUS_BLOCKED.getCode().equals(loginUser.getStatus())){
 				String message="";
 				if(loginUser==null){
 					message="用户未登录";
-				}else if(User.STATUS_BLOCKED.equals(loginUser.getStatus())){//用户被禁用
+				}else if(UserStatusEnum.STATUS_BLOCKED.getCode().equals(loginUser.getStatus())){//用户被禁用
 					message="用户被禁用";
 					TokenUtils.clearAuth();
 				}

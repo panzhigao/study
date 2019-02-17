@@ -140,7 +140,7 @@ public class RedisLock {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("获取分布式锁失败,");
+			logger.error("获取分布式锁失败,",e);
 		} finally {
 			JedisUtils.closeJedis(jedis);
 		}
