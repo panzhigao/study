@@ -10,7 +10,7 @@ import com.pan.util.TokenUtils;
 
 
 /**
- * 登陆拦截器
+ * 会话拦截器
  * @author Administrator
  *
  */
@@ -18,6 +18,7 @@ public class SessionInterceptor implements HandlerInterceptor{
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
+		response.addHeader("X-frame-options", "SAMEORIGIN");
 		return true;
 	}
 	
