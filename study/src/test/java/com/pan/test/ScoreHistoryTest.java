@@ -17,7 +17,7 @@ public class ScoreHistoryTest extends BaseTest{
 	@Test
 	public void test1(){
 		ScoreHistory history=new ScoreHistory();
-		history.setId(1);
+		history.setId(1L);
 		history.setUserId("2222");
 		history.setCreateTime(new Date());
 		history.setType("2");

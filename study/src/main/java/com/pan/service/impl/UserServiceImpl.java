@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.pan.entity.*;
+import com.pan.service.LoginHistoryService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,10 +27,6 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.exception.BusinessException;
-import com.pan.entity.ScoreHistory;
-import com.pan.entity.User;
-import com.pan.entity.UserExtension;
-import com.pan.entity.UserRole;
 import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
@@ -97,8 +95,10 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private ScoreHistoryService scoreHistoryService;
-	
-	
+
+	@Autowired
+	private LoginHistoryService loginHistoryService;
+
 	/**
 	 * 用户注册,默认新增用户拥有普通用户权限
 	 * 1.校验用户注册字段，校验用户名是否已经注册
@@ -173,7 +173,12 @@ public class UserServiceImpl implements UserService{
 	public User findByUsername(String username) {
 		return this.userMapper.findByUsername(username);
 	}
-	
+
+	/**
+	 * 校验用户登陆
+	 * @param user
+	 * @return
+	 */
 	@Override
 	public User checkLogin(User user) {
 		ValidationUtils.validateEntityWithGroups(user, new Class[]{LoginGroup.class});
@@ -197,13 +202,22 @@ public class UserServiceImpl implements UserService{
 			if(!validPassword){
 				throw new BusinessException("用户名或密码错误");
 			}
+			Date now=new Date();
+			//修改用户最近登录时间
 			updateUserLastLoginTime(userInDb.getUserId());
+			//记录用户登录历史
+			LoginHistory loginHistory=new LoginHistory();
+			loginHistory.setUserId(userInDb.getUserId());
+			loginHistory.setIpStr(TokenUtils.getIp());
+			loginHistory.setCreateTime(now);
+			loginHistoryService.addLoginHistory(loginHistory);
 			//积分历史表新增登录积分
 			ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreHistory.ScoreType.LOGIN);
-			if(addScoreHistory!=null){//如果不是今日首次登录，连续登录天数加1
+			//如果不是今日首次登录，连续登录天数加1
+			if(addScoreHistory!=null){
 				UserExtension userExtension=new UserExtension();
 				userExtension.setUserId(addScoreHistory.getUserId());
-				userExtension.setUpdateTime(new Date());
+				userExtension.setUpdateTime(now);
 				userExtension.setScore(addScoreHistory.getScore());
 				userExtension.setContinuousLoginDays(1);
 				userExtensionService.increaseCounts(userExtension);

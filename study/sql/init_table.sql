@@ -313,3 +313,13 @@ INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (
 INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (196, 'r1001308', 'p10038', '2018-05-13 19:56:44');
 INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (197, 'r10006', 'p1107289', '2018-06-14 11:12:29');
 INSERT INTO t_role_permission (id, role_id, permission_id, create_time) VALUES (198, 'r1001308', 'p1140342', '2018-05-13 19:56:44');
+
+CREATE TABLE `t_login_history` (
+  `id` bigint(20) unsigned NOT NULL COMMENT 'id',
+  `user_id` varchar(64) NOT NULL DEFAULT '' COMMENT '用户id',
+  `username` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间，即登录时间',
+  `ip` int(10) unsigned zerofill NOT NULL COMMENT '登录时的ip',
+  PRIMARY KEY (`id`),
+  KEY `idx_userId_username` (`user_id`,`username`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

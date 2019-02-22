@@ -31,6 +31,9 @@ import com.pan.service.RoleService;
 import com.pan.service.UserService;
 import com.pan.util.TokenUtils;
 
+/**
+ * @author panzhigao
+ */
 public class MyRealm extends AuthorizingRealm {
 
 	private static final Logger logger = LoggerFactory.getLogger(MyRealm.class);
@@ -53,7 +56,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * @param userId
 	 */
 	private Set<String> loadMenus(String userId) {
-		logger.debug("---------------从数据库加载权限--------------------");
+		logger.debug(">>>>>>>>>>>>>>>>>>>从数据库加载权限>>>>>>>>>>>>>>>>>>>");
 		List<Permission> permissionList = permissionService
 				.findPermissionsByUserId(userId);
 		List<Tree> nodes = new ArrayList<Tree>(20);
@@ -142,7 +145,7 @@ public class MyRealm extends AuthorizingRealm {
 	
 	/**
 	 * 删除指定用户认证信息,即删除用户session信息
-	 * @param user 被删除人
+	 * @param userId 被删除人id
 	 */
 	public void clearAuth(String userId) {
 		Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
@@ -157,7 +160,7 @@ public class MyRealm extends AuthorizingRealm {
 	
 	/**
 	 * 删除指定用户授权信息
-	 * @param user 被删除人
+	 * @param userId 被删除人id
 	 */
 	public void clearAuthz(String userId) {
 		Subject subject = SecurityUtils.getSubject();
@@ -175,7 +178,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * 删除所有用户权限信息
 	 */
 	public void clearAllCachedAuthorizationInfo() {
-		logger.debug("----------------清空所有用户权限-----------------");
+		logger.debug(">>>>>>>>>>>>>>>>>>>清空所有用户权限>>>>>>>>>>>>>>>>>>>");
 		Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
 		if (cache != null) {
 			for (Object key : cache.keys()) {

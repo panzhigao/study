@@ -10,10 +10,7 @@ import com.pan.util.JsonUtils;
  */
 public class Message extends BaseEntity{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8041567985696094383L;
 	/**
 	 * 消息id
 	 */

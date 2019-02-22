@@ -41,7 +41,7 @@ public interface UserMapper {
 	public void updateUserByUserId(User user);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param queryUserVO
 	 * @return
 	 */
 	public int getCountByParams(QueryUser queryUserVO);

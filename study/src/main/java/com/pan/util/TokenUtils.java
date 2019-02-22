@@ -6,10 +6,12 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-
 import com.pan.entity.User;
 import com.pan.shiro.MyRealm;
 
+/**
+ * @author panzhigao
+ */
 public class TokenUtils {
 	
 	public static boolean isAuthenticated(){
@@ -54,7 +56,7 @@ public class TokenUtils {
 	
 	/**
 	 * 清空指定用户认证信息
-	 * @param user 用户信息
+	 * @param userId 用户id
 	 */
 	public static void clearAuth(String userId){  
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
@@ -64,7 +66,7 @@ public class TokenUtils {
 	
 	/**
 	 * 清空指定用户授权信息
-	 * @param user 用户信息
+	 * @param userId 用户id
 	 */
 	public static void clearAuthz(String userId){  
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
@@ -98,5 +100,13 @@ public class TokenUtils {
 		Subject subject = SecurityUtils.getSubject(); 
 	    UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());  
 		subject.login(token);
+	}
+
+	/**
+	 * 获取登录人的ip地址
+	 * @return
+	 */
+	public static String getIp(){
+		return getSession().getHost();
 	}
 }

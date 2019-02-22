@@ -41,7 +41,6 @@ public interface UserService {
 	public User findByUserTelephone(String telephone);
 	/**
 	 * 校验用户登陆
-	 * @param httpRequest
 	 * @param user
 	 * @return
 	 */

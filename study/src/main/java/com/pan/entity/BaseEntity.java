@@ -18,7 +18,7 @@ public class BaseEntity implements Serializable{
 	/**
 	 * 自增主键
 	 */
-	protected Integer id;
+	protected Long id;
 	/**
 	 * 创建时间
 	 */
@@ -35,10 +35,10 @@ public class BaseEntity implements Serializable{
 	 * 修改人
 	 */
 	protected String updateUser;
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public Date getCreateTime() {

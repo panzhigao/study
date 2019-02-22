@@ -5,143 +5,162 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 权限实体类
- * @author Administrator
  *
+ * @author Administrator
  */
-public class Permission extends BaseEntity{
+public class Permission extends BaseEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -338202844637487403L;
-	
-	/**
-	 * 权限id
-	 */
-	private String permissionId;
-	/**
-	 * 权限名
-	 */
-	@NotEmpty(message="权限名不能为空")
-	private String permissionName;
-	/**
-	 * 权限路径
-	 */
-	@NotEmpty(message="权限路径url不能为空")
-	private String url;
-	/**
-	 * 父级pid
-	 */
-	private String pId;
-	/**
-	 * 标识，0-未选中
-	 */
-	private String marker;
-	/**
-	 * 层级
-	 */
-	private Integer level;
-	/**
-	 * 排序
-	 */
-	private Integer sort;
-	/**
-	 * 图标
-	 */
-	private String icon;
-	/**
-	 * 类型
-	 */
-	private String type;
-	public String getPermissionId() {
-		return permissionId;
-	}
-	public void setPermissionId(String permissionId) {
-		this.permissionId = permissionId;
-	}
-	public String getPermissionName() {
-		return permissionName;
-	}
-	public void setPermissionName(String permissionName) {
-		this.permissionName = permissionName;
-	}
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getMarker() {
-		return marker;
-	}
-	public void setMarker(String marker) {
-		this.marker = marker;
-	}
-	
-	public String getIcon() {
-		return icon;
-	}
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-	public Integer getLevel() {
-		return level;
-	}
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
-	public Integer getSort() {
-		return sort;
-	}
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public String getpId() {
-		return pId;
-	}
-	public void setpId(String pId) {
-		this.pId = pId;
-	}
-	@Override
-	public String toString() {
-		return "Permission [permissionId=" + permissionId + ", permissionName="
-				+ permissionName + ", url=" + url + ", pId=" + pId
-				+ ", marker=" + marker + ", level=" + level + ", sort=" + sort
-				+ ", icon=" + icon + ", type=" + type + "]";
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((permissionId == null) ? 0 : permissionId.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj){			
-			return true;
-		}
-		if (obj == null){			
-			return false;
-		}
-		if (!(obj instanceof Permission)){			
-			return false;
-		}
-		Permission other = (Permission) obj;
-		if (permissionId == null) {
-			if (other.permissionId != null){				
-				return false;
-			}
-		} else if (!permissionId.equals(other.permissionId)){			
-			return false;
-		}
-		return true;
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -338202844637487403L;
+
+    /**
+     * 权限id
+     */
+    private String permissionId;
+    /**
+     * 权限名
+     */
+    @NotEmpty(message = "权限名不能为空")
+    private String permissionName;
+    /**
+     * 权限路径
+     */
+    @NotEmpty(message = "权限路径url不能为空")
+    private String url;
+    /**
+     * 父级pid
+     */
+    private String pId;
+    /**
+     * 标识，0-未选中
+     */
+    private String marker;
+    /**
+     * 层级
+     */
+    private Integer level;
+    /**
+     * 排序
+     */
+    private Integer sort;
+    /**
+     * 图标
+     */
+    private String icon;
+    /**
+     * 类型
+     */
+    private String type;
+
+    public String getPermissionId() {
+        return permissionId;
+    }
+
+    public void setPermissionId(String permissionId) {
+        this.permissionId = permissionId;
+    }
+
+    public String getPermissionName() {
+        return permissionName;
+    }
+
+    public void setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getMarker() {
+        return marker;
+    }
+
+    public void setMarker(String marker) {
+        this.marker = marker;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getpId() {
+        return pId;
+    }
+
+    public void setpId(String pId) {
+        this.pId = pId;
+    }
+
+    @Override
+    public String toString() {
+        return "Permission [permissionId=" + permissionId + ", permissionName="
+                + permissionName + ", url=" + url + ", pId=" + pId
+                + ", marker=" + marker + ", level=" + level + ", sort=" + sort
+                + ", icon=" + icon + ", type=" + type + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((permissionId == null) ? 0 : permissionId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Permission)) {
+            return false;
+        }
+        Permission other = (Permission) obj;
+        if (permissionId == null) {
+            if (other.permissionId != null) {
+                return false;
+            }
+        } else if (!permissionId.equals(other.permissionId)) {
+            return false;
+        }
+        return true;
+    }
 }
