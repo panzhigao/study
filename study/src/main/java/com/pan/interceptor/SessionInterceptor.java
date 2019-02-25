@@ -3,6 +3,8 @@ package com.pan.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.pan.common.constant.MyConstant;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.entity.User;
@@ -15,10 +17,21 @@ import com.pan.util.TokenUtils;
  *
  */
 public class SessionInterceptor implements HandlerInterceptor{
-	
+
+	/**
+	 * 1.禁止非同源iframe嵌套
+	 * 2.获取发起请求的设备信息
+	 * @param request
+	 * @param response
+	 * @param handler
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		response.addHeader("X-frame-options", "SAMEORIGIN");
+		String userAgent = request.getHeader(MyConstant.USER_AGENT_HEADER);
+		TokenUtils.setAttribute(MyConstant.USER_AGENT,userAgent);
 		return true;
 	}
 	
@@ -32,7 +45,7 @@ public class SessionInterceptor implements HandlerInterceptor{
 		if(modelAndView!=null){
 			User loginUser=TokenUtils.getLoginUser();
 			if(loginUser!=null){			
-				modelAndView.addObject("user",loginUser);
+				modelAndView.addObject(MyConstant.USER,loginUser);
 			}
 		}
 	}

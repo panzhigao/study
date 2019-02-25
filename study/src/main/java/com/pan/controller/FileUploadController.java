@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.pan.common.enums.ResultCodeEmun;
+import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
@@ -85,7 +85,7 @@ public class FileUploadController {
 			}
             file.transferTo(destFile);  
             Picture picture=new Picture();
-            String userId=TokenUtils.getLoingUserId();
+            String userId=TokenUtils.getLoginUserId();
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
@@ -95,7 +95,7 @@ public class FileUploadController {
                  logger.info("图片输出路径:{}",pictureUrl+fileName); 
                  Map<String,Object> data=new HashMap<String, Object>(5);
                  data.put("src", pictureUrl+fileName);
-                 resultMsg=ResultMsg.build(ResultCodeEmun.UPLOAD_SUCCESS,ResultCodeEmun.UPLOAD_SUCCESS.getMsg(),data);
+                 resultMsg=ResultMsg.build(ResultCodeEnum.UPLOAD_SUCCESS, ResultCodeEnum.UPLOAD_SUCCESS.getMsg(),data);
 			} catch (Exception e) {
 				logger.error("保存图片信息失败",e);
 				resultMsg=ResultMsg.fail("保存图片信息失败");
@@ -149,7 +149,7 @@ public class FileUploadController {
 							}
 							try {
 								Picture picture=new Picture();
-					            String userId=TokenUtils.getLoingUserId();
+					            String userId=TokenUtils.getLoginUserId();
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPicUrl(pictureUrl+destFileName);

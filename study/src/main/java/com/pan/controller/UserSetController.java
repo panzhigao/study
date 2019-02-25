@@ -59,9 +59,9 @@ public class UserSetController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/doSet")
 	@ResponseBody
 	@RequiresPermissions("/user/set")
-	public ResultMsg userEdit(HttpServletRequest request,User user,UserExtension userExtension){
+	public ResultMsg userEdit(User user,UserExtension userExtension){
 		ResultMsg resultMsg=null;
-		String userId=TokenUtils.getLoingUserId();
+		String userId=TokenUtils.getLoginUserId();
 		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
 		resultMsg=ResultMsg.ok("修改用户信息成功");
@@ -82,7 +82,7 @@ public class UserSetController {
 		if(!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())){
 			throw new BusinessException("确认密码与密码不一致");
 		}
-		String userId=TokenUtils.getLoingUserId();
+		String userId=TokenUtils.getLoginUserId();
 		User userInDb = userService.findByUserId(userId);
 		boolean flag=PasswordUtils.validPassword(passwordDTO.getNowPassword(),userInDb.getPassword());
 		if(!flag){
@@ -114,8 +114,8 @@ public class UserSetController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/confirmBind")
 	@ResponseBody
 	@RequiresPermissions(value="/user/set")
-	public ResultMsg confirmBind(HttpServletRequest request,String telephone,String code){
-		String loginUserId = TokenUtils.getLoingUserId();
+	public ResultMsg confirmBind(String telephone,String code){
+		String loginUserId = TokenUtils.getLoginUserId();
 		User user=new User();
 		user.setUserId(loginUserId);
 		user.setTelephone(telephone);

@@ -1,6 +1,6 @@
 package com.pan.common.vo;
 
-import com.pan.common.enums.ResultCodeEmun;
+import com.pan.common.enums.ResultCodeEnum;
 
 
 /**
@@ -16,12 +16,12 @@ public class ResultMsg {
 	
 	/**
 	 * 自定义返回信息
-	 * @param resultCodeEmun
+	 * @param resultCodeEnum
 	 * @param msg
 	 * @return
 	 */
-	public static ResultMsg build(ResultCodeEmun resultCodeEmun,Object msg){
-		return new ResultMsg(resultCodeEmun.getCode(), msg);
+	public static ResultMsg build(ResultCodeEnum resultCodeEnum, Object msg){
+		return new ResultMsg(resultCodeEnum.getCode(), msg);
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public class ResultMsg {
 	 * @return
 	 */
 	public static ResultMsg ok(){
-		return ResultMsg.ok(ResultCodeEmun.OK.getMsg());
+		return ResultMsg.ok(ResultCodeEnum.OK.getMsg());
 	}
 	
 	/**
@@ -37,15 +37,15 @@ public class ResultMsg {
 	 * @return
 	 */
 	public static ResultMsg ok(Object msg){
-		return new ResultMsg(ResultCodeEmun.OK.getCode(), msg);
+		return new ResultMsg(ResultCodeEnum.OK.getCode(), msg);
 	}
 	
 	/**
 	 * 成功信息
 	 * @return
 	 */
-	public static ResultMsg build(ResultCodeEmun resultCodeEmun,Object msg,Object data){
-		return new ResultMsg(resultCodeEmun.getCode(),msg,data);
+	public static ResultMsg build(ResultCodeEnum resultCodeEnum, Object msg, Object data){
+		return new ResultMsg(resultCodeEnum.getCode(),msg,data);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class ResultMsg {
 	 * @return
 	 */
 	public static ResultMsg ok(Object msg,Object data){
-		return new ResultMsg(ResultCodeEmun.OK.getCode(), msg,data);
+		return new ResultMsg(ResultCodeEnum.OK.getCode(), msg,data);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class ResultMsg {
 	 * @return
 	 */
 	public static ResultMsg fail(){
-		return ResultMsg.ok(ResultCodeEmun.FAIL.getMsg());
+		return ResultMsg.ok(ResultCodeEnum.FAIL.getMsg());
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class ResultMsg {
 	 * @return
 	 */
 	public static ResultMsg fail(Object msg){
-		return new ResultMsg(ResultCodeEmun.FAIL.getCode(), msg);
+		return new ResultMsg(ResultCodeEnum.FAIL.getCode(), msg);
 	}
 	
 	private ResultMsg(String code, Object msg) {

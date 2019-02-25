@@ -102,7 +102,7 @@ public class MyRealm extends AuthorizingRealm {
 	}
 	
 	/**
-	 * 验证
+	 * 验证,校验用户名和密码是否正确，同时加载菜单到session
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(

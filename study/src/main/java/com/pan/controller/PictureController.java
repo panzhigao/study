@@ -34,7 +34,6 @@ public class PictureController {
 	
 	/**
 	 * 跳转用户相册
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/myPicturePage")
@@ -51,7 +50,7 @@ public class PictureController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/getPictures")
 	@ResponseBody
 	public ResultMsg getPictureList(Integer pageSize,Integer pageNo){
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		QueryPicture queryPicture=new QueryPicture();
 		queryPicture.setUserId(loingUserId);
 		queryPicture.setPageSize(pageSize);
@@ -72,8 +71,8 @@ public class PictureController {
 	@ResponseBody
 	public ResultMsg deletePicture(String pictureIds){
 		logger.info("删除图片开始");
-		String loingUserId = TokenUtils.getLoingUserId();
-		ResultMsg resultMsg=null;
+		String loingUserId = TokenUtils.getLoginUserId();
+		ResultMsg resultMsg;
 		pictureService.deleteByPictureIds(loingUserId, pictureIds);
 		resultMsg=ResultMsg.ok("删除图片成功");
 		return resultMsg;

@@ -1,10 +1,14 @@
 package com.pan.query;
 
+import com.pan.common.constant.PageConstant;
+import lombok.Data;
+
 /**
  * @author 作者
  * @version 创建时间：2018年3月28日 下午6:28:30
  * 类说明
  */
+@Data
 public class QueryBase {
     /**
      * 分页
@@ -32,18 +36,10 @@ public class QueryBase {
      * @param pageSize
      */
     public void setPageSize(Integer pageSize) {
-        if (pageSize == null || pageSize >= 30) {
-            pageSize = 30;
+        if (pageSize == null || pageSize >= PageConstant.MAX_PAGE_SIZE) {
+            pageSize = PageConstant.MAX_PAGE_SIZE;
         }
         this.pageSize = pageSize;
-    }
-
-    public Integer getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
     }
 
     public Integer getOffset() {
@@ -56,21 +52,4 @@ public class QueryBase {
     public Integer getRow() {
         return this.pageSize;
     }
-
-    public String getOrderCondition() {
-        return orderCondition;
-    }
-
-    public void setOrderCondition(String orderCondition) {
-        this.orderCondition = orderCondition;
-    }
-
-    public String getWhereCondition() {
-        return whereCondition;
-    }
-
-    public void setWhereCondition(String whereCondition) {
-        this.whereCondition = whereCondition;
-    }
-
 }

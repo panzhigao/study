@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.pan.common.enums.ScoreTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.ScoreHistory;
-import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
 import com.pan.query.QueryScoreHistory;
@@ -48,13 +49,14 @@ public class IndexController {
 	@RequestMapping(method=RequestMethod.GET,value={"/","/index"})
 	public ModelAndView toLogin(){
 		ModelAndView mav=new ModelAndView("html/index");
-		if(TokenUtils.isAuthenticated()){//用户已登录
-			UserExtension extension = userExtensionService.findByUserId(TokenUtils.getLoingUserId());
+		//用户已登录
+		if(TokenUtils.isAuthenticated()){
+			UserExtension extension = userExtensionService.findByUserId(TokenUtils.getLoginUserId());
 			mav.addObject("checkInDays", extension.getContinuousCheckInDays());
 			//查询今日是否已签到
 			QueryScoreHistory historyVO=new QueryScoreHistory();
-			historyVO.setUserId(TokenUtils.getLoingUserId());
-			historyVO.setType(ScoreType.CHECK_IN.getCode());
+			historyVO.setUserId(TokenUtils.getLoginUserId());
+			historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
 			historyVO.setScoreDate(new Date());
 			List<ScoreHistory> list = scoreHistoryService.findByParams(historyVO);
 			//今日已签到
@@ -111,7 +113,7 @@ public class IndexController {
 	public ResultMsg getActiveRanking(){
 		//最新签到
 		QueryScoreHistory historyVO=new QueryScoreHistory();
-		historyVO.setType(ScoreType.CHECK_IN.getCode());
+		historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
 		historyVO.setScoreDate(new Date());
 		historyVO.setOrderCondition("create_time desc");
 		historyVO.setPageNo(1);

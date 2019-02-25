@@ -23,12 +23,12 @@ public class TokenUtils {
 		return user;
 	} 
 	
-	public static String getLoingUserId(){
-		User loingUser = getLoginUser();
-		if(loingUser==null){
+	public static String getLoginUserId(){
+		User loginUser = getLoginUser();
+		if(loginUser==null){
 			return null;
 		}
-		return loingUser.getUserId();
+		return loginUser.getUserId();
 	} 
 	
 	public static Session getSession(){

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import com.pan.common.enums.ScoreTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.ScoreHistory;
-import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.ScoreHistoryMapper;
 import com.pan.mapper.UserExtensionMapper;
@@ -51,8 +51,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		}
 		ScoreHistory scoreHistory=new ScoreHistory();
 		scoreHistory.setUserId(userId);
-		scoreHistory.setType(ScoreHistory.ScoreType.CHECK_IN.getName());
-		scoreHistory.setScore(ScoreHistory.ScoreType.CHECK_IN.getScore());
+		scoreHistory.setType(ScoreTypeEnum.CHECK_IN.getName());
+		scoreHistory.setScore(ScoreTypeEnum.CHECK_IN.getScore());
 		scoreHistory.setScoreDate(new Date());
 		scoreHistory.setCreateTime(new Date());
 		scoreHistoryMapper.save(scoreHistory);
@@ -62,7 +62,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	public void addLoginScore(String userId) {
 		QueryScoreHistory vo=new QueryScoreHistory();
 		vo.setUserId(userId);
-		vo.setType(ScoreHistory.ScoreType.LOGIN.getCode());
+		vo.setType(ScoreTypeEnum.LOGIN.getCode());
 		vo.setScoreDate(new Date());
 		int counts = scoreHistoryMapper.getCountByParams(vo);
 		if(counts>0){
@@ -72,13 +72,13 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		ScoreHistory history=new ScoreHistory();
 		BeanUtils.copyProperties(vo, history);
 		history.setCreateTime(new Date());
-		history.setScore(ScoreHistory.ScoreType.LOGIN.getScore());
+		history.setScore(ScoreTypeEnum.LOGIN.getScore());
 		scoreHistoryMapper.save(history);
 		//登录加5分
 		UserExtension userExtension=new UserExtension();
 		userExtension.setUserId(userId);
 		userExtension.setUpdateTime(new Date());
-		userExtension.setScore(ScoreHistory.ScoreType.LOGIN.getScore());
+		userExtension.setScore(ScoreTypeEnum.LOGIN.getScore());
 		userExtensionMapper.updateUserExtensionByUserId(userExtension);
 	}
 	
@@ -88,11 +88,11 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	 * @param scoreType 积分类型
 	 */
 	@Override
-	public ScoreHistory addScoreHistory(String userId, ScoreType scoreType) {
+	public ScoreHistory addScoreHistory(String userId, ScoreTypeEnum scoreType) {
 		//签到积分
 		Integer score=scoreType.getScore();
 		//签到积分
-		if(ScoreHistory.ScoreType.CHECK_IN==scoreType){
+		if(ScoreTypeEnum.CHECK_IN==scoreType){
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
@@ -113,7 +113,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
 				score=getTodayCheckInScore(continuousCheckInDays);	
 			}
-		}else if(ScoreHistory.ScoreType.LOGIN==scoreType){//登陆积分
+			//登陆积分
+		}else if(ScoreTypeEnum.LOGIN==scoreType){
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());

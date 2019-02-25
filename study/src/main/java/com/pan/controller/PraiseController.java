@@ -24,8 +24,8 @@ public class PraiseController {
 	 */
 	@RequestMapping(value="/user/praise",method=RequestMethod.POST)
 	@ResponseBody
-	public ResultMsg praise(HttpServletRequest request,String commentId){
-		String loingUserId = TokenUtils.getLoingUserId();
+	public ResultMsg praise(String commentId){
+		String loingUserId = TokenUtils.getLoginUserId();
 		Praise praise=new Praise();
 		praise.setUserId(loingUserId);
 		praise.setCommentId(commentId);

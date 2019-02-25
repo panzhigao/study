@@ -31,7 +31,7 @@ public class CommentController {
 	@RequestMapping(value="/user/comment",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg comment(Comment comment){
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		comment.setUserId(loingUserId);
 		Comment addComment = commentService.addComment(comment);
 		User loginUser = TokenUtils.getLoginUser();
@@ -51,7 +51,7 @@ public class CommentController {
 	@ResponseBody
 	public ResultMsg loadComments(String articleId){
 		//TODO 分页
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		List<CommentVO> comments = commentService.loadComments(loingUserId,articleId);
 		TransFieldUtils.transEntityCollection(comments);
 		return ResultMsg.ok("获取评论信息成功",comments);
@@ -64,7 +64,7 @@ public class CommentController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/deleteComment")
 	@ResponseBody
 	public ResultMsg deleteComments(String commentId){
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		commentService.deleteByCommentId(commentId, loingUserId);
 		return ResultMsg.ok("删除评论成功");
 	}

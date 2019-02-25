@@ -43,8 +43,8 @@ public class RegisterController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/register")
 	public ModelAndView toRegisterPage(){
-		if(TokenUtils.getLoingUserId()!=null){
-			String loginUserId = TokenUtils.getLoingUserId();
+		if(TokenUtils.getLoginUserId()!=null){
+			String loginUserId = TokenUtils.getLoginUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}

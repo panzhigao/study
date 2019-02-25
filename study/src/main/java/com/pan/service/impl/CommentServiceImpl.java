@@ -3,6 +3,7 @@ package com.pan.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.pan.common.enums.ScoreTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import com.pan.entity.Comment;
 import com.pan.entity.Message;
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.UserExtension;
-import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
 import com.pan.mapper.CommentMapper;
 import com.pan.service.ArticleService;
@@ -82,7 +82,7 @@ public class CommentServiceImpl implements CommentService{
 		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		
 		//发表评论加2分,
-		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(TokenUtils.getLoingUserId(),ScoreType.COMMENT);
+		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(TokenUtils.getLoginUserId(), ScoreTypeEnum.COMMENT);
 		//修改当前登录人评论数
 		//用户拓展表增加积分
 		UserExtension userExtension=new UserExtension();

@@ -49,7 +49,7 @@ public class ScoreHistoryController {
 	@ResponseBody
 	@RequiresPermissions("/user/scoreHistory")
 	public ResultMsg getScoreHistory(Integer pageSize,Integer pageNo){
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		QueryScoreHistory queryScoreHistory=new QueryScoreHistory();
 		queryScoreHistory.setUserId(loingUserId);
 		queryScoreHistory.setPageSize(pageSize);

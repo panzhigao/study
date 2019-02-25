@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/context 
-	http://www.springframework.org/schema/context/spring-context-4.0.xsd 
-	http://www.springframework.org/schema/task
-	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	http://www.springframework.org/schema/mvc 
 	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
 	http://www.springframework.org/schema/aop
@@ -19,13 +17,13 @@
 
 	<mvc:annotation-driven />
 	
-	<mvc:resources mapping="/static/images/**" location="/static/images/" />
-	<mvc:resources mapping="/static/css/**" location="/static/css/" />
-	<mvc:resources mapping="/static/js/**" location="/static/js/" />
-	<mvc:resources mapping="/static/frame/**" location="/static/frame/" />
-	<mvc:resources mapping="/static/assets/**" location="/static/assets/" />
-	<mvc:resources mapping="/static/res/**" location="/static/res/" />
-	<mvc:resources mapping="/static/ztree/**" location="/static/ztree/" />
+	<mvc:resources mapping="/static/**" location="/static/" />
+	<!--<mvc:resources mapping="/static/css/**" location="/static/css/" />-->
+	<!--<mvc:resources mapping="/static/js/**" location="/static/js/" />-->
+	<!--<mvc:resources mapping="/static/frame/**" location="/static/frame/" />-->
+	<!--<mvc:resources mapping="/static/assets/**" location="/static/assets/" />-->
+	<!--<mvc:resources mapping="/static/res/**" location="/static/res/" />-->
+	<!--<mvc:resources mapping="/static/ztree/**" location="/static/ztree/" />-->
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors> 

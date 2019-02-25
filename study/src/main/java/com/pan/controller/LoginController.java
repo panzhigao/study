@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.constant.MyConstant;
-import com.pan.common.enums.ResultCodeEmun;
+import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
@@ -48,8 +48,8 @@ public class LoginController{
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/login")
 	public ModelAndView toLogin(){
-		if(TokenUtils.getLoingUserId()!=null){
-			 String loginUserId = TokenUtils.getLoingUserId();
+		if(TokenUtils.getLoginUserId()!=null){
+			 String loginUserId = TokenUtils.getLoginUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}
@@ -73,7 +73,7 @@ public class LoginController{
 		UsernamePasswordToken passwordToken=new UsernamePasswordToken(user.getUsername(),user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
-		request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
+		//request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
 		//手机号登陆
 		User userInDb=null;
 		if(RegexUtils.checkTelephone(user.getUsername())){
@@ -88,8 +88,8 @@ public class LoginController{
 			redirectUrl=savedRequest.getRequestUrl();
 			logger.info("跳转登陆页前的url:{}",redirectUrl);
 		}
-		if(StringUtils.isNotBlank(redirectUrl)&&!"/favicon.ico".equals(redirectUrl)){
-			return ResultMsg.build(ResultCodeEmun.REDIRECT, "用户登陆成功",redirectUrl);
+		if(StringUtils.isNotBlank(redirectUrl)&&!MyConstant.DEFAULT_REQUEST_URL.equals(redirectUrl)){
+			return ResultMsg.build(ResultCodeEnum.REDIRECT, "用户登陆成功",redirectUrl);
 		}
 		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
 	}

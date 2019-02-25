@@ -92,7 +92,7 @@ public class ArticleController {
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setUserId(loingUserId);
 		queryArticleVO.setPageSize(pageSize);
@@ -115,7 +115,7 @@ public class ArticleController {
 		ModelAndView mav=new ModelAndView("html/article/detail");
 		String loginUserId=null;
 		if(TokenUtils.isAuthenticated()){
-			loginUserId = TokenUtils.getLoingUserId();
+			loginUserId = TokenUtils.getLoginUserId();
 		}
 		//查询文章信息
 		QueryArticle queryArticle=new QueryArticle();
@@ -144,7 +144,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
 		ModelAndView mav=new ModelAndView("html/article/edit");
-		String loingUserId = TokenUtils.getLoingUserId();
+		String loingUserId = TokenUtils.getLoginUserId();
 		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -182,7 +182,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doDelete")
 	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
-		String userId=TokenUtils.getLoingUserId();
+		String userId=TokenUtils.getLoginUserId();
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
 	}

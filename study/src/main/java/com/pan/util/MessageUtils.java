@@ -1,25 +1,22 @@
 package com.pan.util;
 
 import java.util.Set;
-
 import org.springframework.web.socket.TextMessage;
+import com.pan.websocket.MyWebSocketHandler;
 
-import com.pan.websocket.MyHandler;
 
 /**
- * 
- * @author panzhigao-wb
- *
+ * @author panzhigao
  */
 public class MessageUtils {
 	
-	private static MyHandler myHandler;
+	private static MyWebSocketHandler myHandler;
 
-	public MyHandler getMyHandler() {
+	public MyWebSocketHandler getMyHandler() {
 		return myHandler;
 	}
 
-	public void setMyHandler(MyHandler myHandler) {
+	public void setMyHandler(MyWebSocketHandler myHandler) {
 		MessageUtils.myHandler = myHandler;
 	}
 	

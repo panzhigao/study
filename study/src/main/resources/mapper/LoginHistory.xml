@@ -9,10 +9,11 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="ip" property="ip" jdbcType="INTEGER"/>
         <result column="ip_str" property="ipStr" jdbcType="VARCHAR"/>
+        <result column="user_agent" property="userAgent" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str
+    id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str,user_agent
   </sql>
 
     <insert id="insert" parameterType="com.pan.entity.LoginHistory">
@@ -30,6 +31,9 @@
             <if test="ipStr != null">
                 ip,
             </if>
+            <if test="userAgent != null">
+                user_agent,
+            </if>
         </trim>
         values
         <trim suffixOverrides="," prefix="(" suffix=")">
@@ -44,6 +48,9 @@
             </if>
             <if test="ipStr != null">
                 inet_aton(#{ipStr,jdbcType=VARCHAR}),
+            </if>
+            <if test="userAgent != null">
+                #{userAgent,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

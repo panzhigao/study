@@ -38,7 +38,8 @@ public class MyAuthenticationFilter extends AccessControlFilter{
 		if(!SecurityUtils.getSubject().isAuthenticated()){			
 			WebUtils.saveRequest(request);
 		}
-		if(isAjax((HttpServletRequest)request)){//是ajax请求
+		//是ajax请求
+		if(isAjax((HttpServletRequest)request)){
 			User loginUser = TokenUtils.getLoginUser();
 			//用户未登录或者用户被禁用
 			if(loginUser==null||UserStatusEnum.STATUS_BLOCKED.getCode().equals(loginUser.getStatus())){

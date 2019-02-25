@@ -48,7 +48,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg loadMessages(){
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);
 		TransFieldUtils.transEntityCollection(list);
 		return ResultMsg.ok("加载消息成功", list);
@@ -58,7 +58,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
 		return ResultMsg.ok("统计成功", count);
 	}
@@ -67,7 +67,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg cleanMessage(String messageId){
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.cleanMessage(loginUserId, messageId);
 		return ResultMsg.ok("消息置为已读成功", count);
 	}
@@ -87,7 +87,6 @@ public class MessageController {
 	/**
 	 * 发送系统消息
 	 * @param article
-	 * @param messageId
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/send")
@@ -95,7 +94,7 @@ public class MessageController {
 	@RequiresPermissions(value="/user/systemMessage")
 	public ResultMsg sendMessage(Article article){
 		logger.info("发布消息开始");
-		String userId=TokenUtils.getLoingUserId();
+		String userId=TokenUtils.getLoginUserId();
 		article.setUserId(userId);
 		articleService.saveSystemMessage(article);
 		return ResultMsg.ok("消息发布成功");

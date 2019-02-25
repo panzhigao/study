@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.pan.common.enums.ResultCodeEmun;
+import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
@@ -78,7 +78,7 @@ public class PermissionController {
 	@RequiresPermissions(value="/user/permission")
 	public ResultMsg loadPermissions(){
 		List<TreeNode> nodes=permissionService.getTreeData();
-		return ResultMsg.build(ResultCodeEmun.SUCCESS, ResultCodeEmun.SUCCESS.getMsg(),nodes);
+		return ResultMsg.build(ResultCodeEnum.SUCCESS, ResultCodeEnum.SUCCESS.getMsg(),nodes);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")

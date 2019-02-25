@@ -18,12 +18,12 @@ public class LoginHistoryMapperTest extends BaseTest {
 
 
     @Test
-    @Rollback(false)
     public void insert() throws Exception {
         LoginHistory loginHistory=new LoginHistory();
         loginHistory.setUserId("123");
         loginHistory.setUsername("pzg");
         loginHistory.setIpStr("127.0.0.1");
+        loginHistory.setUserAgent("22222222222222222222222222222222222222222222");
         loginHistory.setCreateTime(new Date());
         int insert = loginHistoryMapper.insert(loginHistory);
         Assert.assertEquals(insert,1);

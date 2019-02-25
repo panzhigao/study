@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pan.common.enums.ScoreTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ import com.pan.entity.ArticleCheck;
 import com.pan.entity.Message;
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.UserExtension;
-import com.pan.entity.ScoreHistory.ScoreType;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
@@ -138,7 +138,7 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticle(article);
 		//文章数加1，发表文章加5分
-		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(),ScoreType.PUBLISH_ARTICLE);
+		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(), ScoreTypeEnum.PUBLISH_ARTICLE);
 		//用户拓展表增加积分和文章数
 		UserExtension userExtension=new UserExtension();
 		userExtension.setUserId(addScoreHistory.getUserId());

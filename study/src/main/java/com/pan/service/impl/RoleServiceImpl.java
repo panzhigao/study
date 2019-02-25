@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService{
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
 		ValidationUtils.validateEntity(role);
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
 		role.setSuperAdminFlag("0");
@@ -185,7 +185,7 @@ public class RoleServiceImpl implements RoleService{
 	public void updateRole(Role role) {
 		ValidationUtils.validateEntityWithGroups(role);
 		role.setUpdateTime(new Date());
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		role.setUpdateUser(loginUserId);
 		roleMapper.updateRole(role);
 	}

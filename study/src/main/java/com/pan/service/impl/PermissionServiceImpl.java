@@ -67,7 +67,7 @@ public class PermissionServiceImpl implements PermissionService {
 			permission.setSort(1);
 		}
 		permission.setCreateTime(new Date());
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		permission.setCreateUser(loginUserId);
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
@@ -185,7 +185,7 @@ public class PermissionServiceImpl implements PermissionService {
 		if(MyConstant.PERMISSION_TYPE_MENU.equals(permission.getType())){
 			permission.setUrl("  ");
 		}
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		permission.setUpdateUser(loginUserId);
 		permission.setUpdateTime(new Date());
 		permissionMapper.updatePermission(permission);

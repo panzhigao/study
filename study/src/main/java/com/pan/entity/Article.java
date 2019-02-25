@@ -2,16 +2,21 @@ package com.pan.entity;
 
 import java.util.Date;
 import javax.validation.constraints.Size;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.pan.common.annotation.UnescapeHtml;
-
 
 /**
  * 文章实体类
  * @author Administrator
  *
  */
+@Data
 public class Article extends BaseEntity{
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -4357328851427096260L;
 	/**
 	 * 审核未通过
 	 */
@@ -36,10 +41,6 @@ public class Article extends BaseEntity{
 	 * 文章类型 1-文章 2-系统消息
 	 */
 	public static final String TYPE_SYSTEM_MESSAGE="2";
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4357328851427096260L;
 	/**
 	 * 文章id
 	 */
@@ -97,119 +98,4 @@ public class Article extends BaseEntity{
 	 * 是否是精品贴,0-否，1-是
 	 */
 	private String highQuality;
-	public String getArticleId() {
-		return articleId;
-	}
-
-	public void setArticleId(String articleId) {
-		this.articleId = articleId;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Date getPublishTime() {
-		return publishTime;
-	}
-
-	public void setPublishTime(Date publishTime) {
-		this.publishTime = publishTime;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getOutline() {
-		return outline;
-	}
-
-	public void setOutline(String outline) {
-		this.outline = outline;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-	
-	public Integer getCommentCount() {
-		return commentCount;
-	}
-
-	public void setCommentCount(Integer commentCount) {
-		this.commentCount = commentCount;
-	}
-	
-	public Integer getViewCount() {
-		return viewCount;
-	}
-	public void setViewCount(Integer viewCount) {
-		this.viewCount = viewCount;
-	}
-	
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public Integer getStick() {
-		return stick;
-	}
-
-	public void setStick(Integer stick) {
-		this.stick = stick;
-	}
-
-	public String getHighQuality() {
-		return highQuality;
-	}
-
-	public void setHighQuality(String highQuality) {
-		this.highQuality = highQuality;
-	}
-
-	@Override
-	public String toString() {
-		return "Article [articleId=" + articleId + ", userId=" + userId
-				+ ", status=" + status + ", publishTime=" + publishTime
-				+ ", title=" + title + ", content=" + content + ", outline="
-				+ outline + ", image=" + image + ", commentCount="
-				+ commentCount + ", viewCount=" + viewCount + ", type=" + type
-				+ ", stick=" + stick + ", highQuality=" + highQuality + ", id="
-				+ id + ", createTime=" + createTime + ", createUser="
-				+ createUser + ", updateTime=" + updateTime + ", updateUser="
-				+ updateUser + "]";
-	}
 }

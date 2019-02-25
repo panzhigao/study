@@ -3,12 +3,14 @@ package com.pan.task;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import com.pan.common.constant.PageConstant;
+import com.pan.common.enums.ScoreTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import com.pan.entity.ScoreHistory;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryScoreHistory;
 import com.pan.query.QueryUserExtension;
@@ -119,12 +121,7 @@ public class OperateCountTask {
 			}
 		}
 	}
-	
-	/**
-	 * 每次执行数据条数
-	 */
-	private static final int PAGE_SIZE = 20;
-	
+
 	/**
 	 * 每天凌晨0点更新登录天数和签到天数
 	 */
@@ -136,9 +133,9 @@ public class OperateCountTask {
 				logger.info("------->>执行定时任务,更新登录天数和签到天数start,锁[key={},value={}]------", LOCK_LOGIN_AND_CHECK_IN, value);
 				QueryUserExtension queryUserExtensionVO = new QueryUserExtension();
 				int total = userExtensionService.countByParams(queryUserExtensionVO);
-				int pageTotal = total % PAGE_SIZE == 0 ? total / PAGE_SIZE : total / PAGE_SIZE + 1;
+				int pageTotal = total % PageConstant.PAGE_SIZE_20 == 0 ? total / PageConstant.PAGE_SIZE_20 : total / PageConstant.PAGE_SIZE_20 + 1;
 				for (int i = 1; i <= pageTotal; i++) {
-					queryUserExtensionVO.setPageSize(PAGE_SIZE);
+					queryUserExtensionVO.setPageSize(PageConstant.PAGE_SIZE_20);
 					queryUserExtensionVO.setPageNo(i);
 					List<UserExtension> resultList = userExtensionService.findByParams(queryUserExtensionVO);
 					UserExtension updateExtension = new UserExtension();
@@ -148,14 +145,16 @@ public class OperateCountTask {
 						updateExtension.setUserId(userExtension.getUserId());
 						// 查询昨日是否签到
 						historyVO.setUserId(userExtension.getUserId());
-						historyVO.setType(ScoreHistory.ScoreType.CHECK_IN.getCode());
+						historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
 						int checkCount = scoreHistoryService.getCountByParams(historyVO);
-						if (checkCount == 0 && userExtension.getContinuousCheckInDays() != 0) {// 昨天没有签到,连续签到天数重置为0
+						// 昨天没有签到,连续签到天数重置为0
+						if (checkCount == 0 && userExtension.getContinuousCheckInDays() != 0) {
 							updateExtension.setContinuousCheckInDays(0);
 						}
-						historyVO.setType(ScoreHistory.ScoreType.LOGIN.getCode());
+						historyVO.setType(ScoreTypeEnum.LOGIN.getCode());
 						int loginCount = scoreHistoryService.getCountByParams(historyVO);
-						if (loginCount == 0 && userExtension.getContinuousLoginDays() != 0) {// 昨天没有登录,连续登录天数重置为0
+						// 昨天没有登录,连续登录天数重置为0
+						if (loginCount == 0 && userExtension.getContinuousLoginDays() != 0) {
 							updateExtension.setContinuousLoginDays(0);
 						}
 						if (updateExtension.getContinuousCheckInDays() != null

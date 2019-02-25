@@ -171,7 +171,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}", article);
-		String userId = TokenUtils.getLoingUserId();
+		String userId = TokenUtils.getLoginUserId();
 		article.setUserId(userId);
 		// 校验前台传来的数据
 		checkArticle(article);
@@ -301,7 +301,7 @@ public class ArticleServiceImpl implements ArticleService {
 		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
-		String loginUserId = TokenUtils.getLoingUserId();
+		String loginUserId = TokenUtils.getLoginUserId();
 		Set<String> set = new HashSet<String>();
 		set.add(loginUserId);
 		MessageUtils.sendMessageToAllExceptionUser(JsonUtils.toJson(message), set);

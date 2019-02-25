@@ -16,51 +16,51 @@ public interface ArticleMapper {
 	 * @param articleId
 	 * @return
 	 */
-	public Article findByArticleId(String articleId);
+	Article findByArticleId(String articleId);
 	/**
 	 * 根据userId查找文章信息集合
 	 * @param userId
 	 * @return
 	 */
-	public List<Article> findListByUserId(String userId);
+	List<Article> findListByUserId(String userId);
 	/**
 	 * 保存文章信息
 	 * @param article
 	 */
-	public void saveArticle(Article article);
+	void saveArticle(Article article);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param queryArticleVO
 	 * @return
 	 */
-	public List<Article> findByParams(QueryArticle queryArticleVO);
+	List<Article> findByParams(QueryArticle queryArticleVO);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param queryArticleVO
 	 * @return
 	 */
-	public int getCountByParams(QueryArticle queryArticleVO);
+	int getCountByParams(QueryArticle queryArticleVO);
 	/**
-	 * 更新文章
+	 * 更新文章，返回更新文章条数
 	 * @param article
 	 */
-	public int updateArticle(Article article);
+	int updateArticle(Article article);
 	/**
 	 * 根据条条件查询，不分页
 	 * @param article
 	 * @return
 	 */
-	public List<Article> findByCondition(Article article);
+	List<Article> findByCondition(Article article);
 	/**
 	 * 删除文章
 	 * @param userId
 	 * @param articleId
 	 * @return
 	 */
-	public int deleteByUserIdAndArticleId(@Param("userId")String userId,@Param("articleId")String articleId);
+	int deleteByUserIdAndArticleId(@Param("userId")String userId,@Param("articleId")String articleId);
 	/**
 	 * 获取最大置顶值
 	 * @return
 	 */
-	public int getMaxStick();
+	int getMaxStick();
 }
