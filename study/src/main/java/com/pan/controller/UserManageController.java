@@ -55,7 +55,6 @@ public class UserManageController {
 	
 	/**
 	 * 获取角色树
-	 * @param roleId
 	 * @return
 	 */
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/getRoleTree")

@@ -56,7 +56,11 @@ public class OperateCountTask {
 	 * 每次扫描的数量
 	 */
 	private final static int SCAN_COUNT=1000;
-	
+	/**
+	 * 过期时间100秒
+	 */
+	private final static int EXPIRE_TIME=100;
+
 	private static final String KEY_COMMENT="comment_count:";
 	
 	/**
@@ -66,7 +70,7 @@ public class OperateCountTask {
 	public void updateCommentCount() {
 		String value = UUID.randomUUID().toString().split("-")[0];
 		try {
-			if (RedisLock.tryGetDistributedLock(LOCK_COMMENT_COUNT, value, 10000)) {
+			if (RedisLock.tryGetDistributedLock(LOCK_COMMENT_COUNT, value, EXPIRE_TIME)) {
 				logger.info("------->>执行定时任务,更新文章数据库评论数start,锁[key={},value={}]", LOCK_COMMENT_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_COMMENT+"*", SCAN_COUNT);
 				for (String string : keys) {
@@ -97,7 +101,7 @@ public class OperateCountTask {
 	@Scheduled(cron = "0 0/3 * * * ?")
 	public void updateViewCount() {
 		String value = UUID.randomUUID().toString().split("-")[0];
-		if (RedisLock.tryGetDistributedLock(LOCK_VIEW_COUNT, value, 100)) {
+		if (RedisLock.tryGetDistributedLock(LOCK_VIEW_COUNT, value, EXPIRE_TIME)) {
 			try {
 				logger.info("------->>执行定时任务,更新文章数据库阅读数start,锁[key={},value={}]", LOCK_VIEW_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_VIEW+"*", SCAN_COUNT);
@@ -129,7 +133,7 @@ public class OperateCountTask {
 	public void updateLoginAndCheckInCount() {
 		String value = UUID.randomUUID().toString().split("-")[0];
 		try {
-			if (RedisLock.tryGetDistributedLock(LOCK_LOGIN_AND_CHECK_IN, value, 10000)) {
+			if (RedisLock.tryGetDistributedLock(LOCK_LOGIN_AND_CHECK_IN, value, EXPIRE_TIME)) {
 				logger.info("------->>执行定时任务,更新登录天数和签到天数start,锁[key={},value={}]------", LOCK_LOGIN_AND_CHECK_IN, value);
 				QueryUserExtension queryUserExtensionVO = new QueryUserExtension();
 				int total = userExtensionService.countByParams(queryUserExtensionVO);

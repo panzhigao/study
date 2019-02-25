@@ -3,6 +3,7 @@ package com.pan.shiro;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.session.Session;
@@ -12,6 +13,9 @@ import com.pan.util.JedisUtils;
 import com.pan.util.SerializeUtils;
 
 
+/**
+ * @author panzhigao
+ */
 public class RedisSessionDAO extends AbstractSessionDAO {
 
 	private static final String REDIS_SESSION_PREFIX = "redis-session:";
@@ -58,14 +62,16 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		JedisUtils.decreaseKey(key);
 	}
 
+	/**
+	 * 每次扫描的数量
+	 */
+	private final static int SCAN_COUNT=1000;
+
 	@Override
 	public Collection<Session> getActiveSessions() {
-		Set<byte[]> keys = JedisUtils.getByteKeys((REDIS_SESSION_PREFIX+"*").getBytes());
 		Set<Session> set=new HashSet<>();
-		for (byte[] key : keys) {
-			byte[] bs = JedisUtils.get(key);
-			set.add((Session) SerializeUtils.deserialize(bs));
-		}
+		List<byte[]> scan = JedisUtils.scan((REDIS_SESSION_PREFIX + "*").getBytes(), SCAN_COUNT);
+		scan.forEach(t->set.add((Session) SerializeUtils.deserialize(t)));
 		return set;
 	}
 

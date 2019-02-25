@@ -6,6 +6,7 @@ import com.pan.websocket.MyWebSocketHandler;
 
 
 /**
+ * 消息工具类
  * @author panzhigao
  */
 public class MessageUtils {

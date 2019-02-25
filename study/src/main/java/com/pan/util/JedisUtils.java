@@ -1,11 +1,8 @@
 package com.pan.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -503,11 +500,8 @@ public class JedisUtils {
 
 	/**
 	 * 模糊匹配
-	 * 
 	 * @param pattern
-	 *            key的正则表达式
-	 * @param count
-	 *            每次扫描多少条记录，值越大消耗的时间越短，但会影响redis性能。建议设为一千到一万
+	 * @param count 每次扫描多少条记录，值越大消耗的时间越短，但会影响redis性能。建议设为一千到一万
 	 * @return 匹配的key集合
 	 */
 	public static List<String> scan(String pattern, int count) {
@@ -525,10 +519,43 @@ public class JedisUtils {
 				ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
 				list.addAll(scanResult.getResult());
 				cursor = scanResult.getStringCursor();
-			} while (!"0".equals(cursor));
+			} while (!ScanParams.SCAN_POINTER_START.equals(cursor));
 			return list;
 		} catch (Exception e) {
 			logger.error("redis扫描数据报错,pattern={}",pattern, e);
+			return list;
+		} finally {
+			closeJedis(jedis);
+		}
+	}
+
+	/**
+	 * 模糊匹配
+	 *
+	 * @param key
+	 * @param count 每次扫描多少条记录，值越大消耗的时间越短，但会影响redis性能。建议设为一千到一万
+	 * @return 匹配的key集合
+	 */
+	public static List<byte[]> scan(byte[] key, int count) {
+		List<byte[]> list = new ArrayList<>();
+		Jedis jedis = jedisPool.getResource();
+		if (jedis == null) {
+			return list;
+		}
+		try {
+			byte[] cursor = ScanParams.SCAN_POINTER_START_BINARY;
+			ScanParams scanParams = new ScanParams();
+			scanParams.count(count);
+			scanParams.match(key);
+			do {
+				ScanResult<byte[]> scanResult = jedis.scan(cursor, scanParams);
+				List<byte[]> result = scanResult.getResult();
+				list.addAll(result);
+				cursor = scanResult.getCursorAsBytes();
+			} while (!Objects.deepEquals(ScanParams.SCAN_POINTER_START_BINARY,cursor));
+			return list;
+		} catch (Exception e) {
+			logger.error("redis扫描数据报错,pattern={}",key, e);
 			return list;
 		} finally {
 			closeJedis(jedis);

@@ -85,7 +85,7 @@ public class MyRealm extends AuthorizingRealm {
 	}
 	
 	/**
-	 * 授权
+	 * 授权，加载用户角色和权限信息
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
@@ -144,7 +144,7 @@ public class MyRealm extends AuthorizingRealm {
 	}
 	
 	/**
-	 * 删除指定用户认证信息,即删除用户session信息
+	 * 删除指定用户认证信息,即删除用户session信息,如果用户处于登录状态，会被踢出
 	 * @param userId 被删除人id
 	 */
 	public void clearAuth(String userId) {
@@ -163,6 +163,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * @param userId 被删除人id
 	 */
 	public void clearAuthz(String userId) {
+		logger.info("删除指定用户授权信息,userId={}",userId);
 		Subject subject = SecurityUtils.getSubject();
 		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
 		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
