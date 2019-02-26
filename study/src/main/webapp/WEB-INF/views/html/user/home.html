@@ -63,7 +63,7 @@
   <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
   <h1>
     $!{u.nickname}
-    <i class="iconfont #if($u.sex==0) icon-nan #elseif($u.sex==1) icon-nv #end"></i>
+    <i class="iconfont #if($u.sex==1) icon-nan #elseif($u.sex==2) icon-nv #end"></i>
     #if($u.adminFlag=='1')<i class="layui-badge fly-badge-vip layui-bg-green">管理员</i>#end
   </h1>
 

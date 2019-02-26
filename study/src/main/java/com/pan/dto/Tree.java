@@ -117,6 +117,7 @@ public class Tree implements Serializable {
                 for (Tree temp : nodes) {
                     if (StringUtils.equals(temp.getId(), treeNode.getpId())) {
                         temp.data.add(treeNode);
+                        break;
                     }
                 }
             }

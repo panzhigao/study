@@ -1,6 +1,7 @@
 package com.pan.util;
 
 
+import com.pan.shiro.RedisSessionDAO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -8,6 +9,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import com.pan.entity.User;
 import com.pan.shiro.MyRealm;
+import java.util.Collection;
 
 /**
  * @author panzhigao
@@ -108,5 +110,16 @@ public class TokenUtils {
 	 */
 	public static String getIp(){
 		return getSession().getHost();
+	}
+
+	/**
+	 * 判断当前用户是否在线
+	 * @param userId 用户id
+	 * @return
+	 */
+	public static boolean isOnline(String userId,Collection<Session> activeSessions){
+		RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();
+		MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();
+		return realm.isOnline(userId,activeSessions);
 	}
 }

@@ -3,6 +3,7 @@ package com.pan.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +11,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.pan.common.enums.ScoreTypeEnum;
+import com.pan.dto.UserDTO;
 import com.pan.entity.*;
 import com.pan.service.LoginHistoryService;
+import com.pan.shiro.RedisSessionDAO;
+import com.pan.util.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +39,6 @@ import com.pan.query.QueryUser;
 import com.pan.service.ScoreHistoryService;
 import com.pan.service.UserExtensionService;
 import com.pan.service.UserService;
-import com.pan.util.DateUtils;
-import com.pan.util.ImageUtils;
-import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
-import com.pan.util.PasswordUtils;
-import com.pan.util.RegexUtils;
-import com.pan.util.TokenUtils;
-import com.pan.util.ValidationUtils;
-import com.pan.util.VerifyCodeUtils;
 
 /**
  * @author Administrator
@@ -341,21 +337,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> findPageData(QueryUser queryUser) {
-        Map<String, Object> pageData = new HashMap<String, Object>(2);
-        List<User> list = new ArrayList<User>();
+        Map<String, Object> pageData = new HashMap<>(4);
+        List<UserDTO> list = new ArrayList<>();
         try {
-            logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryUser));
+            logger.info("分页查询用户参数为:{}", JsonUtils.toJson(queryUser));
             int total = userMapper.getCountByParams(queryUser);
             //当查询记录大于0时，查询数据库记录，否则直接返回空集合
             if (total > 0) {
+                RedisSessionDAO redisSessionDAO = SpringContextUtils.getBean(RedisSessionDAO.class);
+                Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
                 list = userMapper.findByParams(queryUser);
+                list.forEach(s->{
+                    boolean online = TokenUtils.isOnline(s.getUserId(),activeSessions);
+                    s.setIsOnline(online);
+                });
             }
             pageData.put("data", list);
             pageData.put("total", total);
             pageData.put("code", "200");
             pageData.put("msg", "");
         } catch (Exception e) {
-            logger.error("分页查询文章异常", e);
+            logger.error("分页查询用户异常", e);
         }
         return pageData;
     }

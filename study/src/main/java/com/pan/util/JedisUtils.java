@@ -506,11 +506,9 @@ public class JedisUtils {
 	 */
 	public static List<String> scan(String pattern, int count) {
 		List<String> list = new ArrayList<>();
-		Jedis jedis = jedisPool.getResource();
-		if (jedis == null) {
-			return list;
-		}
+		Jedis jedis = null;
 		try {
+			jedis=jedisPool.getResource();
 			String cursor = ScanParams.SCAN_POINTER_START;
 			ScanParams scanParams = new ScanParams();
 			scanParams.count(count);
@@ -531,18 +529,15 @@ public class JedisUtils {
 
 	/**
 	 * 模糊匹配
-	 *
-	 * @param key
+	 * @param key 匹配内容
 	 * @param count 每次扫描多少条记录，值越大消耗的时间越短，但会影响redis性能。建议设为一千到一万
 	 * @return 匹配的key集合
 	 */
 	public static List<byte[]> scan(byte[] key, int count) {
 		List<byte[]> list = new ArrayList<>();
-		Jedis jedis = jedisPool.getResource();
-		if (jedis == null) {
-			return list;
-		}
+		Jedis jedis = null;
 		try {
+			jedis=jedisPool.getResource();
 			byte[] cursor = ScanParams.SCAN_POINTER_START_BINARY;
 			ScanParams scanParams = new ScanParams();
 			scanParams.count(count);
@@ -560,5 +555,24 @@ public class JedisUtils {
 		} finally {
 			closeJedis(jedis);
 		}
+	}
+
+	/**
+	 * 根据keys数组一次获取多个值
+	 * @param keys key数组
+	 * @return value集合
+	 */
+	public static List<byte[]> mget(byte[]... keys) {
+		List<byte[]> result=new ArrayList<>();
+		Jedis jedis = null;
+		try {
+			jedis=jedisPool.getResource();
+			result= jedis.mget(keys);
+		}catch (Exception e){
+			logger.error("redis mget失败",e);
+		}finally {
+			closeJedis(jedis);
+		}
+		return result;
 	}
 }

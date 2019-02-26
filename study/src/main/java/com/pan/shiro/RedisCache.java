@@ -13,9 +13,12 @@ import org.slf4j.LoggerFactory;
 import com.pan.util.JedisUtils;
 import com.pan.util.SerializeUtils;
 
+/**
+ * @author panzhigao
+ */
 public class RedisCache<K, V> implements Cache<K, V> {
 	
-	private static final Logger logger=LoggerFactory.getLogger(MyRealm.class);
+	private static final Logger logger=LoggerFactory.getLogger(RedisCache.class);
 	
 	public static final String CACHE_PREFIX = "redis-cache:";
 	

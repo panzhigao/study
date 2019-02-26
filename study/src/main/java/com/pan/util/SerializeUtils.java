@@ -8,14 +8,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.pan.common.exception.BusinessException;
+import com.pan.shiro.MyRealm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * 序列化工具
  * @author panzhigao-wb
  *
  */
 public class SerializeUtils {
-	
+
+    private static final Logger logger = LoggerFactory.getLogger(SerializeUtils.class);
+
 	public static byte[] serialize(Object value) {
         if (value == null) {
             throw new BusinessException("Can't serialize null");
@@ -31,7 +36,7 @@ public class SerializeUtils {
             bos.close();
             rv = bos.toByteArray();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("序列化失败，value={}",value,e);
         } finally {
             close(os);
             close(bos);
@@ -55,7 +60,7 @@ public class SerializeUtils {
                 rv = is.readObject();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("反序列化失败",e);
         } finally {
             close(is);
             close(bis);

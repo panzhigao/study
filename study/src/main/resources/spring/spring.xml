@@ -25,7 +25,9 @@
 	<bean class="com.pan.util.MessageUtils">
 		<property name="myHandler" ref="myHandler"/>
 	</bean>
-	
+
+	<bean id="springContextUtils" class="com.pan.util.SpringContextUtils" />
+
 	<bean id="client" factory-bean="esClientBuilder" factory-method="build" />
 
 	<bean id="esClientBuilder" class="com.pan.common.client.EsClientBuilder"></bean>

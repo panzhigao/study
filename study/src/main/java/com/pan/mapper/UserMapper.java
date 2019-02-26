@@ -1,6 +1,8 @@
 package com.pan.mapper;
 
 import java.util.List;
+
+import com.pan.dto.UserDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserRole;
 import com.pan.query.QueryUser;
@@ -16,60 +18,60 @@ public interface UserMapper {
 	 * @param userId
 	 * @return
 	 */
-	public User findByUserId(String userId);
+	User findByUserId(String userId);
 	/**
 	 * 根据手机号查找用户信息，唯一一条用户数据
 	 * @param telephone
 	 * @return
 	 */
-	public User findByTelephone(String telephone);
+	User findByTelephone(String telephone);
 	/**
 	 * 根据username查找用户信息，唯一一条用户数据
 	 * @param username
 	 * @return
 	 */
-	public User findByUsername(String username);
+	User findByUsername(String username);
 	/**
 	 * 保存用户信息
 	 * @param user
 	 */
-	public void saveUser(User user);
+	void saveUser(User user);
 	/**
 	 * 更新用户id更新用户信息
 	 * @param user
 	 */
-	public void updateUserByUserId(User user);
+	void updateUserByUserId(User user);
 	/**
 	 * 查询文章详细,支持分页
 	 * @param queryUserVO
 	 * @return
 	 */
-	public int getCountByParams(QueryUser queryUserVO);
+	int getCountByParams(QueryUser queryUserVO);
 	/**
 	 * 分页查询用户信息
 	 * @return
 	 */
-	public List<User> findByParams(QueryUser queryUserVO);
+	List<UserDTO> findByParams(QueryUser queryUserVO);
 	/**
 	 * 新增用户角色
 	 * @param list
 	 */
-	public void addUserRole(List<UserRole> list);
+	void addUserRole(List<UserRole> list);
 	/**
 	 * 删除用户角色
 	 * @param userId
 	 */
-	public void deleteUserRoleByUserId(String userId);
+	void deleteUserRoleByUserId(String userId);
 	/**
 	 * 查找使用角色的用户数
 	 * @param roleId
 	 * @return
 	 */
-	public int findRoleUserCountByRoleId(String roleId);
+	int findRoleUserCountByRoleId(String roleId);
 	/**
 	 * 查找使用角色的用户数据
 	 * @param roleId
 	 * @return
 	 */
-	public List<User> findUserByRoleId(String roleId);
+	List<User> findUserByRoleId(String roleId);
 }

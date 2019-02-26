@@ -70,8 +70,12 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	@Override
 	public Collection<Session> getActiveSessions() {
 		Set<Session> set=new HashSet<>();
-		List<byte[]> scan = JedisUtils.scan((REDIS_SESSION_PREFIX + "*").getBytes(), SCAN_COUNT);
-		scan.forEach(t->set.add((Session) SerializeUtils.deserialize(t)));
+		List<byte[]> scanKeys = JedisUtils.scan(getKey("*"), SCAN_COUNT);
+		byte[][] keys=new byte[scanKeys.size()][];
+		List<byte[]> values = JedisUtils.mget(scanKeys.toArray(keys));
+		values.forEach(
+				t->set.add((Session) SerializeUtils.deserialize(t))
+		);
 		return set;
 	}
 
