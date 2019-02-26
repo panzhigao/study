@@ -1,7 +1,12 @@
 package com.pan.entity;
 
-import com.pan.util.JsonUtils;
+import lombok.Data;
 
+/**
+ * 收藏实体
+ * @author panzhigao
+ */
+@Data
 public class Collection extends BaseEntity{
 	/**
 	 * 
@@ -23,35 +28,4 @@ public class Collection extends BaseEntity{
 	 * 文章标题
 	 */
 	private String title;
-	
-	public String getCollectionId() {
-		return collectionId;
-	}
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
-	public String getArticleId() {
-		return articleId;
-	}
-	public void setArticleId(String articleId) {
-		this.articleId = articleId;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	@Override
-	public String toString() {
-		return JsonUtils.toJson(this);
-	}
 }

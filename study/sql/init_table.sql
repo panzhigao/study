@@ -57,7 +57,8 @@ CREATE TABLE
         create_time DATETIME NOT NULL COMMENT '创建时间',
         title VARCHAR(64) COMMENT '标题',
         PRIMARY KEY (id),
-        CONSTRAINT user_id UNIQUE (user_id, article_id)
+        UNIQUE KEY `uq_user_id_article_id` (`user_id`,`article_id`) USING BTREE,
+        UNIQUE KEY `uq_collection_id` (`collection_id`) USING BTREE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收藏表';
     
@@ -74,7 +75,8 @@ CREATE TABLE
         reply_to_user_id VARCHAR(64) COMMENT '接收评论者的userId',
         create_time DATETIME NOT NULL COMMENT '创建时间',
         praise_counts bigint DEFAULT '0' NOT NULL COMMENT '点赞数',
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+        UNIQUE KEY `uq_comment_id` (`comment_id`) USING BTREE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论信息';
     
@@ -320,6 +322,7 @@ CREATE TABLE `t_login_history` (
   `username` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间，即登录时间',
   `ip` int(10) unsigned zerofill NOT NULL COMMENT '登录时的ip',
+  `user_agent` varchar(2048) NOT NULL DEFAULT '' COMMENT '用户代理',
   PRIMARY KEY (`id`),
   KEY `idx_userId_username` (`user_id`,`username`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

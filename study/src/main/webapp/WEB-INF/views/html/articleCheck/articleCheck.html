@@ -139,7 +139,7 @@ layui.use(['table','jquery'], function(){
 	      	  }
 	       },
 	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:260,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
@@ -194,11 +194,11 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
-	      {field: 'createTime', title: '创建时间', width:160, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
 	      }},
-	      {field: 'checkTime', title: '审核时间', width:160, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.checkTime));
+	      {field: 'checkTime', title: '审核时间', width:150, sort: true,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.checkTime));
 	      }},
 	      {field: 'checkUsername', title: '审核人', width:100,templet:function(d){
 	    	  return d.checkUsername;
@@ -212,7 +212,7 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
-	      {title:'操作',width:100,fixed: 'right',templet:function(row){
+	      {title:'操作',width:100,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  if(row.completeFlag=='1'){
 	    		  return detail;

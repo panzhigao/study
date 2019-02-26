@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * @author panzhigao
+ */
 public class DateUtils {
 	
 	public static final String FORMAT_DATE_FULL="yyyy-MM-dd HH:mm:ss";

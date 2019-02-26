@@ -60,8 +60,8 @@ public class PermissionServiceImpl implements PermissionService {
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
-		if(StringUtils.isBlank(permission.getpId())){
-			permission.setpId("0");
+		if(StringUtils.isBlank(permission.getPId())){
+			permission.setPId("0");
 		}
 		if(permission.getSort()==null){
 			permission.setSort(1);
@@ -126,7 +126,7 @@ public class PermissionServiceImpl implements PermissionService {
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
 			treeNode.setId(permission.getPermissionId());
-			treeNode.setpId(permission.getpId());
+			treeNode.setpId(permission.getPId());
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
@@ -149,7 +149,7 @@ public class PermissionServiceImpl implements PermissionService {
 			permissionTree.setTitle(permission.getPermissionName());
 			permissionTree.setValue(permission.getPermissionId());
 			permissionTree.setId(permission.getPermissionId());
-			permissionTree.setpId(permission.getpId());
+			permissionTree.setPId(permission.getPId());
 			permissionTree.setIcon(permission.getIcon());
 			permissionTree.setSort(permission.getSort());
 			if(!StringUtils.equals(permission.getMarker(),"0")){

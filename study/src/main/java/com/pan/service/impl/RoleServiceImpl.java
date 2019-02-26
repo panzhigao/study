@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.pan.common.enums.AdminFlagEnum;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -72,37 +74,46 @@ public class RoleServiceImpl implements RoleService{
 		}
 		return pageData;
 	}
-	
-	
+
+	/**
+	 * 删除角色，超级管理员角色不能删除，已被使用的角色不能删除
+	 *
+	 * @param roleId 角色id
+	 */
 	@Override
 	public void deleteRole(String roleId) {
 		Role roleInDb = this.findByRoleId(roleId);
 		if(roleInDb==null){
 			throw new BusinessException("该角色不存在");
 		}
-		if(roleInDb.isSuperAdmin()){
+		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(roleInDb.getSuperAdminFlag())){
 			throw new BusinessException("超级管理员不能删除");
 		}
 		int count = userService.findRoleUserCountByRoleId(roleId);
 		if(count>0){
-			throw new BusinessException("改角色已使用，不能被删除");
+			throw new BusinessException("该角色已使用，不能被删除");
 		}
 		//删除角色信息
 		roleMapper.deleteRole(roleId);
 		//删除角色下关联的权限
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		//清除缓存中角色的权限信息
-		TokenUtils.clearAuth();
+		//TokenUtils.clearAuth();
 		//JedisUtils.delete("role_permissions:"+roleId);
 	}
 
+	/**
+	 * 为角色添加权限
+	 * @param roleId 添加权限的角色id
+	 * @param permissions 权限id数组
+	 */
 	@Override
 	public void allocatePermissionToRole(String roleId, String[] permissions) {
 		Role role = findByRoleId(roleId);
 		if(role==null){
 			throw new BusinessException("该角色不存在");
 		}
-		if(role.isSuperAdmin()){
+		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(role.getSuperAdminFlag())){
 			throw new BusinessException("超级管理员不能编辑");
 		}
 		//TODO 增加日志
@@ -145,7 +156,7 @@ public class RoleServiceImpl implements RoleService{
 			roleTree.setTitle(role.getRoleName());
 			roleTree.setValue(role.getRoleId());
 			roleTree.setId(role.getRoleId());
-			roleTree.setpId("0");
+			roleTree.setPId("0");
 			if(!StringUtils.equals(role.getMarker(),"0")){
 				roleTree.setChecked(true);
 			}

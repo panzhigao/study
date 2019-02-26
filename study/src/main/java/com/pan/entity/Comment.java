@@ -2,6 +2,8 @@ package com.pan.entity;
 
 import javax.validation.constraints.Size;
 
+import com.pan.common.annotation.LoginGroup;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.pan.common.annotation.UnescapeHtml;
@@ -12,8 +14,8 @@ import com.pan.util.JsonUtils;
  * @author panzhigao-wb
  *
  */
+@Data
 public class Comment extends BaseEntity{
-
 	/**
 	 * 
 	 */
@@ -29,7 +31,7 @@ public class Comment extends BaseEntity{
 	/**
 	 * 文章id
 	 */
-	@NotEmpty(message="文章id不能为空")
+	@NotEmpty(message="文章id不能为空",groups = {LoginGroup.class})
 	private String articleId;
 	/**
 	 * 评论内容
@@ -46,45 +48,4 @@ public class Comment extends BaseEntity{
 	 * 赞的数目,默认0
 	 */
 	private Integer praiseCounts=0;
-	
-	public String getCommentId() {
-		return commentId;
-	}
-	public void setCommentId(String commentId) {
-		this.commentId = commentId;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getArticleId() {
-		return articleId;
-	}
-	public void setArticleId(String articleId) {
-		this.articleId = articleId;
-	}
-	public String getCommentContent() {
-		return commentContent;
-	}
-	public void setCommentContent(String commentContent) {
-		this.commentContent = commentContent;
-	}
-	public String getReplyToUserId() {
-		return replyToUserId;
-	}
-	public void setReplyToUserId(String replyToUserId) {
-		this.replyToUserId = replyToUserId;
-	}
-	public Integer getPraiseCounts() {
-		return praiseCounts;
-	}
-	public void setPraiseCounts(Integer praiseCounts) {
-		this.praiseCounts = praiseCounts;
-	}
-	@Override
-	public String toString() {
-		return JsonUtils.toJson(this);
-	}
 }

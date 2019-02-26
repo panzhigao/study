@@ -73,7 +73,7 @@ public class MyRealm extends AuthorizingRealm {
 			roleTree.setTitle(permission.getPermissionName());
 			roleTree.setValue(permission.getPermissionId());
 			roleTree.setId(permission.getPermissionId());
-			roleTree.setpId(permission.getpId());
+			roleTree.setPId(permission.getPId());
 			roleTree.setUrl(permission.getUrl());
 			roleTree.setIcon(permission.getIcon());
 			roleTree.setSort(permission.getSort());

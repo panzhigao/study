@@ -63,7 +63,8 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		List<ArticleCheckVO> list = new ArrayList<ArticleCheckVO>();
 		try {
 			logger.info("分页查询文章审核信息，参数为:{}", JsonUtils.toJson(queryArticleCheck));
-			if(COMPLETE_CHECK.equals(queryArticleCheck.getCompleteFlag())){//审核完成
+			//审核完成
+			if(COMPLETE_CHECK.equals(queryArticleCheck.getCompleteFlag())){
 				queryArticleCheck.setOrderCondition("check_time desc");
 			}else{
 				queryArticleCheck.setOrderCondition("create_time desc");

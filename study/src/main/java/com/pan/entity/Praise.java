@@ -1,9 +1,14 @@
 package com.pan.entity;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * 点赞实体
+ * @author panzhigao
+ */
+@Data
 public class Praise extends BaseEntity{
-
 	/**
 	 * 
 	 */
@@ -21,29 +26,4 @@ public class Praise extends BaseEntity{
 	 * 用户id
 	 */
 	private String userId;
-	public String getPraiseId() {
-		return praiseId;
-	}
-	public void setPraiseId(String praiseId) {
-		this.praiseId = praiseId;
-	}
-	public String getCommentId() {
-		return commentId;
-	}
-	public void setCommentId(String commentId) {
-		this.commentId = commentId;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	@Override
-	public String toString() {
-		return "Praise [praiseId=" + praiseId + ", commentId=" + commentId
-				+ ", userId=" + userId + ", getId()=" + getId()
-				+ ", getCreateTime()=" + getCreateTime() + ", getUpdateTime()="
-				+ getUpdateTime() + "]";
-	}
 }

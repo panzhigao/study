@@ -1,12 +1,14 @@
 package com.pan.entity;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 
+ * 用户角色
  * @author panzhigao-wb
  *
  */
+@Data
 public class Role extends BaseEntity{
 
 	/**
@@ -30,39 +32,4 @@ public class Role extends BaseEntity{
 	 * 是否是超级管理员
 	 */
 	private String superAdminFlag;
-	public String getRoleId() {
-		return roleId;
-	}
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-	
-	public String getMarker() {
-		return marker;
-	}
-	public void setMarker(String marker) {
-		this.marker = marker;
-	}
-	
-	public String getSuperAdminFlag() {
-		return superAdminFlag;
-	}
-	public void setSuperAdminFlag(String superAdminFlag) {
-		this.superAdminFlag = superAdminFlag;
-	}
-	public boolean isSuperAdmin(){
-		return "1".equals(this.superAdminFlag);
-	}
-	@Override
-	public String toString() {
-		return "Role [roleId=" + roleId + ", roleName=" + roleName
-				+ ", marker=" + marker + ", superAdminFlag=" + superAdminFlag
-				+ "]";
-	}
 }

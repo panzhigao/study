@@ -47,7 +47,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(ARTICLE_KEY);
 			}
-			articleId="a"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
+			articleId="a"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成文章id错误",e);
 		}
@@ -68,7 +68,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(PICTURE_KEY);
 			}
-			pictureId="pic"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
+			pictureId="pic"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成图片id错误",e);
 		}
@@ -89,7 +89,7 @@ public class IdUtils {
 			}else{
 				value=JedisUtils.increaseKey(COMMENT_KEY);
 			}
-			commentId="c"+((System.currentTimeMillis() - EPOCH) / 60000+value);;
+			commentId="c"+((System.currentTimeMillis() - EPOCH) / 60000+value);
 		} catch (Exception e) {
 			logger.error("生成评论id错误",e);
 		}

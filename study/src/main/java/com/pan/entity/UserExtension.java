@@ -1,10 +1,13 @@
 package com.pan.entity;
 
+import lombok.Data;
+
 /**
  * 用户拓展信息
  * @author Administrator
  *
  */
+@Data
 public class UserExtension extends BaseEntity{
 
 	/**
@@ -47,70 +50,4 @@ public class UserExtension extends BaseEntity{
 	 * 连续签到天数
 	 */
 	private Integer continuousCheckInDays;
-
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getUserBrief() {
-		return userBrief;
-	}
-	public void setUserBrief(String userBrief) {
-		this.userBrief = userBrief;
-	}
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
-	public Integer getArticleCounts() {
-		return articleCounts;
-	}
-	public void setArticleCounts(Integer articleCounts) {
-		this.articleCounts = articleCounts;
-	}
-	public Integer getCommentCounts() {
-		return commentCounts;
-	}
-	public void setCommentCounts(Integer commentCounts) {
-		this.commentCounts = commentCounts;
-	}
-	public Integer getScore() {
-		return score;
-	}
-	public void setScore(Integer score) {
-		this.score = score;
-	}
-	
-	public String getNickname() {
-		return nickname;
-	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	
-	public Integer getContinuousLoginDays() {
-		return continuousLoginDays;
-	}
-	public void setContinuousLoginDays(Integer continuousLoginDays) {
-		this.continuousLoginDays = continuousLoginDays;
-	}
-	
-	public Integer getContinuousCheckInDays() {
-		return continuousCheckInDays;
-	}
-	public void setContinuousCheckInDays(Integer continuousCheckInDays) {
-		this.continuousCheckInDays = continuousCheckInDays;
-	}
-	@Override
-	public String toString() {
-		return "UserExtension [userId=" + userId + ", nickname=" + nickname + ", userPortrait=" + userPortrait
-				+ ", articleCounts=" + articleCounts + ", commentCounts=" + commentCounts + ", score=" + score
-				+ ", userBrief=" + userBrief + ", continuousLoginDays=" + continuousLoginDays
-				+ ", continuousCheckInDays=" + continuousCheckInDays + ", id=" + id + ", createTime=" + createTime
-				+ ", createUser=" + createUser + ", updateTime=" + updateTime + ", updateUser=" + updateUser + "]";
-	}
 }

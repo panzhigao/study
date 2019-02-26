@@ -1,13 +1,14 @@
 package com.pan.entity;
 
 
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 权限实体类
- *
  * @author Administrator
  */
+@Data
 public class Permission extends BaseEntity {
 
     /**
@@ -50,117 +51,7 @@ public class Permission extends BaseEntity {
      */
     private String icon;
     /**
-     * 类型
+     * 类型 0-菜单 1-链接 2-按钮
      */
     private String type;
-
-    public String getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getMarker() {
-        return marker;
-    }
-
-    public void setMarker(String marker) {
-        this.marker = marker;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getpId() {
-        return pId;
-    }
-
-    public void setpId(String pId) {
-        this.pId = pId;
-    }
-
-    @Override
-    public String toString() {
-        return "Permission [permissionId=" + permissionId + ", permissionName="
-                + permissionName + ", url=" + url + ", pId=" + pId
-                + ", marker=" + marker + ", level=" + level + ", sort=" + sort
-                + ", icon=" + icon + ", type=" + type + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((permissionId == null) ? 0 : permissionId.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Permission)) {
-            return false;
-        }
-        Permission other = (Permission) obj;
-        if (permissionId == null) {
-            if (other.permissionId != null) {
-                return false;
-            }
-        } else if (!permissionId.equals(other.permissionId)) {
-            return false;
-        }
-        return true;
-    }
 }

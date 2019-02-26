@@ -8,11 +8,11 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
-
 import org.apache.commons.collections.CollectionUtils;
-
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 校验工具
@@ -20,20 +20,13 @@ import com.pan.common.vo.ValidationResult;
  *
  */
 public class ValidationUtils {
+
+	private static final Logger logger = LoggerFactory.getLogger(ValidationUtils.class);
+
 	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-	public static <T> ValidationResult validateEntity(T obj) {
-		ValidationResult result = new ValidationResult();
-		Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
-		if (CollectionUtils.isNotEmpty(set)) {
-			result.setHasErrors(true);
-			Map<String, String> errorMsg = new HashMap<String, String>(10);
-			for (ConstraintViolation<T> cv : set) {
-				errorMsg.put(cv.getPropertyPath().toString(), cv.getMessage());
-			}
-			result.setErrorMsg(errorMsg);
-		}
-		return result;
+	public static <T> void validateEntity(T obj) {
+		validateEntityWithGroups(obj,Default.class);
 	}
 
 	public static <T> ValidationResult validateProperty(T obj,String propertyName) {
@@ -58,8 +51,8 @@ public class ValidationUtils {
 			for (ConstraintViolation<T> cv : set) {
 				stringBuilder.append(cv.getMessage()+"; ");
 			}
+			logger.error(stringBuilder.toString());
 			throw new BusinessException(stringBuilder.toString());
 		}
-		System.out.println("校验成功");
 	}
 }
