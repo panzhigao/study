@@ -3,7 +3,7 @@
 <mapper namespace="com.pan.mapper.ScoreHistoryMapper" >
 
   <resultMap id="BaseResultMap" type="com.pan.entity.ScoreHistory">
-    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="score"       	    property="score"           jdbcType="INTEGER" />
     <result column="type"               property="type"            jdbcType="VARCHAR" />

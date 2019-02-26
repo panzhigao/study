@@ -3,13 +3,13 @@
 <mapper namespace="com.pan.mapper.RoleMapper" >
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Role">
-    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="role_id"            property="roleId"          jdbcType="VARCHAR" />
     <result column="role_name"          property="roleName"        jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="create_user"        property="createUser"      jdbcType="VARCHAR" />
     <result column="marker"             property="marker"          jdbcType="VARCHAR" />
-    <result column="super_admin_flag"   property="superAdminFlag"    jdbcType="VARCHAR" />
+    <result column="super_admin_flag"   property="superAdminFlag"  jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >

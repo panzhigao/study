@@ -3,7 +3,7 @@
 <mapper namespace="com.pan.mapper.ArticleCheckMapper" >
 
   <resultMap id="BaseResultMap" type="com.pan.entity.ArticleCheck">
-    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />

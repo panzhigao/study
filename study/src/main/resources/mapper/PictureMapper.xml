@@ -3,7 +3,7 @@
 <mapper namespace="com.pan.mapper.PictureMapper" >
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Picture">
-    <id     column="id"             	property="id"              jdbcType="INTEGER" />
+    <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="picture_id"        	property="pictureId"       jdbcType="VARCHAR" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
