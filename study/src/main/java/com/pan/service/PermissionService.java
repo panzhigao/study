@@ -1,8 +1,6 @@
 package com.pan.service;
 
 import java.util.List;
-import java.util.Map;
-
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
@@ -18,10 +16,10 @@ public interface PermissionService extends BaseService<Permission>{
 	 */
 	void addPermission(Permission permission);
 	/**
-	 * 删除权限
+	 * 根据权限id删除权限
 	 * @param id
 	 */
-	int deletePermission(Long id);
+	int deleteByPermissionId(String permissionId);
 	/**
 	 * 获取所有权限
 	 * @return

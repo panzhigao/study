@@ -17,11 +17,6 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	 */
 	int getCountByParams(Map<String,Object> params);
 	/**
-	 * 新增权限
-	 * @param permission
-	 */
-	void addPermission(Permission permission);
-	/**
 	 * 查找所有权限
 	 * @return
 	 */
@@ -43,4 +38,10 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	 * @return
 	 */
 	List<Permission> findPermissionsByUserId(String userId);
+	/**
+	 * 根据权限id查询唯一一条权限信息
+	 * @param permissionId
+	 * @return
+	 */
+	Permission selectByPermissionId(String permissionId);
 }

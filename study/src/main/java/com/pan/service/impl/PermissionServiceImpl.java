@@ -2,10 +2,7 @@ package com.pan.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.*;
 import com.pan.mapper.BaseMapper;
@@ -24,7 +21,6 @@ import com.pan.dto.TreeNode;
 import com.pan.mapper.PermissionMapper;
 import com.pan.query.QueryRole;
 import com.pan.util.IdUtils;
-import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -62,8 +58,8 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
-		if(StringUtils.isBlank(permission.getPId())){
-			permission.setPId("0");
+		if(StringUtils.isBlank(permission.getPid())){
+			permission.setPid("0");
 		}
 		if(permission.getSort()==null){
 			permission.setSort(1);
@@ -73,7 +69,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		User loginUser = TokenUtils.getLoginUser();
 		permission.setCreateUser(loginUser.getUserId());
 		permission.setPermissionId(IdUtils.generatePermissionId());
-		permissionMapper.addPermission(permission);
+		permissionMapper.insertSelective(permission);
 		//记录操作日志
 		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.ADD_PERMISSION);
 		QueryRole queryRoleVO=new QueryRole();
@@ -90,20 +86,29 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			}
 		}
 	}
-
+	
+	/**
+	 * 通过权限id获取权限信息并校验
+	 * @param permissionId
+	 */
+	private Permission getAndCheck(String permissionId){
+		Permission permission = permissionMapper.selectByPermissionId(permissionId);
+		if(permission==null){
+			logger.error("根据权限id未查询到权限信息，permissionId={}",permissionId);
+			throw new BusinessException("该权限点不存在");
+		}
+		return permission;
+	}
+	
 	/**
 	 * 删除权限点，同时删除角色权限标里关联该权限点的数据
 	 * 同时删除缓存中角色的权限信息，记录操作日志
 	 */
 	@Override
-	public int deletePermission(Long id) {
-		Permission permission = this.selectByPrimaryKey(id);
-		if(permission==null){
-			logger.error("根据id未查询到权限信息，id={}",id);
-			throw new BusinessException("该权限点不存在");
-		}
+	public int deleteByPermissionId(String permissionId) {
+		Permission permission = getAndCheck(permissionId);
 		//删除权限信息
-		int p = permissionMapper.deleteByPrimaryKey(id);
+		int p = permissionMapper.deleteByPrimaryKey(permission.getId());
 		//删除角色权限管联信息
 		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getPermissionId());
 		logger.info("删除权限点，删除权限点条数：{}，删除角色权限关联信息条数：{}",p,rp);
@@ -121,7 +126,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
 			treeNode.setId(permission.getPermissionId());
-			treeNode.setpId(permission.getPId());
+			treeNode.setpId(permission.getPid());
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
@@ -144,7 +149,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			permissionTree.setTitle(permission.getPermissionName());
 			permissionTree.setValue(permission.getPermissionId());
 			permissionTree.setId(permission.getPermissionId());
-			permissionTree.setPId(permission.getPId());
+			permissionTree.setPId(permission.getPid());
 			permissionTree.setIcon(permission.getIcon());
 			permissionTree.setSort(permission.getSort());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
@@ -171,12 +176,10 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	@Override
 	public void updatePermission(Permission permission) {
 		if(StringUtils.isBlank(permission.getPermissionId())){
-			throw new BusinessException("权限id为空");
+			throw new BusinessException("参数有误，权限id为空");
 		}
-		Permission permissionInDb = getByPermissionId(permission.getPermissionId());
-		if(permissionInDb==null){
-			throw new BusinessException("权限已不存在");
-		}
+		Permission permissionInDb = getAndCheck(permission.getPermissionId());
+		permission.setId(permissionInDb.getId());
 		if(MyConstant.PERMISSION_TYPE_MENU.equals(permission.getType())){
 			permission.setUrl("  ");
 		}

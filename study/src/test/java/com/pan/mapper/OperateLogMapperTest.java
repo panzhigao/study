@@ -1,10 +1,7 @@
 package com.pan.mapper;
 
-import com.pan.entity.OperateLog;
 import com.pan.test.base.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class OperateLogMapperTest extends BaseTest{
 

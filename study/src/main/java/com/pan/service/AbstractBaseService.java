@@ -13,7 +13,8 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      * @param <M>
      * @return
      */
-    protected abstract <M>BaseMapper<T> getBaseMapper();
+	@SuppressWarnings("hiding")
+	protected abstract <M>BaseMapper<T> getBaseMapper();
 
     /**
      * 根据id获取唯一一条数据

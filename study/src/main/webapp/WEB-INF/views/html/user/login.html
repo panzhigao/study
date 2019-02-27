@@ -129,7 +129,7 @@ layui.use(['jquery', 'form'], function(){
 		}); 
 	  form.on('submit(login)', function(data){
 			params = data.field;
-			params.password=$.md5(params.password);
+			//params.password=$.md5(params.password);
 			login(params);
 			return false;
 	  });

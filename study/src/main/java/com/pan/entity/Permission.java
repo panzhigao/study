@@ -35,7 +35,7 @@ public class Permission extends BaseEntity {
     /**
      * 父级pid
      */
-    private String pId;
+    private String pid;
     /**
      * 标识，0-未选中
      */

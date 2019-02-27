@@ -45,7 +45,7 @@
             <if test="operateType != null">
                 operate_type,
             </if>
-            <if test="ip != null">
+            <if test="ipStr != null">
                 ip,
             </if>
             <if test="createTime != null">
