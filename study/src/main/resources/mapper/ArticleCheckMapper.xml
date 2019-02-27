@@ -73,7 +73,7 @@
 	  	<include refid="whereSql"/>
   </select>
   
-  <insert id="saveArticleCheck" parameterType="com.pan.entity.ArticleCheck">
+  <insert id="insertSelective" parameterType="com.pan.entity.ArticleCheck">
   	insert into t_article_check (
   	<trim suffixOverrides=",">
   		<if test="userId !=null">
@@ -151,7 +151,7 @@
   	)
   </insert>
   
-  <update id="updateArticleCheck" parameterType="com.pan.entity.ArticleCheck">
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.ArticleCheck">
   	update t_article_check
   	<set>
   		<if test="checkTime !=null ">

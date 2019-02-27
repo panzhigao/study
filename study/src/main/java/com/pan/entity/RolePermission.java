@@ -1,6 +1,7 @@
 package com.pan.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import java.util.Date;
  * @author panzhigao-wb
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class RolePermission extends BaseEntity {
 
     /**

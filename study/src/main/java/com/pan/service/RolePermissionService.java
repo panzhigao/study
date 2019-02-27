@@ -14,19 +14,19 @@ public interface RolePermissionService {
 	 * 根据权限删除角色权限信息
 	 * @param permissionId
 	 */
-	public void deleteRolePermissionByPermissionId(String permissionId);
+	int deleteRolePermissionByPermissionId(String permissionId);
 	/**
 	 * 
 	 * @param roleId
 	 */
-	public void deleteRolePermissionByRoleId(String roleId);
+	int deleteRolePermissionByRoleId(String roleId);
 	/**
 	 * 新增角色权限
 	 */
-	public void addRolePermission(List<RolePermission> list);
+	int addRolePermission(List<RolePermission> list);
 	/**
 	 * 新增角色权限
 	 */
-	public void addRolePermission(RolePermission rolePermission);
+	int addRolePermission(RolePermission rolePermission);
 	
 }

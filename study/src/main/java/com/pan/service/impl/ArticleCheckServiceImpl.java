@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.pan.common.enums.ScoreTypeEnum;
+import com.pan.mapper.BaseMapper;
+import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
@@ -24,10 +25,6 @@ import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
 import com.pan.query.QueryArticleCheck;
-import com.pan.service.ArticleCheckService;
-import com.pan.service.MessageService;
-import com.pan.service.ScoreHistoryService;
-import com.pan.service.UserExtensionService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
@@ -35,8 +32,11 @@ import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.ArticleCheckVO;
 
+/**
+ * @author panzhigao
+ */
 @Service
-public class ArticleCheckServiceImpl implements ArticleCheckService{
+public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,ArticleCheckMapper> implements ArticleCheckService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	
@@ -56,7 +56,12 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	
 	@Autowired
 	private UserExtensionService userExtensionService;
-	
+
+	@Override
+	protected BaseMapper getBaseMapper() {
+		return this.articleCheckMapper;
+	}
+
 	@Override
 	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
@@ -89,7 +94,7 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		ValidationUtils.validateEntity(articleCheck);
 		articleCheck.setCreateTime(new Date());
 		articleCheck.setCompleteFlag(ArticleCheck.CompleteFlagEnum.NOT_COMPLETE.getCode());
-		articleCheckMapper.saveArticleCheck(articleCheck);
+		insertSelective(articleCheck);
 	}
 
 	/**
@@ -205,8 +210,4 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
 	}
 
-	@Override
-	public ArticleCheck findById(Long id) {
-		return articleCheckMapper.findById(id);
-	}
 }

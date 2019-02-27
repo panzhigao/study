@@ -3,6 +3,7 @@ package com.pan.entity;
 import com.pan.common.annotation.UnescapeHtml;
 import com.pan.util.JsonUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 消息实体类
@@ -10,6 +11,7 @@ import lombok.Data;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Message extends BaseEntity{
 
 	private static final long serialVersionUID = -8041567985696094383L;

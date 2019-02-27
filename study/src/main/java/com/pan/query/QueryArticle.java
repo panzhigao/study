@@ -2,6 +2,7 @@ package com.pan.query;
 
 import com.pan.common.annotation.QueryParam;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  * 类说明
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class QueryArticle extends QueryBase {
     /**
      * 文章id

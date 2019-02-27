@@ -19,7 +19,7 @@ public enum UserStatusEnum {
 
 	private String desc;
 
-	private UserStatusEnum(String code, String desc) {
+	UserStatusEnum(String code, String desc) {
 		this.code = code;
 		this.desc = desc;
 	}

@@ -1,6 +1,7 @@
 package com.pan.query;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  * 类说明
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class QueryScoreHistory extends QueryBase{
 	/**
 	 * 用户id

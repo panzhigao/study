@@ -5,6 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.pan.common.enums.OperateLogTypeEnum;
+import com.pan.entity.*;
+import com.pan.mapper.BaseMapper;
+import com.pan.query.QueryPermission;
+import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +21,8 @@ import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
-import com.pan.entity.Permission;
-import com.pan.entity.Role;
-import com.pan.entity.RolePermission;
-import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
 import com.pan.query.QueryRole;
-import com.pan.service.PermissionService;
-import com.pan.service.RolePermissionService;
-import com.pan.service.RoleService;
-import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
@@ -37,7 +35,7 @@ import com.pan.util.ValidationUtils;
  * 
  */
 @Service
-public class PermissionServiceImpl implements PermissionService {
+public class PermissionServiceImpl extends AbstractBaseService<Permission,PermissionMapper> implements  PermissionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(PermissionServiceImpl.class);
 	
@@ -52,9 +50,13 @@ public class PermissionServiceImpl implements PermissionService {
 	
 	@Autowired
 	private UserService userService;
-	
+
+	@Autowired
+	private OperateLogService operateLogService;
+
 	/**
 	 * 新增权限，同时为自动为超级管理员添加该权限
+	 * 记录日志
 	 */
 	@Override
 	public void addPermission(Permission permission) {
@@ -66,11 +68,14 @@ public class PermissionServiceImpl implements PermissionService {
 		if(permission.getSort()==null){
 			permission.setSort(1);
 		}
-		permission.setCreateTime(new Date());
-		String loginUserId = TokenUtils.getLoginUserId();
-		permission.setCreateUser(loginUserId);
+		Date now=new Date();
+		permission.setCreateTime(now);
+		User loginUser = TokenUtils.getLoginUser();
+		permission.setCreateUser(loginUser.getUserId());
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.addPermission(permission);
+		//记录操作日志
+		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.ADD_PERMISSION);
 		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setSuperAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
 		//自动为超级管理员添加权限
@@ -86,37 +91,27 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 	}
 
-	@Override
-	public Map<String, Object> findByParams(Map<String, Object> params) {
-		Map<String,Object> pageData=new HashMap<String, Object>(2);
-		List<Permission> list = new ArrayList<Permission>();
-		try {
-			logger.info("分页权限参数为:{}", JsonUtils.toJson(params));
-			int total=permissionMapper.getCountByParams(params);
-			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
-			if(total>0){				
-				list = permissionMapper.findByParams(params);
-			}
-			pageData.put("data", list);
-			pageData.put("total", total);
-			pageData.put("code", "200");
-			pageData.put("msg", "");
-		} catch (Exception e) {
-			logger.error("分页查询权限异常", e);
-		}
-		return pageData;
-	}
-	
 	/**
-	 * 删除权限
-	 * 同时删除缓存中角色的权限信息
+	 * 删除权限点，同时删除角色权限标里关联该权限点的数据
+	 * 同时删除缓存中角色的权限信息，记录操作日志
 	 */
 	@Override
-	public void deletePermission(String permissionId) {
-		//删除数据库信息
-		permissionMapper.deletePermission(permissionId);
+	public int deletePermission(Long id) {
+		Permission permission = this.selectByPrimaryKey(id);
+		if(permission==null){
+			logger.error("根据id未查询到权限信息，id={}",id);
+			throw new BusinessException("该权限点不存在");
+		}
+		//删除权限信息
+		int p = permissionMapper.deleteByPrimaryKey(id);
+		//删除角色权限管联信息
+		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getPermissionId());
+		logger.info("删除权限点，删除权限点条数：{}，删除角色权限关联信息条数：{}",p,rp);
+		//记录日志
+		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.DELETE_PERMISSION);
 		//删除缓存数据
 		TokenUtils.clearAllUserAuth();
+		return p;
 	}
 
 	@Override
@@ -167,9 +162,9 @@ public class PermissionServiceImpl implements PermissionService {
 
 	@Override
 	public Permission getByPermissionId(String permissionId) {
-		Map<String,Object> params=new HashMap<String, Object>(1);
-		params.put("permissionId", permissionId);
-		List<Permission> list = this.permissionMapper.findByParams(params);
+		QueryPermission queryPermission=new QueryPermission();
+		queryPermission.setPermissionId(permissionId);
+		List<Permission> list = this.permissionMapper.findPagable(queryPermission);
 		return list.size()==1?list.get(0):null;
 	}
 
@@ -188,7 +183,7 @@ public class PermissionServiceImpl implements PermissionService {
 		String loginUserId = TokenUtils.getLoginUserId();
 		permission.setUpdateUser(loginUserId);
 		permission.setUpdateTime(new Date());
-		permissionMapper.updatePermission(permission);
+		permissionMapper.updateByPrimaryKeySelective(permission);
 		TokenUtils.clearAllUserAuth();
 	}
 
@@ -200,5 +195,10 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<Permission> findPermissionsByUserId(String userId) {
 		return permissionMapper.findPermissionsByUserId(userId);
+	}
+
+	@Override
+	protected <M> BaseMapper<Permission> getBaseMapper() {
+		return permissionMapper;
 	}
 }

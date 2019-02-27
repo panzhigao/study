@@ -12,17 +12,21 @@ import com.pan.entity.RolePermission;
  */
 public interface RolePermissionMapper {
 	/**
-	 * 
+	 * 根据权限id,删除权限关联角色信息
 	 * @param permissionId
+	 * @return  删除条数
 	 */
-	public void deleteRolePermissionByPermissionId(String permissionId);
+	int deleteRolePermissionByPermissionId(String permissionId);
 	/**
-	 * 
+	 * 根据角色id,删除权限关联角色信息
 	 * @param roleId
+	 * @return  删除条数
 	 */
-	public void deleteRolePermissionByRoleId(String roleId);
+	int deleteRolePermissionByRoleId(String roleId);
 	/**
-	 * 新增角色权限
+	 * 批量新增角色权限
+	 * @param list
+	 * @return  删除条数
 	 */
-	public void addRolePermission(List<RolePermission> list);
+	int addRolePermission(List<RolePermission> list);
 }

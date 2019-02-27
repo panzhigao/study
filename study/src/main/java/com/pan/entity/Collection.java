@@ -1,12 +1,14 @@
 package com.pan.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 收藏实体
  * @author panzhigao
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Collection extends BaseEntity{
 	/**
 	 * 

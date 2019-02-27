@@ -84,8 +84,8 @@ public class PermissionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/permission/doDelete")
-	public ResultMsg deletePermissions(String permissionId){
-		permissionService.deletePermission(permissionId);
+	public ResultMsg deletePermission(Long id){
+		permissionService.deletePermission(id);
 		return ResultMsg.ok("删除权限成功");
 	}
 	

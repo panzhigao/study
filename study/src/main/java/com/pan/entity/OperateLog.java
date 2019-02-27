@@ -1,18 +1,18 @@
 package com.pan.entity;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 /**
- * 登录历史
- *
+ * 操作日志
  * @author panzhigao
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class LoginHistory extends BaseEntity {
-    private static final long serialVersionUID = 5675762635184777705L;
+public class OperateLog extends BaseEntity{
+    private static final long serialVersionUID = 7151401128307567372L;
     /**
      * 用户id
      */
@@ -22,6 +22,14 @@ public class LoginHistory extends BaseEntity {
      */
     private String username;
     /**
+     * 日志内容
+     */
+    private String content;
+    /**
+     * 操作类型
+     */
+    private Integer operateType;
+    /**
      * ip地址
      */
     private Integer ip;
@@ -30,7 +38,7 @@ public class LoginHistory extends BaseEntity {
      */
     private String ipStr;
     /**
-     * 用户代理
+     * 创建时间
      */
-    private String userAgent;
+    private Date createTime;
 }

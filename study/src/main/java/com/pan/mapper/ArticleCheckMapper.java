@@ -11,18 +11,13 @@ import com.pan.vo.ArticleCheckVO;
  * @author Administrator
  *
  */
-public interface ArticleCheckMapper {
+public interface ArticleCheckMapper extends BaseMapper<ArticleCheck>{
 	/**
 	 * 根据id查找唯一一条审核记录
 	 * @param id
 	 * @return
 	 */
 	ArticleCheck findById(Long id);
-	/**
-	 * 保存文章信息
-	 * @param articleCheck
-	 */
-	void saveArticleCheck(ArticleCheck articleCheck);
 	/**
 	 * 查询文章详细,支持分页
 	 * @param queryArticleCheckVO

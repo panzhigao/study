@@ -12,58 +12,52 @@ import com.pan.entity.Permission;
  * @author Administrator
  *
  */
-public interface PermissionService {
+public interface PermissionService extends BaseService<Permission>{
 	/**
 	 * 添加权限
 	 */
-	public void addPermission(Permission permission);
-	/**
-	 * 多条件查询，支持分页
-	 * @param params 条件有userId,articleId
-	 * @return
-	 */
-	public Map<String,Object> findByParams(Map<String,Object> params);
+	void addPermission(Permission permission);
 	/**
 	 * 删除权限
-	 * @param permissionId
+	 * @param id
 	 */
-	public void deletePermission(String permissionId);
+	int deletePermission(Long id);
 	/**
 	 * 获取所有权限
 	 * @return
 	 */
-	public List<TreeNode> getTreeData();
+	List<TreeNode> getTreeData();
 	/**
 	 * 根据角色id获取权限层级树数据
 	 * @return
 	 */
-	public List<Tree> getPermissionTreeData(String roleId);
+	List<Tree> getPermissionTreeData(String roleId);
 	/**
 	 * 查找角色所有权限
 	 * @param roleId
 	 * @return
 	 */
-	public List<Permission> getPermissionByRoleId(String roleId);
+	List<Permission> getPermissionByRoleId(String roleId);
 	/**
 	 * 根据permissionId查找唯一数据
 	 * @param permissionId
 	 * @return
 	 */
-	public Permission getByPermissionId(String permissionId);
+	Permission getByPermissionId(String permissionId);
 	/**
 	 * 更新权限
 	 */
-	public void updatePermission(Permission permission);
+	void updatePermission(Permission permission);
 	/**
 	 * 获取所有权限
 	 * @return
 	 */
-	public List<Permission> getAll();
+	List<Permission> getAll();
 	/**
 	 * 获取用户的所有权限
 	 * @param userId
 	 * @return
 	 */
-	public List<Permission> findPermissionsByUserId(String userId);
+	List<Permission> findPermissionsByUserId(String userId);
 	
 }

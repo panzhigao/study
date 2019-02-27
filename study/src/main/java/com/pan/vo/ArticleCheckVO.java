@@ -2,6 +2,7 @@ package com.pan.vo;
 
 import com.pan.entity.ArticleCheck;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author 作者
@@ -9,6 +10,7 @@ import lombok.Data;
  * 类说明
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class ArticleCheckVO extends ArticleCheck{
 
 	/**

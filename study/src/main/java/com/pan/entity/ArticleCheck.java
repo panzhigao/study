@@ -4,12 +4,14 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import com.pan.common.annotation.UnescapeHtml;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 文章审核
  * @author panzhigao
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class ArticleCheck extends BaseEntity{
 	/**
 	 * 

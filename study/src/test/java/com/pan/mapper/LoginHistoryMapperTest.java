@@ -31,6 +31,7 @@ public class LoginHistoryMapperTest extends BaseTest {
 
     @Test
     public void findByParams() throws Exception {
+        loginHistoryMapper.selectByPrimaryKey(1L);
         QueryLoginHistory queryLoginHistory=new QueryLoginHistory();
         queryLoginHistory.setPageNo(1);
         queryLoginHistory.setPageSize(1);

@@ -4,6 +4,7 @@ import javax.validation.constraints.Size;
 
 import com.pan.common.annotation.LoginGroup;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.pan.common.annotation.UnescapeHtml;
@@ -15,6 +16,7 @@ import com.pan.util.JsonUtils;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Comment extends BaseEntity{
 	/**
 	 * 

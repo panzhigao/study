@@ -3,6 +3,7 @@ package com.pan.entity;
 import java.util.Date;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.pan.common.annotation.UnescapeHtml;
 
@@ -12,6 +13,7 @@ import com.pan.common.annotation.UnescapeHtml;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Article extends BaseEntity{
 	/**
 	 *

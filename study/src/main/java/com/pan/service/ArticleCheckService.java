@@ -14,7 +14,6 @@ public interface ArticleCheckService extends BaseService<ArticleCheck>{
 	 * @return
 	 */
 	Map<String,Object> findByParams(QueryArticleCheck articleCheckVO);
-
 	/**
 	 * 新增文章审核记录
 	 * @param articleCheck

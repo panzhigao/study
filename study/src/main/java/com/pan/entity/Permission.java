@@ -2,6 +2,7 @@ package com.pan.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -9,6 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Administrator
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Permission extends BaseEntity {
 
     /**

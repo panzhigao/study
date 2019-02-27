@@ -1,6 +1,7 @@
 package com.pan.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @author Administrator
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class ScoreHistory extends BaseEntity {
 
     /**

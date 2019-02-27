@@ -1,6 +1,7 @@
 package com.pan.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class UserRole extends BaseEntity{
 
 	/**

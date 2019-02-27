@@ -22,25 +22,25 @@ public class RolePermissionServiceImpl implements RolePermissionService{
 	private RolePermissionMapper rolePermissionMapper;
 	
 	@Override
-	public void deleteRolePermissionByPermissionId(String permissionId) {
-		rolePermissionMapper.deleteRolePermissionByPermissionId(permissionId);
+	public int deleteRolePermissionByPermissionId(String permissionId) {
+		return rolePermissionMapper.deleteRolePermissionByPermissionId(permissionId);
 	}
 
 	@Override
-	public void deleteRolePermissionByRoleId(String roleId) {
-		rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
+	public int deleteRolePermissionByRoleId(String roleId) {
+		return rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
 	}
 
 	@Override
-	public void addRolePermission(List<RolePermission> list) {
-		rolePermissionMapper.addRolePermission(list);
+	public int addRolePermission(List<RolePermission> list) {
+		return rolePermissionMapper.addRolePermission(list);
 	}
 
 	@Override
-	public void addRolePermission(RolePermission rolePermission) {
+	public int addRolePermission(RolePermission rolePermission) {
 		List<RolePermission> list=new ArrayList<RolePermission>(1);
 		list.add(rolePermission);
-		this.addRolePermission(list);
+		return this.addRolePermission(list);
 	}
 
 }

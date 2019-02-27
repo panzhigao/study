@@ -1,6 +1,7 @@
 package com.pan.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 图片信息
@@ -8,6 +9,7 @@ import lombok.Data;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class Picture extends BaseEntity{
 	/**
 	 * 

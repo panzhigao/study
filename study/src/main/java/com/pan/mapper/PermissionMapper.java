@@ -9,54 +9,38 @@ import com.pan.entity.Permission;
  * @author Administrator
  *
  */
-public interface PermissionMapper {
-	/**
-	 * 分页查询权限
-	 * @param params
-	 * @return
-	 */
-	public List<Permission> findByParams(Map<String,Object> params);
+public interface PermissionMapper extends BaseMapper<Permission>{
 	/**
 	 * 查询分页
 	 * @param params
 	 * @return
 	 */
-	public int getCountByParams(Map<String,Object> params);
+	int getCountByParams(Map<String,Object> params);
 	/**
 	 * 新增权限
-	 * @param collection
+	 * @param permission
 	 */
-	public void addPermission(Permission permission);
-	/**
-	 * 删除权限
-	 * @param userId
-	 * @param articleId
-	 */
-	public void deletePermission(String permissionId);
+	void addPermission(Permission permission);
 	/**
 	 * 查找所有权限
 	 * @return
 	 */
-	public List<Permission> findAll();
+	List<Permission> findAll();
 	/**
 	 * 查找角色选中的权限
 	 * @return
 	 */
-	public List<Permission> getPermissionSelectedByRoleId(String roleId);
+	List<Permission> getPermissionSelectedByRoleId(String roleId);
 	/**
 	 * 查找角色所有权限
 	 * @param roleId
 	 * @return
 	 */
-	public List<Permission> getPermissionByRoleId(String roleId);
-	/**
-	 * 更新权限
-	 */
-	public void updatePermission(Permission permission);
+	List<Permission> getPermissionByRoleId(String roleId);
 	/**
 	 * 获取用户权限
 	 * @param userId
 	 * @return
 	 */
-	public List<Permission> findPermissionsByUserId(String userId);
+	List<Permission> findPermissionsByUserId(String userId);
 }

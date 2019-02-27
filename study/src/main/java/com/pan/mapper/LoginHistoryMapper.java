@@ -11,7 +11,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public interface LoginHistoryMapper {
+public interface LoginHistoryMapper extends BaseMapper<LoginHistory>{
 	/**
 	 * 新增登录历史
 	 * @param loginHistory

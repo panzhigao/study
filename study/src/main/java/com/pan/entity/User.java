@@ -5,6 +5,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.pan.common.annotation.CheckUsernameGroup;
 import com.pan.common.annotation.LoginGroup;
@@ -18,6 +19,7 @@ import com.pan.common.annotation.UserEditGroup;
  * @author Administrator
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class User extends BaseEntity {
     /**
      *

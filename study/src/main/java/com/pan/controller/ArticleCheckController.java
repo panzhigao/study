@@ -86,7 +86,7 @@ public class ArticleCheckController {
 	public ModelAndView articleCheckDetail(Long id){
 		ModelAndView mav=new ModelAndView();
 		mav.setViewName("html/articleCheck/articleCheckDetail");
-		ArticleCheck articleCheck = articleCheckService.findById(id);
+		ArticleCheck articleCheck = articleCheckService.selectByPrimaryKey(id);
 		if(articleCheck!=null){
 			TransFieldUtils.transEntity(articleCheck);
 		}
