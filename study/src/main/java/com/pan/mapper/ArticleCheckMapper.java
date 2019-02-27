@@ -14,36 +14,36 @@ import com.pan.vo.ArticleCheckVO;
 public interface ArticleCheckMapper {
 	/**
 	 * 根据id查找唯一一条审核记录
-	 * @param articleId
+	 * @param id
 	 * @return
 	 */
-	public ArticleCheck findById(String id);
+	ArticleCheck findById(Long id);
 	/**
 	 * 保存文章信息
-	 * @param article
+	 * @param articleCheck
 	 */
-	public void saveArticleCheck(ArticleCheck articleCheck);
+	void saveArticleCheck(ArticleCheck articleCheck);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param queryArticleCheckVO
 	 * @return
 	 */
-	public List<ArticleCheck> findByParams(QueryArticleCheck queryArticleCheckVO);
+	List<ArticleCheck> findByParams(QueryArticleCheck queryArticleCheckVO);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param queryArticleCheckVO
 	 * @return
 	 */
-	public List<ArticleCheckVO> findVOByParams(QueryArticleCheck queryArticleCheckVO);
+	List<ArticleCheckVO> findVOByParams(QueryArticleCheck queryArticleCheckVO);
 	/**
 	 * 查询文章详细,支持分页
-	 * @param params
+	 * @param QueryArticleCheckVO
 	 * @return
 	 */
-	public int getCountByParams(QueryArticleCheck QueryArticleCheckVO);
+	int getCountByParams(QueryArticleCheck QueryArticleCheckVO);
 	/**
 	 * 更新文章
-	 * @param article
+	 * @param articleCheck
 	 */
-	public int updateArticleCheck(ArticleCheck articleCheck);
+	int updateArticleCheck(ArticleCheck articleCheck);
 }

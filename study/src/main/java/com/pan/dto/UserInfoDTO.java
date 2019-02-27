@@ -2,12 +2,14 @@ package com.pan.dto;
 
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
+import lombok.Data;
 
 /**
  * 
  * @author Administrator
  *
  */
+@Data
 public class UserInfoDTO {
 	/**
 	 * 用户id
@@ -50,62 +52,4 @@ public class UserInfoDTO {
 			this.userBrief=userExtension.getUserBrief();
 		}
 	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public String getUserBrief() {
-		return userBrief;
-	}
-
-	public void setUserBrief(String userBrief) {
-		this.userBrief = userBrief;
-	}
-
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
-
-	@Override
-	public String toString() {
-		return "UserInfoDTO [userId=" + userId + ", username=" + username
-				+ ", nickname=" + nickname + ", telephone=" + telephone
-				+ ", userBrief=" + userBrief + ", userPortrait=" + userPortrait
-				+ "]";
-	}
-	
-	
 }

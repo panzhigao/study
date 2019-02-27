@@ -1,7 +1,12 @@
 package com.pan.dto;
 
 import com.pan.entity.Article;
+import lombok.Data;
 
+/**
+ * @author panzhigao
+ */
+@Data
 public class ArticleDTO extends Article{
 
 	/**
@@ -16,17 +21,4 @@ public class ArticleDTO extends Article{
 	 * 用户头像
 	 */
 	private String userPortrait;
-	public String getNickname() {
-		return nickname;
-	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
-	
 }

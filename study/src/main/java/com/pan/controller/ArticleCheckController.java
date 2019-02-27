@@ -15,6 +15,9 @@ import com.pan.query.QueryArticleCheck;
 import com.pan.service.ArticleCheckService;
 import com.pan.util.TransFieldUtils;
 
+/**
+ * @author panzhigao
+ */
 @Controller
 public class ArticleCheckController {
 	
@@ -57,7 +60,7 @@ public class ArticleCheckController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/pass")
 	@ResponseBody
 	@RequiresPermissions(value="/user/check")
-	public ResultMsg articlePass(String id){
+	public ResultMsg articlePass(Long id){
 		articleCheckService.passArticleCheck(id);
 		return ResultMsg.ok("文章通过审核");
 	}
@@ -69,7 +72,7 @@ public class ArticleCheckController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/notPass")
 	@ResponseBody
 	@RequiresPermissions(value="/user/check")
-	public ResultMsg articleNotPass(String id,String reason){
+	public ResultMsg articleNotPass(Long id,String reason){
 		articleCheckService.notPassArticle(id, reason);
 		return ResultMsg.ok("文章未通过审核");
 	}
@@ -80,7 +83,7 @@ public class ArticleCheckController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/check/detail")
 	@RequiresPermissions(value="/user/check")
-	public ModelAndView articleCheckDetail(String id){
+	public ModelAndView articleCheckDetail(Long id){
 		ModelAndView mav=new ModelAndView();
 		mav.setViewName("html/articleCheck/articleCheckDetail");
 		ArticleCheck articleCheck = articleCheckService.findById(id);

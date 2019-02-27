@@ -1,11 +1,15 @@
 package com.pan.entity;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-
 import com.pan.common.annotation.UnescapeHtml;
+import lombok.Data;
 
+/**
+ * 文章审核
+ * @author panzhigao
+ */
+@Data
 public class ArticleCheck extends BaseEntity{
 	/**
 	 * 
@@ -54,79 +58,6 @@ public class ArticleCheck extends BaseEntity{
 	 */
 	@UnescapeHtml
 	private String content;
-	public String getArticleId() {
-		return articleId;
-	}
-	public void setArticleId(String articleId) {
-		this.articleId = articleId;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getCompleteFlag() {
-		return completeFlag;
-	}
-	public void setCompleteFlag(String completeFlag) {
-		this.completeFlag = completeFlag;
-	}
-	public String getCheckType() {
-		return checkType;
-	}
-	public void setCheckType(String checkType) {
-		this.checkType = checkType;
-	}
-	public String getCheckUserId() {
-		return checkUserId;
-	}
-	public void setCheckUserId(String checkUserId) {
-		this.checkUserId = checkUserId;
-	}
-	public String getCheckUsername() {
-		return checkUsername;
-	}
-	public void setCheckUsername(String checkUsername) {
-		this.checkUsername = checkUsername;
-	}
-	public Date getCheckTime() {
-		return checkTime;
-	}
-	public void setCheckTime(Date checkTime) {
-		this.checkTime = checkTime;
-	}
-	
-	public String getApproveFlag() {
-		return approveFlag;
-	}
-	public void setApproveFlag(String approveFlag) {
-		this.approveFlag = approveFlag;
-	}
-	
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	@Override
-	public String toString() {
-		return "ArticleCheck [userId=" + userId + ", articleId=" + articleId
-				+ ", title=" + title + ", completeFlag=" + completeFlag
-				+ ", checkType=" + checkType + ", checkUserId=" + checkUserId
-				+ ", checkUsername=" + checkUsername + ", checkTime="
-				+ checkTime + ", approveFlag=" + approveFlag + ", content="
-				+ content + ", id=" + id + ", createTime=" + createTime
-				+ ", createUser=" + createUser + ", updateTime=" + updateTime
-				+ ", updateUser=" + updateUser + "]";
-	}
 	
 	public enum CompleteFlagEnum{
 		COMPLETE("已完成","1"),
@@ -165,8 +96,8 @@ public class ArticleCheck extends BaseEntity{
 	}
 	
 	public enum ApproveFlagEnum{
-		APPROVED("通过","1"),
-		NOT_APPROVED("未通过","0");
+		APPROVED("审核通过","1"),
+		NOT_APPROVED("审核未通过","0");
 		private String name;
 		private String code;
 		

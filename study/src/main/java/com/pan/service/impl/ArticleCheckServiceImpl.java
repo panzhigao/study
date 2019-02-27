@@ -91,10 +91,14 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		articleCheck.setCompleteFlag(ArticleCheck.CompleteFlagEnum.NOT_COMPLETE.getCode());
 		articleCheckMapper.saveArticleCheck(articleCheck);
 	}
-	
-	
-	private ArticleCheck commonCheck(String id){
-		if(StringUtils.isBlank(id)){
+
+	/**
+	 * 根据id获取文章并校验
+	 * @param id
+	 * @return
+	 */
+	private ArticleCheck getAndCheck(Long id){
+		if(id==null){
 			throw new BusinessException("id为空");
 		}
 		ArticleCheck articleCheckInDb = articleCheckMapper.findById(id);
@@ -110,8 +114,8 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	
 	
 	@Override
-	public void passArticleCheck(String id) {
-		ArticleCheck articleCheckInDb = commonCheck(id);
+	public void passArticleCheck(Long id) {
+		ArticleCheck articleCheckInDb = getAndCheck(id);
 		User loginUser = TokenUtils.getLoginUser();
 		articleCheckInDb.setCheckTime(new Date());
 		articleCheckInDb.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
@@ -149,9 +153,14 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 		userExtensionService.increaseCounts(userExtension);
 	}
 
+	/**
+	 * 审核文章拒绝
+	 * @param id
+	 * @param reason
+	 */
 	@Override
-	public void notPassArticle(String id,String reason) {
-		ArticleCheck articleCheckInDb = commonCheck(id);
+	public void notPassArticle(Long id,String reason) {
+		ArticleCheck articleCheckInDb = getAndCheck(id);
 		//修改审核信息
 		User loginUser = TokenUtils.getLoginUser();
 		articleCheckInDb.setCheckTime(new Date());
@@ -197,7 +206,7 @@ public class ArticleCheckServiceImpl implements ArticleCheckService{
 	}
 
 	@Override
-	public ArticleCheck findById(String id) {
+	public ArticleCheck findById(Long id) {
 		return articleCheckMapper.findById(id);
 	}
 }

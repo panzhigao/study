@@ -3,11 +3,13 @@ package com.pan.util;
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
 
+/**
+ * @author panzhigao
+ */
 public class BeanUtils extends org.springframework.beans.BeanUtils{
 	
 	public static String[] getNullPropertyNames (Object source) {
