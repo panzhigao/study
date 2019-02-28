@@ -71,14 +71,16 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		permission.setPermissionId(IdUtils.generatePermissionId());
 		permissionMapper.insertSelective(permission);
 		//记录操作日志
-		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.ADD_PERMISSION);
+		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_ADD);
 		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setSuperAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
 		//自动为超级管理员添加权限
-		List<Role> list = roleService.findByParams(queryRoleVO);
+		List<Role> list = roleService.findPagable(queryRoleVO);
 		if(list.size()>0){
 			String roleId=list.get(0).getRoleId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
+			rolePermission.setCreateTime(now);
+			rolePermission.setCreateUser(loginUser.getUserId());
 			rolePermissionService.addRolePermission(rolePermission);
 			List<User> users = userService.findUserByRoleId(roleId);
 			for (User user : users) {
@@ -113,7 +115,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getPermissionId());
 		logger.info("删除权限点，删除权限点条数：{}，删除角色权限关联信息条数：{}",p,rp);
 		//记录日志
-		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.DELETE_PERMISSION);
+		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_DELETE);
 		//删除缓存数据
 		TokenUtils.clearAllUserAuth();
 		return p;
@@ -200,8 +202,9 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		return permissionMapper.findPermissionsByUserId(userId);
 	}
 
+
 	@Override
-	protected <M> BaseMapper<Permission> getBaseMapper() {
+	protected PermissionMapper getBaseMapper() {
 		return permissionMapper;
 	}
 }

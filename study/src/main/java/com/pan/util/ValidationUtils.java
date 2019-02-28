@@ -8,6 +8,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
+
+import com.pan.entity.Role;
 import org.apache.commons.collections.CollectionUtils;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ValidationResult;
@@ -43,7 +45,13 @@ public class ValidationUtils {
 		}
 		return result;
 	}
-	
+
+	/**
+	 *
+	 * @param object
+	 * @param groups 当传入的groups为空数组，会采用Default.class来校验
+	 * @param <T>
+	 */
 	public static <T> void validateEntityWithGroups(T object,Class<?>... groups) {
 		Set<ConstraintViolation<T>> set = validator.validate(object,groups);
 		if (CollectionUtils.isNotEmpty(set)) {
@@ -54,5 +62,10 @@ public class ValidationUtils {
 			logger.error(stringBuilder.toString());
 			throw new BusinessException(stringBuilder.toString());
 		}
+	}
+
+	public static void main(String[] args) {
+		Role role=new Role();
+		validateEntityWithGroups(role);
 	}
 }

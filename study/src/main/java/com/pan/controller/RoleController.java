@@ -88,7 +88,6 @@ public class RoleController {
 	
 	/**
 	 * 编辑权限
-	 * @param roleId
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doEdit")

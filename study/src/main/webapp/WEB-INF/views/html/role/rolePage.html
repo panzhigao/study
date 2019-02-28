@@ -323,7 +323,7 @@ layui.use(['table','jquery','form'], function(){
 			 return;
 	  	  }
           $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/edit',
+        	  url:'$!{rc.contextPath}/user/role/doEdit',
         	  data:{roleId:selectedRoleId,roleName:newRoleName},
         	  dataType:'json',
         	  type:'post',

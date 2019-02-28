@@ -277,6 +277,7 @@ CREATE TABLE `t_role_permission` (
   `role_id` varchar(32) NOT NULL DEFAULT '' COMMENT '角色id',
   `permission_id` varchar(32) NOT NULL DEFAULT '' COMMENT '权限id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
+  `create_user` varchar(64) NOT NULL DEFAULT '' COMMENT '创建人id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_role_permission` (`role_id`,`permission_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
@@ -424,6 +425,7 @@ CREATE TABLE `t_user_role` (
   `user_id` varchar(32) NOT NULL DEFAULT '' COMMENT '用户id',
   `role_id` varchar(32) NOT NULL DEFAULT '' COMMENT '角色id',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user` varchar(64) NOT NULL DEFAULT '' COMMENT '创建人id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户角色表';
 

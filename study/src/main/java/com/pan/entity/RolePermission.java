@@ -35,7 +35,6 @@ public class RolePermission extends BaseEntity {
         super();
         this.roleId = roleId;
         this.permissionId = permissionId;
-        this.createTime = new Date();
     }
 
 }

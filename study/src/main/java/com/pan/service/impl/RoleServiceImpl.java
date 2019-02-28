@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.pan.common.enums.AdminFlagEnum;
+import com.pan.common.enums.OperateLogTypeEnum;
+import com.pan.mapper.BaseMapper;
+import com.pan.query.QueryBase;
+import com.pan.service.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,16 +24,17 @@ import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
 import com.pan.query.QueryRole;
-import com.pan.service.RolePermissionService;
-import com.pan.service.RoleService;
-import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
+/**
+ * 角色关联
+ * @author panzhigao
+ */
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implements RoleService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
 
@@ -41,7 +46,17 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Autowired
 	private UserService userService;
-	
+
+	@Autowired
+	private UserRoleService userRoleService;
+
+	@Autowired
+	private OperateLogService operateLogService;
+
+	/**
+	 * 新增角色信息，并记录日志
+	 * @param role
+	 */
 	@Override
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
@@ -49,9 +64,11 @@ public class RoleServiceImpl implements RoleService{
 		String loginUserId = TokenUtils.getLoginUserId();
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
-		role.setSuperAdminFlag("0");
+		role.setSuperAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
 		role.setRoleId(IdUtils.generateRoleId());
-		roleMapper.addRole(role);
+		roleMapper.insertSelective(role);
+		//记录日志
+		operateLogService.addOperateLog(role.toString(), OperateLogTypeEnum.ROLE_ADD);
 	}
 
 	@Override
@@ -63,7 +80,7 @@ public class RoleServiceImpl implements RoleService{
 			int total=roleMapper.getCountByParams(queryRoleVO);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = roleMapper.findByParams(queryRoleVO);
+				list = findPagable(queryRoleVO);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -77,29 +94,47 @@ public class RoleServiceImpl implements RoleService{
 
 	/**
 	 * 删除角色，超级管理员角色不能删除，已被使用的角色不能删除
-	 *
+	 * 记录日志
 	 * @param roleId 角色id
 	 */
 	@Override
 	public void deleteRole(String roleId) {
 		Role roleInDb = this.findByRoleId(roleId);
 		if(roleInDb==null){
+			logger.error("根据角色id未查询到角色信息,roleId={}",roleId);
 			throw new BusinessException("该角色不存在");
 		}
 		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(roleInDb.getSuperAdminFlag())){
-			throw new BusinessException("超级管理员不能删除");
+			throw new BusinessException("超级管理员角色不能删除");
 		}
-		int count = userService.findRoleUserCountByRoleId(roleId);
+		int count = userRoleService.findUserCountByRoleId(roleId);
 		if(count>0){
-			throw new BusinessException("该角色已使用，不能被删除");
+			throw new BusinessException("该角色已使用，不能被删除，请先取消该角色的分配");
 		}
 		//删除角色信息
-		roleMapper.deleteRole(roleId);
+		roleMapper.deleteByPrimaryKey(roleInDb.getId());
 		//删除角色下关联的权限
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
+		operateLogService.addOperateLog(roleInDb.toString(),OperateLogTypeEnum.ROLE_ADD);
 		//清除缓存中角色的权限信息
 		//TokenUtils.clearAuth();
 		//JedisUtils.delete("role_permissions:"+roleId);
+	}
+
+	/**
+	 * 根据角色id获取角色信息，并校验
+	 * @param roleId
+	 * @return
+	 */
+	private Role getAndCheck(String roleId){
+		if(StringUtils.isBlank(roleId)){
+			throw new BusinessException("角色ID未传入");
+		}
+		Role role = findByRoleId(roleId);
+		if(role==null){
+			throw new BusinessException("该角色不存在");
+		}
+		return role;
 	}
 
 	/**
@@ -109,10 +144,7 @@ public class RoleServiceImpl implements RoleService{
 	 */
 	@Override
 	public void allocatePermissionToRole(String roleId, String[] permissions) {
-		Role role = findByRoleId(roleId);
-		if(role==null){
-			throw new BusinessException("该角色不存在");
-		}
+		Role role = getAndCheck(roleId);
 		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(role.getSuperAdminFlag())){
 			throw new BusinessException("超级管理员不能编辑");
 		}
@@ -137,7 +169,7 @@ public class RoleServiceImpl implements RoleService{
 	public Role findByRoleId(String roleId) {
 		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setRoleId(roleId);
-		List<Role> list = roleMapper.findByParams(queryRoleVO);
+		List<Role> list = findPagable(queryRoleVO);
 		if(list.size()==1){
 			return list.get(0);
 		}
@@ -166,11 +198,6 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public List<Role> findAll() {
-		return roleMapper.findByParams(new QueryRole());
-	}
-
-	@Override
 	public List<String> getRoleByUserId(String userId) {
 		return this.roleMapper.getRoleByUserId(userId);
 	}
@@ -192,17 +219,27 @@ public class RoleServiceImpl implements RoleService{
 		}
 	}
 
+	/**
+	 * 更新角色信息,并记录日志
+	 * @param role
+	 */
 	@Override
 	public void updateRole(Role role) {
-		ValidationUtils.validateEntityWithGroups(role);
-		role.setUpdateTime(new Date());
-		String loginUserId = TokenUtils.getLoginUserId();
-		role.setUpdateUser(loginUserId);
-		roleMapper.updateRole(role);
+		ValidationUtils.validateEntity(role);
+		Role roleInDb = getAndCheck(role.getRoleId());
+		Role updateRole=new Role();
+		String different=role.getRoleId()+","+ role.getRoleName()+"-->"+roleInDb.getRoleName();
+		updateRole.setId(roleInDb.getId());
+		updateRole.setRoleName(role.getRoleName());
+		updateRole.setUpdateTime(new Date());
+		updateRole.setUpdateUser(TokenUtils.getLoginUserId());
+		roleMapper.updateByPrimaryKeySelective(updateRole);
+		operateLogService.addOperateLog(different,OperateLogTypeEnum.ROLE_EDIT);
 	}
 
+
 	@Override
-	public List<Role> findByParams(QueryRole queryRoleVO) {
-		return roleMapper.findByParams(queryRoleVO);
+	protected RoleMapper getBaseMapper() {
+		return roleMapper;
 	}
 }

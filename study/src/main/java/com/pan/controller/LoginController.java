@@ -75,7 +75,7 @@ public class LoginController{
 		subject.login(passwordToken);
 		//request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
 		//手机号登陆
-		User userInDb=null;
+		User userInDb;
 		if(RegexUtils.checkTelephone(user.getUsername())){
 			userInDb = userService.findByUserTelephone(user.getUsername());
 		}else{

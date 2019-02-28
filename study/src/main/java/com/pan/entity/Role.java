@@ -1,8 +1,12 @@
 package com.pan.entity;
 
+import com.pan.common.annotation.LoginGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 
 /**
  * 用户角色
@@ -25,6 +29,7 @@ public class Role extends BaseEntity{
 	 * 角色名称
 	 */
 	@NotEmpty(message="角色名称不能为空")
+	@Size(max = 30,message = "角色名称不能超过30的字符")
 	private String roleName;
 	/**
 	 * 是否选中

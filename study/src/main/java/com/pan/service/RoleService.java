@@ -11,65 +11,60 @@ import com.pan.query.QueryRole;
  * @author Administrator
  *
  */
-public interface RoleService {
+public interface RoleService extends BaseService<Role>{
 	/**
 	 * 新增角色
 	 * @param role
 	 */
-	public void addRole(Role role);
+	void addRole(Role role);
 	/**
 	 * 多条件查询，支持分页
-	 * @param params 条件有userId,articleId
+	 * @param queryRoleVO
 	 * @return
 	 */
-	public Map<String,Object> findPageData(QueryRole queryRoleVO);
-	/**
-	 * 多条件查询，支持分页
-	 * @param params 条件有userId,articleId
-	 * @return
-	 */
-	public List<Role> findByParams(QueryRole queryRoleVO);
+	Map<String,Object> findPageData(QueryRole queryRoleVO);
+//	/**
+//	 * 多条件查询，支持分页
+//	 * @param queryRoleVO
+//	 * @return
+//	 */
+//	List<Role> findByParams(QueryRole queryRoleVO);
 	/**
 	 * 删除角色
 	 * @param roleId 角色id
 	 */
-	public void deleteRole(String roleId);
+	void deleteRole(String roleId);
 	/**
 	 * 为角色分配权限
 	 * @param roleId
 	 * @param permissions
 	 */
-	public void allocatePermissionToRole(String roleId,String[] permissions);
+	void allocatePermissionToRole(String roleId,String[] permissions);
 	/**
 	 * 查找唯一角色
 	 * @param roleId
 	 * @return
 	 */
-	public Role findByRoleId(String roleId);
+	Role findByRoleId(String roleId);
 	/**
 	 * 根据角色id获取权限层级树数据
 	 * @return
 	 */
-	public List<Tree> getRoleTreeData(String roleId);
-	/**
-	 * 获取所有角色
-	 * @return
-	 */
-	public List<Role> findAll();
+	List<Tree> getRoleTreeData(String roleId);
 	/**
 	 * 获取用户角色id
 	 * @param userId
 	 * @return
 	 */
-	public List<String> getRoleByUserId(String userId);
+	List<String> getRoleByUserId(String userId);
 	/**
 	 * 重新缓存指定角色用户权限
 	 * @param roleId
 	 */
-	public void reCachePermissionByRoleId(String roleId);
+	void reCachePermissionByRoleId(String roleId);
 	/**
 	 * 编辑角色
 	 * @param role
 	 */
-	public void updateRole(Role role);
+	void updateRole(Role role);
 }

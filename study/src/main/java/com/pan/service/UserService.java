@@ -14,7 +14,7 @@ import com.pan.query.QueryUser;
  * @author Administrator
  *
  */
-public interface UserService {
+public interface UserService extends BaseService<User>{
 	/**
 	 * 注册用户信息
 	 * @param user
@@ -98,17 +98,6 @@ public interface UserService {
 	 * @param status
 	 */
 	String changeUserStatus(String userId,String status);
-	/**
-	 * 查找使用角色的用户数
-	 * @param roleId
-	 * @return
-	 */
-	int findRoleUserCountByRoleId(String roleId);
-	/**
-	 * 为用户添加用户角色信息
-	 * @param userRole
-	 */
-	void addUserRole(UserRole userRole);
 	/**
 	 * 根据角色id获取拥有该角色的用户
 	 * @param roleId

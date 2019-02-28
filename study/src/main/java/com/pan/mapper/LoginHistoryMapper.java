@@ -18,10 +18,4 @@ public interface LoginHistoryMapper extends BaseMapper<LoginHistory>{
 	 * @return
 	 */
 	int insert(LoginHistory loginHistory);
-	/**
-	 * 分页查询登录历史
-	 * @param queryLoginHistory 查询参数
-	 * @return
-	 */
-	List<LoginHistory> findByParams(QueryLoginHistory queryLoginHistory);
 }

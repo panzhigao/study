@@ -57,10 +57,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	@Autowired
 	private UserExtensionService userExtensionService;
 
-	@Override
-	protected BaseMapper getBaseMapper() {
-		return this.articleCheckMapper;
-	}
+
 
 	@Override
 	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
@@ -210,4 +207,8 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
 	}
 
+	@Override
+	protected ArticleCheckMapper getBaseMapper() {
+		return articleCheckMapper;
+	}
 }

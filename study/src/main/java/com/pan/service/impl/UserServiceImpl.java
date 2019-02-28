@@ -13,7 +13,7 @@ import java.util.UUID;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.dto.UserDTO;
 import com.pan.entity.*;
-import com.pan.service.LoginHistoryService;
+import com.pan.service.*;
 import com.pan.shiro.RedisSessionDAO;
 import com.pan.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,15 +36,12 @@ import com.pan.common.exception.BusinessException;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.query.QueryUser;
-import com.pan.service.ScoreHistoryService;
-import com.pan.service.UserExtensionService;
-import com.pan.service.UserService;
 
 /**
  * @author Administrator
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -83,6 +80,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserExtensionMapper userExtensionMapper;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Autowired
     private UserExtensionService userExtensionService;
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(UserStatusEnum.STATUS_NORMAL.getCode());
             //默认头像
             user.setUserPortrait(defaultPortrait);
-            userMapper.saveUser(user);
+            userMapper.insertSelective(user);
             //新增用户拓展信息
             UserExtension userExtensionTemp = new UserExtension();
             userExtensionTemp.setUserId(userId);
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
             //为用户添加用户角色信息
             UserRole userRole = new UserRole(userId, defaultRoleId);
             userRole.setCreateTime(new Date());
-            this.addUserRole(userRole);
+            userRoleService.addUserRole(userRole);
             //用户验证,用明文密码验证
             user.setPassword(password);
             TokenUtils.userAutoLogin(user);
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
             loginHistory.setIpStr(TokenUtils.getIp());
             loginHistory.setCreateTime(now);
             loginHistory.setUserAgent(TokenUtils.getAttribute(MyConstant.USER_AGENT).toString());
-            loginHistoryService.addLoginHistory(loginHistory);
+            loginHistoryService.insertSelective(loginHistory);
             //积分历史表新增登录积分
             ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreTypeEnum.LOGIN);
             //如果不是今日首次登录，连续登录天数加1
@@ -241,26 +241,28 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 更新用户信息，同时更新用户缓存信息
+     * 更新当前登录人用户信息，同时更新用户缓存信息
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
-        String userId = user.getUserId();
-        user.setUpdateTime(new Date());
+        User updateUser=new User();
+        BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});
+        String userId = TokenUtils.getLoginUserId();
+        updateUser.setUpdateTime(new Date());
         String newPortrait = null;
-        if (StringUtils.isNotBlank(user.getUserPortrait())) {
-            String temp = user.getUserPortrait();
+        if (StringUtils.isNotBlank(updateUser.getUserPortrait())) {
+            String temp = updateUser.getUserPortrait();
             temp = temp.replace("data:image/jpeg;base64,", "");
             String generateImage = ImageUtils.generateImage(temp, pictureSaveDir);
             if (generateImage != null) {
                 newPortrait = imgUrl + generateImage;
-                user.setUserPortrait(newPortrait);
+                updateUser.setUserPortrait(newPortrait);
             } else {
-                user.setUserPortrait(null);
+                updateUser.setUserPortrait(null);
             }
         }
-        userMapper.updateUserByUserId(user);
+        userMapper.updateUserByUserId(updateUser);
         User userInDb = userMapper.findByUserId(userId);
         //重置用户登陆信息
         TokenUtils.setAttribute(MyConstant.USER, userInDb);
@@ -341,7 +343,7 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> list = new ArrayList<>();
         try {
             logger.info("分页查询用户参数为:{}", JsonUtils.toJson(queryUser));
-            int total = userMapper.getCountByParams(queryUser);
+            int total = userMapper.countByParams(queryUser);
             //当查询记录大于0时，查询数据库记录，否则直接返回空集合
             if (total > 0) {
                 RedisSessionDAO redisSessionDAO = SpringContextUtils.getBean(RedisSessionDAO.class);
@@ -398,7 +400,7 @@ public class UserServiceImpl implements UserService {
                 user.setUpdateUser(TokenUtils.getLoginUserId());
                 userMapper.updateUserByUserId(user);
             }
-            userMapper.addUserRole(list);
+            userRoleService.batchAddUserRole(list);
             //清空该用户权限缓存
             TokenUtils.clearAuthz(userId);
         }
@@ -432,17 +434,6 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
-    @Override
-    public int findRoleUserCountByRoleId(String roleId) {
-        return userMapper.findRoleUserCountByRoleId(roleId);
-    }
-
-    @Override
-    public void addUserRole(UserRole userRole) {
-        List<UserRole> list = new ArrayList<UserRole>();
-        list.add(userRole);
-        userMapper.addUserRole(list);
-    }
 
     @Override
     public List<User> findUserByRoleId(String roleId) {
@@ -460,5 +451,10 @@ public class UserServiceImpl implements UserService {
         userExtension.setContinuousCheckInDays(1);
         userExtensionService.increaseCounts(userExtension);
         return addScoreHistory;
+    }
+
+    @Override
+    protected UserMapper getBaseMapper() {
+        return userMapper;
     }
 }

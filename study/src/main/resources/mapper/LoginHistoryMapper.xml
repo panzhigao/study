@@ -16,7 +16,7 @@
     id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str,user_agent
   </sql>
 
-    <insert id="insert" parameterType="com.pan.entity.LoginHistory">
+    <insert id="insertSelective" parameterType="com.pan.entity.LoginHistory">
         insert into t_login_history
         <trim suffixOverrides="," prefix="(" suffix=")">
             <if test="userId != null">
@@ -69,7 +69,7 @@
     </sql>
 
 
-    <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryLoginHistory">
+    <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryLoginHistory">
         select
         <include refid="Base_Column_List"/>
         from t_login_history

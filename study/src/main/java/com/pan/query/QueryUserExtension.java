@@ -1,25 +1,17 @@
 package com.pan.query;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * 查询用户拓展表VO
+ * @author panzhigao
  */
+@Data
+@EqualsAndHashCode(callSuper=true)
 public class QueryUserExtension extends QueryBase{
 	/**
 	 * 用户id
 	 */
 	private String userId;
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	@Override
-	public String toString() {
-		return "QueryUserExtensionVO [userId=" + userId + ", pageSize="
-				+ pageSize + ", pageNo=" + pageNo + "]";
-	}
 }

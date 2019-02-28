@@ -2,6 +2,8 @@ package com.pan.service;
 
 import com.pan.entity.BaseEntity;
 import com.pan.mapper.BaseMapper;
+import com.pan.query.QueryBase;
+import java.util.List;
 
 /**
  * 抽象
@@ -10,11 +12,10 @@ import com.pan.mapper.BaseMapper;
 public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMapper<T>> implements BaseService<T>{
     /**
      * 获取mapper
-     * @param <M>
+     * @param
      * @return
      */
-	@SuppressWarnings("hiding")
-	protected abstract <M>BaseMapper<T> getBaseMapper();
+	protected abstract M getBaseMapper();
 
     /**
      * 根据id获取唯一一条数据
@@ -59,5 +60,10 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     @Override
     public int updateByPrimaryKeySelective(T t){
         return getBaseMapper().updateByPrimaryKeySelective(t);
+    }
+
+    @Override
+    public List<T> findPagable(QueryBase queryBase) {
+        return getBaseMapper().findPagable(queryBase);
     }
 }

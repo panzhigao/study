@@ -60,12 +60,8 @@ public class UserSetController {
 	@ResponseBody
 	@RequiresPermissions("/user/set")
 	public ResultMsg userEdit(User user,UserExtension userExtension){
-		ResultMsg resultMsg=null;
-		String userId=TokenUtils.getLoginUserId();
-		user.setUserId(userId);
 		userService.updateUserInfo(user, userExtension);
-		resultMsg=ResultMsg.ok("修改用户信息成功");
-		return resultMsg;
+		return ResultMsg.ok("修改用户信息成功");
 	}
 	
 	/**

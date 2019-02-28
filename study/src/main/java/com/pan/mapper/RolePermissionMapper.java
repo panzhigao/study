@@ -28,5 +28,5 @@ public interface RolePermissionMapper {
 	 * @param list
 	 * @return  删除条数
 	 */
-	int addRolePermission(List<RolePermission> list);
+	int batchAddRolePermission(List<RolePermission> list);
 }

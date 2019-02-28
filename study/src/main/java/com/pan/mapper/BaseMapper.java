@@ -39,4 +39,10 @@ public interface BaseMapper<T extends BaseEntity> {
      * @return
      */
     List<T> findPagable(QueryBase queryBase);
+    /**
+     * 查询记录数
+     * @param queryBase
+     * @return
+     */
+    int countByParams(QueryBase queryBase);
 }

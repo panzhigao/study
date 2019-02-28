@@ -47,7 +47,7 @@
   	select <include refid="Base_Column_List"/> from t_user where username=#{username}
   </select>
   
-  <insert id="saveUser" parameterType="com.pan.entity.User">
+  <insert id="insertSelective" parameterType="com.pan.entity.User">
   	insert into t_user
   	<trim suffixOverrides="," prefix="(" suffix=")">
   		<if test="userId != null">
@@ -188,26 +188,12 @@
   	</if>
   </select>	
   
-  <insert id="addUserRole" parameterType="java.util.List">
-  	insert into t_user_role (user_id,role_id,create_time) values
-  	<foreach collection="list" item="item" separator="," close=";">  	
-  		  (#{item.userId,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
-  	</foreach>
-  </insert>	
-  
-  <!-- 根据角色查找使用该角色的用户数 -->
-  <select id="findRoleUserCountByRoleId" resultType="int">
-  	select count(0) from t_user_role where role_id=#{roleId}
-  </select>
-  
+
   <!-- 根据角色查找使用该角色的用户数 -->
   <select id="findUserByRoleId" resultMap="BaseResultMap">
   	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait
   	from t_user tu join t_user_role tur on tu.user_id=tur.user_id
   	where role_id=#{roleId}
   </select>
-  
-  <delete id="deleteUserRoleByUserId" >
-  	delete from t_user_role where user_id=#{userId}
-  </delete>
+
 </mapper>

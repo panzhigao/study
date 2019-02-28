@@ -8,15 +8,27 @@ public enum OperateLogTypeEnum {
     /**
      * 新增权限
      */
-    ADD_PERMISSION(1, "新增权限"),
+    PERMISSION_ADD(11, "新增权限"),
     /**
      * 编辑权限
      */
-    EDIT_PERMISSION(2, "编辑权限"),
+    PERMISSION_EDIT(12, "编辑权限"),
     /**
      * 删除权限
      */
-    DELETE_PERMISSION(3, "删除权限");
+    PERMISSION_DELETE(13, "删除权限"),
+    /**
+     * 新增角色
+     */
+    ROLE_ADD(21, "新增角色"),
+    /**
+     * 编辑角色
+     */
+    ROLE_EDIT(22, "编辑角色"),
+    /**
+     * 删除角色
+     */
+    ROLE_DELETE(23, "删除角色");
 
     private Integer code;
 

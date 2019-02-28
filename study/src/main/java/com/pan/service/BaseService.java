@@ -1,6 +1,9 @@
 package com.pan.service;
 
 import com.pan.entity.BaseEntity;
+import com.pan.query.QueryBase;
+
+import java.util.List;
 
 /**
  * @author panzhigao
@@ -38,4 +41,11 @@ public interface BaseService<T extends BaseEntity> {
      * @return
      */
     int updateByPrimaryKeySelective(T t);
+
+    /**
+     * 分页查询
+     * @param queryBase
+     * @return
+     */
+    List<T> findPagable(QueryBase queryBase);
 }

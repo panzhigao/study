@@ -33,7 +33,7 @@ public class RolePermissionServiceImpl implements RolePermissionService{
 
 	@Override
 	public int addRolePermission(List<RolePermission> list) {
-		return rolePermissionMapper.addRolePermission(list);
+		return rolePermissionMapper.batchAddRolePermission(list);
 	}
 
 	@Override

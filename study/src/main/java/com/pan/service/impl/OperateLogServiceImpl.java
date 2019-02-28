@@ -3,7 +3,6 @@ package com.pan.service.impl;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.OperateLog;
 import com.pan.entity.User;
-import com.pan.mapper.BaseMapper;
 import com.pan.mapper.OperateLogMapper;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.OperateLogService;
@@ -23,7 +22,7 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
     private OperateLogMapper operateLogMapper;
 
     @Override
-    protected BaseMapper getBaseMapper() {
+    protected OperateLogMapper getBaseMapper() {
         return operateLogMapper;
     }
 
