@@ -30,7 +30,7 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
     public int addOperateLog(String content, OperateLogTypeEnum operateLogTypeEnum) {
         User loginUser = TokenUtils.getLoginUser();
         StringBuilder stringBuilder=new StringBuilder(loginUser.getNickname()+"("+loginUser.getUsername()+")");
-        stringBuilder.append(operateLogTypeEnum.getDesc()).append(",");
+        stringBuilder.append(operateLogTypeEnum.getDesc()).append(":");
         stringBuilder.append(content);
         OperateLog operateLog=new OperateLog();
         operateLog.setUserId(loginUser.getUserId());

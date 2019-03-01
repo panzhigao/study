@@ -228,7 +228,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		ValidationUtils.validateEntity(role);
 		Role roleInDb = getAndCheck(role.getRoleId());
 		Role updateRole=new Role();
-		String different=role.getRoleId()+","+ role.getRoleName()+"-->"+roleInDb.getRoleName();
+		String different=role.getRoleId()+","+ roleInDb.getRoleName()+"-->"+role.getRoleName();
 		updateRole.setId(roleInDb.getId());
 		updateRole.setRoleName(role.getRoleName());
 		updateRole.setUpdateTime(new Date());

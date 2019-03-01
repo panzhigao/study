@@ -64,7 +64,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.pan.UserRole">
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.UserRole">
     update t_user_role
     <set>
       <if test="userId != null">

@@ -26,5 +26,9 @@ public class Picture extends BaseEntity{
 	/**
 	 * 图片路径
 	 */
-	private String picUrl;
+	private String pictureUrl;
+	/**
+	 * 图片保存路径
+	 */
+	private String picturePath;
 }

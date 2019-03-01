@@ -217,10 +217,11 @@ CREATE TABLE `t_picture` (
   `picture_id` varchar(64) NOT NULL DEFAULT '' COMMENT '图片id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `user_id` varchar(64) NOT NULL DEFAULT '' COMMENT '用户id',
-  `pic_url` varchar(200) NOT NULL DEFAULT '' COMMENT '图片路径',
+  `picture_url` varchar(200) NOT NULL DEFAULT '' COMMENT '图片访问路径',
+  `picture_path` varchar(200) NOT NULL DEFAULT '' COMMENT '图片保存路径',
   PRIMARY KEY (`id`),
   UNIQUE KEY `picture_id` (`picture_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图片信息表';
 
 -- ----------------------------
 -- Records of t_picture
