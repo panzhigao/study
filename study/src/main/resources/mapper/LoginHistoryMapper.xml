@@ -2,80 +2,88 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pan.mapper.LoginHistoryMapper">
 
-    <resultMap id="BaseResultMap" type="com.pan.entity.LoginHistory">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
-        <result column="username" property="username" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="ip" property="ip" jdbcType="INTEGER"/>
-        <result column="ip_str" property="ipStr" jdbcType="VARCHAR"/>
-        <result column="user_agent" property="userAgent" jdbcType="VARCHAR"/>
-    </resultMap>
+	<resultMap id="BaseResultMap" type="com.pan.entity.LoginHistory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="ip" property="ip" jdbcType="INTEGER" />
+		<result column="ip_str" property="ipStr" jdbcType="VARCHAR" />
+		<result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
+	</resultMap>
 
-    <sql id="Base_Column_List">
-    id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str,user_agent
-  </sql>
+	<sql id="Base_Column_List">
+		id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str,user_agent
+	</sql>
 
-    <insert id="insertSelective" parameterType="com.pan.entity.LoginHistory">
-        insert into t_login_history
-        <trim suffixOverrides="," prefix="(" suffix=")">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="username != null">
-                username,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="ipStr != null">
-                ip,
-            </if>
-            <if test="userAgent != null">
-                user_agent,
-            </if>
-        </trim>
-        values
-        <trim suffixOverrides="," prefix="(" suffix=")">
-            <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
-            </if>
-            <if test="username != null">
-                #{username,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="ipStr != null">
-                inet_aton(#{ipStr,jdbcType=VARCHAR}),
-            </if>
-            <if test="userAgent != null">
-                #{userAgent,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
+	<insert id="insertSelective" parameterType="com.pan.entity.LoginHistory">
+		insert into t_login_history
+		<trim suffixOverrides="," prefix="(" suffix=")">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="ipStr != null">
+				ip,
+			</if>
+			<if test="userAgent != null">
+				user_agent,
+			</if>
+		</trim>
+		values
+		<trim suffixOverrides="," prefix="(" suffix=")">
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ipStr != null">
+				inet_aton(#{ipStr,jdbcType=VARCHAR}),
+			</if>
+			<if test="userAgent != null">
+				#{userAgent,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
 
-    <select id="getCountByParams" resultType="int">
-        select count(0) from t_login_history
-        <include refid="whereSql"/>
-    </select>
+	<select id="getCountByParams" resultType="int">
+		select count(0) from t_login_history
+		<include refid="whereSql" />
+	</select>
 
-    <sql id="whereSql">
-        <where>
-            <if test="userId !=null ">
-                and user_id=#{userId}
-            </if>
-        </where>
-    </sql>
+	<sql id="whereSql">
+		<where>
+			<if test="userId !=null ">
+				and user_id=#{userId}
+			</if>
+		</where>
+	</sql>
 
+	<select id="findPagable" resultMap="BaseResultMap"
+		parameterType="com.pan.query.QueryLoginHistory">
+		select
+		<include refid="Base_Column_List" />
+		from t_login_history
+		<include refid="whereSql" />
+		<if test="offset!=null and row !=null">
+			limit #{offset},#{row}
+		</if>
+	</select>
 
-    <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryLoginHistory">
-        select
-        <include refid="Base_Column_List"/>
-        from t_login_history
-        <include refid="whereSql"/>
-        <if test="offset!=null and row !=null">
-            limit #{offset},#{row}
-        </if>
-    </select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_login_history
+		where id = #{id,jdbcType=BIGINT}
+	</select>
 </mapper>

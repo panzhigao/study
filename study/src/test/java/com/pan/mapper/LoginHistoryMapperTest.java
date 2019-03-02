@@ -23,7 +23,7 @@ public class LoginHistoryMapperTest extends BaseTest {
         loginHistory.setIpStr("127.0.0.1");
         loginHistory.setUserAgent("22222222222222222222222222222222222222222222");
         loginHistory.setCreateTime(new Date());
-        int insert = loginHistoryMapper.insert(loginHistory);
+        int insert = loginHistoryMapper.insertSelective(loginHistory);
         Assert.assertEquals(insert,1);
     }
 
