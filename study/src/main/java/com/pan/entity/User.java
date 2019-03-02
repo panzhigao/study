@@ -39,7 +39,7 @@ public class User extends BaseEntity {
      */
     @NotEmpty(message = "用户名不能为空", groups = {LoginGroup.class, RegisterGroup.class, CheckUsernameGroup.class})
     @Size(max = 15, min = 5, message = "用户名长度必须在5-15之间", groups = {RegisterGroup.class, CheckUsernameGroup.class})
-    @Pattern(regexp = "^(?![0-9]+$)([a-zA-Z0-9_\\.\\-]+$)", message = "用户名只能包含字母，数字，点和下划线,且不能全为数字", groups = {RegisterGroup.class, CheckUsernameGroup.class})
+    @Pattern(regexp = "^(?![0-9]+$)([a-zA-Z0-9_\\.\\-]+$)", message = "用户名只能包含字母，数字，点和下划线和减号,且不能全为数字", groups = {RegisterGroup.class, CheckUsernameGroup.class})
     private String username;
     /**
      * 昵称
@@ -69,7 +69,7 @@ public class User extends BaseEntity {
      * 手机号码
      */
     @NotEmpty(message = "手机号不能为空", groups = {TelephoneBindGroup.class})
-    @Pattern(regexp = "^1[3|5|8]{1}[0-9]{9}$", message = "请输入正确的手机号码", groups = {TelephoneBindGroup.class})
+    @Pattern(regexp = "^((1[3|4|5|7|8][0-9]{1})+\\d{8})$", message = "请输入正确的手机号码", groups = {TelephoneBindGroup.class})
     private String telephone;
     /**
      * 用户头像

@@ -3,22 +3,23 @@
 <mapper namespace="com.pan.mapper.PictureMapper" >
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Picture">
-    <id     column="id"             	property="id"              jdbcType="BIGINT" />
-    <result column="picture_id"        	property="pictureId"       jdbcType="VARCHAR" />
-    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
-    <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
-    <result column="pic_url"            property="picUrl"          jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="picture_id" jdbcType="VARCHAR" property="pictureId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+    <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,picture_id,user_id,create_time,pic_url
+    id, picture_id, create_time, user_id, picture_url, picture_path
   </sql>
   
   <select id="findByPictureId" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
+  <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
   	select <include refid="Base_Column_List"/> from t_picture 
   	<include refid="whereSql"/>
   	order by create_time desc
@@ -27,9 +28,48 @@
   	</if>
   </select>
   
-  <insert id="savePicture" parameterType="com.pan.entity.Picture">
-  	insert into t_picture (<include refid="Base_Column_List"/>) values 
-  	(null,#{pictureId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{picUrl,jdbcType=VARCHAR})
+  <insert id="insertSelective" parameterType="com.pan.entity.Picture">
+    insert into t_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="pictureId != null">
+        picture_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="pictureUrl != null">
+        picture_url,
+      </if>
+      <if test="picturePath != null">
+        picture_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pictureId != null">
+        #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null">
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="picturePath != null">
+        #{picturePath,jdbcType=VARCHAR},
+      </if>
+    </trim>
   </insert>
   
   <delete id="deleteByPictureIds">
@@ -39,7 +79,7 @@
   	</foreach>
   </delete>
   
-  <select id="getCountByParams" resultType="int">
+  <select id="countByParams" resultType="int">
   	select count(0) from t_picture tp
   	<include refid="whereSql"/>
   </select>

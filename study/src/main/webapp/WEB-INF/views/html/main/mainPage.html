@@ -14,6 +14,7 @@
 </head>
 <body class="childrenBody">
 	<div class="panel_box row">
+		#hasPermission('/user/message')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/message">
 				<div class="panel_icon">
@@ -26,6 +27,8 @@
 				</div>
 			</a>
 		</div>
+		#end
+		#hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#index">
 				<div class="panel_icon" style="background-color:#FF5722;">
@@ -38,6 +41,8 @@
 				</div>
 			</a>
 		</div>	
+		#end
+		#hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine?status=2#index">
 				<div class="panel_icon" style="background-color:#F7B824;">
@@ -50,6 +55,8 @@
 				</div>
 			</a>
 		</div>
+		#end
+		#hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#collection">
 				<div class="panel_icon" style="background-color:#2F4056;">
@@ -62,6 +69,8 @@
 				</div>
 			</a>
 		</div>
+		#end
+		#hasPermission('/user/scoreHistory')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/scoreHistory">
 				<div class="panel_icon" style="background-color:#009688;">
@@ -73,6 +82,7 @@
 				</div>
 			</a>
 		</div>
+		#end
 		<div class="panel col">
 			<a href="javascript:;" style="pointer-events:none">
 				<div class="panel_icon" style="background-color:#c789c9">
@@ -84,6 +94,7 @@
 				</div>
 			</a>
 		</div>
+		#hasPermission('/user/myPicturePage')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/myPicturePage">
 				<div class="panel_icon" style="background-color:#5FB878;">
@@ -95,6 +106,7 @@
 				</div>
 			</a>
 		</div>
+		#end
 		<div class="panel col">
 			<a href="javascript:;" style="pointer-events:none">
 				<div class="panel_icon layui-bg-blue">

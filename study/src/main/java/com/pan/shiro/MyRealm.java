@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.PermissionTypeEnum;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.entity.User;
@@ -57,16 +60,17 @@ public class MyRealm extends AuthorizingRealm {
 	 */
 	private Set<String> loadMenus(String userId) {
 		logger.debug(">>>>>>>>>>>>>>>>>>>从数据库加载权限>>>>>>>>>>>>>>>>>>>");
-		List<Permission> permissionList = permissionService
-				.findPermissionsByUserId(userId);
-		List<Tree> nodes = new ArrayList<Tree>(20);
+		List<Permission> permissionList = permissionService.findPermissionsByUserId(userId);
+		List<Tree> nodes = new ArrayList<Tree>(50);
+		//用户的权限点集合
 		Set<String> permissions = new HashSet<>();
 		for (Permission permission : permissionList) {
-			// 非菜单路径
+			//非菜单权限点
 			if (StringUtils.isNotBlank(permission.getUrl())) {
 				permissions.add(permission.getUrl());
 			}
-			if ("2".equals(permission.getType())) {
+			//按钮
+			if (PermissionTypeEnum.BUTTON.getCode().equals(permission.getType())) {
 				continue;
 			}
 			Tree roleTree = new Tree();
@@ -79,7 +83,9 @@ public class MyRealm extends AuthorizingRealm {
 			roleTree.setSort(permission.getSort());
 			nodes.add(roleTree);
 		}
-		List<Tree> buildTree = Tree.buildTree(nodes, true);
+		List<Tree> nodeList = nodes.stream().distinct().collect(Collectors.toList());
+		//构建用户中心左侧菜单栏
+		List<Tree> buildTree = Tree.buildTree(nodeList, true);
 		TokenUtils.setAttribute("menus", buildTree);
 		return permissions;
 	}
@@ -92,7 +98,7 @@ public class MyRealm extends AuthorizingRealm {
 			PrincipalCollection principals) {
 		String userId = (String) principals.getPrimaryPrincipal();
 		// 角色信息
-		List<String> roles = roleService.getRoleByUserId(userId);
+		List<String> roles = roleService.getRoleIdsByUserId(userId);
 		// 权限信息
 		Set<String> permissions = loadMenus(userId);
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();

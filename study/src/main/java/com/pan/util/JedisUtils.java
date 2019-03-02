@@ -1,8 +1,6 @@
 package com.pan.util;
 
 import java.util.*;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

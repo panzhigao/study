@@ -24,7 +24,7 @@ layui.config({
                         var hasData = pageSize*pageNo<total;
                         setTimeout(function(){
                             for(var i=0; i<data.length; i++){
-                                imgList.push('<li><img src="'+ data[i].picUrl +'"><div class="operate"><div class="check"><input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary" title="'+data[i].pictureId+'"></div><i class="layui-icon img_del">&#xe640;</i></div></li>')
+                                imgList.push('<li><img src="'+ data[i].pictureUrl +'"><div class="operate"><div class="check"><input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary" title="'+data[i].pictureId+'"></div><i class="layui-icon img_del">&#xe640;</i></div></li>')
                             }
                             next(imgList.join(''), hasData);
                             form.render();

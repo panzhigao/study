@@ -43,14 +43,6 @@ public class MyConstant {
      */
     public static final String OPERATETYPE_FINDPASSWORD = "findPassword";
     /**
-     * 权限类型  菜单
-     */
-    public static final String PERMISSION_TYPE_MENU = "0";
-    /**
-     * 权限类型  链接
-     */
-    public static final String PERMISSION_TYPE_HREF = "1";
-    /**
      * 用户
      */
     public static final String USER = "user";
@@ -78,4 +70,12 @@ public class MyConstant {
      * 默认请求路径
      */
     public static final String DEFAULT_REQUEST_URL="/favicon.ico";
+    /**
+     * 公钥
+     */
+    public static final String PUBLIC_KEY="public_key";
+    /**
+     * 私钥
+     */
+    public static final String PRIVATE_KEY="private_key";
 }

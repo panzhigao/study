@@ -2,154 +2,160 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pan.mapper.RoleMapper">
 
-    <resultMap id="BaseResultMap" type="com.pan.entity.Role">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
-        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
-        <result column="super_admin_flag" jdbcType="CHAR" property="superAdminFlag"/>
-    </resultMap>
+	<resultMap id="BaseResultMap" type="com.pan.entity.Role">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="role_id" jdbcType="VARCHAR" property="roleId" />
+		<result column="role_name" jdbcType="VARCHAR" property="roleName" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+		<result column="super_admin_flag" jdbcType="CHAR" property="superAdminFlag" />
+	</resultMap>
 
-    <sql id="Base_Column_List">
-    id, role_id, role_name, create_time, create_user, update_time, update_user, super_admin_flag
-  </sql>
+	<sql id="Base_Column_List">
+		id, role_id, role_name, create_time, create_user, update_time,
+		update_user, super_admin_flag
+	</sql>
+	
+	<select id="findPagable" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		<include refid="whereSql"/>
+		order by create_time desc
+		<if test="offset!=null and row !=null">
+			limit #{offset},#{row}
+		</if>
+	</select>
 
-    <select id="findPagable" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from t_role
-        <where>
-            <if test="roleName !=null and roleName !=''">
-                and role_name like CONCAT('%','${roleName}','%')
-            </if>
-            <if test="roleId !=null and roleId !=''">
-                and role_id=#{roleId}
-            </if>
-            <if test="superAdminFlag !=null and superAdminFlag !=''">
-                and super_admin_flag=#{superAdminFlag}
-            </if>
-        </where>
-        order by create_time desc
-        <if test="offset!=null and row !=null">
-            limit #{offset},#{row}
-        </if>
-    </select>
+	<select id="countByParams" resultType="int">
+		select count(0) from t_role
+		<include refid="whereSql"/>
+	</select>
+	
+	<sql id="whereSql">
+		<where>
+			<if test="roleName !=null">
+				and role_name like CONCAT('%','${roleName}','%')
+			</if>
+			<if test="roleId !=null">
+				and role_id=#{roleId}
+			</if>
+			<if test="superAdminFlag !=null">
+				and super_admin_flag=#{superAdminFlag}
+			</if>
+		</where>
+	</sql>
+	
+	<insert id="insertSelective" parameterType="com.pan.entity.Role">
+		insert into t_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="roleId != null">
+				role_id,
+			</if>
+			<if test="roleName != null">
+				role_name,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="superAdminFlag != null">
+				super_admin_flag,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="superAdminFlag != null">
+				#{superAdminFlag,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
 
-    <select id="getCountByParams" resultType="int">
-        select count(0) from t_role
-        <where>
-            <if test="roleName !=null and roleName !=''">
-                and role_name like CONCAT('%','${roleName}','%')
-            </if>
-            <if test="roleId !=null and roleId !=''">
-                and role_id=#{roleId}
-            </if>
-            <if test="superAdminFlag !=null and superAdminFlag !=''">
-                and super_admin_flag=#{superAdminFlag}
-            </if>
-        </where>
-    </select>
-
-    <insert id="insertSelective" parameterType="com.pan.entity.Role">
-        insert into t_role
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="roleId != null">
-                role_id,
-            </if>
-            <if test="roleName != null">
-                role_name,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createUser != null">
-                create_user,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateUser != null">
-                update_user,
-            </if>
-            <if test="superAdminFlag != null">
-                super_admin_flag,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=BIGINT},
-            </if>
-            <if test="roleId != null">
-                #{roleId,jdbcType=VARCHAR},
-            </if>
-            <if test="roleName != null">
-                #{roleName,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createUser != null">
-                #{createUser,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateUser != null">
-                #{updateUser,jdbcType=VARCHAR},
-            </if>
-            <if test="superAdminFlag != null">
-                #{superAdminFlag,jdbcType=CHAR},
-            </if>
-        </trim>
-    </insert>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from t_role
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-    <select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
-        select tr.role_id,tr.role_name,max(ifnull(tr.user_id,0))marker from t_role tr
-        left join t_user_role tur on tur.role_id=tr.role_id
-        left join (select user_id from t_user where user_id =#{userId}) tr on tr.user_id=tur.user_id
-        group by tr.role_id
-    </select>
+	<select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
+		select tr.role_id,tr.role_name,max(ifnull(tr.user_id,0))marker from t_role
+		tr
+		left join t_user_role tur on tur.role_id=tr.role_id
+		left join (select user_id from t_user where user_id =#{userId}) tr on
+		tr.user_id=tur.user_id
+		group by tr.role_id
+	</select>
 
-    <select id="getRoleByUserId" resultType="String">
-  	    select role_id from t_user_role where user_id=#{userId}
-    </select>
+	<select id="getRoleIdsByUserId" resultType="String">
+		select role_id from t_user_role where user_id=#{userId}
+	</select>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Role">
-        update t_role
-        <set>
-            <if test="roleId != null">
-                role_id = #{roleId,jdbcType=VARCHAR},
-            </if>
-            <if test="roleName != null">
-                role_name = #{roleName,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createUser != null">
-                create_user = #{createUser,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateUser != null">
-                update_user = #{updateUser,jdbcType=VARCHAR},
-            </if>
-            <if test="superAdminFlag != null">
-                super_admin_flag = #{superAdminFlag,jdbcType=CHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Role">
+		update t_role
+		<set>
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				role_name = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="superAdminFlag != null">
+				super_admin_flag = #{superAdminFlag,jdbcType=CHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="findByRoleIds" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_role where role_id in
+		<foreach collection="array" item="roleId" open="(" close=")" separator=",">
+			#{roleId}
+		</foreach>
+	</select>
 </mapper>

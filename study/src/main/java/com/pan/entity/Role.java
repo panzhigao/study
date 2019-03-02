@@ -1,12 +1,9 @@
 package com.pan.entity;
 
-import com.pan.common.annotation.LoginGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.Size;
-import javax.validation.groups.Default;
 
 /**
  * 用户角色

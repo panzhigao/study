@@ -32,7 +32,7 @@ public class UserRoleServiceImpl extends AbstractBaseService<UserRole,UserRoleMa
 
     @Override
     public int deleteUserRoleByUserId(String userId) {
-        return deleteUserRoleByUserId(userId);
+        return userRoleMapper.deleteUserRoleByUserId(userId);
     }
 
     @Override

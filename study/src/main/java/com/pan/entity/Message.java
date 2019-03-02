@@ -1,7 +1,6 @@
 package com.pan.entity;
 
 import com.pan.common.annotation.UnescapeHtml;
-import com.pan.util.JsonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

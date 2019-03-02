@@ -2,6 +2,16 @@ package com.pan.vo;
 
 import com.pan.entity.ScoreHistory;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * 用户积分
+ * @author Administrator
+ *
+ */
+@Data
+@EqualsAndHashCode(callSuper=true)
 public class ScoreHistoryVO extends ScoreHistory{
 
 	/**
@@ -16,24 +26,4 @@ public class ScoreHistoryVO extends ScoreHistory{
 	 * 用户昵称
 	 */
 	private String nickname;
-	public String getUserPortrait() {
-		return userPortrait;
-	}
-	public void setUserPortrait(String userPortrait) {
-		this.userPortrait = userPortrait;
-	}
-	
-	public String getNickname() {
-		return nickname;
-	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	@Override
-	public String toString() {
-		return "ScoreHistoryVO [userPortrait=" + userPortrait + ", nickname="
-				+ nickname + ", id=" + id + ", createTime=" + createTime
-				+ ", createUser=" + createUser + ", updateTime=" + updateTime
-				+ ", updateUser=" + updateUser + "]";
-	}
 }

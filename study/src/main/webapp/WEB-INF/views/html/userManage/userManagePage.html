@@ -252,7 +252,7 @@ layui.use(['table','jquery','form'], function(){
 	  $('#btnSave').click(function(){
 		  var selectedUserId=$('#selectedUserId').val();
 		  if(!selectedUserId){
-			  layer.alert('未选择角色');
+			  layer.alert('未选择用户');
 			  return;
 		  }
 		  var oCks = xtree3.GetAllChecked(); //这是方法
@@ -262,6 +262,10 @@ layui.use(['table','jquery','form'], function(){
         		  continue;
         	  }
               arr.push(oCks[i].value);
+          }
+          if(arr.length==0){
+        	  layer.alert('至少选择一个角色');
+			  return;
           }
           var roles = JSON.stringify(arr);
           console.log(roles);

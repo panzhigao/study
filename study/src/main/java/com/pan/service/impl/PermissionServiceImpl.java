@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.pan.common.enums.OperateLogTypeEnum;
-import com.pan.entity.*;
-import com.pan.mapper.BaseMapper;
+import com.pan.common.enums.PermissionTypeEnum;
 import com.pan.query.QueryPermission;
 import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -13,11 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
+import com.pan.entity.Permission;
+import com.pan.entity.Role;
+import com.pan.entity.RolePermission;
+import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
 import com.pan.query.QueryRole;
 import com.pan.util.IdUtils;
@@ -58,6 +60,11 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
+		if(!PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
+			if(StringUtils.isBlank(permission.getUrl())){
+				throw new BusinessException("url不能为空");
+			}
+		}
 		if(StringUtils.isBlank(permission.getPid())){
 			permission.setPid("0");
 		}
@@ -182,7 +189,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		}
 		Permission permissionInDb = getAndCheck(permission.getPermissionId());
 		permission.setId(permissionInDb.getId());
-		if(MyConstant.PERMISSION_TYPE_MENU.equals(permission.getType())){
+		if(PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
 			permission.setUrl("  ");
 		}
 		String loginUserId = TokenUtils.getLoginUserId();

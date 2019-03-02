@@ -9,7 +9,6 @@ import java.util.List;
  * @author panzhigao
  */
 public interface BaseService<T extends BaseEntity> {
-
     /**
      * 根据id获取唯一一条数据
      *
@@ -48,4 +47,10 @@ public interface BaseService<T extends BaseEntity> {
      * @return
      */
     List<T> findPagable(QueryBase queryBase);
+    /**
+     * 查询记录数
+     * @param queryBase
+     * @return
+     */
+    int countByParams(QueryBase queryBase);
 }

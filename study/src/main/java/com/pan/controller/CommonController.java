@@ -3,6 +3,7 @@ package com.pan.controller;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.KeyPair;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
 import com.pan.util.VerifyCodeUtils;
 
@@ -40,4 +44,20 @@ public class CommonController {
         BufferedImage bim = VerifyCodeUtils.generateImageCode(verifyCode, 70, 30, 5, true, Color.WHITE, Color.BLUE, null);
         ImageIO.write(bim, "JPEG", response.getOutputStream());
     }
+    
+	/**
+	 * 生成公钥和私钥
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(method=RequestMethod.POST,value="/publicKey")
+	@ResponseBody
+	public String generatePublicKey() throws Exception{
+		KeyPair keyPair = RSAUtil.getKeyPair();
+		String privateKey = RSAUtil.getPrivateKey(keyPair);
+		String publicKey = RSAUtil.getPublicKey(keyPair);
+		//私钥放入session
+		TokenUtils.setAttribute(MyConstant.PRIVATE_KEY, privateKey);
+		return publicKey;
+	}
 }

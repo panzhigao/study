@@ -30,7 +30,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 	private static final Logger logger = LoggerFactory.getLogger(BusinessExceptionResolver.class);
 	
 	public static boolean isAjax(HttpServletRequest request) {  
-        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));  
+		return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));  
     }  
 	
 	@Override

@@ -99,7 +99,7 @@ public class AdminController {
 		int praiseCount = praiseService.getCount(queryPraise);
 		QueryPicture queryPicture=new QueryPicture();
 		queryPicture.setUserId(loingUserId);
-		int pictureCount = pictureService.getCountByParams(queryPicture);
+		int pictureCount = pictureService.countByParams(queryPicture);
 		Date lastLoginTime = loginUser.getLastLoginTime();
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);

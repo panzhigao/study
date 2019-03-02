@@ -89,9 +89,10 @@ public class FileUploadController {
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
-                 picture.setPicUrl(pictureUrl+fileName);
+                 picture.setPictureUrl(pictureUrl+fileName);
+                 picture.setPicturePath(imgFilePath);
                  picture.setCreateTime(new Date());
-                 pictureService.savePicture(picture);
+                 pictureService.insertSelective(picture);
                  logger.info("图片输出路径:{}",pictureUrl+fileName); 
                  Map<String,Object> data=new HashMap<String, Object>(5);
                  data.put("src", pictureUrl+fileName);
@@ -152,9 +153,10 @@ public class FileUploadController {
 					            String userId=TokenUtils.getLoginUserId();
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
-				                picture.setPicUrl(pictureUrl+destFileName);
+				                picture.setPictureUrl(pictureUrl+destFileName);
+				                picture.setPicturePath(filePath);
 				                picture.setCreateTime(new Date());
-				                pictureService.savePicture(picture);
+				                pictureService.insertSelective(picture);
 								file.transferTo(localFile);
 								data.add(pictureUrl+destFileName);
 							} catch (Exception e) {

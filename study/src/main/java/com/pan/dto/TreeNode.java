@@ -15,7 +15,7 @@ public class TreeNode {
     private String url;
     private String icon;
     private Integer sort;
-    private String type;
+    private Integer type;
     private List<TreeNode> children = new ArrayList<TreeNode>();
 
     public String getId() {
@@ -82,11 +82,11 @@ public class TreeNode {
         this.sort = sort;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

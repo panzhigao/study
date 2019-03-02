@@ -5,11 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
-import com.pan.mapper.BaseMapper;
-import com.pan.query.QueryBase;
 import com.pan.service.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,13 +51,19 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	private OperateLogService operateLogService;
 
 	/**
-	 * 新增角色信息，并记录日志
+	 * 新增角色信息，角色名称不能重复，并记录日志
 	 * @param role
 	 */
 	@Override
 	public void addRole(Role role) {
 		logger.info("新增角色：{}",role);
 		ValidationUtils.validateEntity(role);
+		QueryRole queryRole=new QueryRole();
+		queryRole.setRoleName(role.getRoleName());
+		int countByParams = roleMapper.countByParams(queryRole);
+		if(countByParams>0){
+			throw new BusinessException("改角色名已存在，请重新输入");
+		}
 		String loginUserId = TokenUtils.getLoginUserId();
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
@@ -72,15 +75,15 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	}
 
 	@Override
-	public Map<String, Object> findPageData(QueryRole queryRoleVO) {
+	public Map<String, Object> findPageData(QueryRole queryRole) {
 		Map<String,Object> pageData=new HashMap<String, Object>(2);
 		List<Role> list = new ArrayList<Role>();
 		try {
-			logger.info("分页权限参数为:{}", JsonUtils.toJson(queryRoleVO));
-			int total=roleMapper.getCountByParams(queryRoleVO);
+			logger.info("分页权限参数为:{}", JsonUtils.toJson(queryRole));
+			int total=roleMapper.countByParams(queryRole);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = findPagable(queryRoleVO);
+				list = findPagable(queryRole);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -158,6 +161,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 				rolePermission.setPermissionId(string);
 				rolePermission.setRoleId(roleId);
 				rolePermission.setCreateTime(new Date());
+				rolePermission.setCreateUser(TokenUtils.getLoginUserId());
 				list.add(rolePermission);
 			}
 			rolePermissionService.addRolePermission(list);
@@ -176,6 +180,9 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		return null;
 	}
 	
+	/**
+	 * 获取角色层级树
+	 */
 	@Override
 	public List<Tree> getRoleTreeData(String userId) {
 		if(StringUtils.isBlank(userId)){
@@ -198,8 +205,8 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	}
 
 	@Override
-	public List<String> getRoleByUserId(String userId) {
-		return this.roleMapper.getRoleByUserId(userId);
+	public List<String> getRoleIdsByUserId(String userId) {
+		return this.roleMapper.getRoleIdsByUserId(userId);
 	}
 	
 	/**

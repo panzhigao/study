@@ -2,11 +2,9 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
-
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
-import com.pan.entity.UserRole;
 import com.pan.query.QueryUser;
 
 /**

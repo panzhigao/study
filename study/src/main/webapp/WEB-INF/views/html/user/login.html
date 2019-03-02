@@ -51,19 +51,19 @@
               <div class="layui-form-item">
                 <label for="L_username" class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_username" name="username" placeholder="请输入用户名或手机号" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_username" name="username" placeholder="请输入用户名或手机号" required lay-verify="username" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_password" class="layui-form-label">密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_password" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="L_password" name="password" required lay-verify="password" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_vercode" class="layui-form-label">验证码</label>
                 <div class="layui-input-inline">
-                  <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                  <input type="text" id="L_vercode" name="vercode" required lay-verify="vercode" placeholder="请输入验证码" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">
                   <img id="validateCodeImg" src="$!{rc.contextPath}/api/validateCode" />&nbsp;&nbsp;<a onclick="reloadValidateCode();">看不清？</a>
@@ -87,8 +87,8 @@
   <p><a href="/" target="_blank">好好学习社区 </a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
 </div>
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
-<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
-<script src="$!{rc.contextPath}/static/js/jQuery.md5.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.min.js"></script>
+<script src="$!{rc.contextPath}/static/js/jsencrypt.min.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -109,6 +109,7 @@ layui.use(['jquery', 'form'], function(){
 	  var $ = layui.$ ;
 	  var form = layui.form;  
 	  form.verify({
+		  /*
 		  username: function(value, item){ //value：表单的值、item：表单的DOM对象
 		    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
 		      return '用户名不能有特殊字符';
@@ -122,18 +123,33 @@ layui.use(['jquery', 'form'], function(){
 		  }
 		  //我们既支持上述函数式的方式，也支持下述数组的形式
 		  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-		  ,pass: [
-		    /^[\S]{6,12}$/
-		    ,'密码必须6到12位，且不能出现空格'
-		  ] 
+		  ,password: [/^[a-zA-Z0-9_\\.\\-]{6,12}$/,'密码只能包含字母，数字，点和下划线,6到12位'],*/
+		  vercode:[/^\w{4}$/,'验证码为4位数字或字母']
 		}); 
 	  form.on('submit(login)', function(data){
 			params = data.field;
-			//params.password=$.md5(params.password);
+			var key=getKey();
+			var Encrypt = new JSEncrypt();
+			Encrypt.setPublicKey(key);
+			params.password=Encrypt.encrypt(params.password);
 			login(params);
 			return false;
 	  });
 });
+
+//获取公钥
+function getKey(){
+	var key='';
+	$.ajax({
+		url:'/api/publicKey',
+		type:'post',
+		async:false,
+		success:function(res){
+			key=res;
+		}
+	});
+	return key;
+}
 
 //提交
 function login(params){

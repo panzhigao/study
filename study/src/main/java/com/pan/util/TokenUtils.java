@@ -1,7 +1,6 @@
 package com.pan.util;
 
 
-import com.pan.shiro.RedisSessionDAO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;

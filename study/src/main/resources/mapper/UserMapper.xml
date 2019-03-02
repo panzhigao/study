@@ -48,66 +48,101 @@
   </select>
   
   <insert id="insertSelective" parameterType="com.pan.entity.User">
-  	insert into t_user
-  	<trim suffixOverrides="," prefix="(" suffix=")">
-  		<if test="userId != null">
-  			user_id,
-  		</if>
-  		<if test="sex != null">
-  			sex,
-  		</if>
-  		<if test="username != null">
-  			username,
-  		</if>
-  		<if test="nickname != null">
-  			nickname,
-  		</if>
-  		<if test="password != null">
-  			password,
-  		</if>
-  		<if test="createTime != null">
-  			create_time,
-  		</if>
-  		<if test="status != null">
-  			status,
-  		</if>
-  		<if test="telephone != null">
-  			telephone,
-  		</if>
-  		<if test="userPortrait != null">
-  			user_portrait,
-  		</if>
-  	</trim>
-  		values 
-  	<trim suffixOverrides="," prefix="(" suffix=")">
-  		<if test="userId != null">
-  			#{userId,jdbcType=VARCHAR},
-  		</if>
-  		<if test="sex != null">
-  			#{sex,jdbcType=VARCHAR},
-  		</if>
-  		<if test="username != null">
-  			#{username,jdbcType=VARCHAR},
-  		</if>
-  		<if test="nickname != null">
-  			#{nickname,jdbcType=VARCHAR},
-  		</if>
-  		<if test="password != null">
-  			#{password,jdbcType=VARCHAR},
-  		</if>
-  		<if test="createTime != null">
-  			#{createTime,jdbcType=TIMESTAMP},
-  		</if>
-  		<if test="status != null">
-  			#{status,jdbcType=VARCHAR},
-  		</if>
-  		<if test="telephone != null">
-  			#{telephone,jdbcType=VARCHAR},
-  		</if>
-  		<if test="userPortrait != null">
-  			#{userPortrait,jdbcType=VARCHAR},
-  		</if>
-  	</trim>
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="userPortrait != null">
+        user_portrait,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="adminFlag != null">
+        admin_flag,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userPortrait != null">
+        #{userPortrait,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="adminFlag != null">
+        #{adminFlag,jdbcType=CHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
   </insert>
   
   <update id="updateUserByUserId" parameterType="com.pan.entity.User">
@@ -153,7 +188,7 @@
   	where user_id=#{userId}
   </update>
   
-  <select id="getCountByParams" resultType="int">
+  <select id="countByParams" resultType="int">
   	select count(0) from t_user tu
   	<include refid="whereSql"/>
   </select>

@@ -1,7 +1,6 @@
 package com.pan.mapper;
 
 import java.util.List;
-import java.util.Map;
 import com.pan.entity.Permission;
 
 /**
@@ -10,12 +9,6 @@ import com.pan.entity.Permission;
  *
  */
 public interface PermissionMapper extends BaseMapper<Permission>{
-	/**
-	 * 查询分页
-	 * @param params
-	 * @return
-	 */
-	int getCountByParams(Map<String,Object> params);
 	/**
 	 * 查找所有权限
 	 * @return

@@ -3,7 +3,6 @@ package com.pan.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
 
 /**
  * @author panzhigao-wb

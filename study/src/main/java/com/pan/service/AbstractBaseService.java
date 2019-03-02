@@ -53,7 +53,6 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
 
     /**
      * 更新非空字段
-     *
      * @param t
      * @return
      */
@@ -66,4 +65,10 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     public List<T> findPagable(QueryBase queryBase) {
         return getBaseMapper().findPagable(queryBase);
     }
+
+	@Override
+	public int countByParams(QueryBase queryBase) {
+		return getBaseMapper().countByParams(queryBase);
+	}
+    
 }

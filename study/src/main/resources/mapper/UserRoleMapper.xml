@@ -102,13 +102,13 @@
   <sql id="whereSql">
     <where>
       <if test="userId != null">
-        and user_id = #{userId,jdbcType=VARCHAR},
+        and user_id = #{userId,jdbcType=VARCHAR}
       </if>
       <if test="roleId != null">
-        and role_id = #{roleId,jdbcType=VARCHAR},
+        and role_id = #{roleId,jdbcType=VARCHAR}
       </if>
       <if test="createUser != null">
-        and create_user = #{createUser,jdbcType=VARCHAR},
+        and create_user = #{createUser,jdbcType=VARCHAR}
       </if>
     </where>
   </sql>

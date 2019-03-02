@@ -2,7 +2,6 @@ package com.pan.mapper;
 
 import java.util.List;
 import com.pan.entity.Role;
-import com.pan.query.QueryRole;
 
 /**
  * 
@@ -11,21 +10,21 @@ import com.pan.query.QueryRole;
  */
 public interface RoleMapper extends BaseMapper<Role>{
 	/**
-	 * 查询分页
-	 * @param queryRoleVO
-	 * @return
-	 */
-	int getCountByParams(QueryRole queryRoleVO);
-	/**
 	 * 获取用户选中角色
 	 * @param userId
 	 * @return
 	 */
 	List<Role> getRoleSelectedByUserId(String userId);
 	/**
-	 * 获取用户的角色
+	 * 获取用户的角色id集合
 	 * @param userId
 	 * @return
 	 */
-	List<String> getRoleByUserId(String userId);
+	List<String> getRoleIdsByUserId(String userId);
+	/**
+	 * 根据角色id查询多条角色信息
+	 * @param roleIds
+	 * @return
+	 */
+	List<Role> findByRoleIds(String[] roleIds);
 }

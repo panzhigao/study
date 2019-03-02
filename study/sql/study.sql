@@ -433,7 +433,4 @@ CREATE TABLE `t_user_role` (
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
-INSERT INTO `t_user_role` VALUES ('1', '20180406823da5754261', 'r10006', null);
-INSERT INTO `t_user_role` VALUES ('2', '2019021636efdaf047a2', 'r1001308', '2019-02-16 23:30:00');
-INSERT INTO `t_user_role` VALUES ('3', '20190216f9b22528ae14', 'r1001308', '2019-02-16 23:34:54');
-INSERT INTO `t_user_role` VALUES ('4', '20190217f4a6ff0d98ab', 'r1001308', '2019-02-17 12:11:03');
+INSERT INTO `t_user_role` VALUES ('1', '20180406823da5754261', 'r10006', '2019-02-16 23:30:00','20180406823da5754261');

@@ -8,8 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.dto.UserDTO;
 import com.pan.entity.*;
@@ -24,15 +26,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.AdminFlagEnum;
+import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.exception.BusinessException;
+import com.pan.mapper.RoleMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
 import com.pan.query.QueryUser;
@@ -80,7 +83,10 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
     @Autowired
     private UserExtensionMapper userExtensionMapper;
-
+    
+    @Autowired
+    private RoleMapper roleMapper;
+    
     @Autowired
     private UserRoleService userRoleService;
 
@@ -92,7 +98,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
     @Autowired
     private LoginHistoryService loginHistoryService;
-
+    
+    @Autowired
+    private OperateLogService operateLogService;
+    
+    @Autowired
+    private PictureService pictureService;
+    
     /**
      * 用户注册,默认新增用户拥有普通用户权限
      * 1.校验用户注册字段，校验用户名是否已经注册
@@ -113,6 +125,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         String password = user.getPassword();
         //用户密码加密
         try {
+        	Date now = new Date();
             String encryptedPwd = PasswordUtils.getEncryptedPwd(password);
             user.setPassword(encryptedPwd);
             //生成userId
@@ -125,11 +138,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             user.setStatus(UserStatusEnum.STATUS_NORMAL.getCode());
             //默认头像
             user.setUserPortrait(defaultPortrait);
+            //最近登录时间
+            user.setLastLoginTime(now);
+            user.setUpdateTime(now);
             userMapper.insertSelective(user);
             //新增用户拓展信息
             UserExtension userExtensionTemp = new UserExtension();
             userExtensionTemp.setUserId(userId);
-            Date now = new Date();
             userExtensionTemp.setCreateTime(now);
             userExtensionTemp.setUpdateTime(now);
             userExtensionTemp.setNickname(user.getNickname());
@@ -146,6 +161,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             //为用户添加用户角色信息
             UserRole userRole = new UserRole(userId, defaultRoleId);
             userRole.setCreateTime(new Date());
+            userRole.setCreateUser(userId);
             userRoleService.addUserRole(userRole);
             //用户验证,用明文密码验证
             user.setPassword(password);
@@ -241,7 +257,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     }
 
     /**
-     * 更新当前登录人用户信息，同时更新用户缓存信息
+     * 更新当前登录人用户信息,只更新性别，昵称，用户头像，地址，同时更新用户缓存信息
+     * 更新用户表，用户拓展表
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
@@ -249,15 +266,19 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         User updateUser=new User();
         BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});
         String userId = TokenUtils.getLoginUserId();
+        updateUser.setUserId(userId);
         updateUser.setUpdateTime(new Date());
-        String newPortrait = null;
+        //新图片访问url路径
+        String newPortraitUrl = null;
         if (StringUtils.isNotBlank(updateUser.getUserPortrait())) {
             String temp = updateUser.getUserPortrait();
             temp = temp.replace("data:image/jpeg;base64,", "");
             String generateImage = ImageUtils.generateImage(temp, pictureSaveDir);
             if (generateImage != null) {
-                newPortrait = imgUrl + generateImage;
-                updateUser.setUserPortrait(newPortrait);
+                newPortraitUrl = imgUrl + generateImage;
+                updateUser.setUserPortrait(newPortraitUrl);
+                //保存图片路径
+                pictureService.insertPicture(newPortraitUrl, pictureSaveDir+generateImage);
             } else {
                 updateUser.setUserPortrait(null);
             }
@@ -273,7 +294,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             userExtension.setUserBrief(null);
         }
         Date now = new Date();
-        userExtension.setUserPortrait(newPortrait);
+        userExtension.setUserPortrait(newPortraitUrl);
         userExtension.setUpdateTime(now);
         userExtensionMapper.updateUserExtensionByUserId(userExtension);
     }
@@ -365,26 +386,40 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     }
 
     /**
-     * 为用户分配角色
-     *
-     * @param userId
-     * @param roles  角色id数组
+     * 为用户分配角色,每个用户至少有一个角色
+     * 如果为用户分配管理员角色，将该用户设为管理员
+     * @param userId 被分配角色的用户id
+     * @param roleIds  角色id数组
      */
     @Override
-    public void allocateRoleToUser(String userId, String[] roles) {
+    public void allocateRoleToUser(String userId, String[] roleIds) {
         User user = this.findByUserId(userId);
         if (user == null) {
             logger.error("为用户分配角色,根据userId({})未查询到用户信息", userId);
             throw new BusinessException("该用户不存在");
         }
-        //TODO 增加日志
+        if(ArrayUtils.isEmpty(roleIds)){
+        	throw new BusinessException("至少选择一个角色");
+        }
+        List<Role> roles = roleMapper.findByRoleIds(roleIds);
+        Set<String> roleSet = roles.stream().map(r->r.getRoleName()+"("+r.getRoleId()+")").collect(Collectors.toSet());
+        //查询用户数据库里的角色信息
+        List<String> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
+        String[] userRoleIds=new String[roleIdsByUserId.size()];
+        String[] array = roleIdsByUserId.toArray(userRoleIds);
+        List<Role> rolesInDb = roleMapper.findByRoleIds(array);
+        Set<String> roleSetFromDb = rolesInDb.stream().map(r->r.getRoleName()+"("+r.getRoleId()+")").collect(Collectors.toSet());
+        if(Objects.deepEquals(roleSet, roleSetFromDb)){
+        	throw new BusinessException("分配的角色未修改，请重新选择");
+        }
         //删除该用户下的所有角色，再重新添加
-        userMapper.deleteUserRoleByUserId(userId);
+        int deleteUserRoleByUserId = userRoleService.deleteUserRoleByUserId(userId);
+        logger.info("删除用户角色共：{} 条",deleteUserRoleByUserId);
         //是否给角色分配管理员角色
         boolean hasAdmin = false;
-        if (ArrayUtils.isNotEmpty(roles)) {
+        if (ArrayUtils.isNotEmpty(roleIds)) {
             List<UserRole> list = new ArrayList<UserRole>();
-            for (String roleId : roles) {
+            for (String roleId : roleIds) {
                 if (StringUtils.equals(adminRoleId, roleId)) {
                     hasAdmin = true;
                 }
@@ -392,8 +427,10 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 userRole.setRoleId(roleId);
                 userRole.setUserId(userId);
                 userRole.setCreateTime(new Date());
+                userRole.setCreateUser(TokenUtils.getLoginUserId());
                 list.add(userRole);
             }
+            //如果给用户分配管理员角色，更新改用户的管理员字段
             if (hasAdmin) {
                 user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
                 user.setUpdateTime(new Date());
@@ -404,6 +441,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             //清空该用户权限缓存
             TokenUtils.clearAuthz(userId);
         }
+        //记录日志
+        StringBuilder builder=new StringBuilder();
+        builder.append("为用户(username=").append(user.getUsername()).append(")分配角色，角色从:");
+        roleSet.forEach(r->builder.append(r));
+        builder.append("-->");
+        roleSetFromDb.forEach(r->builder.append(r));
+        operateLogService.addOperateLog(builder.toString(), OperateLogTypeEnum.ROLE_ALLOCATE);
     }
 
     @Override

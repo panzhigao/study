@@ -18,6 +18,7 @@ import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
+import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -55,15 +56,22 @@ public class RegisterController {
 	/**
 	 * 用户注册操作
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doRegister")
 	@ResponseBody
-	public ResultMsg register(User user,String vercode){
+	public ResultMsg register(User user,String vercode) throws Exception{
 		logger.info("注册开始,用户信息为：{}",user);
 		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
 		if(!StringUtils.equalsIgnoreCase(vercode, vercodeInSession)){
 			throw new BusinessException("验证码错误");
 		}
+		//获取私钥
+		String privateKey=(String)TokenUtils.getAttribute(MyConstant.PRIVATE_KEY);
+		String password=user.getPassword();
+		//解密密码
+		String decodeByPrivateKey = RSAUtil.decodeByPrivateKey(password, privateKey);
+		user.setPassword(decodeByPrivateKey);
 		userService.registerUser(user);
 		return ResultMsg.ok("用户注册成功");
 	}

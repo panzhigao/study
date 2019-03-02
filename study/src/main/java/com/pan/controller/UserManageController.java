@@ -71,8 +71,8 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocateRole")
 	@ResponseBody
 	@RequiresPermissions("/user/role/allocateRole")
-	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]",required=false)String[] roles){
-		userService.allocateRoleToUser(userId, roles);
+	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]",required=false)String[] roleIds){
+		userService.allocateRoleToUser(userId, roleIds);
 		return ResultMsg.ok("分配用户角色成功");
 	}
 	

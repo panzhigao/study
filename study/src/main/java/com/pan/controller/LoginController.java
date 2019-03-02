@@ -1,5 +1,6 @@
 package com.pan.controller;
 
+
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +23,7 @@ import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
 import com.pan.service.UserService;
+import com.pan.util.RSAUtil;
 import com.pan.util.RegexUtils;
 import com.pan.util.TokenUtils;
 
@@ -60,20 +62,25 @@ public class LoginController{
 	/**
 	 * 用户登陆
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
-	public ResultMsg doLogin(HttpServletRequest request,User user,String vercode){
+	public ResultMsg doLogin(HttpServletRequest request,User user,String vercode) throws Exception{
 		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
 		if(!StringUtils.equalsIgnoreCase(vercode, vercodeInSession)){
 			throw new BusinessException("验证码错误");
 		}
-		UsernamePasswordToken passwordToken=new UsernamePasswordToken(user.getUsername(),user.getPassword());
+		//获取私钥
+		String privateKey=(String)TokenUtils.getAttribute(MyConstant.PRIVATE_KEY);
+		String password=user.getPassword();
+		//解密密码
+		String decodeByPrivateKey = RSAUtil.decodeByPrivateKey(password, privateKey);
+		UsernamePasswordToken passwordToken=new UsernamePasswordToken(user.getUsername(),decodeByPrivateKey);
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(passwordToken);
-		//request.getSession().setAttribute(MyConstant.USER_ID, TokenUtils.getAttribute(MyConstant.USER_ID));
 		//手机号登陆
 		User userInDb;
 		if(RegexUtils.checkTelephone(user.getUsername())){
@@ -104,4 +111,5 @@ public class LoginController{
 		subject.logout();
 		return "redirect:/login";
 	}
+	
 }

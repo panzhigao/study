@@ -2,9 +2,7 @@ package com.pan.mapper;
 
 
 import com.pan.entity.LoginHistory;
-import com.pan.query.QueryLoginHistory;
 
-import java.util.List;
 
 /**
  * 

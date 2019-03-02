@@ -3,6 +3,9 @@ package com.pan.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -26,11 +29,11 @@ public class Permission extends BaseEntity {
      * 权限名
      */
     @NotEmpty(message = "权限名不能为空")
+    @Size(max=64,message="权限名称不能超过64个字符")
     private String permissionName;
     /**
      * 权限路径
      */
-    @NotEmpty(message = "权限路径url不能为空")
     private String url;
     /**
      * 父级pid
@@ -55,5 +58,5 @@ public class Permission extends BaseEntity {
     /**
      * 类型 0-菜单 1-链接 2-按钮
      */
-    private String type;
+    private Integer type;
 }

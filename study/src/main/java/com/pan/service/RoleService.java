@@ -52,11 +52,11 @@ public interface RoleService extends BaseService<Role>{
 	 */
 	List<Tree> getRoleTreeData(String roleId);
 	/**
-	 * 获取用户角色id
+	 * 获取用户角色id集合
 	 * @param userId
 	 * @return
 	 */
-	List<String> getRoleByUserId(String userId);
+	List<String> getRoleIdsByUserId(String userId);
 	/**
 	 * 重新缓存指定角色用户权限
 	 * @param roleId

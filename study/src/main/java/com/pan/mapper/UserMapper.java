@@ -1,10 +1,8 @@
 package com.pan.mapper;
 
 import java.util.List;
-
 import com.pan.dto.UserDTO;
 import com.pan.entity.User;
-import com.pan.entity.UserRole;
 import com.pan.query.QueryUser;
 
 /**
@@ -42,11 +40,6 @@ public interface UserMapper extends BaseMapper<User>{
 	 * @return
 	 */
 	List<UserDTO> findByParams(QueryUser queryUserVO);
-	/**
-	 * 删除用户角色
-	 * @param userId
-	 */
-	void deleteUserRoleByUserId(String userId);
 	/**
 	 * 查找使用角色的用户数据
 	 * @param roleId

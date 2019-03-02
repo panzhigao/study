@@ -1,8 +1,7 @@
 package com.pan.service.impl;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,9 +12,10 @@ import org.springframework.stereotype.Service;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Picture;
 import com.pan.mapper.PictureMapper;
-import com.pan.query.QueryPicture;
+import com.pan.service.AbstractBaseService;
 import com.pan.service.PictureService;
-import com.pan.util.JsonUtils;
+import com.pan.util.IdUtils;
+import com.pan.util.TokenUtils;
 
 /**
  * 
@@ -23,7 +23,7 @@ import com.pan.util.JsonUtils;
  *
  */
 @Service
-public class PictureServiceImpl implements PictureService{
+public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapper> implements PictureService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 	
@@ -34,27 +34,10 @@ public class PictureServiceImpl implements PictureService{
 	private String pictureSaveDir;
 	
 	@Override
-	public void savePicture(Picture picture) {
-		pictureMapper.savePicture(picture);
+	protected PictureMapper getBaseMapper() {
+		return pictureMapper;
 	}
-	
-	@Override
-	public List<Picture> findByParams(QueryPicture queryPicture) {
-		List<Picture> list = new ArrayList<Picture>();
-		try {
-			logger.info("分页查询图片参数为:{}", JsonUtils.toJson(queryPicture));
-			String userId=queryPicture.getUserId();
-			if(StringUtils.isBlank(userId)){
-				logger.info("用户id有误",userId);
-				return list;
-			}
-			list = pictureMapper.findByParams(queryPicture);
-		} catch (Exception e) {
-			logger.error("分页查询文章异常", e);
-		}
-		return list;
-	}
-	
+		
 	@Override
 	public void deleteByPictureIds(String userId,String pictureIds) {
 		logger.info("删除的图片ids为{}",pictureIds);
@@ -70,30 +53,16 @@ public class PictureServiceImpl implements PictureService{
 			throw new BusinessException("删除图片信息失败，请重试");
 		}
 	}
-	
-	/**
-	 * 删除图片
-	 * @param filePath 图片实际路径
-	 * @return
-	 */
-	private void deletePicture(String filePath){
-		File file=new File(filePath);
-		if(file.exists()){
-			boolean deleted = file.delete();
-			if(deleted){
-				logger.info("删除图片成功");
-			}else{
-				logger.error("删除图片失败");
-				throw new BusinessException("删除图片失败");
-			}
-		}else{
-			logger.error("删除图片失败，图片不存在，图片路径：{}",filePath);
-			throw new BusinessException("删除图片失败，图片不存在");
-		}
-	}
-	
+
 	@Override
-	public int getCountByParams(QueryPicture queryPicture) {
-		return pictureMapper.getCountByParams(queryPicture);
+	public void insertPicture(String pictureUrl, String picturePath) {
+		Picture picture=new Picture();
+		picture.setUserId(TokenUtils.getLoginUserId());
+        picture.setPictureId(IdUtils.generatePictureId());
+        picture.setPictureUrl(pictureUrl);
+        picture.setPicturePath(picturePath);
+        picture.setCreateTime(new Date());
+        pictureMapper.insertSelective(picture);
 	}
+	
 }

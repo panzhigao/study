@@ -12,7 +12,7 @@
 		<result column="level" jdbcType="INTEGER" property="level" />
 		<result column="sort" jdbcType="BIGINT" property="sort" />
 		<result column="icon" jdbcType="VARCHAR" property="icon" />
-		<result column="type" jdbcType="CHAR" property="type" />
+		<result column="type" jdbcType="INTEGER" property="type" />
 		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -60,15 +60,6 @@
 		</if>
 	</select>
 
-	<select id="getCountByParams" resultType="int">
-		select count(0) from t_permission
-		<where>
-			<if test="permissionName !=null and permissionName !=''">
-				and permission_name like
-				CONCAT('%','${permissionName}','%')
-			</if>
-		</where>
-	</select>
 
 	<insert id="insertSelective" parameterType="com.pan.entity.Permission">
 		insert into t_permission
@@ -142,7 +133,7 @@
 				#{icon,jdbcType=VARCHAR},
 			</if>
 			<if test="type != null">
-				#{type,jdbcType=CHAR},
+				#{type,jdbcType=INTEGER},
 			</if>
 			<if test="createUser != null">
 				#{createUser,jdbcType=VARCHAR},
@@ -217,7 +208,7 @@
 				icon = #{icon,jdbcType=VARCHAR},
 			</if>
 			<if test="type != null">
-				type = #{type,jdbcType=CHAR},
+				type = #{type,jdbcType=INTEGER},
 			</if>
 			<if test="createUser != null">
 				create_user = #{createUser,jdbcType=VARCHAR},
