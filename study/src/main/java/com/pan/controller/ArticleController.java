@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
@@ -54,14 +53,14 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 保存文章，文章为草稿状态
+	 * 保存文章，文章为草稿状态或者待审核状态
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doSave")
 	public ResultMsg saveArticle(Article article){
-		logger.info("发布文章开始");
+		logger.info("新建文章信息");
 		ResultMsg resultMsg=null;
 		articleService.saveArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
@@ -145,24 +144,21 @@ public class ArticleController {
 	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
 		ModelAndView mav=new ModelAndView("html/article/edit");
 		String loingUserId = TokenUtils.getLoginUserId();
-		Article article=articleService.getByUserIdAndArticleId(loingUserId, articleId);
-		if(article==null){
-			throw new BusinessException("文章不存在");
-		}
+		Article article=articleService.getAndCheckByUserId(loingUserId, articleId);
 		mav.addObject("article", article);
 		return mav;
 	}
 	
 
 	/**
-	 * 保存文章，文章为草稿状态
+	 * 编辑文章，保存草稿文章为草稿状态，保存发布文章状态为审核中
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doEdit"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doEdit")
-	public ResultMsg updateArticle(Article article,HttpServletRequest request){
-		logger.info("发布文章开始",article);
+	public ResultMsg updateArticle(Article article){
+		logger.info("编辑文章信息",article);
 		ResultMsg resultMsg=null;
 		articleService.updateArticle(article);
 		if(Article.STATUS_SKETCH.equals(article.getStatus())){				

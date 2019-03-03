@@ -13,7 +13,7 @@ import com.pan.query.QueryArticle;
  * @author Administrator
  *
  */
-public interface ArticleService {
+public interface ArticleService extends BaseService<Article>{
 	/**
 	 * 保存文章
 	 * @param article
@@ -32,12 +32,12 @@ public interface ArticleService {
 	 */
 	Map<String,Object> findByParams(QueryArticle queryArticle);
 	/**
-	 * 获取用户的文章详细信息
+	 * 校验并获取用户的文章详细信息，
 	 * @param userId
 	 * @param articleId
 	 * @return
 	 */
-	Article getByUserIdAndArticleId(String userId,String articleId);
+	Article getAndCheckByUserId(String userId,String articleId);
 	/**
 	 * 修改文章信息
 	 * @param article
@@ -46,10 +46,15 @@ public interface ArticleService {
 	/**
 	 * 获取用户的文章详细信息
 	 * @param articleId
-	 * @param articleId
 	 * @return
 	 */
 	Article getByArticleId(String articleId);
+	/**
+	 * 获取用户的文章详细信息,并校验文章是否存在
+	 * @param articleId
+	 * @return
+	 */
+	Article getAndCheckByArticleId(String articleId);
 	/**
 	 * 删除文章
 	 * @param articleId
@@ -97,12 +102,12 @@ public interface ArticleService {
 	 * @return
 	 */
 	List<ArticleDTO> searchArticleByTitle(String title);
-	/**
-	 * 根据文章标题搜索文章
-	 * @param queryArticle
-	 * @return
-	 */
-	List<Article> findByCondition(QueryArticle queryArticle);
+//	/**
+//	 * 根据文章标题搜索文章
+//	 * @param queryArticle
+//	 * @return
+//	 */
+//	List<Article> findByCondition(QueryArticle queryArticle);
 	/**
 	 * 获取文章最大置顶值
 	 * @return

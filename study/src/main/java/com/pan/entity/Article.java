@@ -52,7 +52,11 @@ public class Article extends BaseEntity{
 	 */
 	private String userId;
 	/**
-	 * 文章状态 0-审核未通过，1-草稿，2-发布中
+	 * 用户名
+	 */
+	private String username;
+	/**
+	 * 文章状态 0-审核未通过，1-草稿，2-审核中，3-发布成功
 	 */
 	private String status;
 	/**

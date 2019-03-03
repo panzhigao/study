@@ -22,6 +22,10 @@ public class ArticleCheck extends BaseEntity{
 	 */
 	private String userId;
 	/**
+	 * 用户名
+	 */
+	private String username;
+	/**
 	 * 文章id
 	 */
 	@NotNull(message="文章id不能为空")
@@ -60,6 +64,10 @@ public class ArticleCheck extends BaseEntity{
 	 */
 	@UnescapeHtml
 	private String content;
+	/**
+	 * 审核备注
+	 */
+	private String remark;
 	
 	public enum CompleteFlagEnum{
 		COMPLETE("已完成","1"),

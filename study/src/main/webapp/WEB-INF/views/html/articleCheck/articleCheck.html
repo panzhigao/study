@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>文章审核</title>
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
@@ -54,7 +54,11 @@ layui.use(['table','jquery'], function(){
 	    if(obj.event === 'detail'){
 	      view(data.id);
 	    } else if(obj.event === 'notPass'){
-    	  layer.prompt({title: '请输入未审核通过原因，并确认', formType: 2}, function(reason, index){
+    	  layer.prompt({title: '请输入审核拒绝原因，并确认', formType: 2}, function(reason, index){
+    		  if(!reason || !reason.trim()){
+    			  layer.alert('请输入审核拒绝原因');
+    			  return;
+    		  }
     		  layer.close(index);
     		  $.ajax({
   	    		url:"$!{rc.contextPath}/user/check/notPass",
@@ -121,7 +125,7 @@ layui.use(['table','jquery'], function(){
 	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'nickname', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
+	      {field: 'username', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
 	      }},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
@@ -177,7 +181,7 @@ layui.use(['table','jquery'], function(){
 	    },
 	    cols: [[ //表头
 	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'nickname', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
+	      {field: 'username', title: '用户名', width:100, sort: true, fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
 	      }},
 	      {field: 'articleId', title: '文章ID', width:100, sort: true},
@@ -212,6 +216,7 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
+	      {field: 'remark', title: '审核备注', width:100},
 	      {title:'操作',width:100,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  if(row.completeFlag=='1'){

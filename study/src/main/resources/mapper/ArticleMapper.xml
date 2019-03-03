@@ -6,12 +6,12 @@
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="username"        	property="username"        jdbcType="VARCHAR" />
     <result column="status"       	    property="status"          jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
     <result column="publish_time"       property="publishTime"     jdbcType="TIMESTAMP" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
-    <result column="content"    		property="content"         jdbcType="VARCHAR" />
     <result column="outline"    		property="outline"         jdbcType="VARCHAR" />
     <result column="image"    		    property="image"           jdbcType="VARCHAR" />
     <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
@@ -21,45 +21,56 @@
     <result column="high_quality"       property="highQuality"     jdbcType="VARCHAR" />
   </resultMap>
   
+  <resultMap id="ResultMapWithBLOBs" extends="BaseResultMap"  type="com.pan.entity.Article">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  
   <resultMap id="MoreResultMap" type="com.pan.dto.ArticleDTO" extends="BaseResultMap">  
     <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" /> 
   </resultMap> 
   
-  <sql id="Base_Column_List" >
-    id,article_id,user_id,status,create_time,update_time,publish_time,title,content,
-    outline,image,comment_count,view_count,type,stick,high_quality
+  <sql id="Base_Column_List">
+    id, article_id, user_id, status, create_time, update_time, publish_time, title, outline, 
+    image, comment_count, view_count, type, stick, high_quality
+  </sql>
+  
+  <sql id="Blob_Column_List">
+    content
   </sql>
   
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    article_id,a.user_id,a.status,a.create_time,a.update_time,publish_time,title,outline,
+    article_id,a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
     image,comment_count,view_count,type,stick,high_quality
   </sql>
   
   <select id="findByArticleId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_article where article_id=#{articleId}
+  	select 
+  	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" /> from t_article where article_id=#{articleId,jdbcType=VARCHAR}
   </select>
   
-  <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.pan.entity.Article">
-  	select <include refid="Base_Column_List"/> from t_article 
-  	<where>
-  		<if test="articleId !=null and articleId!='' ">
-  			and article_id=#{articleId}
-  		</if>
-  		<if test="status !=null and status !=''">
-  			and status=#{status}
-  		</if>
-  		<if test="userId !=null and userId !=''">
-  			and user_id=#{userId}
-  		</if>
-  		<if test="type !=null and type !=''">
-  			and type=#{type}
-  		</if>
-  	</where>
-  </select>
+<!--   <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.pan.entity.Article"> -->
+<!--   	select <include refid="Base_Column_List"/> from t_article  -->
+<!--   	<where> -->
+<!--   		<if test="articleId !=null and articleId!='' "> -->
+<!--   			and article_id=#{articleId} -->
+<!--   		</if> -->
+<!--   		<if test="status !=null and status !=''"> -->
+<!--   			and status=#{status} -->
+<!--   		</if> -->
+<!--   		<if test="userId !=null and userId !=''"> -->
+<!--   			and user_id=#{userId} -->
+<!--   		</if> -->
+<!--   		<if test="type !=null and type !=''"> -->
+<!--   			and type=#{type} -->
+<!--   		</if> -->
+<!--   	</where> -->
+<!--   </select> -->
   
-  <select id="findByParams" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
+  <select id="findPagable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
   	on a.user_id=u.user_id 
   	<include refid="whereSql"/>
@@ -83,13 +94,16 @@
   	<where> 
   		    1=1
   		<if test="articleId !=null and articleId!='' ">
-  			and a.article_id=#{articleId}
+  			and a.article_id=#{articleId,jdbcType=VARCHAR}
   		</if>
   		<if test="status !=null and status !=''">
   			and a.status=#{status}
   		</if>
-  		<if test="userId !=null and userId!=''">
-  			and a.user_id=#{userId}
+  		<if test="userId !=null and userId !=''">
+  			and a.user_id=#{userId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="username !=null and username !=''">
+  			and a.username=#{username,jdbcType=VARCHAR}
   		</if>
   		<if test="type !=null and type !=''">
   			and a.type=#{type}
@@ -100,7 +114,7 @@
   	</where>
   </sql>
   
-  <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryArticle">
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryArticle">
 	  	select count(0) from t_article a
 	  	<include refid="whereSql"/>
   </select>
@@ -110,20 +124,124 @@
   	select <include refid="Base_Column_List"/> from t_article where user_id=#{userId} order by create_time desc
   </select>
   
-  <insert id="saveArticle" parameterType="com.pan.entity.Article">
-  	insert into t_article (<include refid="Base_Column_List"/>) values 
-  	(null,#{articleId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-  	#{updateTime,jdbcType=TIMESTAMP},#{publishTime,jdbcType=TIMESTAMP},#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{outline,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},0,0,#{type,jdbcType=VARCHAR},0,0)
+  <insert id="insertSelective" parameterType="com.pan.entity.Article">
+    insert into t_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="outline != null">
+        outline,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="commentCount != null">
+        comment_count,
+      </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="stick != null">
+        stick,
+      </if>
+      <if test="highQuality != null">
+        high_quality,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="outline != null">
+        #{outline,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="commentCount != null">
+        #{commentCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="stick != null">
+        #{stick,jdbcType=INTEGER},
+      </if>
+      <if test="highQuality != null">
+        #{highQuality,jdbcType=CHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
   </insert>
   
-  <update id="updateArticle" parameterType="com.pan.entity.Article">
+  <update id="updateArticleByArticleId" parameterType="com.pan.entity.Article">
   	update t_article
   	<set>
   		<if test="title !=null and title !=''">
   			title=#{title,jdbcType=VARCHAR},
   		</if>
   		<if test="content !=null and content !=''">
-  			content=#{content,jdbcType=VARCHAR},
+  			content=#{content,jdbcType=LONGVARCHAR},
   		</if>
   		<if test="updateTime !=null ">
   			update_time=#{updateTime,jdbcType=TIMESTAMP},

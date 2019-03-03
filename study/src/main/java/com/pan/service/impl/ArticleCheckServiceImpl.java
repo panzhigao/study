@@ -41,6 +41,9 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	private static final String COMPLETE_CHECK="1";
 	
 	@Autowired
+	private ArticleService articleService;
+	
+	@Autowired
 	private ArticleCheckMapper articleCheckMapper;
 	
 	@Autowired
@@ -69,7 +72,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 			}else{
 				queryArticleCheck.setOrderCondition("create_time desc");
 			}
-			int total=articleCheckMapper.getCountByParams(queryArticleCheck);
+			int total=articleCheckMapper.countByParams(queryArticleCheck);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
 				list = articleCheckMapper.findVOByParams(queryArticleCheck);
@@ -83,7 +86,11 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		}
 		return pageData;
 	}
-
+	
+	/**
+	 * 新增文章审核记录
+	 * @param articleCheck
+	 */
 	@Override
 	public void addArticleCheck(ArticleCheck articleCheck) {
 		ValidationUtils.validateEntity(articleCheck);
@@ -93,7 +100,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	}
 
 	/**
-	 * 根据id获取文章并校验
+	 * 根据id获取文章审核信息并校验
 	 * @param id
 	 * @return
 	 */
@@ -101,31 +108,35 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		if(id==null){
 			throw new BusinessException("id为空");
 		}
-		ArticleCheck articleCheckInDb = articleCheckMapper.findById(id);
+		ArticleCheck articleCheckInDb = articleCheckMapper.selectByPrimaryKey(id);
 		if(articleCheckInDb==null){
 			logger.error("根据id{}未查询到审核信息",id);
 			throw new BusinessException("审核信息不存在");
 		}
 		if(StringUtils.equals(articleCheckInDb.getCompleteFlag(),ArticleCheck.CompleteFlagEnum.COMPLETE.getCode())){
-			throw new BusinessException("文章已审核通过，不能重复通过");
+			throw new BusinessException("文章已审核完成，不能重复审核");
 		}
 		return articleCheckInDb;
 	}
 	
-	
+	/**
+	 * 文章审核通过
+	 * @param id 文章审核记录id
+	 */
+	//TODO 文章状态修改为int
 	@Override
 	public void passArticleCheck(Long id) {
 		ArticleCheck articleCheckInDb = getAndCheck(id);
 		User loginUser = TokenUtils.getLoginUser();
 		articleCheckInDb.setCheckTime(new Date());
+		//审核完成
 		articleCheckInDb.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
 		articleCheckInDb.setCheckUserId(loginUser.getUserId());
 		articleCheckInDb.setCheckUsername(loginUser.getUsername());
 		articleCheckInDb.setApproveFlag(ArticleCheck.ApproveFlagEnum.APPROVED.getCode());
-		articleCheckMapper.updateArticleCheck(articleCheckInDb);
+		articleCheckMapper.updateByPrimaryKeySelective(articleCheckInDb);
 		//审核通过文章信息
-		
-		Article article = articleMapper.findByArticleId(articleCheckInDb.getArticleId());
+		Article article = articleService.getAndCheckByArticleId(articleCheckInDb.getArticleId());
 		if(article==null){
 			throw new BusinessException("文章不存在");
 		}
@@ -141,7 +152,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		article.setStatus(Article.STATUS_PUBLISHED);
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticle(article);
+		articleMapper.updateArticleByArticleId(article);
 		//文章数加1，发表文章加5分
 		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(), ScoreTypeEnum.PUBLISH_ARTICLE);
 		//用户拓展表增加积分和文章数
@@ -160,33 +171,31 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	 */
 	@Override
 	public void notPassArticle(Long id,String reason) {
-		ArticleCheck articleCheckInDb = getAndCheck(id);
-		//修改审核信息
-		User loginUser = TokenUtils.getLoginUser();
-		articleCheckInDb.setCheckTime(new Date());
-		articleCheckInDb.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
-		articleCheckInDb.setCheckUserId(loginUser.getUserId());
-		articleCheckInDb.setCheckUsername(loginUser.getUsername());
-		articleCheckInDb.setApproveFlag(ArticleCheck.ApproveFlagEnum.NOT_APPROVED.getCode());
-		articleCheckMapper.updateArticleCheck(articleCheckInDb);
-		
 		if(StringUtils.isBlank(reason)){
 			throw new BusinessException("原因不能为空");
 		}
-		Article article = articleMapper.findByArticleId(articleCheckInDb.getArticleId());
-		if(article==null){
-			throw new BusinessException("文章不存在");
-		}
+		ArticleCheck articleCheckInDb = getAndCheck(id);
+		//修改审核信息
+		User loginUser = TokenUtils.getLoginUser();
+		ArticleCheck updateArticleCheck=new ArticleCheck();
+		updateArticleCheck.setId(id);
+		updateArticleCheck.setCheckTime(new Date());
+		updateArticleCheck.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
+		updateArticleCheck.setCheckUserId(loginUser.getUserId());
+		updateArticleCheck.setCheckUsername(loginUser.getUsername());
+		updateArticleCheck.setApproveFlag(ArticleCheck.ApproveFlagEnum.NOT_APPROVED.getCode());
+		updateArticleCheck.setRemark(reason);
+		articleCheckMapper.updateByPrimaryKeySelective(updateArticleCheck);
+		//获取文章信息
+		Article article = articleService.getAndCheckByArticleId(articleCheckInDb.getArticleId());
 		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
 			throw new BusinessException("文章状态不为审核中");
 		}
-		//如果审核类型是创建，状态修改为审核未通过，如果是修改，状态修改为发布成功
-		if(ArticleCheck.CheckTypeEnum.CREATE.getCode().equals(articleCheckInDb.getCheckType())){
-			article.setStatus(Article.STATUS_NOT_PASS);
-		}else if(ArticleCheck.CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
-			article.setStatus(Article.STATUS_PUBLISHED);
-		}
-		articleMapper.updateArticle(article);
+		Article updateArticle=new Article();
+		updateArticle.setArticleId(article.getArticleId());
+		//审核未通过
+		updateArticle.setStatus(Article.STATUS_NOT_PASS);
+		articleMapper.updateArticleByArticleId(updateArticle);
 		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
 		//发送消息
 		User user=TokenUtils.getLoginUser();

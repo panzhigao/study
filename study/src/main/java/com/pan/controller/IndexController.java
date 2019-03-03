@@ -79,12 +79,12 @@ public class IndexController {
 	@RequestMapping(method=RequestMethod.POST,value="/api/getStickData")
 	@ResponseBody
 	public ResultMsg loadStickData(){
-		QueryArticle queryArticleVO=new QueryArticle();
-		queryArticleVO.setPageNo(1);
-		queryArticleVO.setPageSize(4);
-		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
-		queryArticleVO.setWhereCondition("stick>0");
-		List<Article> list = articleService.findByCondition(queryArticleVO);
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setPageNo(1);
+		queryArticle.setPageSize(4);
+		queryArticle.setStatus(Article.STATUS_PUBLISHED);
+		queryArticle.setWhereCondition("stick>0");
+		List<Article> list = articleService.findPagable(queryArticle);
 		return ResultMsg.ok("获取置顶帖成功", list);
 	}
 	

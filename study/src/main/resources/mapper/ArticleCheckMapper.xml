@@ -5,6 +5,7 @@
   <resultMap id="BaseResultMap" type="com.pan.entity.ArticleCheck">
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="username"        	property="username"        jdbcType="VARCHAR" />
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
     <result column="complete_flag"      property="completeFlag"    jdbcType="VARCHAR" />
@@ -14,10 +15,11 @@
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="check_time"         property="checkTime"       jdbcType="TIMESTAMP" />
     <result column="approve_flag"       property="approveFlag"     jdbcType="VARCHAR" />
+    <result column="remark"             property="remark"     jdbcType="VARCHAR" />
   </resultMap>
   
-  <resultMap id="MoreResultMap" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
-    <result column="content"    		property="content"        jdbcType="VARCHAR" />
+  <resultMap id="ResultMapWithBLOBs" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
+    <result column="content"    		property="content"        jdbcType="LONGVARCHAR" />
   </resultMap> 
   
   <resultMap id="DetailResultMap" type="com.pan.vo.ArticleCheckVO" extends="BaseResultMap">  
@@ -25,17 +27,31 @@
     <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
   </resultMap> 
   
-  <sql id="BaseColumns">
+  <sql id="Base_Column_List">
   c.id,c.user_id,c.article_id,c.title,c.complete_flag,c.check_type,c.check_user_id,
-  c.check_username,c.create_time,c.check_time,c.approve_flag
+  c.check_username,c.create_time,c.check_time,c.approve_flag,remark
   </sql>  
-      
-  <select id="findById" resultMap="MoreResultMap">
-  	select <include refid="BaseColumns"/>,c.content from t_article_check c where id=#{id}
+  
+  <sql id="Blob_Column_List">
+    c.content
+  </sql>
+       
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_article_check c
+    where id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
-  	select <include refid="BaseColumns"/> from t_article_check c
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_article_check
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
+  	select <include refid="Base_Column_List"/> from t_article_check c
   	<include refid="whereSql"/>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
@@ -43,7 +59,7 @@
   </select>
   
     <select id="findVOByParams" resultMap="DetailResultMap" parameterType="com.pan.query.QueryArticleCheck">
-  	select <include refid="BaseColumns"/>,user.nickname,user.username from t_article_check c left join t_user user on c.user_id=user.user_id
+  	select <include refid="Base_Column_List"/>,user.nickname,user.username from t_article_check c left join t_user user on c.user_id=user.user_id
   	<include refid="whereSql"/>
   	<if test="orderCondition !=null and orderCondition !='' ">
   		order by ${orderCondition}
@@ -68,87 +84,95 @@
   	</where>
   </sql>
   
-  <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryArticleCheck">
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryArticleCheck">
 	  	select count(0) from t_article_check c
 	  	<include refid="whereSql"/>
   </select>
   
   <insert id="insertSelective" parameterType="com.pan.entity.ArticleCheck">
-  	insert into t_article_check (
-  	<trim suffixOverrides=",">
-  		<if test="userId !=null">
-  			user_id,
-  		</if>
-  		<if test="articleId !=null">
-  			article_id,
-  		</if>
-  		<if test="title !=null">
-  			title,
-  		</if>
-  		<if test="completeFlag !=null">
-  			complete_flag,
-  		</if>
-  		<if test="checkType !=null">
-  			check_type,
-  		</if>
-  		<if test="checkUserId !=null">
-  			check_user_id,
-  		</if>
-  		<if test="checkUsername !=null">
-  			check_username,
-  		</if>
-  		<if test="createTime !=null">
-  			create_time,
-  		</if>
-  		<if test="checkTime !=null">
-  			check_time,
-  		</if>
-  		<if test="approveFlag !=null">
-  			approve_flag,
-  		</if>
-  		<if test="content !=null">
-  			content,
-  		</if>
-  	</trim>
-  	) 
-  	values 
-  	(
-  	<trim suffixOverrides=",">
-  		<if test="userId !=null">
-  			#{userId,jdbcType=VARCHAR},
-  		</if>
-  		<if test="articleId !=null">
-  			#{articleId,jdbcType=VARCHAR},
-  		</if>
-  		<if test="title !=null">
-  			#{title,jdbcType=VARCHAR},
-  		</if>
-  		<if test="completeFlag !=null">
-  			#{completeFlag,jdbcType=VARCHAR},
-  		</if>
-  		<if test="checkType !=null">
-  			#{checkType,jdbcType=VARCHAR},
-  		</if>
-  		<if test="checkUserId !=null">
-  			#{checkUserId,jdbcType=VARCHAR},
-  		</if>
-  		<if test="checkUsername !=null">
-  			#{checkUsername,jdbcType=VARCHAR},
-  		</if>
-  		<if test="createTime !=null">
-  			#{createTime,jdbcType=TIMESTAMP},
-  		</if>
-  		<if test="checkTime !=null">
-  			#{checkTime,jdbcType=TIMESTAMP},
-  		</if>
-  		<if test="approveFlag !=null">
-  			#{approveFlag,jdbcType=VARCHAR},
-  		</if>
-  		<if test="content !=null">
-  			#{content,jdbcType=VARCHAR},
-  		</if>
-  	</trim>
-  	)
+    insert into t_article_check
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="completeFlag != null">
+        complete_flag,
+      </if>
+      <if test="checkType != null">
+        check_type,
+      </if>
+      <if test="checkUserId != null">
+        check_user_id,
+      </if>
+      <if test="checkUsername != null">
+        check_username,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="approveFlag != null">
+        approve_flag,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="completeFlag != null">
+        #{completeFlag,jdbcType=CHAR},
+      </if>
+      <if test="checkType != null">
+        #{checkType,jdbcType=CHAR},
+      </if>
+      <if test="checkUserId != null">
+        #{checkUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUsername != null">
+        #{checkUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveFlag != null">
+        #{approveFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
   </insert>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.ArticleCheck">
@@ -168,6 +192,9 @@
   		</if>
   		<if test="approveFlag !=null ">
   			approve_flag=#{approveFlag,jdbcType=VARCHAR},
+  		</if>
+  		<if test="remark !=null ">
+  			remark=#{remark,jdbcType=VARCHAR},
   		</if>
   	</set>
   	where id=#{id}
