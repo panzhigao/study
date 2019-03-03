@@ -8,13 +8,13 @@
     <result column="username"        	property="username"        jdbcType="VARCHAR" />
     <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
-    <result column="complete_flag"      property="completeFlag"    jdbcType="VARCHAR" />
-    <result column="check_type"         property="checkType"       jdbcType="VARCHAR" />
+    <result column="complete_flag"      property="completeFlag"    jdbcType="INTEGER" />
+    <result column="check_type"         property="checkType"       jdbcType="INTEGER" />
     <result column="check_user_id"      property="checkUserId"     jdbcType="VARCHAR" />
     <result column="check_username"     property="checkUsername"   jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="check_time"         property="checkTime"       jdbcType="TIMESTAMP" />
-    <result column="approve_flag"       property="approveFlag"     jdbcType="VARCHAR" />
+    <result column="approve_flag"       property="approveFlag"     jdbcType="INTEGER" />
     <result column="remark"             property="remark"     jdbcType="VARCHAR" />
   </resultMap>
   

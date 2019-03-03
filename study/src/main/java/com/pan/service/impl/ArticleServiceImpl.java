@@ -17,6 +17,11 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
 import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.ArticleOperateEnum;
+import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.ArticleTypeEnum;
+import com.pan.common.enums.CheckTypeEnum;
+import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
@@ -70,8 +75,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * @param status
 	 * @return
 	 */
-	private boolean checkOpearteStatus(String status) {
-		if (Article.STATUS_SKETCH.equals(status) || Article.STATUS_IN_REVIEW.equals(status)) {
+	private boolean checkOpearteStatus(Integer status) {
+		if (ArticleStatusEnum.SKETCH.getCode().equals(status) || ArticleStatusEnum.IN_CHECK.getCode().equals(status)) {
 			return true;
 		}
 		return false;
@@ -91,9 +96,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	/**
-	 * 新增文章
-	 * 1.文章表新增一条数据
-	 * 2.文章审核表里新增一条数据
+	 * 新增保存文章，如果是发布保存文章，新增一条审核记录，文章状态为待审核
+	 * 如果是保存草稿，不新增审核记录，文章状态为草稿
 	 */
 	@Override
 	public void saveArticle(Article article) {
@@ -102,24 +106,24 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		article.setUsername(loingUser.getUsername());
 		checkArticle(article);
 		// 默认草稿状态
-		if (StringUtils.isBlank(article.getStatus())) {
+		if (article.getStatus()==null) {
 			logger.info("文章无状态，默认设置为草稿状态");
-			article.setStatus(Article.STATUS_SKETCH);
+			article.setStatus(ArticleStatusEnum.SKETCH.getCode());
 		}
 		article.setCreateTime(new Date());
 		article.setUpdateTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		article.setType("1");
+		article.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		articleMapper.insertSelective(article);
 		//发布文章,新增审核记录
-		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(article.getUserId());
-			
+			articleCheck.setUserId(loingUser.getUserId());
+			articleCheck.setUsername(loingUser.getUserId());
 			articleCheck.setArticleId(article.getArticleId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
-			articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.CREATE.getCode());
+			articleCheck.setCheckType(CheckTypeEnum.CREATE.getCode());
 			articleCheckService.addArticleCheck(articleCheck);
 		}
 	}
@@ -184,18 +188,18 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		checkArticle(article);
 		String articleId = article.getArticleId();
 		Article articleInDb = getAndCheckByUserId(loginUser.getUserId(),articleId);
-		if (Article.TYPE_SYSTEM_MESSAGE.equals(articleInDb.getType())) {
+		if (ArticleTypeEnum.TYPE_SYSTEM_MESSAGE.getCode().equals(articleInDb.getType())) {
 			logger.error("系统消息不可修改", articleInDb);
 			throw new BusinessException("系统消息不可修改");
 		}
-		if (Article.STATUS_IN_REVIEW.equals(articleInDb.getStatus())) {
-			logger.error("当前文章处于发布状态,不可修改", articleInDb);
-			throw new BusinessException("当前文章处于发布状态,不可修改");
+		if (ArticleStatusEnum.IN_CHECK.getCode().equals(articleInDb.getStatus())) {
+			logger.error("当前文章处于审核中,不可修改", articleInDb);
+			throw new BusinessException("当前文章处于审核中,不可修改");
 		}
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticleByArticleId(article);
 		//文章处于审核状态，新增审核记录
-		if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			//新增审核记录
 			ArticleCheck articleCheck = new ArticleCheck();
 			articleCheck.setUserId(loginUser.getUserId());
@@ -203,7 +207,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			articleCheck.setArticleId(article.getArticleId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
-			articleCheck.setCheckType(ArticleCheck.CheckTypeEnum.UPDATE.getCode());
+			articleCheck.setCheckType(CheckTypeEnum.UPDATE.getCode());
 			articleCheckService.addArticleCheck(articleCheck);
 		}
 	}
@@ -237,11 +241,11 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			logger.info("根据文章id{}未查询到文章信息", articleId);
 			throw new BusinessException("文章不存在");
 		}
-		if (Article.STATUS_IN_REVIEW.equals(article.getStatus())) {
+		if (ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())) {
 			logger.info("审核中文章不能删除");
 			throw new BusinessException("审核中文章不能删除");
 		}
-		if (Article.STATUS_PUBLISHED.equals(article.getStatus())) {
+		if (ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())) {
 			logger.info("发布中文章不能删除");
 			throw new BusinessException("发布中文章不能删除");
 		}
@@ -259,7 +263,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	@Override
-	public Article findByArticleIdAndStatus(String articleId, String status) {
+	public Article findByArticleIdAndStatus(String articleId, Integer status) {
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setArticleId(articleId);
 		queryArticle.setStatus(status);
@@ -294,14 +298,15 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public void saveSystemMessage(Article article) {
 		ValidationUtils.validateEntity(article);
-		article.setStatus(Article.STATUS_PUBLISHED);
+		//状态为发布成功
+		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setCreateTime(new Date());
 		article.setPublishTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
-		// 系统消息文章
-		article.setType(Article.TYPE_SYSTEM_MESSAGE);
+		//系统消息文章
+		article.setType(ArticleTypeEnum.TYPE_SYSTEM_MESSAGE.getCode());
 		Message message = new Message();
-		message.setMessageType(MyConstant.MESSAGE_TYPE_NOTICE);
+		message.setMessageType(MessageTypeEnum.NOTICE.getCode());
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
 		String loginUserId = TokenUtils.getLoginUserId();
@@ -339,12 +344,12 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public int getMaxStick() {
 		return articleMapper.getMaxStick();
 	}
-	
+		
 	/**
 	 * 文章置顶/加精
 	 */
 	@Override
-	public void setArticle(String articleId, String stick, String highQuality) {
+	public void setArticle(String articleId, Integer stick, Integer highQuality) {
 		Article articleInDb = getByArticleId(articleId);
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
@@ -353,17 +358,19 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Article article=new Article();
 		article.setArticleId(articleInDb.getArticleId());
 		//取消置顶
-		if("0".equals(stick)){
+		if(ArticleOperateEnum.CANCEL_STICK.getCode().equals(stick)){
 			article.setStick(0);
 			flag=true;
-		}else if("1".equals(stick)){//置顶
+		//置顶	
+		}else if(ArticleOperateEnum.STICK.getCode().equals(stick)){
 			int maxStick = getMaxStick();
 			maxStick++;
 			article.setStick(maxStick);
 			flag=true;
 		}
 		//加精或取消加精
-		if("0".equals(highQuality)||"1".equals(highQuality)){
+		if(ArticleOperateEnum.NOT_HIGH_QUALITY.getCode().equals(highQuality)||
+				ArticleOperateEnum.HIGH_QUALITY.getCode().equals(highQuality)){
 			flag=true;
 			article.setHighQuality(highQuality);
 		}
@@ -394,7 +401,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 				}else{
 					article=(Article) JsonUtils.fromJson(string, Article.class);
 					//如果文章不为发布状态，且不属于当前用户的文章，不能浏览
-					if(!Article.STATUS_PUBLISHED.equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
 						logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 						throw new BusinessException("文章不存在");
 					}

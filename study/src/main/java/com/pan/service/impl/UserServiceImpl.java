@@ -451,7 +451,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     }
 
     @Override
-    public String changeUserStatus(String userId, String status) {
+    public String changeUserStatus(String userId, Integer status) {
         String message = null;
         User userInDb = userMapper.findByUserId(userId);
         if (userInDb == null) {

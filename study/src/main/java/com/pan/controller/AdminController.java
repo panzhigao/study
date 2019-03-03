@@ -3,20 +3,18 @@ package com.pan.controller;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.ArticleTypeEnum;
+import com.pan.common.enums.MessageStatusEnum;
 import com.pan.dto.Tree;
-import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
@@ -78,14 +76,14 @@ public class AdminController {
 		User loginUser = TokenUtils.getLoginUser();
 		String loingUserId = loginUser.getUserId();
 		//未读消息数
-		int unReadMessageCount = messageService.countMessage(loingUserId, MyConstant.MESSAGE_NOT_READED);
+		int unReadMessageCount = messageService.countMessage(loingUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		//文章总数
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setUserId(loingUserId);
-		queryArticle.setType(Article.TYPE_ARTICLE);
+		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		int articleTotalCount = articleService.getCount(queryArticle);
 		//待审核文章数
-		queryArticle.setStatus(Article.STATUS_IN_REVIEW);
+		queryArticle.setStatus(ArticleStatusEnum.IN_CHECK.getCode());
 		int articleWaitReviewCount = articleService.getCount(queryArticle);
 		//收藏数
 		QueryCollection queryCollection=new QueryCollection();

@@ -95,7 +95,7 @@ public interface UserService extends BaseService<User>{
 	 * @param userId
 	 * @param status
 	 */
-	String changeUserStatus(String userId,String status);
+	String changeUserStatus(String userId,Integer status);
 	/**
 	 * 根据角色id获取拥有该角色的用户
 	 * @param roleId

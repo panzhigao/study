@@ -73,7 +73,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param status
 	 * @return
 	 */
-	Article findByArticleIdAndStatus(String articleId,String status);
+	Article findByArticleIdAndStatus(String articleId,Integer status);
 	/**
 	 * 更新文章评论
 	 * @param articleId
@@ -120,7 +120,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param highQuality
 	 * @return
 	 */
-	void setArticle(String articleId,String stick,String highQuality);
+	void setArticle(String articleId,Integer stick,Integer highQuality);
 	/**
 	 * 查询并校验文章信息，判断是否有当前文章的权限
 	 * @param queryArticleVO

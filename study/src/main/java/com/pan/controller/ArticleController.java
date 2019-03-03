@@ -2,7 +2,6 @@ package com.pan.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
@@ -63,9 +64,9 @@ public class ArticleController {
 		logger.info("新建文章信息");
 		ResultMsg resultMsg=null;
 		articleService.saveArticle(article);
-		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+		if(ArticleStatusEnum.SKETCH.getCode().equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章保存草稿成功");
-		}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+		}else if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 		}
 		return resultMsg;
@@ -90,16 +91,16 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
-	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,String status){
+	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,Integer status){
 		String loingUserId = TokenUtils.getLoginUserId();
-		QueryArticle queryArticleVO=new QueryArticle();
-		queryArticleVO.setUserId(loingUserId);
-		queryArticleVO.setPageSize(pageSize);
-		queryArticleVO.setPageNo(pageNo);
-		queryArticleVO.setStatus(status);
-		queryArticleVO.setType(Article.TYPE_ARTICLE);
-		queryArticleVO.setOrderCondition("create_time desc");
-		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setUserId(loingUserId);
+		queryArticle.setPageSize(pageSize);
+		queryArticle.setPageNo(pageNo);
+		queryArticle.setStatus(status);
+		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
+		queryArticle.setOrderCondition("create_time desc");
+		Map<String,Object> pageData=articleService.findByParams(queryArticle);
 		return pageData;
 	}
 	
@@ -123,7 +124,7 @@ public class ArticleController {
 		Article article=articleService.checkAndGetArticle(queryArticle);
 		TransFieldUtils.transEntity(article);
 		mav.addObject("article", article);
-		if(Article.STATUS_PUBLISHED.equals(article.getStatus())){			
+		if(ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())){			
 			long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
 			mav.addObject("viewCount",viewCount+article.getViewCount());
 		}else{
@@ -161,9 +162,9 @@ public class ArticleController {
 		logger.info("编辑文章信息",article);
 		ResultMsg resultMsg=null;
 		articleService.updateArticle(article);
-		if(Article.STATUS_SKETCH.equals(article.getStatus())){				
+		if(ArticleStatusEnum.SKETCH.getCode().equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章保存草稿成功");
-		}else if(Article.STATUS_IN_REVIEW.equals(article.getStatus())){				
+		}else if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){				
 			resultMsg=ResultMsg.ok("文章发布成功,请等待审核");
 		}
 		return resultMsg;
@@ -194,22 +195,22 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表的文章
+	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表成功的文章
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
 	@ResponseBody
-	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,String type){
+	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,Integer type){
 		QueryArticle articleVO=new QueryArticle();
 		articleVO.setUserId(userId);
 		articleVO.setPageSize(pageSize);
 		articleVO.setPageNo(pageNo);
-		articleVO.setStatus(Article.STATUS_PUBLISHED);
+		articleVO.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		articleVO.setIsHot(isHot);
 		articleVO.setType(type);
 		articleVO.setOrderCondition("publish_time desc");
-		if(StringUtils.isBlank(type)){
-			articleVO.setType(Article.TYPE_ARTICLE);
+		if(type==null){
+			articleVO.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
 		Map<String,Object> pageData=articleService.findByParams(articleVO);
 		return pageData;
@@ -221,7 +222,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/getCount")
 	@ResponseBody
-	public int getCount(String status,String type){
+	public int getCount(Integer status,Integer type){
 		QueryArticle articleVO=new QueryArticle();
 		articleVO.setStatus(status);
 		articleVO.setType(type);
@@ -237,7 +238,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
 	@RequiresPermissions("/user/article/set")
-	public ResultMsg set(String articleId,String stick,String highQuality){
+	public ResultMsg set(String articleId,Integer stick,Integer highQuality){
 		articleService.setArticle(articleId, stick, highQuality);
 		return ResultMsg.ok();
 	}

@@ -25,7 +25,7 @@ public class ScoreHistory extends BaseEntity {
     /**
      * 积分类型，1-登陆，2-发表文章成功，3-回帖，4-签到
      */
-    private String type;
+    private Integer type;
     /**
      * 积分类型，1-登陆，2-发表文章成功，3-回帖，4-签到
      */

@@ -21,7 +21,7 @@ public class Message extends BaseEntity{
 	/**
 	 * 消息状态 0-未读 1-已读
 	 */
-	private String status;
+	private Integer status;
 	/**
 	 * 消息接收者id
 	 */
@@ -37,7 +37,7 @@ public class Message extends BaseEntity{
 	/**
 	 * 消息类别 1-评论 2-点赞 3-系统消息
 	 */
-	private String messageType;
+	private Integer messageType;
 	/**
 	 * 内容id
 	 */

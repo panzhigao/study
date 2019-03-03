@@ -19,30 +19,30 @@ public class Article extends BaseEntity{
 	 *
 	 */
 	private static final long serialVersionUID = -4357328851427096260L;
-	/**
-	 * 审核未通过
-	 */
-	public static final String STATUS_NOT_PASS="0";
-	/**
-	 * 草稿状态
-	 */
-	public static final String STATUS_SKETCH="1";
-	/**
-	 * 审核中
-	 */
-	public static final String STATUS_IN_REVIEW="2";
-	/**
-	 * 发布成功
-	 */
-	public static final String STATUS_PUBLISHED="3";
-	/**
-	 * 文章类型 1-文章 2-系统消息
-	 */
-	public static final String TYPE_ARTICLE="1";
-	/**
-	 * 文章类型 1-文章 2-系统消息
-	 */
-	public static final String TYPE_SYSTEM_MESSAGE="2";
+//	/**
+//	 * 审核未通过
+//	 */
+//	public static final String STATUS_NOT_PASS="0";
+//	/**
+//	 * 草稿状态
+//	 */
+//	public static final String STATUS_SKETCH="1";
+//	/**
+//	 * 审核中
+//	 */
+//	public static final String STATUS_IN_REVIEW="2";
+//	/**
+//	 * 发布成功
+//	 */
+//	public static final String STATUS_PUBLISHED="3";
+//	/**
+//	 * 文章类型 1-文章 2-系统消息
+//	 */
+//	public static final String TYPE_ARTICLE="1";
+//	/**
+//	 * 文章类型 1-文章 2-系统消息
+//	 */
+//	public static final String TYPE_SYSTEM_MESSAGE="2";
 	/**
 	 * 文章id
 	 */
@@ -58,7 +58,7 @@ public class Article extends BaseEntity{
 	/**
 	 * 文章状态 0-审核未通过，1-草稿，2-审核中，3-发布成功
 	 */
-	private String status;
+	private Integer status;
 	/**
 	 * 发布时间
 	 */
@@ -95,7 +95,7 @@ public class Article extends BaseEntity{
 	 * 文章类型
 	 * 1-文章 2-系统消息
 	 */
-	private String type;
+	private Integer type;
 	/**
 	 * 置顶系数
 	 */
@@ -103,5 +103,5 @@ public class Article extends BaseEntity{
 	/**
 	 * 是否是精品贴,0-否，1-是
 	 */
-	private String highQuality;
+	private Integer highQuality;
 }

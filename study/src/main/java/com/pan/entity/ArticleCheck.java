@@ -38,11 +38,11 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 是否审核完成，0-否，1-是
 	 */
-	private String completeFlag;
+	private Integer completeFlag;
 	/**
 	 * 审核类型，0-创建，1-修改
 	 */
-	private String checkType;
+	private Integer checkType;
 	/**
 	 * 审核人id
 	 */
@@ -58,7 +58,7 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 通过标志，是否通过，0-否，1-是
 	 */
-	private String approveFlag;
+	private Integer approveFlag;
 	/**
 	 * 文章内容
 	 */
@@ -68,58 +68,5 @@ public class ArticleCheck extends BaseEntity{
 	 * 审核备注
 	 */
 	private String remark;
-	
-	public enum CompleteFlagEnum{
-		COMPLETE("已完成","1"),
-		NOT_COMPLETE("未完成","0");
-		private String name;
-		private String code;
-		
-		CompleteFlagEnum(String name,String code){
-			this.name=name;
-			this.code=code;
-		}
-		public String getName() {
-			return name;
-		}
-		public String getCode() {
-			return code;
-		}	
-	}
-	
-	public enum CheckTypeEnum{
-		CREATE("创建","0"),
-		UPDATE("修改","1");
-		private String name;
-		private String code;
-		
-		CheckTypeEnum(String name,String code){
-			this.name=name;
-			this.code=code;
-		}
-		public String getName() {
-			return name;
-		}
-		public String getCode() {
-			return code;
-		}	
-	}
-	
-	public enum ApproveFlagEnum{
-		APPROVED("审核通过","1"),
-		NOT_APPROVED("审核未通过","0");
-		private String name;
-		private String code;
-		
-		ApproveFlagEnum(String name,String code){
-			this.name=name;
-			this.code=code;
-		}
-		public String getName() {
-			return name;
-		}
-		public String getCode() {
-			return code;
-		}	
-	}
+
 }

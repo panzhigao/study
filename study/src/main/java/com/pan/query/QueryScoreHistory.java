@@ -21,7 +21,7 @@ public class QueryScoreHistory extends QueryBase{
 	/**
 	 * 积分类型，1-登陆，2-发表文章成功，3-回帖
 	 */
-	private String type;
+	private Integer type;
 	/**
 	 * 积分
 	 */

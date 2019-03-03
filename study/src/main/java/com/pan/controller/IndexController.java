@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,7 +83,7 @@ public class IndexController {
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setPageNo(1);
 		queryArticle.setPageSize(4);
-		queryArticle.setStatus(Article.STATUS_PUBLISHED);
+		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		queryArticle.setWhereCondition("stick>0");
 		List<Article> list = articleService.findPagable(queryArticle);
 		return ResultMsg.ok("获取置顶帖成功", list);

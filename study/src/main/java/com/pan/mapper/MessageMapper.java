@@ -10,25 +10,15 @@ import com.pan.entity.Message;
 /**
  * 
  * @author Administrator
- *
  */
-public interface MessageMapper {
-	/**
-	 * 新增消息
-	 */
-	public void addMessage(Message message);
+//TODO 消息查询接口优化
+public interface MessageMapper extends BaseMapper<Message>{
 	/**
 	 * 查询用户的所有消息
 	 * @param userId
 	 * @return
 	 */
 	public List<Message> findByReceiverUserId(String userId);
-	/**
-	 * 查询
-	 * @param userId
-	 * @return
-	 */
-	public int countMessage(@Param("receiverUserId")String receiverUserId,@Param("status")String status);
 	/**
 	 * 消息标记为已读
 	 * @param receiverUserId

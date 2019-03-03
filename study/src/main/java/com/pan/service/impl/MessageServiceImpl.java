@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.pan.entity.Message;
 import com.pan.mapper.MessageMapper;
+import com.pan.query.QueryMessage;
+import com.pan.service.AbstractBaseService;
 import com.pan.service.MessageService;
 
 
@@ -20,7 +22,7 @@ import com.pan.service.MessageService;
  * 
  */
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapper> implements MessageService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	
@@ -28,10 +30,18 @@ public class MessageServiceImpl implements MessageService {
 	private MessageMapper messageMapper;
 	
 	@Override
+	protected MessageMapper getBaseMapper() {
+		return messageMapper;
+	}
+	
+	/**
+	 * 新增消息
+	 */
+	@Override
 	public void addMessage(Message message) {
 		// TODO 校验
 		logger.info("消息内容：{}",message);
-		messageMapper.addMessage(message);
+		messageMapper.insertSelective(message);
 	}
 
 	@Override
@@ -44,12 +54,16 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public int countMessage(String userId, String status) {
-		return messageMapper.countMessage(userId, status);
+	public int countMessage(String userId, Integer status) {
+		QueryMessage queryMessage=new QueryMessage();
+		queryMessage.setReceiverUserId(userId);
+		queryMessage.setStatus(status);
+		return messageMapper.countByParams(queryMessage);
 	}
 
 	@Override
 	public int cleanMessage(String userId, String messageId) {
 		return messageMapper.cleanMessage(userId, messageId);
 	}
+
 }

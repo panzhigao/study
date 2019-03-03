@@ -10,34 +10,27 @@ public enum AdminFlagEnum {
 	/**
 	 * 不是管理员
 	 */
-	ADMIN_FALSE("0", "不是管理员"),
+	ADMIN_FALSE(0, "不是管理员"),
 	/**
 	 * 是管理员
 	 */
-	ADMIN_TRUE("1", "是管理员");
+	ADMIN_TRUE(1, "是管理员");
 
-	private String code;
+	private Integer code;
 
-	private String desc;
+	private String name;
 
-	private AdminFlagEnum(String code, String desc) {
+	private AdminFlagEnum(Integer code, String name) {
 		this.code = code;
-		this.desc = desc;
+		this.name = name;
 	}
 
-	public String getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public String getName() {
+		return name;
 	}
 
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
 }

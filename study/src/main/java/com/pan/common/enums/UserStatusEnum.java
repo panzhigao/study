@@ -9,35 +9,27 @@ public enum UserStatusEnum {
 	/**
 	 * 禁用状态
 	 */
-	STATUS_BLOCKED("0", "禁用状态"),
+	STATUS_BLOCKED(0, "禁用状态"),
 	/**
 	 * 正常状态
 	 */
-	STATUS_NORMAL("1", "正常状态");
+	STATUS_NORMAL(1, "正常状态");
 
-	private String code;
+	private Integer code;
 
-	private String desc;
+	private String name;
 
-	UserStatusEnum(String code, String desc) {
+	UserStatusEnum(Integer code, String name) {
 		this.code = code;
-		this.desc = desc;
+		this.name = name;
 	}
 
-	public String getCode() {
-		return code;
-	}
+    public Integer getCode() {
+        return code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public String getName() {
+		return name;
 	}
 
 }

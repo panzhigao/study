@@ -51,7 +51,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		}
 		ScoreHistory scoreHistory=new ScoreHistory();
 		scoreHistory.setUserId(userId);
-		scoreHistory.setType(ScoreTypeEnum.CHECK_IN.getName());
+		scoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
+		scoreHistory.setTypeName(ScoreTypeEnum.CHECK_IN.getName());
 		scoreHistory.setScore(ScoreTypeEnum.CHECK_IN.getScore());
 		scoreHistory.setScoreDate(new Date());
 		scoreHistory.setCreateTime(new Date());

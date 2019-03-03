@@ -5,6 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.pan.common.enums.ApproveFlagEnum;
+import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.CheckTypeEnum;
+import com.pan.common.enums.CompleteFlagEnum;
+import com.pan.common.enums.MessageStatusEnum;
+import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
@@ -95,7 +100,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	public void addArticleCheck(ArticleCheck articleCheck) {
 		ValidationUtils.validateEntity(articleCheck);
 		articleCheck.setCreateTime(new Date());
-		articleCheck.setCompleteFlag(ArticleCheck.CompleteFlagEnum.NOT_COMPLETE.getCode());
+		articleCheck.setCompleteFlag(CompleteFlagEnum.NOT_COMPLETE.getCode());
 		insertSelective(articleCheck);
 	}
 
@@ -113,7 +118,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 			logger.error("根据id{}未查询到审核信息",id);
 			throw new BusinessException("审核信息不存在");
 		}
-		if(StringUtils.equals(articleCheckInDb.getCompleteFlag(),ArticleCheck.CompleteFlagEnum.COMPLETE.getCode())){
+		if(CompleteFlagEnum.COMPLETE.getCode().equals(articleCheckInDb.getCompleteFlag())){
 			throw new BusinessException("文章已审核完成，不能重复审核");
 		}
 		return articleCheckInDb;
@@ -123,33 +128,32 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	 * 文章审核通过
 	 * @param id 文章审核记录id
 	 */
-	//TODO 文章状态修改为int
 	@Override
 	public void passArticleCheck(Long id) {
 		ArticleCheck articleCheckInDb = getAndCheck(id);
 		User loginUser = TokenUtils.getLoginUser();
 		articleCheckInDb.setCheckTime(new Date());
 		//审核完成
-		articleCheckInDb.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
+		articleCheckInDb.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
 		articleCheckInDb.setCheckUserId(loginUser.getUserId());
 		articleCheckInDb.setCheckUsername(loginUser.getUsername());
-		articleCheckInDb.setApproveFlag(ArticleCheck.ApproveFlagEnum.APPROVED.getCode());
+		articleCheckInDb.setApproveFlag(ApproveFlagEnum.APPROVED.getCode());
 		articleCheckMapper.updateByPrimaryKeySelective(articleCheckInDb);
 		//审核通过文章信息
 		Article article = articleService.getAndCheckByArticleId(articleCheckInDb.getArticleId());
 		if(article==null){
 			throw new BusinessException("文章不存在");
 		}
-		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+		if(!ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			throw new BusinessException("文章状态不为审核中");
 		}
 		//如果文章为修改，则将内容复制过去
-		if(ArticleCheck.CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
-			article.setStatus(Article.STATUS_PUBLISHED);
+		if(CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
+			article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 			article.setTitle(articleCheckInDb.getTitle());
 			article.setContent(articleCheckInDb.getContent());
 		}
-		article.setStatus(Article.STATUS_PUBLISHED);
+		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticleByArticleId(article);
@@ -180,29 +184,29 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		ArticleCheck updateArticleCheck=new ArticleCheck();
 		updateArticleCheck.setId(id);
 		updateArticleCheck.setCheckTime(new Date());
-		updateArticleCheck.setCompleteFlag(ArticleCheck.CompleteFlagEnum.COMPLETE.getCode());
+		updateArticleCheck.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
 		updateArticleCheck.setCheckUserId(loginUser.getUserId());
 		updateArticleCheck.setCheckUsername(loginUser.getUsername());
-		updateArticleCheck.setApproveFlag(ArticleCheck.ApproveFlagEnum.NOT_APPROVED.getCode());
+		updateArticleCheck.setApproveFlag(ApproveFlagEnum.NOT_APPROVED.getCode());
 		updateArticleCheck.setRemark(reason);
 		articleCheckMapper.updateByPrimaryKeySelective(updateArticleCheck);
 		//获取文章信息
 		Article article = articleService.getAndCheckByArticleId(articleCheckInDb.getArticleId());
-		if(!Article.STATUS_IN_REVIEW.equals(article.getStatus())){
+		if(!ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			throw new BusinessException("文章状态不为审核中");
 		}
 		Article updateArticle=new Article();
 		updateArticle.setArticleId(article.getArticleId());
 		//审核未通过
-		updateArticle.setStatus(Article.STATUS_NOT_PASS);
+		updateArticle.setStatus(ArticleStatusEnum.FAIL_CHECKED.getCode());
 		articleMapper.updateArticleByArticleId(updateArticle);
 		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
 		//发送消息
 		User user=TokenUtils.getLoginUser();
 		Message message=new Message();
 		message.setMessageId(IdUtils.generateMessageId());
-		message.setMessageType(MyConstant.MESSAGE_TYPE_SYSTEM);
-		message.setStatus(MyConstant.MESSAGE_NOT_READED);
+		message.setMessageType(MessageTypeEnum.SYSTEM_MESSAGE.getCode());
+		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		message.setContentId(article.getArticleId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());

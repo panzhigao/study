@@ -15,26 +15,6 @@ public class MyConstant {
      */
     public static final String VERCODE = "vercode";
     /**
-     * 消息已读
-     */
-    public static final String MESSAGE_READED = "1";
-    /**
-     * 消息未读
-     */
-    public static final String MESSAGE_NOT_READED = "0";
-    /**
-     * 消息类型 1-评论 2-系统消息 3-公告
-     */
-    public static final String MESSAGE_TYPE_COMMENT = "1";
-    /**
-     * 消息类型 1-评论 2-系统消息 3-公告
-     */
-    public static final String MESSAGE_TYPE_SYSTEM = "2";
-    /**
-     * 消息类型 1-评论 2-系统消息 3-公告
-     */
-    public static final String MESSAGE_TYPE_NOTICE = "3";
-    /**
      * 重置
      */
     public static final String OPERATETYPE_SET = "set";

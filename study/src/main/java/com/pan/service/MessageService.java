@@ -24,10 +24,16 @@ public interface MessageService {
 	/**
 	 * 统计用户未读消息条数
 	 * @param userId
-	 * @param status
+	 * @param status 消息状态
 	 * @return
 	 */
-	public int countMessage(String userId,String status);
-	
+	public int countMessage(String userId,Integer status);
+	/**
+	 * 消息标记为已读
+	 * @param userId
+	 * @param messageId
+	 * @return
+	 */
+	//TODO 修改方法名
 	public int cleanMessage(String userId,String messageId);
 }

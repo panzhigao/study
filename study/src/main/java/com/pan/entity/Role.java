@@ -33,7 +33,7 @@ public class Role extends BaseEntity{
 	 */
 	private String marker;
 	/**
-	 * 是否是超级管理员
+	 * 是否是超级管理员 0-否，1-是
 	 */
-	private String superAdminFlag;
+	private Integer superAdminFlag;
 }

@@ -22,27 +22,19 @@ public enum PermissionTypeEnum {
 
 	private Integer code;
 
-	private String desc;
+	private String name;
 
-	PermissionTypeEnum(Integer code, String desc) {
+	PermissionTypeEnum(Integer code, String name) {
 		this.code = code;
-		this.desc = desc;
+		this.name = name;
 	}
 
 	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public String getName() {
+		return name;
 	}
 
 }

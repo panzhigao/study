@@ -84,7 +84,7 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/manage/changeStatus")
 	@ResponseBody
 	@RequiresPermissions("/user/manage/changeStatus")
-	public ResultMsg changeUserStatus(String userId,String status){
+	public ResultMsg changeUserStatus(String userId,Integer status){
 		String message = userService.changeUserStatus(userId, status);
 		return ResultMsg.ok(message);
 	}

@@ -36,26 +36,20 @@ public enum OperateLogTypeEnum {
 
     private Integer code;
 
-    private String desc;
+    private String name;
 
-    OperateLogTypeEnum(Integer code, String desc) {
+    OperateLogTypeEnum(Integer code, String name) {
         this.code = code;
-        this.desc = desc;
+        this.name = name;
     }
 
-    public Integer getCode() {
-        return code;
-    }
+	public Integer getCode() {
+		return code;
+	}
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDesc() {
-        return desc;
-    }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

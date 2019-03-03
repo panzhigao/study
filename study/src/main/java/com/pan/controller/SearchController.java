@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.ArticleDTO;
-import com.pan.entity.Article;
 import com.pan.query.QueryArticle;
 import com.pan.service.ArticleService;
 
@@ -40,7 +40,7 @@ public class SearchController {
 	public ResultMsg returnSearchContent(String q){
 		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setTitle(q);
-		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
+		queryArticleVO.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		List<ArticleDTO> searchContent = articleService.queryFromEsByCondition(queryArticleVO);
 		return ResultMsg.ok("返回搜索查询结果成功", searchContent);
 	}

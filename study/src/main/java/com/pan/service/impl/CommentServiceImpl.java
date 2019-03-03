@@ -3,14 +3,14 @@ package com.pan.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.pan.common.enums.MessageStatusEnum;
+import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Article;
 import com.pan.entity.Comment;
@@ -103,8 +103,8 @@ public class CommentServiceImpl implements CommentService{
 			message.setSenderName(userInDb.getNickname());
 		}
 		message.setMessageId(IdUtils.generateMessageId());
-		message.setMessageType(MyConstant.MESSAGE_TYPE_COMMENT);
-		message.setStatus(MyConstant.MESSAGE_NOT_READED);
+		message.setMessageType(MessageTypeEnum.COMMENT.getCode());
+		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		message.setSenderUserId(comment.getUserId());
 		message.setSenderName(userInDb.getNickname());
 		message.setContentId(comment.getArticleId());

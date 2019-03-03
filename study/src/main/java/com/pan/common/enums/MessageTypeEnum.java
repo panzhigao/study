@@ -9,30 +9,32 @@ public enum MessageTypeEnum {
     /**
      * 评论
      */
-    COMMENT("1", "评论"),
+    COMMENT(1, "评论"),
     /**
      * 系统消息
+     * eg.文章审核通过，未通过
      */
-    SYSTEM_MESSAGE("2", "系统消息"),
+    SYSTEM_MESSAGE(2, "系统消息"),
     /**
      * 公告
+     * 用户页面主动弹出
      */
-    NOTICE("3", "公告");
+    NOTICE(3, "公告");
 
-    private String code;
+    private Integer code;
 
-    private String msg;
+    private String name;
 
-    MessageTypeEnum(String code, String msg) {
+    MessageTypeEnum(Integer code, String msg) {
         this.code = code;
-        this.msg = msg;
+        this.name = msg;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getName() {
+        return name;
     }
 }

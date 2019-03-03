@@ -2,9 +2,7 @@ package com.pan.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.pan.common.constant.MyConstant;
+import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.ArticleTypeEnum;
+import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.Message;
@@ -59,7 +58,7 @@ public class MessageController {
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
 		String loginUserId = TokenUtils.getLoginUserId();
-		int count=messageService.countMessage(loginUserId, MyConstant.MESSAGE_NOT_READED);
+		int count=messageService.countMessage(loginUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		return ResultMsg.ok("统计成功", count);
 	}
 	
@@ -108,12 +107,12 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/systemMessage")
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo){
-		QueryArticle queryArticleVO=new QueryArticle();
-		queryArticleVO.setPageSize(pageSize);
-		queryArticleVO.setPageNo(pageNo);
-		queryArticleVO.setStatus(Article.STATUS_PUBLISHED);
-		queryArticleVO.setType(Article.TYPE_SYSTEM_MESSAGE);
-		Map<String,Object> pageData=articleService.findByParams(queryArticleVO);
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setPageSize(pageSize);
+		queryArticle.setPageNo(pageNo);
+		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
+		queryArticle.setType(ArticleTypeEnum.TYPE_SYSTEM_MESSAGE.getCode());
+		Map<String,Object> pageData=articleService.findByParams(queryArticle);
 		return pageData;
 	}
 }

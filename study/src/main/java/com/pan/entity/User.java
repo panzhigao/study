@@ -64,7 +64,7 @@ public class User extends BaseEntity {
      * 用户状态
      * 0禁用，1正常
      */
-    private String status;
+    private Integer status;
     /**
      * 手机号码
      */
@@ -79,7 +79,7 @@ public class User extends BaseEntity {
      * 当前用户是否是管理员
      * 0-否,1-是
      */
-    private String adminFlag;
+    private Integer adminFlag;
     /**
      * 地址
      */
@@ -90,7 +90,7 @@ public class User extends BaseEntity {
         super();
     }
 
-    public User(String userId, String status) {
+    public User(String userId, Integer status) {
         super();
         this.userId = userId;
         this.status = status;

@@ -16,9 +16,9 @@
     <result column="image"    		    property="image"           jdbcType="VARCHAR" />
     <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
     <result column="view_count"         property="viewCount"       jdbcType="INTEGER" />
-    <result column="type"               property="type"            jdbcType="VARCHAR" />
+    <result column="type"               property="type"            jdbcType="INTEGER" />
     <result column="stick"              property="stick"           jdbcType="INTEGER" />
-    <result column="high_quality"       property="highQuality"     jdbcType="VARCHAR" />
+    <result column="high_quality"       property="highQuality"     jdbcType="INTEGER" />
   </resultMap>
   
   <resultMap id="ResultMapWithBLOBs" extends="BaseResultMap"  type="com.pan.entity.Article">
@@ -52,24 +52,7 @@
     <include refid="Blob_Column_List" /> from t_article where article_id=#{articleId,jdbcType=VARCHAR}
   </select>
   
-<!--   <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.pan.entity.Article"> -->
-<!--   	select <include refid="Base_Column_List"/> from t_article  -->
-<!--   	<where> -->
-<!--   		<if test="articleId !=null and articleId!='' "> -->
-<!--   			and article_id=#{articleId} -->
-<!--   		</if> -->
-<!--   		<if test="status !=null and status !=''"> -->
-<!--   			and status=#{status} -->
-<!--   		</if> -->
-<!--   		<if test="userId !=null and userId !=''"> -->
-<!--   			and user_id=#{userId} -->
-<!--   		</if> -->
-<!--   		<if test="type !=null and type !=''"> -->
-<!--   			and type=#{type} -->
-<!--   		</if> -->
-<!--   	</where> -->
-<!--   </select> -->
-  
+
   <select id="findPagable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
   	on a.user_id=u.user_id 
@@ -97,7 +80,7 @@
   			and a.article_id=#{articleId,jdbcType=VARCHAR}
   		</if>
   		<if test="status !=null and status !=''">
-  			and a.status=#{status}
+  			and a.status=#{status,jdbcType=INTEGER}
   		</if>
   		<if test="userId !=null and userId !=''">
   			and a.user_id=#{userId,jdbcType=VARCHAR}
@@ -106,7 +89,7 @@
   			and a.username=#{username,jdbcType=VARCHAR}
   		</if>
   		<if test="type !=null and type !=''">
-  			and a.type=#{type}
+  			and a.type=#{type,jdbcType=INTEGER}
   		</if>
   		<if test="whereCondition !=null">
   			and ${whereCondition}
@@ -193,7 +176,7 @@
         #{username,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=CHAR},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -220,13 +203,13 @@
         #{viewCount,jdbcType=INTEGER},
       </if>
       <if test="type != null">
-        #{type,jdbcType=CHAR},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="stick != null">
         #{stick,jdbcType=INTEGER},
       </if>
       <if test="highQuality != null">
-        #{highQuality,jdbcType=CHAR},
+        #{highQuality,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -250,7 +233,7 @@
   			publish_time=#{publishTime,jdbcType=TIMESTAMP},
   		</if>
   		<if test="status!=null and status!=''">
-  			status=#{status,jdbcType=VARCHAR},
+  			status=#{status,jdbcType=INTEGER},
   		</if>
   		<if test="outline != null and outline !=''">
   			outline=#{outline,jdbcType=VARCHAR},
@@ -262,13 +245,13 @@
   			comment_count=comment_count+#{commentCount},
   		</if>
   		<if test="viewCount != null and viewCount !=''">
-  			view_count=view_count+#{viewCount},
+  			view_count=view_count+#{viewCount,jdbcType=INTEGER},
   		</if>
   		<if test="stick != null">
-  			stick=#{stick},
+  			stick=#{stick,jdbcType=INTEGER},
   		</if>
   		<if test="highQuality != null and highQuality !=''">
-  			high_quality=#{highQuality},
+  			high_quality=#{highQuality,jdbcType=INTEGER},
   		</if>
   	</set>
   	where article_id=#{articleId}
