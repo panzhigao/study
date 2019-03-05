@@ -67,7 +67,7 @@ public class Article extends BaseEntity{
 	 * 文章标题
 	 */
 	@NotEmpty(message="文章标题不能为空")
-	@Size(max=30,min=5,message="文章标题长度必须在5-30之间")
+	@Size(max=100,message="文章最大100个字符")
 	private String title;
 	/**
 	 * 文章内容

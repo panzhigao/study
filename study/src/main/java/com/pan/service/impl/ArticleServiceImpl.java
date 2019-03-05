@@ -383,7 +383,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	
 	/**
 	 * 获取文章信息，校验是否有当前文章信息的权限
-	 * 先从redis中读取，如果不存在，则从数据库读取，如果数据库存在，加入redis缓存，如果数据库不存在，添加一个默认缓存，缓存过期时间60秒
+	 * 先从redis中读取，如果不存在，则从数据库读取，如果数据库存在且文章已发布，加入redis缓存，如果数据库不存在，添加一个默认缓存，缓存过期时间60秒
 	 * @param queryArticleVO
 	 * @return
 	 */
@@ -413,7 +413,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
 					throw new BusinessException("文章不存在");
 				}
-				jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,JsonUtils.toJson(article));
+				if(ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())){					
+					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,JsonUtils.toJson(article));
+				}
 			}	
 		}catch(BusinessException ex){
 			throw new BusinessException(ex.getMessage());

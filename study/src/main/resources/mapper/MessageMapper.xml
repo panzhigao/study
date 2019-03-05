@@ -26,7 +26,7 @@
   	select <include refid="Base_Column_List"/> from t_message where receiver_user_id=#{receiverUserId} order by create_time desc
   </select>
   
-  <insert id="insertSelective" parameterType="com.pan.Message">
+  <insert id="insertSelective" parameterType="com.pan.entity.Message">
     insert into t_message
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -105,10 +105,10 @@
   	select count(0) from t_message 
   	<where>
   	 	<if test="receiverUserId != null">
-        	receiver_user_id=#{receiverUserId,jdbcType=VARCHAR},
+        	and receiver_user_id=#{receiverUserId,jdbcType=VARCHAR}
         </if>
   		<if test="status != null">
-        	status=#{status,jdbcType=INTEGER},
+        	and status=#{status,jdbcType=INTEGER}
       	</if>
   	</where>
   </select>

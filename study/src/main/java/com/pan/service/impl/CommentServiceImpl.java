@@ -2,7 +2,6 @@ package com.pan.service.impl;
 
 import java.util.Date;
 import java.util.List;
-
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
@@ -19,6 +18,8 @@ import com.pan.entity.ScoreHistory;
 import com.pan.entity.UserExtension;
 import com.pan.entity.User;
 import com.pan.mapper.CommentMapper;
+import com.pan.query.QueryComment;
+import com.pan.service.AbstractBaseService;
 import com.pan.service.ArticleService;
 import com.pan.service.CommentService;
 import com.pan.service.MessageService;
@@ -39,7 +40,7 @@ import com.pan.vo.CommentVO;
  *
  */
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMapper> implements CommentService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(CommentServiceImpl.class);
 	
@@ -61,6 +62,11 @@ public class CommentServiceImpl implements CommentService{
 	@Autowired
 	private UserExtensionService userExtensionService;
 	
+	@Override
+	protected CommentMapper getBaseMapper() {
+		return commentMapper;
+	}
+	
 	/**
 	 * 添加评论
 	 * 1.新增评论记录
@@ -78,7 +84,7 @@ public class CommentServiceImpl implements CommentService{
 		comment.setCommentId(IdUtils.generateCommentId());
 		comment.setCreateTime(new Date());
 		//新增评论
-		commentMapper.addComment(comment);
+		commentMapper.insertSelective(comment);
 		JedisUtils.increaseKey("comment_count:"+comment.getArticleId());
 		
 		//发表评论加2分,
@@ -147,7 +153,9 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	public int getCommnetCount(String articleId) {
-		int total=commentMapper.countComment(articleId);
+		QueryComment queryComment=new QueryComment();
+		queryComment.setArticleId(articleId);
+		int total=commentMapper.countByParams(queryComment);
 		return total;
 	}
 
@@ -155,4 +163,5 @@ public class CommentServiceImpl implements CommentService{
 	public List<Comment> loadUserComments(String userId) {
 		return commentMapper.findByUserId(userId);
 	}
+
 }

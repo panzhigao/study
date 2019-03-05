@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>文章审核</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="好好学习社区">
+  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
@@ -191,8 +196,8 @@ layui.use(['table','jquery'], function(){
 	      {field: 'checkType', title: '审核类型', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.checkType){
-		    	  	case '0':temp='创建';break;
-		    	  	case '1':temp='修改';break;
+		    	  	case 0:temp='创建';break;
+		    	  	case 1:temp='修改';break;
 		    	  	default:temp="无状态";
 	    	  	}
 	    	  	return temp;
@@ -210,8 +215,8 @@ layui.use(['table','jquery'], function(){
 	      {field: 'approveFlag', title: '是否通过', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.approveFlag){
-		    	  	case '0':temp='未通过';break;
-		    	  	case '1':temp='通过';break;
+		    	  	case 0:temp='未通过';break;
+		    	  	case 1:temp='通过';break;
 	    	  	}
 	    	  	return temp;
 	      	  }

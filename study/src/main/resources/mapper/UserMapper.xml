@@ -178,7 +178,7 @@
   		<if test="updateUser !=null and updateUser !=''">
   			update_user=#{updateUser,jdbcType=VARCHAR},
   		</if>
-  		<if test="adminFlag !=null and adminFlag !=''">
+  		<if test="adminFlag !=null">
   			admin_flag=#{adminFlag,jdbcType=VARCHAR},
   		</if>
   		<if test="address !=null and address !=''">

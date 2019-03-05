@@ -431,8 +431,14 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 list.add(userRole);
             }
             //如果给用户分配管理员角色，更新改用户的管理员字段
-            if (hasAdmin) {
+            if (hasAdmin && AdminFlagEnum.ADMIN_FALSE.getCode().equals(user.getAdminFlag())) {
                 user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
+                user.setUpdateTime(new Date());
+                user.setUpdateUser(TokenUtils.getLoginUserId());
+                userMapper.updateUserByUserId(user);
+            //取消用户admin权限    
+            }else if(!hasAdmin && AdminFlagEnum.ADMIN_TRUE.getCode().equals(user.getAdminFlag())){
+            	user.setAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
                 user.setUpdateTime(new Date());
                 user.setUpdateUser(TokenUtils.getLoginUserId());
                 userMapper.updateUserByUserId(user);
@@ -445,7 +451,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         StringBuilder builder=new StringBuilder();
         builder.append("为用户(username=").append(user.getUsername()).append(")分配角色，角色从:");
         roleSet.forEach(r->builder.append(r));
-        builder.append("-->");
+        builder.append("=======>>>");
         roleSetFromDb.forEach(r->builder.append(r));
         operateLogService.addOperateLog(builder.toString(), OperateLogTypeEnum.ROLE_ALLOCATE);
     }
