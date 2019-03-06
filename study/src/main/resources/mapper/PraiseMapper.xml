@@ -14,11 +14,45 @@
     id,praise_id,comment_id,user_id,create_time
   </sql>
   
-  <insert id="addPraise" parameterType="com.pan.entity.Praise">
-  	insert into t_praise (<include refid="Base_Column_List"/>) values (null,#{praiseId},#{commentId},#{userId},#{createTime})
+  <insert id="insertSelective" parameterType="com.pan.entity.Praise">
+    insert into t_praise
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="praiseId != null">
+        praise_id,
+      </if>
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="praiseId != null">
+        #{praiseId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentId != null">
+        #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
   </insert>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPraise">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPraise">
   	select <include refid="Base_Column_List"/> from t_praise
   	<include refid="whereSql"/>
   </select>
@@ -34,7 +68,7 @@
   	</where>
   </sql>
   
-  <select id="getCount" parameterType="com.pan.query.QueryPraise" resultType="int">
+  <select id="countByParams" parameterType="com.pan.query.QueryPraise" resultType="int">
   	select count(0) from t_praise
   	<include refid="whereSql"/>
   </select>

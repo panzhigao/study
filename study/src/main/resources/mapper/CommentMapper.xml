@@ -110,7 +110,7 @@
 		from t_comment where comment_id=#{commentId}
 	</select>
 
-	<select id="findPagable" resultMap="BaseResultMap">
+	<select id="findPageable" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from t_comment

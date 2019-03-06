@@ -82,7 +82,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setSuperAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
 		//自动为超级管理员添加权限
-		List<Role> list = roleService.findPagable(queryRoleVO);
+		List<Role> list = roleService.findPageable(queryRoleVO);
 		if(list.size()>0){
 			String roleId=list.get(0).getRoleId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
@@ -178,7 +178,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	public Permission getByPermissionId(String permissionId) {
 		QueryPermission queryPermission=new QueryPermission();
 		queryPermission.setPermissionId(permissionId);
-		List<Permission> list = this.permissionMapper.findPagable(queryPermission);
+		List<Permission> list = this.permissionMapper.findPageable(queryPermission);
 		return list.size()==1?list.get(0):null;
 	}
 

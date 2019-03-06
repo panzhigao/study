@@ -94,7 +94,7 @@ public class AdminController {
 		QueryPraise queryPraise=new QueryPraise();
 		queryPraise.setUserId(loingUserId);
 		//我的点赞数
-		int praiseCount = praiseService.getCount(queryPraise);
+		int praiseCount = praiseService.countByParams(queryPraise);
 		QueryPicture queryPicture=new QueryPicture();
 		queryPicture.setUserId(loingUserId);
 		int pictureCount = pictureService.countByParams(queryPicture);

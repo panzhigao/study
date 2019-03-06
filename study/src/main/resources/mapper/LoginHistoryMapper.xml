@@ -68,7 +68,7 @@
 		</where>
 	</sql>
 
-	<select id="findPagable" resultMap="BaseResultMap"
+	<select id="findPageable" resultMap="BaseResultMap"
 		parameterType="com.pan.query.QueryLoginHistory">
 		select
 		<include refid="Base_Column_List" />

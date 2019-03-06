@@ -62,8 +62,8 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     }
 
     @Override
-    public List<T> findPagable(QueryBase queryBase) {
-        return getBaseMapper().findPagable(queryBase);
+    public List<T> findPageable(QueryBase queryBase) {
+        return getBaseMapper().findPageable(queryBase);
     }
 
 	@Override

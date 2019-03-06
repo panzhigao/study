@@ -18,7 +18,7 @@
 		update_user, super_admin_flag
 	</sql>
 	
-	<select id="findPagable" resultMap="BaseResultMap">
+	<select id="findPageable" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from t_role

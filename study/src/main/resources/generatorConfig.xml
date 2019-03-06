@@ -78,7 +78,7 @@
 
 
         <!-- 表生成映射 -->
-		<table tableName="t_comment"  domainObjectName="Comment"
+		<table tableName="t_praise"  domainObjectName="Praise"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

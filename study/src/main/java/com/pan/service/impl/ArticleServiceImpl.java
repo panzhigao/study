@@ -143,7 +143,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			int total = articleMapper.countByParams(queryArticle);
 			// 当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if (total > 0) {
-				list = articleMapper.findPagable(queryArticle);
+				list = articleMapper.findPageable(queryArticle);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -267,7 +267,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setArticleId(articleId);
 		queryArticle.setStatus(status);
-		List<Article> list = articleMapper.findPagable(queryArticle);
+		List<Article> list = articleMapper.findPageable(queryArticle);
 		if (list.size() == 1) {
 			return list.get(0);
 		}
@@ -337,7 +337,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 //	@Override
 //	public List<Article> findByCondition(QueryArticle queryArticle) {
-//		return articleMapper.findPagable(queryArticle);
+//		return articleMapper.findPageable(queryArticle);
 //	}
 
 	@Override

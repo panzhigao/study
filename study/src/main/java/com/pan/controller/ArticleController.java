@@ -46,10 +46,8 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
 	@RequiresPermissions("/user/article/doSave")
-	public ModelAndView writeArticle(HttpServletRequest request){
+	public ModelAndView toAddPage(){
 		ModelAndView mav=new ModelAndView("html/article/add");
-//		User user = TokenUtils.getLoginUser();
-//		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -76,7 +74,7 @@ public class ArticleController {
 	 * 获取文章列表信息
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value={"/user/article/mine"})
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/mine")
 	@RequiresPermissions("/user/article/mine")
 	public ModelAndView toArticleList(String status){
 		ModelAndView mav=new ModelAndView("html/article/articleManage");

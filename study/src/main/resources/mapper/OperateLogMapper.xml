@@ -11,6 +11,7 @@
         <result column="ip_str" property="ipStr" jdbcType="VARCHAR"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
+    
     <sql id="Base_Column_List">
     id, user_id, username, content, operate_type, ip,inet_ntoa(ip) as ip_str, create_time
     </sql>
@@ -23,9 +24,9 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_operate_log
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+    	delete from t_operate_log
+    	where id = #{id,jdbcType=BIGINT}
+  	</delete>
 
     <insert id="insertSelective" parameterType="com.pan.entity.OperateLog">
         insert into t_operate_log
@@ -101,5 +102,28 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-
+	
+	<select id="findPageable" parameterType="com.pan.entity.OperateLog" resultMap="BaseResultMap">
+		select
+        <include refid="Base_Column_List"/>
+        from t_operate_log
+        <include refid="whereSql"/>
+        order by create_time desc
+        <if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  		</if>
+	</select>
+	
+	<select id="countByParams" resultType="int">
+		select count(0) from t_operate_log
+		<include refid="whereSql"/>
+	</select>
+	
+	<sql id="whereSql">
+		<where>
+			<if test="username != null">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+		</where>
+	</sql>
 </mapper>

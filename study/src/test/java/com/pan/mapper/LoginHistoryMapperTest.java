@@ -33,7 +33,7 @@ public class LoginHistoryMapperTest extends BaseTest {
         QueryLoginHistory queryLoginHistory=new QueryLoginHistory();
         queryLoginHistory.setPageNo(1);
         queryLoginHistory.setPageSize(1);
-        List<LoginHistory> byParams = loginHistoryMapper.findPagable(queryLoginHistory);
+        List<LoginHistory> byParams = loginHistoryMapper.findPageable(queryLoginHistory);
         System.out.println(byParams);
     }
 }

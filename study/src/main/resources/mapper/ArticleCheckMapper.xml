@@ -50,7 +50,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   
-  <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
   	select <include refid="Base_Column_List"/> from t_article_check c
   	<include refid="whereSql"/>
   	<if test="offset!=null and row !=null">

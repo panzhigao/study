@@ -11,6 +11,7 @@ import com.pan.entity.Praise;
 import com.pan.mapper.CommentMapper;
 import com.pan.mapper.PraiseMapper;
 import com.pan.query.QueryPraise;
+import com.pan.service.AbstractBaseService;
 import com.pan.service.PraiseService;
 import com.pan.util.IdUtils;
 import com.pan.util.ValidationUtils;
@@ -21,7 +22,7 @@ import com.pan.util.ValidationUtils;
  *
  */
 @Service
-public class PraiseServiceImpl implements PraiseService{
+public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper> implements PraiseService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(PraiseServiceImpl.class);
 	
@@ -30,7 +31,12 @@ public class PraiseServiceImpl implements PraiseService{
 	
 	@Autowired
 	private PraiseMapper praiseMapper;
-
+	
+	@Override
+	protected PraiseMapper getBaseMapper() {
+		return praiseMapper;
+	}
+	
 	@Override
 	public void addPraise(Praise praise) {
 		ValidationUtils.validateEntity(praise);
@@ -42,18 +48,13 @@ public class PraiseServiceImpl implements PraiseService{
 		QueryPraise queryPraise=new QueryPraise();
 		queryPraise.setUserId(praise.getUserId());
 		queryPraise.setCommentId(praise.getCommentId());
-		Praise findByParams = praiseMapper.findByParams(queryPraise);
-		if(findByParams!=null){
+		int countByParams = praiseMapper.countByParams(queryPraise);
+		if(countByParams>0){
 			throw new BusinessException("已经点过赞了");
 		}
 		praise.setCreateTime(new Date());
 		praise.setPraiseId(IdUtils.generatePraiseId());
-		praiseMapper.addPraise(praise);
+		praiseMapper.insertSelective(praise);
 		commentMapper.updatePraiseCounts(praise.getCommentId());
-	}
-
-	@Override
-	public int getCount(QueryPraise queryPraise) {
-		return praiseMapper.getCount(queryPraise);
 	}
 }

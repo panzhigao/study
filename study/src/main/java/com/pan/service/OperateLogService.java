@@ -1,7 +1,9 @@
 package com.pan.service;
 
+import java.util.Map;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.OperateLog;
+import com.pan.query.QueryOperateLog;
 
 /**
  * @author panzhigao
@@ -14,4 +16,10 @@ public interface OperateLogService extends BaseService<OperateLog>{
      * @return
      */
     int addOperateLog(String content, OperateLogTypeEnum operateLogTypeEnum);
+    /**
+     * 多条件查询，支持分页
+     * @param queryOperateLog
+     * @return
+     */
+    public Map<String, Object> findByParams(QueryOperateLog queryOperateLog);
 }

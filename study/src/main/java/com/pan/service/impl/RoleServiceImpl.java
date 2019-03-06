@@ -83,7 +83,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 			int total=roleMapper.countByParams(queryRole);
 			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if(total>0){				
-				list = findPagable(queryRole);
+				list = findPageable(queryRole);
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
@@ -173,7 +173,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	public Role findByRoleId(String roleId) {
 		QueryRole queryRoleVO=new QueryRole();
 		queryRoleVO.setRoleId(roleId);
-		List<Role> list = findPagable(queryRoleVO);
+		List<Role> list = findPageable(queryRoleVO);
 		if(list.size()==1){
 			return list.get(0);
 		}

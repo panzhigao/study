@@ -45,7 +45,7 @@ public class MessageController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/load")
 	@ResponseBody
-	@RequiresPermissions(value="/user/message")
+	@RequiresPermissions(value="/user/message")//TODO 分页
 	public ResultMsg loadMessages(){
 		String loginUserId = TokenUtils.getLoginUserId();
 		List<Message> list=messageService.findByReceiverUserId(loginUserId);

@@ -55,7 +55,7 @@ public class PictureController {
 		queryPicture.setUserId(loingUserId);
 		queryPicture.setPageSize(pageSize);
 		queryPicture.setPageNo(pageNo);
-		List<Picture> list=pictureService.findPagable(queryPicture);
+		List<Picture> list=pictureService.findPageable(queryPicture);
 		int total = pictureService.countByParams(queryPicture);
 		Map<String,Object> data=new HashMap<String, Object>(2);
 		data.put("total", total);

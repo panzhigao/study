@@ -19,7 +19,7 @@
   	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
   </select>
   
-  <select id="findPagable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
   	select <include refid="Base_Column_List"/> from t_picture 
   	<include refid="whereSql"/>
   	order by create_time desc

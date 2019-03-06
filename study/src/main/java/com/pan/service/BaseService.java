@@ -46,7 +46,7 @@ public interface BaseService<T extends BaseEntity> {
      * @param queryBase
      * @return
      */
-    List<T> findPagable(QueryBase queryBase);
+    List<T> findPageable(QueryBase queryBase);
     /**
      * 查询记录数
      * @param queryBase

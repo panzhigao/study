@@ -85,7 +85,7 @@ public class IndexController {
 		queryArticle.setPageSize(4);
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		queryArticle.setWhereCondition("stick>0");
-		List<Article> list = articleService.findPagable(queryArticle);
+		List<Article> list = articleService.findPageable(queryArticle);
 		return ResultMsg.ok("获取置顶帖成功", list);
 	}
 	

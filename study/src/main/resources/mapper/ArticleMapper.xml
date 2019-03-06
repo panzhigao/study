@@ -53,7 +53,7 @@
   </select>
   
 
-  <select id="findPagable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
+  <select id="findPageable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
   	on a.user_id=u.user_id 
   	<include refid="whereSql"/>

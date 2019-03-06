@@ -40,7 +40,7 @@
 		where permission_id = #{permissionId,jdbcType=VARCHAR}
 	</select>
 
-	<select id="findPagable" resultMap="BaseResultMap"
+	<select id="findPageable" resultMap="BaseResultMap"
 		parameterType="com.pan.query.QueryPermission">
 		select
 		<include refid="Base_Column_List" />
