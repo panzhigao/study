@@ -51,5 +51,18 @@ public enum OperateLogTypeEnum {
 		return name;
 	}
 
-
+	public static String getNameByCode(Integer code){
+		OperateLogTypeEnum[] values = OperateLogTypeEnum.values();
+		for(OperateLogTypeEnum operateLogTypeEnum:values){
+			if(operateLogTypeEnum.getCode().equals(code)){
+				return operateLogTypeEnum.getName();
+			}
+		}
+		return "未知";
+	}
+	
+	public static OperateLogTypeEnum[] getEnums(){
+		return OperateLogTypeEnum.values();
+	}
+	
 }

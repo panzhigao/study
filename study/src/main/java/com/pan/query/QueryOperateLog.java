@@ -12,5 +12,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class QueryOperateLog extends QueryBase {
+	
+	private Integer operateType;
+	
 	private String username;
 }

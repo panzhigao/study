@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 /**
  * @author 作者
  * @version 创建时间：2018年6月22日 下午3:28:21
- * 类说明
+ * 文章审核实体
  */
 @Data
 @EqualsAndHashCode(callSuper=true)

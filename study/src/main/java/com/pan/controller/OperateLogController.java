@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.query.QueryOperateLog;
 import com.pan.service.OperateLogService;
 
@@ -26,9 +28,10 @@ public class OperateLogController {
 	 * 跳转操作日志列表
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/operateLog")
-	@RequiresPermissions("/user/article/mine")
+	@RequiresPermissions("/user/operateLog")
 	public ModelAndView toLogList(){
 		ModelAndView mav=new ModelAndView("html/system/operateLog");
+		mav.addObject("types", OperateLogTypeEnum.getEnums());
 		return mav;
 	}
 	
@@ -36,14 +39,10 @@ public class OperateLogController {
 	 * 加载操作日志数据，分页查询
 	 * @return
 	 */
-	//TODO 按用户名查询，ip地址显示，操作时间
 	@RequestMapping(method=RequestMethod.POST,value="/user/operateLog/getPageData")
 	@ResponseBody
-	@RequiresPermissions("/user/article/mine")
-	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo){
-		QueryOperateLog queryOperateLog=new QueryOperateLog();
-		queryOperateLog.setPageNo(pageNo);
-		queryOperateLog.setPageSize(pageSize);
+	@RequiresPermissions("/user/operateLog")
+	public Map<String,Object> getUserArticleList(QueryOperateLog queryOperateLog){
 		return operateLogService.findByParams(queryOperateLog);
 	}
 	

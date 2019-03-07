@@ -34,10 +34,6 @@ public class OperateLog extends BaseEntity{
      */
     private Integer ip;
     /**
-     * ip地址
-     */
-    private String ipStr;
-    /**
      * 创建时间
      */
     private Date createTime;

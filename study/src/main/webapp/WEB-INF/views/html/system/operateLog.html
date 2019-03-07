@@ -16,7 +16,24 @@
 </head>
 <body class="childrenBody">
   <div class="fly-panel fly-panel-user" pad20>
-    <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
+    <div class="layui-tab layui-tab-brief" lay-filter="user"> 
+	    
+      <div class="layui-form layui-form-pane">
+          <label class="layui-form-label">操作类型</label>
+          <div class="layui-input-inline" style="width: 190px;">
+               <select id="operateType" name="experience" lay-search>
+               		  <option value="">请选择</option>
+                      #foreach($item in $types)
+                      <option value="$item.code">$item.name</option>
+                      #end
+                </select>
+            </div>
+            <div class="layui-inline">
+      			<button class="layui-btn" data-type="reload" id="search">搜索</button>	
+      		</div>
+      </div>
+      
+      			
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 	    	<table id="roleTable" lay-filter="roleTab"></table>
@@ -28,38 +45,28 @@
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
-/*
-layui.cache.page = 'user';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
-layui.config({
-  version: "3.0.0"
-  ,base: '$!{rc.contextPath}/static/res/mods/'
-}).extend({
-  fly: 'index'
-}).use('fly');*/
-
 //table
 layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ , active = {
 	    reload: function(){
+	    	var operateType = $('#operateType');
 	        //执行重载
 	        table.reload('tab', {
 	          page: {
 	            curr: 1 //重新从第 1 页开始
 	          }
 	          ,where: {
-	        	 
+	        	  operateType: operateType.val()
 	          }
 	        });
 	      }
 	    };
+	  
+	  $('#search').on('click', function(){
+		   var type = $(this).data('type');
+		   active[type] ? active[type].call(this) : '';
+	  });
 	  
 	  //第一个实例
 	  table.render({
@@ -81,8 +88,9 @@ layui.use(['table','jquery','form'], function(){
 	    cols: [[ //表头
 	      {type: 'numbers',title:'序号'},
 	      {field: 'username', title: '用户名', width:100},
+	      {field: 'operateTypeName', title: '操作类型', width:100},
 	      {field: 'content', title: '操作内容', width:800},
-	      {field: 'operateType', title: '操作类型', width:100},
+	      {field: 'ipStr', title: 'ip地址', width:100},
 	      {field: 'createTime', title: '操作时间', width:160,templet:function(d){
 	    	 return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
 	      }}

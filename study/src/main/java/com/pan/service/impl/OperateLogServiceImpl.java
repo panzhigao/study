@@ -7,8 +7,12 @@ import com.pan.mapper.OperateLogMapper;
 import com.pan.query.QueryOperateLog;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.OperateLogService;
+import com.pan.util.BeanUtils;
+import com.pan.util.IPUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
+import com.pan.vo.OperateLogVO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +50,7 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
         operateLog.setUsername(loginUser.getUsername());
         operateLog.setContent(stringBuilder.toString());
         operateLog.setOperateType(operateLogTypeEnum.getCode());
-        operateLog.setIpStr(TokenUtils.getIp());
+        operateLog.setIp(IPUtils.ip2Integer(TokenUtils.getIp()));
         operateLog.setCreateTime(new Date());
         return operateLogMapper.insertSelective(operateLog);
     }
@@ -54,13 +58,20 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
 	@Override
 	public Map<String, Object> findByParams(QueryOperateLog queryOperateLog) {
 		Map<String, Object> pageData = new HashMap<String, Object>(2);
-		List<OperateLog> list = new ArrayList<OperateLog>();
+		List<OperateLogVO> list = new ArrayList<OperateLogVO>();
 		try {
 			logger.info("分页查询操作日志参数为:{}", JsonUtils.toJson(queryOperateLog));
 			int total = operateLogMapper.countByParams(queryOperateLog);
 			// 当查询记录大于0时，查询数据库记录，否则直接返回空集合
 			if (total > 0) {
-				list = operateLogMapper.findPageable(queryOperateLog);
+				List<OperateLog> findPageable = operateLogMapper.findPageable(queryOperateLog);
+				findPageable.forEach(log->{
+					OperateLogVO logVO=new OperateLogVO();
+					BeanUtils.copyProperties(log, logVO);
+					logVO.setIpStr(IPUtils.integer2Ip(log.getIp()));
+					logVO.setOperateTypeName(OperateLogTypeEnum.getNameByCode(log.getOperateType()));
+					list.add(logVO);
+				});
 			}
 			pageData.put("data", list);
 			pageData.put("total", total);
