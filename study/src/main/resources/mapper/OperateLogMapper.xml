@@ -69,7 +69,7 @@
                 #{operateType,jdbcType=INTEGER},
             </if>
             <if test="ip != null">
-                #ip=#{ip,jdbcType=INTEGER},
+                #{ip,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
