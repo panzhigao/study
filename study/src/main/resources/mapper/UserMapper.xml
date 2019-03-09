@@ -160,7 +160,7 @@
   		<if test="lastLoginTime != null">
   			last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},
   		</if>
-  		<if test="status != null and status !=''">
+  		<if test="status != null">
   			status=#{status,jdbcType=VARCHAR},
   		</if>
   		<if test="telephone != null and telephone !=''">

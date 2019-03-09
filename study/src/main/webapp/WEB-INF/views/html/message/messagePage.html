@@ -70,7 +70,7 @@ function loadMessages(){
 					if(message.messageType=='1'){
 					   one='<li data-messageid="'+message.messageId+'">'+
 			            '<blockquote class="layui-elem-quote">'+
-			              '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'"><cite>'+message.contentName+'</cite></a>'+
+			              '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'#comment"><cite>'+message.contentName+'</cite></a>'+
 			              '<cite style="color:black;">'+message.commentContent+'</cite>'+
 			            '</blockquote>'+
 			            '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
@@ -78,7 +78,7 @@ function loadMessages(){
 					}else if(message.messageType=='2'){
 						one='<li data-messageid="'+message.messageId+'">'+
 			            '<blockquote class="layui-elem-quote">'+
-			              '您发表的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'"><cite>'+message.contentName+'</cite></a>因'+
+			              '您发表的文章<cite>'+message.contentName+'</cite>因'+
 			              message.commentContent+
 			            '未通过审核</blockquote>'+
 			            '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+

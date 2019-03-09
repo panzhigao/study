@@ -19,18 +19,28 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 
 	    
       <div class="layui-form layui-form-pane">
-          <label class="layui-form-label">操作类型</label>
-          <div class="layui-input-inline" style="width: 190px;">
-               <select id="operateType" name="experience" lay-search>
-               		  <option value="">请选择</option>
-                      #foreach($item in $types)
-                      <option value="$item.code">$item.name</option>
-                      #end
-                </select>
-            </div>
-            <div class="layui-inline">
-      			<button class="layui-btn" data-type="reload" id="search">搜索</button>	
-      		</div>
+          
+          <div class="layui-inline">
+	          <label class="layui-form-label">操作类型</label>
+	          <div class="layui-input-inline" >
+	               <select id="operateType" name="experience" lay-search>
+	               		  <option value="">请选择</option>
+	                      #foreach($item in $types)
+	                      <option value="$item.code">$item.name</option>
+	                      #end
+	                </select>
+	          </div>
+          </div> 
+      	   
+      	  <div class="layui-inline"> 
+      	  	  <label class="layui-form-label">用户名</label>
+	          <div class="layui-input-inline" style="width: 190px;">
+	          	<input placeholder="请输入用户名" class="layui-input" name="userName" id="userNameInput" autocomplete="off">
+	          </div>
+	          <div class="layui-inline">
+	      	  	<button class="layui-btn" data-type="reload" id="search">搜索</button>	
+	      	  </div>
+      	  </div>
       </div>
       
       			
@@ -50,14 +60,15 @@ layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ , active = {
 	    reload: function(){
-	    	var operateType = $('#operateType');
+	    	var username=$('#userNameInput').val()?$('#userNameInput').val():null;
 	        //执行重载
 	        table.reload('tab', {
 	          page: {
 	            curr: 1 //重新从第 1 页开始
 	          }
 	          ,where: {
-	        	  operateType: operateType.val()
+	        	  operateType: $('#operateType').val(),
+	        	  username:username
 	          }
 	        });
 	      }

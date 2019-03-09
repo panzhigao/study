@@ -32,8 +32,16 @@ public enum OperateLogTypeEnum {
     /**
      * 分配角色
      */
-    ROLE_ALLOCATE(204, "分配角色");
-
+    ROLE_ALLOCATE(204, "分配角色"),
+	/**
+	 * 用户禁用
+	 */
+	USER_DISABLE(301,"用户禁用"),
+	/**
+	 * 用户开启
+	 */
+	USER_ENABLE(302,"用户开启");
+	
     private Integer code;
 
     private String name;

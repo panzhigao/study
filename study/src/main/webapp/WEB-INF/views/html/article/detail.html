@@ -321,7 +321,7 @@ function addComment(comment){
 	   '</div>';
 	var isZan=comment.isChecked?'zanok':'';   
 	var isMeArticle=comment.userId==articleUserId?'<span>(楼主)</span>':'';
-	var commentPart = '<li data-id="'+comment.commentId+'">'+
+	var commentPart = '<a name="'+comment.commentId+'"></a><li data-id="'+comment.commentId+'">'+
     '<div class="detail-about detail-about-reply">'+
       '<a class="fly-avatar" href="$!{rc.contextPath}/u/'+comment.userId+'" target="_blank">'+
         '<img style="border-radius:50%;" src="'+comment.userPortrait+'" alt="'+comment.nickname+'">'+

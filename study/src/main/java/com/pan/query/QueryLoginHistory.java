@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class QueryLoginHistory extends QueryBase{
+	private String username;
     /**
      * 用户id
      */

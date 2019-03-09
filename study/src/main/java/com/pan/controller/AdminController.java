@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.constant.PageConstant;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.enums.MessageStatusEnum;
@@ -19,16 +21,18 @@ import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
 import com.pan.query.QueryCollection;
+import com.pan.query.QueryLoginHistory;
 import com.pan.query.QueryPicture;
 import com.pan.query.QueryPraise;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
+import com.pan.service.LoginHistoryService;
 import com.pan.service.MessageService;
 import com.pan.service.PictureService;
 import com.pan.service.PraiseService;
 import com.pan.service.UserExtensionService;
-import com.pan.util.DateUtils;
 import com.pan.util.TokenUtils;
+import com.pan.vo.LoginHistoryVO;
 
 /**
  * 网站首页
@@ -55,6 +59,9 @@ public class AdminController {
 	
 	@Autowired
 	private PictureService pictureService;
+	
+	@Autowired
+	private LoginHistoryService loginHistoryService;
 	
 	/**
 	 * 跳转用户后台
@@ -98,15 +105,23 @@ public class AdminController {
 		QueryPicture queryPicture=new QueryPicture();
 		queryPicture.setUserId(loingUserId);
 		int pictureCount = pictureService.countByParams(queryPicture);
+		//上次登陆时间
 		Date lastLoginTime = loginUser.getLastLoginTime();
+		//最近5次登陆记录
+		QueryLoginHistory queryLoginHistory=new QueryLoginHistory();
+		queryLoginHistory.setUserId(TokenUtils.getLoginUserId());
+		queryLoginHistory.setPageNo(PageConstant.DEFAULT_PAGE_NO);
+		queryLoginHistory.setPageSize(PageConstant.PAGE_SIZE_5);
+		List<LoginHistoryVO> loginHistoryList = loginHistoryService.findVOPageable(queryLoginHistory);
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
 		mav.addObject("articleWaitReviewCount", articleWaitReviewCount);
 		mav.addObject("collectionCount", collectionCount);
 		mav.addObject("score", score);
 		mav.addObject("praiseCount", praiseCount);
-		mav.addObject("lastLoginTime", DateUtils.getDateStr(lastLoginTime, DateUtils.FORMAT_DATE3));
+		mav.addObject("lastLoginTime", lastLoginTime);
 		mav.addObject("pictureCount", pictureCount);
+		mav.addObject("loginHistoryList", loginHistoryList);
 		return mav;
 	}
 	

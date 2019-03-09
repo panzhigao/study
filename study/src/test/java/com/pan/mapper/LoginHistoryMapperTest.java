@@ -3,6 +3,8 @@ package com.pan.mapper;
 import com.pan.entity.LoginHistory;
 import com.pan.query.QueryLoginHistory;
 import com.pan.test.base.BaseTest;
+import com.pan.util.IPUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class LoginHistoryMapperTest extends BaseTest {
         LoginHistory loginHistory=new LoginHistory();
         loginHistory.setUserId("123");
         loginHistory.setUsername("pzg");
-        loginHistory.setIpStr("127.0.0.1");
+        loginHistory.setIp(IPUtils.ip2Integer("127.0.0.1"));
         loginHistory.setUserAgent("22222222222222222222222222222222222222222222");
         loginHistory.setCreateTime(new Date());
         int insert = loginHistoryMapper.insertSelective(loginHistory);

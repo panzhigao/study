@@ -340,8 +340,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 	            if($('.fly-delete').length==0){
 					$('#LAY_delallmsg').remove();
 				}
-	            var count=$('#messageCount').html();
-	            $('#messageCount').html(--count);
+	            var count=$("#messageCount", parent.document).html();
+	            $("#messageCount", parent.document).html(--count);
 	        }else{
 	        	layer.msg(res.msg);
 	        }

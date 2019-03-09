@@ -26,10 +26,6 @@ public class LoginHistory extends BaseEntity {
      */
     private Integer ip;
     /**
-     * ip地址
-     */
-    private String ipStr;
-    /**
      * 用户代理
      */
     private String userAgent;

@@ -1,21 +1,27 @@
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>好好学习社区用户管理首页</title>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="format-detection" content="telephone=no">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  	<meta name="keywords" content="好好学习社区">
-  	<meta name="description" content="好好学习社区，致力于为web学习交流">
-  	<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-  	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
-	<link rel="stylesheet" href="$!{rc.contextPath}/static/css/font_eolqem241z66flxr.css" media="all" />
-	<link rel="stylesheet" href="$!{rc.contextPath}/static/css/main.css" media="all" />
+<meta charset="utf-8">
+<title>好好学习社区用户管理首页</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="keywords" content="好好学习社区">
+<meta name="description" content="好好学习社区，致力于为web学习交流">
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet"
+	href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+<link rel="stylesheet"
+	href="$!{rc.contextPath}/static/css/font_eolqem241z66flxr.css"
+	media="all" />
+<link rel="stylesheet" href="$!{rc.contextPath}/static/css/main.css"
+	media="all" />
 </head>
 <body class="childrenBody">
 	<div class="panel_box row">
@@ -26,105 +32,121 @@
 					<i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
 				</div>
 				<div class="panel_word newMessage">
-					<span>$!{unReadMessageCount}</span>
-					<cite>未读消息</cite>
-					<input type="hidden" value="我的消息">
+					<span>$!{unReadMessageCount}</span> <cite>未读消息</cite> <input
+						type="hidden" value="我的消息">
 				</div>
 			</a>
 		</div>
-		#end
-		#hasPermission('/user/article/mine')
+		#end #hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#index">
-				<div class="panel_icon" style="background-color:#FF5722;">
+				<div class="panel_icon" style="background-color: #FF5722;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word newMessage">
-					<span>$!{articleTotalCount}</span>
-					<cite>文章数</cite>
-					<input type="hidden" value="我的文章">
+					<span>$!{articleTotalCount}</span> <cite>文章数</cite> <input
+						type="hidden" value="我的文章">
 				</div>
 			</a>
-		</div>	
-		#end
-		#hasPermission('/user/article/mine')
+		</div>
+		#end #hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine?status=2#index">
-				<div class="panel_icon" style="background-color:#F7B824;">
+				<div class="panel_icon" style="background-color: #F7B824;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>$!{articleWaitReviewCount}</span>
-					<cite>审核中文章数</cite>
-					<input type="hidden" value="审核中文章数">
+					<span>$!{articleWaitReviewCount}</span> <cite>审核中文章数</cite> <input
+						type="hidden" value="审核中文章数">
 				</div>
 			</a>
 		</div>
-		#end
-		#hasPermission('/user/article/mine')
+		#end #hasPermission('/user/article/mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#collection">
-				<div class="panel_icon" style="background-color:#2F4056;">
+				<div class="panel_icon" style="background-color: #2F4056;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>$!{collectionCount}</span>
-					<cite>收藏文章数</cite>
-					<input type="hidden" value="我的文章">
+					<span>$!{collectionCount}</span> <cite>收藏文章数</cite> <input
+						type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
-		#end
-		#hasPermission('/user/scoreHistory')
+		#end #hasPermission('/user/scoreHistory')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/scoreHistory">
-				<div class="panel_icon" style="background-color:#009688;">
+				<div class="panel_icon" style="background-color: #009688;">
 					<i class="layui-icon" data-icon="&#xe600;">&#xe600;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{score}</span>
-					<cite>我的积分</cite>
+					<span>$!{score}</span> <cite>我的积分</cite>
 				</div>
 			</a>
 		</div>
 		#end
 		<div class="panel col">
-			<a href="javascript:;" style="pointer-events:none">
-				<div class="panel_icon" style="background-color:#c789c9">
+			<a href="javascript:;" style="pointer-events: none">
+				<div class="panel_icon" style="background-color: #c789c9">
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{praiseCount}</span>
-					<cite>我的点赞数</cite>
+					<span>$!{praiseCount}</span> <cite>我的点赞数</cite>
 				</div>
 			</a>
 		</div>
 		#hasPermission('/user/myPicturePage')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/myPicturePage">
-				<div class="panel_icon" style="background-color:#5FB878;">
+				<div class="panel_icon" style="background-color: #5FB878;">
 					<i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
 				</div>
 				<div class="panel_word imgAll">
-					<span>$!{pictureCount}</span>
-					<cite>我的图片</cite>
+					<span>$!{pictureCount}</span> <cite>我的图片</cite>
 				</div>
 			</a>
 		</div>
 		#end
 		<div class="panel col">
-			<a href="javascript:;" style="pointer-events:none">
+			<a href="javascript:;" style="pointer-events: none">
 				<div class="panel_icon layui-bg-blue">
 					<i class="layui-icon" data-icon="&#xe60e;">&#xe60e;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span style="font-size:1em;">${lastLoginTime}</span>
-					<cite>最近登录时间</cite>
+					<span style="font-size: 1em;">$!date.format('yyyy-MM-dd HH:mm',${lastLoginTime})</span> <cite>最近登录时间</cite>
 				</div>
 			</a>
 		</div>
 	</div>
-	<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
-	<script type="text/javascript" src="$!{rc.contextPath}/static/res/layui-admin/js/main.js"></script>
+	<fieldset class="layui-elem-field layui-field-title site-title">
+      <legend><a name="default">最近5次登陆历史</a></legend>
+    </fieldset>
+	<table class="layui-table">
+		<colgroup>
+			<col width="150">
+			<col width="200">
+			<col>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>登陆时间</th>
+				<th>登陆ip</th>
+				<th>登陆设备信息</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach($vo in $loginHistoryList)
+			<tr>
+				<td>$!date.format('yyyy-MM-dd HH:mm',${vo.createTime})</td>
+				<td>$!{vo.ipStr}</td>
+				<td>$!{vo.userAgent}</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+	<script type="text/javascript"
+		src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+	<script type="text/javascript"
+		src="$!{rc.contextPath}/static/res/layui-admin/js/main.js"></script>
 </body>
 </html>

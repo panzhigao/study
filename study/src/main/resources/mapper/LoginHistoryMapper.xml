@@ -8,12 +8,11 @@
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="ip" property="ip" jdbcType="INTEGER" />
-		<result column="ip_str" property="ipStr" jdbcType="VARCHAR" />
 		<result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id,user_id,username,create_time,ip,inet_ntoa(ip) as ip_str,user_agent
+		id,user_id,username,create_time,ip,user_agent
 	</sql>
 
 	<insert id="insertSelective" parameterType="com.pan.entity.LoginHistory">
@@ -28,7 +27,7 @@
 			<if test="createTime != null">
 				create_time,
 			</if>
-			<if test="ipStr != null">
+			<if test="ip != null">
 				ip,
 			</if>
 			<if test="userAgent != null">
@@ -46,8 +45,8 @@
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="ipStr != null">
-				inet_aton(#{ipStr,jdbcType=VARCHAR}),
+			<if test="ip != null">
+				#{ip,jdbcType=INTEGER},
 			</if>
 			<if test="userAgent != null">
 				#{userAgent,jdbcType=VARCHAR},
@@ -74,6 +73,7 @@
 		<include refid="Base_Column_List" />
 		from t_login_history
 		<include refid="whereSql" />
+		order by create_time desc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>

@@ -220,7 +220,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             LoginHistory loginHistory = new LoginHistory();
             loginHistory.setUserId(userInDb.getUserId());
             loginHistory.setUsername(userInDb.getUsername());
-            loginHistory.setIpStr(TokenUtils.getIp());
+            loginHistory.setIp(IPUtils.ip2Integer(TokenUtils.getIp()));
             loginHistory.setCreateTime(now);
             loginHistory.setUserAgent(TokenUtils.getAttribute(MyConstant.USER_AGENT).toString());
             loginHistoryService.insertSelective(loginHistory);
@@ -455,7 +455,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         roleSetFromDb.forEach(r->builder.append(r));
         operateLogService.addOperateLog(builder.toString(), OperateLogTypeEnum.ROLE_ALLOCATE);
     }
-
+    
+	/**
+	 * 修改用户状态
+	 * 0-禁用，1-开启
+	 * @param userId
+	 * @param status
+	 */
     @Override
     public String changeUserStatus(String userId, Integer status) {
         String message = null;
@@ -473,11 +479,15 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         if (UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
             message = "禁用账号成功";
             userMapper.updateUserByUserId(user);
+            String content="禁用"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
+            operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_DISABLE);
             //清空用户授权信息
             TokenUtils.clearAuth(userId);
         } else if (UserStatusEnum.STATUS_NORMAL.getCode().equals(status)) {
             message = "启用账号成功";
             userMapper.updateUserByUserId(user);
+            String content="开启"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
+            operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_ENABLE);
         } else {
             message = "操作错误，请稍后重试";
         }
@@ -489,7 +499,11 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     public List<User> findUserByRoleId(String roleId) {
         return userMapper.findUserByRoleId(roleId);
     }
-
+    
+	/**
+	 * 用户签到
+	 * 新增一条用户签到积分记录，用户连续签到天数加1
+	 */
     @Override
     public ScoreHistory checkIn(String userId) {
         ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreTypeEnum.CHECK_IN);
