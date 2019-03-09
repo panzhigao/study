@@ -8,6 +8,7 @@ import com.pan.common.constant.MyConstant;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.entity.User;
+import com.pan.util.IPUtils;
 import com.pan.util.TokenUtils;
 
 
@@ -32,6 +33,8 @@ public class SessionInterceptor implements HandlerInterceptor{
 		response.addHeader("X-frame-options", "SAMEORIGIN");
 		String userAgent = request.getHeader(MyConstant.USER_AGENT_HEADER);
 		TokenUtils.setAttribute(MyConstant.USER_AGENT,userAgent);
+		String ipAddress = IPUtils.getIpAddress(request);
+		TokenUtils.setAttribute(MyConstant.USER_IP,ipAddress);
 		return true;
 	}
 	

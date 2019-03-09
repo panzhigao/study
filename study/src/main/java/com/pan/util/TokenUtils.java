@@ -6,6 +6,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+
+import com.pan.common.constant.MyConstant;
 import com.pan.entity.User;
 import com.pan.shiro.MyRealm;
 import java.util.Collection;
@@ -108,7 +110,7 @@ public class TokenUtils {
 	 * @return
 	 */
 	public static String getIp(){
-		return getSession().getHost();
+		return getAttribute(MyConstant.USER_IP)==null?"0.0.0.0":(String)getAttribute(MyConstant.USER_IP);
 	}
 
 	/**

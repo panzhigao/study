@@ -58,4 +58,8 @@ public class MyConstant {
      * 私钥
      */
     public static final String PRIVATE_KEY="private_key";
+    /**
+     * 用户ip
+     */
+    public static final String USER_IP = "userIP";
 }
