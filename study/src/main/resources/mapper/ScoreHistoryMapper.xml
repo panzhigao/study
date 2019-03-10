@@ -21,7 +21,7 @@
     id,user_id,score,type,type_name,score_date,create_time
   </sql>
   
-  <insert id="insertSelective" parameterType="com.pan.ScoreHistory">
+  <insert id="insertSelective" parameterType="com.pan.entity.ScoreHistory">
     insert into t_score_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
