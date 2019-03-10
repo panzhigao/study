@@ -2,6 +2,8 @@ package com.pan.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,15 +91,15 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
-	public Map<String,Object> getUserArticleList(Integer pageSize,Integer pageNo,Integer status){
+	public Map<String,Object> getUserArticleList(QueryArticle queryArticle){
 		String loingUserId = TokenUtils.getLoginUserId();
-		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setUserId(loingUserId);
-		queryArticle.setPageSize(pageSize);
-		queryArticle.setPageNo(pageNo);
-		queryArticle.setStatus(status);
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
-		queryArticle.setOrderCondition("create_time desc");
+		if(StringUtils.isNotBlank(queryArticle.getOrderCondition())){
+			queryArticle.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticle.getOrderCondition()));
+		}else{			
+			queryArticle.setOrderCondition("create_time desc");
+		}
 		Map<String,Object> pageData=articleService.findByParams(queryArticle);
 		return pageData;
 	}

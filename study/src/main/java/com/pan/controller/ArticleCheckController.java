@@ -2,6 +2,8 @@ package com.pan.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,12 +46,13 @@ public class ArticleCheckController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/check/getPageData")
 	@ResponseBody
 	@RequiresPermissions(value="/user/check")
-	public Map<String,Object> getArticleCheckList(Integer pageSize,Integer pageNo,String completeFlag){
-		QueryArticleCheck queryArticleCheckVO=new QueryArticleCheck();
-		queryArticleCheckVO.setPageSize(pageSize);
-		queryArticleCheckVO.setPageNo(pageNo);
-		queryArticleCheckVO.setCompleteFlag(completeFlag);
-		Map<String,Object> pageData=articleCheckService.findByParams(queryArticleCheckVO);
+	public Map<String,Object> getArticleCheckList(QueryArticleCheck queryArticleCheck){
+		if(StringUtils.isNotBlank(queryArticleCheck.getOrderCondition())){
+			queryArticleCheck.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticleCheck.getOrderCondition()));
+		}else{			
+			queryArticleCheck.setOrderCondition("create_time desc");
+		}
+		Map<String,Object> pageData=articleCheckService.findByParams(queryArticleCheck);
 		return pageData;
 	}
 	

@@ -44,8 +44,24 @@ public class DateUtils {
 		return time;
 	}
 	
+	public static Date todayMinusDays(int days){
+		Calendar cal=Calendar.getInstance();
+		cal.add(Calendar.DATE,-days);
+		Date time=cal.getTime();
+		return time;
+	}
+	
+	public static Date minusDays(Date date,int days){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE,-days);
+		Date time=cal.getTime();
+		return time;
+	}
+	
 	public static void main(String[] args) {
 		Date lastDate = getYesterdayDate();
 		System.out.println(lastDate);
+		System.out.println(getDateStr(todayMinusDays(5),FORMAT_DATE));
 	}
 }

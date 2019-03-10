@@ -2,6 +2,8 @@ package com.pan.controller;
 
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,9 @@ public class UserManageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/manage")
 	public Map<String,Object> getUserList(QueryUser queryUser){
+		if(StringUtils.isNotBlank(queryUser.getOrderCondition())){
+			queryUser.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryUser.getOrderCondition()));
+		}
 		Map<String,Object> pageData=userService.findPageData(queryUser);
 		return pageData;
 	}

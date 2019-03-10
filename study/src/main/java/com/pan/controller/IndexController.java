@@ -55,11 +55,11 @@ public class IndexController {
 			UserExtension extension = userExtensionService.findByUserId(TokenUtils.getLoginUserId());
 			mav.addObject("checkInDays", extension.getContinuousCheckInDays());
 			//查询今日是否已签到
-			QueryScoreHistory historyVO=new QueryScoreHistory();
-			historyVO.setUserId(TokenUtils.getLoginUserId());
-			historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
-			historyVO.setScoreDate(new Date());
-			List<ScoreHistory> list = scoreHistoryService.findByParams(historyVO);
+			QueryScoreHistory queryScoreHistory=new QueryScoreHistory();
+			queryScoreHistory.setUserId(TokenUtils.getLoginUserId());
+			queryScoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
+			queryScoreHistory.setScoreDate(new java.sql.Date(new Date().getTime()));
+			List<ScoreHistory> list = scoreHistoryService.findPageable(queryScoreHistory);
 			//今日已签到
 			if(list.size()==1){
 				mav.addObject("checked", "Y");
@@ -115,14 +115,14 @@ public class IndexController {
 		//最新签到
 		QueryScoreHistory historyVO=new QueryScoreHistory();
 		historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
-		historyVO.setScoreDate(new Date());
+		historyVO.setScoreDate(new java.sql.Date(new Date().getTime()));
 		historyVO.setOrderCondition("create_time desc");
 		historyVO.setPageNo(1);
 		historyVO.setPageSize(20);
-		List<ScoreHistoryVO> newList = scoreHistoryService.findVOByParams(historyVO);
+		List<ScoreHistoryVO> newList = scoreHistoryService.findVOPageable(historyVO);
 		//最快签到
 		historyVO.setOrderCondition("create_time asc");
-		List<ScoreHistoryVO> fastList = scoreHistoryService.findVOByParams(historyVO);
+		List<ScoreHistoryVO> fastList = scoreHistoryService.findVOPageable(historyVO);
 		//总签到榜
 		QueryUserExtension extensionVO=new QueryUserExtension();
 		extensionVO.setPageNo(1);

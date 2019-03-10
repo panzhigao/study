@@ -109,11 +109,16 @@ layui.use(['table','jquery'], function(){
 	    }
 	  });
 	  
+	  table.on('sort(myTable)', function(obj){
+		  reload('articlesTab',obj);
+	  });
+	  
 	  //第一个实例
 	  table.render({
 		id: 'articlesTab',  
 	    method: 'post',  
 	    elem: '#myArticles',
+	    autoSort: false,
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -131,11 +136,11 @@ layui.use(['table','jquery'], function(){
 	    },
 	    where:{status:'$!{status}'},
 	    cols: [[ //表头
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'articleId', title: '文章ID', width:100,fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
-	      {field: 'status', title: '状态', width:100, sort: true,templet:
+	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
 	    	  	switch(d.status){
 		    	  	case 0:temp='审核未通过';break;
@@ -179,11 +184,21 @@ layui.use(['table','jquery'], function(){
 	  
 	  
 	  var status='';
-	  function reload(tableId){
+	  var sortObj;
+	  function reload(tableId,obj){
+		 var orderCondition=null;
+		 if(obj){
+			 sortObj=obj;
+			 orderCondition=sortObj.field+" "+sortObj.type;
+		 }
 		 //执行重载
 		 table.reload(tableId, {
 		 page: {curr: 1},
-		 where: {status:status}
+		 initSort: sortObj,
+		 where: {
+			 status:status,
+			 orderCondition:orderCondition
+			 }
 		 }); 
 	  }
 	  
@@ -248,11 +263,11 @@ layui.use(['table','jquery'], function(){
 	    	$('#collectionCounts').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'articleId', title: '文章ID', width:100, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
-	      {field: 'createTime', title: '收藏时间', width:200, sort: true,templet:function(d){
+	      {field: 'createTime', title: '收藏时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:160,templet:function(row){

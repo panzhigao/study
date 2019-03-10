@@ -1,9 +1,9 @@
 package com.pan.query;
 
+import java.sql.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Date;
 
 
 /**
@@ -30,4 +30,12 @@ public class QueryScoreHistory extends QueryBase{
 	 * 积分日期
 	 */
 	private Date scoreDate;
+	/**
+	 * 积分开始日期
+	 */
+	private Date scoreDateStart;
+	/**
+	 * 积分结束日期
+	 */
+	private Date scoreDateEnd;
 }

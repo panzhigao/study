@@ -232,7 +232,7 @@
   		<if test="publishTime !=null ">
   			publish_time=#{publishTime,jdbcType=TIMESTAMP},
   		</if>
-  		<if test="status!=null and status!=''">
+  		<if test="status!=null">
   			status=#{status,jdbcType=INTEGER},
   		</if>
   		<if test="outline != null and outline !=''">

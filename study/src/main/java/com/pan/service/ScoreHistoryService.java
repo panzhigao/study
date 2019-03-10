@@ -11,19 +11,11 @@ import com.pan.vo.ScoreHistoryVO;
 /**
  * @author panzhigao
  */
-public interface ScoreHistoryService {
+public interface ScoreHistoryService extends BaseService<ScoreHistory>{
     /**
      * 登陆奖励积分
      */
     void addLoginScore(String userId);
-
-    /**
-     * 保存积分记录
-     *
-     * @param scoreHistory
-     */
-    void save(ScoreHistory scoreHistory);
-
     /**
      * 签到
      *
@@ -38,31 +30,13 @@ public interface ScoreHistoryService {
      * @param scoreTypeEnum 积分类型
      */
     ScoreHistory addScoreHistory(String userId, ScoreTypeEnum scoreTypeEnum);
-
-    /**
-     * 查询条数
-     *
-     * @param historyVO
-     * @return
-     */
-    int getCountByParams(QueryScoreHistory historyVO);
-
     /**
      * 多条件查询，支持分页
      *
      * @param historyVO
      * @return
      */
-    List<ScoreHistory> findByParams(QueryScoreHistory historyVO);
-
-    /**
-     * 多条件查询，支持分页
-     *
-     * @param historyVO
-     * @return
-     */
-    List<ScoreHistoryVO> findVOByParams(QueryScoreHistory historyVO);
-
+    List<ScoreHistoryVO> findVOPageable(QueryScoreHistory queryScoreHistory);
     /**
      * 获取今日签到积分
      *
@@ -75,5 +49,5 @@ public interface ScoreHistoryService {
      *
      * @return
      */
-    Map<String, List<ScoreHistory>> findShowData(QueryScoreHistory historyVO);
+    Map<String, List<ScoreHistory>> findShowData(QueryScoreHistory queryScoreHistory);
 }

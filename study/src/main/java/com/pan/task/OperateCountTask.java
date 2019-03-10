@@ -145,20 +145,20 @@ public class OperateCountTask {
 					queryUserExtensionVO.setPageNo(i);
 					List<UserExtension> resultList = userExtensionService.findByParams(queryUserExtensionVO);
 					UserExtension updateExtension = new UserExtension();
-					QueryScoreHistory historyVO = new QueryScoreHistory();
-					historyVO.setScoreDate(DateUtils.getYesterdayDate());
+					QueryScoreHistory queryScoreHistory = new QueryScoreHistory();
+					queryScoreHistory.setScoreDate(new java.sql.Date(DateUtils.getYesterdayDate().getTime()));
 					for (UserExtension userExtension : resultList) {
 						updateExtension.setUserId(userExtension.getUserId());
 						// 查询昨日是否签到
-						historyVO.setUserId(userExtension.getUserId());
-						historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
-						int checkCount = scoreHistoryService.getCountByParams(historyVO);
+						queryScoreHistory.setUserId(userExtension.getUserId());
+						queryScoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
+						int checkCount = scoreHistoryService.countByParams(queryScoreHistory);
 						// 昨天没有签到,连续签到天数重置为0
 						if (checkCount == 0 && userExtension.getContinuousCheckInDays() != 0) {
 							updateExtension.setContinuousCheckInDays(0);
 						}
-						historyVO.setType(ScoreTypeEnum.LOGIN.getCode());
-						int loginCount = scoreHistoryService.getCountByParams(historyVO);
+						queryScoreHistory.setType(ScoreTypeEnum.LOGIN.getCode());
+						int loginCount = scoreHistoryService.countByParams(queryScoreHistory);
 						// 昨天没有登录,连续登录天数重置为0
 						if (loginCount == 0 && userExtension.getContinuousLoginDays() != 0) {
 							updateExtension.setContinuousLoginDays(0);

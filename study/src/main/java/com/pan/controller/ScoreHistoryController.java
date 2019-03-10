@@ -1,8 +1,8 @@
 package com.pan.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ScoreHistory;
 import com.pan.query.QueryScoreHistory;
@@ -48,14 +47,21 @@ public class ScoreHistoryController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/scoreHistory/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/scoreHistory")
-	public ResultMsg getScoreHistory(Integer pageSize,Integer pageNo){
+	public ResultMsg getScoreHistory(QueryScoreHistory queryScoreHistory){
 		String loingUserId = TokenUtils.getLoginUserId();
-		QueryScoreHistory queryScoreHistory=new QueryScoreHistory();
 		queryScoreHistory.setUserId(loingUserId);
-		queryScoreHistory.setPageSize(pageSize);
-		queryScoreHistory.setPageNo(pageNo);
 		queryScoreHistory.setOrderCondition("create_time desc");
 		Map<String, List<ScoreHistory>> findShowData = scoreHistoryService.findShowData(queryScoreHistory);
-		return ResultMsg.ok("获取积分历史数据成功", findShowData);
+		queryScoreHistory.setScoreDateEnd(null);
+		int loadedCount = scoreHistoryService.countByParams(queryScoreHistory);
+		//总条数
+		QueryScoreHistory queryScoreHistory2=new QueryScoreHistory();
+		queryScoreHistory2.setUserId(loingUserId);
+		int total = scoreHistoryService.countByParams(queryScoreHistory2);
+		Map<String,Object> resultMap=new HashMap<>();
+		resultMap.put("total", total);
+		resultMap.put("data", findShowData);
+		resultMap.put("hasData", total>loadedCount);
+		return ResultMsg.ok("获取积分历史数据成功", resultMap);
 	}
 }

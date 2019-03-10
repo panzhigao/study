@@ -218,6 +218,14 @@
   	from t_user tu left join t_user_role tur on tu.user_id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
   	<include refid="whereSql"/>
   	group by tu.user_id
+  	<choose>
+  		<when test="orderCondition !=null and orderCondition !=''">
+  			order by ${orderCondition}
+  		</when>
+  		<otherwise>
+  			order by id asc
+  		</otherwise>
+  	</choose>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>

@@ -78,7 +78,7 @@
 
 
         <!-- 表生成映射 -->
-		<table tableName="t_praise"  domainObjectName="Praise"
+		<table tableName="t_score_history"  domainObjectName="ScoreHistory"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

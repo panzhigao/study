@@ -103,7 +103,7 @@ layui.use(['table','jquery','form'], function(){
 	      {field: 'content', title: '操作内容', width:800},
 	      {field: 'ipStr', title: 'ip地址', width:100},
 	      {field: 'createTime', title: '操作时间', width:160,templet:function(d){
-	    	 return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
+	    	 return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }}
 	    ]]
 	  });

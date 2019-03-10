@@ -53,6 +53,14 @@
   <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCheck">
   	select <include refid="Base_Column_List"/> from t_article_check c
   	<include refid="whereSql"/>
+  	<choose>
+  		<when test="orderCondition !=null and orderCondition !=''">
+  			order by ${orderCondition}
+  		</when>
+  		<otherwise>
+  			order by create_time desc
+  		</otherwise>
+  	</choose>
   	<if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>

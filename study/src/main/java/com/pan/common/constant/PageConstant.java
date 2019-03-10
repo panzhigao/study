@@ -9,7 +9,7 @@ public class PageConstant {
     /**
      * 最大分页条数
      */
-    public static final int MAX_PAGE_SIZE=30;
+    public static final int MAX_PAGE_SIZE=100;
     /**
      * 分页5
      */

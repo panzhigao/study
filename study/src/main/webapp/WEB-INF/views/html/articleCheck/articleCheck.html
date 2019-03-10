@@ -99,12 +99,17 @@ layui.use(['table','jquery'], function(){
 	    }
 	  });
 	  
-	  //监听工具条
-	  table.on('tool(tab2)', function(obj){
-		  var data = obj.data;
-		  if(obj.event === 'detail'){
-			  view(data.id);
+	  table.on('sort(tab1)', function(obj){
+		  var orderCondition=null;
+		  if(obj){
+			  orderCondition=obj.field+" "+obj.type;
 		  }
+		  table.reload('notCompleteTab', {
+			    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+			    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+			      orderCondition:orderCondition
+			    }
+			});
 	  });
 	  
 	  //第一个实例
@@ -129,19 +134,19 @@ layui.use(['table','jquery'], function(){
 	    	$('#notCompleteCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'username', title: '用户名', width:120, sort: true, fixed: 'left',templet:function(d){
+	      {field: 'id', title: 'ID', width:80,fixed: 'left'},
+	      {field: 'username', title: '用户名', width:120,fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
 	      }},
-	      {field: 'articleId', title: '文章ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'articleId', title: '文章ID', width:100,fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:400,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'checkType', title: '审核类型', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.checkType){
-		    	  	case '0':temp='创建';break;
-		    	  	case '1':temp='修改';break;
+		    	  	case 0:temp='创建';break;
+		    	  	case 1:temp='修改';break;
 		    	  	default:temp="无状态";
 	    	  	}
 	    	  	return temp;
@@ -162,6 +167,26 @@ layui.use(['table','jquery'], function(){
 	    ]]
 	  });
 	  
+	  //监听工具条
+	  table.on('tool(tab2)', function(obj){
+		  var data = obj.data;
+		  if(obj.event === 'detail'){
+			  view(data.id);
+		  }
+	  });
+	  
+	  table.on('sort(tab2)', function(obj){
+		  var orderCondition=null;
+		  if(obj){
+			  orderCondition=obj.field+" "+obj.type;
+		  }
+		  table.reload('completeTab', {
+			    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+			    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+			      orderCondition:orderCondition
+			    }
+			});
+	  });
 	  
 	  //第二个实例
 	  table.render({
@@ -185,15 +210,13 @@ layui.use(['table','jquery'], function(){
 	    	$('#completeCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
-	      {field: 'username', title: '用户名', width:100, sort: true, fixed: 'left',templet:function(d){
+	      {field: 'id', title: 'ID', width:80,fixed: 'left'},
+	      {field: 'username', title: '用户名', width:100, fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.nickname+'</a>';
 	      }},
-	      {field: 'articleId', title: '文章ID', width:100, sort: true},
-	      {field: 'title', title: '文章标题', width:200,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
-	      }},
-	      {field: 'checkType', title: '审核类型', width:100, sort: true,templet:
+	      {field: 'articleId', title: '文章ID', width:100},
+	      {field: 'title', title: '文章标题', width:200},
+	      {field: 'checkType', title: '审核类型', width:100,sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.checkType){
 		    	  	case 0:temp='创建';break;

@@ -17,12 +17,13 @@ import com.pan.entity.UserExtension;
 import com.pan.mapper.ScoreHistoryMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.query.QueryScoreHistory;
+import com.pan.service.AbstractBaseService;
 import com.pan.service.ScoreHistoryService;
 import com.pan.util.DateUtils;
 import com.pan.vo.ScoreHistoryVO;
 
 @Service
-public class ScoreHistoryServiceImpl implements ScoreHistoryService{
+public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, ScoreHistoryMapper> implements ScoreHistoryService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(ScoreHistoryServiceImpl.class);
 	
@@ -33,10 +34,10 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	private UserExtensionMapper userExtensionMapper;
 	
 	@Override
-	public void save(ScoreHistory scoreHistory) {
-		scoreHistoryMapper.save(scoreHistory);
+	protected ScoreHistoryMapper getBaseMapper() {
+		return scoreHistoryMapper;
 	}
-	
+		
 	/**
 	 * 签到，可得5分
 	 */
@@ -44,8 +45,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	public void checkIn(String userId) {
 		QueryScoreHistory query=new QueryScoreHistory();
 		query.setUserId(userId);
-		query.setScoreDate(new Date());
-		int count = scoreHistoryMapper.getCountByParams(query);
+		query.setScoreDate(new java.sql.Date(new Date().getTime()));
+		int count = scoreHistoryMapper.countByParams(query);
 		if(count>0){
 			throw new BusinessException("今天已签到过了");
 		}
@@ -56,7 +57,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		scoreHistory.setScore(ScoreTypeEnum.CHECK_IN.getScore());
 		scoreHistory.setScoreDate(new Date());
 		scoreHistory.setCreateTime(new Date());
-		scoreHistoryMapper.save(scoreHistory);
+		scoreHistoryMapper.insertSelective(scoreHistory);
 	}
 
 	@Override
@@ -64,8 +65,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		QueryScoreHistory vo=new QueryScoreHistory();
 		vo.setUserId(userId);
 		vo.setType(ScoreTypeEnum.LOGIN.getCode());
-		vo.setScoreDate(new Date());
-		int counts = scoreHistoryMapper.getCountByParams(vo);
+		vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+		int counts = scoreHistoryMapper.countByParams(vo);
 		if(counts>0){
 			logger.debug("{}今日已获取过登陆积分",userId);
 			return;
@@ -74,7 +75,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		BeanUtils.copyProperties(vo, history);
 		history.setCreateTime(new Date());
 		history.setScore(ScoreTypeEnum.LOGIN.getScore());
-		scoreHistoryMapper.save(history);
+		scoreHistoryMapper.insertSelective(history);
 		//登录加5分
 		UserExtension userExtension=new UserExtension();
 		userExtension.setUserId(userId);
@@ -97,16 +98,16 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
-			vo.setScoreDate(new Date());
-			int counts = scoreHistoryMapper.getCountByParams(vo);
+			vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+			int counts = scoreHistoryMapper.countByParams(vo);
 			//今日获取过签到积分，不能再次获取
 			if(counts>0){
 				logger.debug("{}今日已获取过签到积分",userId);
 				throw new BusinessException("今日已签到过了");
 			}
 			//查询昨日是否签到
-			vo.setScoreDate(DateUtils.getYesterdayDate());
-			int lastDayCount = scoreHistoryMapper.getCountByParams(vo);
+			vo.setScoreDate(new java.sql.Date(DateUtils.getYesterdayDate().getTime()));
+			int lastDayCount = scoreHistoryMapper.countByParams(vo);
 			//昨日没有签到过，按5积分算,用户连续签到天数置为0
 			if(lastDayCount>0){
 				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
@@ -119,8 +120,8 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
-			vo.setScoreDate(new Date());
-			int counts = scoreHistoryMapper.getCountByParams(vo);
+			vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+			int counts = scoreHistoryMapper.countByParams(vo);
 			//今日获取过登陆积分，不能再次获取
 			if(counts>0){
 				logger.debug("{}今日已获取过登陆积分",userId);
@@ -135,19 +136,10 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		history.setScoreDate(new Date());
 		history.setScore(score);
 		//保存积分历史
-		scoreHistoryMapper.save(history);
+		scoreHistoryMapper.insertSelective(history);
 		return history;
 	}
 
-	@Override
-	public int getCountByParams(QueryScoreHistory historyVO) {
-		return scoreHistoryMapper.getCountByParams(historyVO);
-	}
-
-	@Override
-	public List<ScoreHistory> findByParams(QueryScoreHistory historyVO) {
-		return scoreHistoryMapper.findByParams(historyVO);
-	}
 	
 	/**
 	 * 计算今天签到分数
@@ -171,10 +163,6 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		return checkInScore;
 	}
 
-	@Override
-	public List<ScoreHistoryVO> findVOByParams(QueryScoreHistory historyVO) {
-		return scoreHistoryMapper.findVOByParams(historyVO);
-	}
 	
 	/**
 	 * 获取积分数据，按日期分组，用于前端展示
@@ -182,7 +170,7 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 	 */
 	@Override
 	public Map<String,List<ScoreHistory>> findShowData(QueryScoreHistory historyVO) {
-		List<ScoreHistory> list = scoreHistoryMapper.findByParams(historyVO);
+		List<ScoreHistory> list = scoreHistoryMapper.findPageable(historyVO);
 		Map<String,List<ScoreHistory>> resultMap=new LinkedHashMap<String, List<ScoreHistory>>(list.size());
 		for (ScoreHistory scoreHistory : list) {
 			Date scoreDate = scoreHistory.getScoreDate();
@@ -198,4 +186,11 @@ public class ScoreHistoryServiceImpl implements ScoreHistoryService{
 		}
 		return resultMap;
 	}
+
+	@Override
+	public List<ScoreHistoryVO> findVOPageable(QueryScoreHistory historyVO) {
+		return scoreHistoryMapper.findVOPageable(historyVO);
+	}
+
+
 }

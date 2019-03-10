@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>我的消息</title>
+  <title>我的积分</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="好好学习社区">
   <meta name="description" content="好好学习社区，致力于为web学习交流">
@@ -14,7 +14,7 @@
 <body class="childrenBody">
  <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;margin-left:60px;">
-       <ul class="layui-timeline"></ul>
+       <ul class="layui-timeline" id="scoreList"></ul>
      </div>
   </div>
 </div>
@@ -36,56 +36,69 @@ layui.config({
   ,base: '$!{rc.contextPath}/static/res/mods/'
 }).extend({
   fly: 'index'
-}).use(['fly'],function(){
-	loadMessages();
+}).use(['fly','flow','form'],function(){
+	//loadMessages();
+	//流加载图片
+    var scoreDateEnd =new Date().format('yyyy-MM-dd');
+    var scoreDateStart=minusDays(new Date(),5);
+    var flow = layui.flow,form = layui.form;
+    flow.load({
+        elem: '#scoreList', //流加载容器
+        done: function(pageNo, next){ //加载下一页
+        	$.ajax({
+        		url:'$!{rc.contextPath}/user/scoreHistory/getPageData',
+        		type:'post',
+        		data:{scoreDateStart:scoreDateStart,scoreDateEnd:scoreDateEnd},
+        		dataType:'json',
+        		success:function(result){
+        			if(result.code=='200'){
+        				var data=result.data.data;
+        				scoreDateEnd=scoreDateStart;
+        				scoreDateStart=minusDays(new Date(scoreDateEnd),5);
+        				var listArr = [];
+        				for(var key in data){
+        					var list=data[key];
+        					var one='<li class="layui-timeline-item">'+
+        				    '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'+
+        				    '<div class="layui-timeline-content layui-text">'+
+        				    '<h3 class="layui-timeline-title">'+key+'</h3>';
+        					var length=list.length;
+        					for(var i=0;i<length;i++){
+        						var history=list[i];
+        						var scoreShow;
+        						if(history.score>0){
+        	 						scoreShow='<span>+'+history.score+'积分</span>';
+        	 					}else{
+        	 						scoreShow='<span>-'+history.score+'积分<span>';
+        	 					}
+        						var icon;
+        						switch(history.type){
+        							case "1":icon='&#xe609;';break;//登陆
+        							case "2":icon='&#xe6b2;';break;//发表文章成功
+        							case "3":icon='&#xe655;';break;//回帖
+        							case "4":icon='&#xe66c;';break;//签到
+        							case "5":icon='&#xe66f;';break;//注册
+        							default:icon='';
+        						}
+        						one+='<p style="width:260px;height:30px;"><i class="layui-icon">'+icon+'</i>&nbsp;<span>'+history.typeName+'</span>'+
+        								'<span>'+scoreShow+'</span>'+
+        								'<span style="float:right;">'+dateFormat('hh:mm',new Date(history.createTime))+'</span>'
+        							 '</p>';
+        					}
+        					one+='</div></li>';
+        					listArr.push(one);
+        				}
+        				next(listArr.join(''), result.data.hasData);
+                        form.render();
+        			}else{
+        				layer.msg("加载积分历史失败");
+        			}
+        		}	
+        	})
+        }
+    });
 });
 
-function loadMessages(){
-	$.ajax({
-		url:"$!{rc.contextPath}/user/scoreHistory/getPageData",
-		type:"post",
-		dataType:'json',
-		success:function(result){
-			if(result.code=='200'){
-				var data=result.data;
-				for(var key in data){
-					var list=data[key];
-					var one='<li class="layui-timeline-item">'+
-				    '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'+
-				    '<div class="layui-timeline-content layui-text">'+
-				    '<h3 class="layui-timeline-title">'+key+'</h3>';
-					var length=list.length;
-					for(var i=0;i<length;i++){
-						var history=list[i];
-						var scoreShow;
-						if(history.score>0){
-	 						scoreShow='<span>+'+history.score+'积分</span>';
-	 					}else{
-	 						scoreShow='<span>-'+history.score+'积分<span>';
-	 					}
-						var icon;
-						switch(history.type){
-							case "1":icon='&#xe609;';break;//登陆
-							case "2":icon='&#xe6b2;';break;//发表文章成功
-							case "3":icon='&#xe655;';break;//回帖
-							case "4":icon='&#xe66c;';break;//签到
-							case "5":icon='&#xe66f;';break;//注册
-							default:icon='';
-						}
-						one+='<p style="width:260px;height:30px;"><i class="layui-icon">'+icon+'</i>&nbsp;<span>'+history.typeName+'</span>'+
-								'<span>'+scoreShow+'</span>'+
-								'<span style="float:right;">'+dateFormat('hh:mm',new Date(history.createTime))+'</span>'
-							 '</p>';
-					}
-					one+='</div></li>';
-					$('.layui-timeline').append(one);
-				}
-			}else{
-				layer.msg("加载积分历史失败");
-			}
-		}
-	});
-}
 </script>
 <div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
 </body>

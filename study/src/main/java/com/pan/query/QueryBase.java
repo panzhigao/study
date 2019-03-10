@@ -31,7 +31,7 @@ public class QueryBase {
     }
 
     /**
-     * 限制pageSize最多30
+     * 限制pageSize最多100
      *
      * @param pageSize
      */

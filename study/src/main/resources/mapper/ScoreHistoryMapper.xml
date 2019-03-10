@@ -21,19 +21,62 @@
     id,user_id,score,type,type_name,score_date,create_time
   </sql>
   
-
-  <insert id="save" parameterType="com.pan.entity.ScoreHistory">
-  	insert into t_score_history (<include refid="Base_Column_List"/>) values 
-  	(null,#{userId,jdbcType=VARCHAR},#{score,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{typeName,jdbcType=VARCHAR},
-  	#{scoreDate,jdbcType=DATE},#{createTime,jdbcType=TIMESTAMP})
+  <insert id="insertSelective" parameterType="com.pan.ScoreHistory">
+    insert into t_score_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="typeName != null">
+        type_name,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="scoreDate != null">
+        score_date,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="scoreDate != null">
+        #{scoreDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
   </insert>
   
-  <select id="getCountByParams" resultType="int" parameterType="com.pan.query.QueryScoreHistory">
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryScoreHistory">
   	select count(0) from t_score_history 
   	<include refid="whereSql"/>
   </select>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryScoreHistory">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryScoreHistory">
   	select <include refid="Base_Column_List"/> from t_score_history
   	<include refid="whereSql"/>
   	<if test="orderCondition !=null and orderCondition !=''">
@@ -44,11 +87,14 @@
   	</if>
   </select>
   
-  <select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryScoreHistory">
+  <select id="findVOPageable" resultMap="VOMap" parameterType="com.pan.query.QueryScoreHistory">
   	select score.user_id,score.create_time,user.nickname,user_portrait from t_score_history score join t_user user on score.user_id=user.user_id
   	<include refid="whereSql"/>
   	<if test="orderCondition !=null and orderCondition !=''">
   		order by ${orderCondition}
+  	</if>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
   	</if>
   </select>
   
@@ -63,6 +109,12 @@
   		</if>
   		<if test="scoreDate !=null">
   			and score_date=#{scoreDate,jdbcType=DATE}
+  		</if>
+  		<if test="scoreDateStart !=null">
+  			and score_date >= #{scoreDateStart,jdbcType=DATE}
+  		</if>
+  		<if test="scoreDateEnd !=null">
+  			and score_date &lt;= #{scoreDateEnd,jdbcType=DATE}
   		</if>
   	</where>
   </sql>
