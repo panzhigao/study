@@ -3,8 +3,6 @@ package com.pan.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +33,7 @@ public class ScoreHistoryController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/scoreHistory")
 	@RequiresPermissions("/user/scoreHistory")
-	public ModelAndView writeArticle(HttpServletRequest request){
+	public ModelAndView scoreHistoryPage(){
 		ModelAndView mav=new ModelAndView("html/scoreHistory/scoreHistoryPage");
 		return mav;
 	}
@@ -48,17 +46,17 @@ public class ScoreHistoryController {
 	@ResponseBody
 	@RequiresPermissions("/user/scoreHistory")
 	public ResultMsg getScoreHistory(QueryScoreHistory queryScoreHistory){
-		String loingUserId = TokenUtils.getLoginUserId();
-		queryScoreHistory.setUserId(loingUserId);
+		String loginUserId = TokenUtils.getLoginUserId();
+		queryScoreHistory.setUserId(loginUserId);
 		queryScoreHistory.setOrderCondition("create_time desc");
 		Map<String, List<ScoreHistory>> findShowData = scoreHistoryService.findShowData(queryScoreHistory);
 		queryScoreHistory.setScoreDateEnd(null);
 		int loadedCount = scoreHistoryService.countByParams(queryScoreHistory);
 		//总条数
 		QueryScoreHistory queryScoreHistory2=new QueryScoreHistory();
-		queryScoreHistory2.setUserId(loingUserId);
+		queryScoreHistory2.setUserId(loginUserId);
 		int total = scoreHistoryService.countByParams(queryScoreHistory2);
-		Map<String,Object> resultMap=new HashMap<>();
+		Map<String,Object> resultMap=new HashMap<>(4);
 		resultMap.put("total", total);
 		resultMap.put("data", findShowData);
 		resultMap.put("hasData", total>loadedCount);

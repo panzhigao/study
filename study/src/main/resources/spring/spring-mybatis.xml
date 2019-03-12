@@ -22,6 +22,7 @@
 		<property name="minIdle" value="${jdbc.minIdle}" />
 		<property name="maxActive" value="${jdbc.maxActive}" />
 		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}"/>
 	</bean>
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

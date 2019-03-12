@@ -7,18 +7,20 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 public class IPUtils {
+
+    public static  final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
+
 	 /**
      * IPv4地址转换为int类型数字
      * 
      */
     public static int ip2Integer(String ipv4Addr) {
         // 判断是否是ip格式的
-        if (!isIPv4Address(ipv4Addr))
+        if (!isIPv4Address(ipv4Addr)){
             throw new RuntimeException("Invalid ip address");
-
+        }
         // 匹配数字
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(ipv4Addr);
+        Matcher matcher = DIGIT_PATTERN.matcher(ipv4Addr);
         int result = 0;
         int counter = 0;
         while (matcher.find()) {
@@ -33,7 +35,8 @@ public class IPUtils {
      * 
      */
     private static boolean isIPv4Address(String ipv4Addr) {
-        String lower = "(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])"; // 0-255的数字
+        // 0-255的数字
+        String lower = "(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])";
         String regex = lower + "(\\." + lower + "){3}";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(ipv4Addr);
@@ -47,7 +50,8 @@ public class IPUtils {
     public static String integer2Ip(int ip) {
         StringBuilder sb = new StringBuilder();
         int num = 0;
-        boolean needPoint = false; // 是否需要加入'.'
+        // 是否需要加入'.'
+        boolean needPoint = false;
         for (int i = 0; i < 4; i++) {
             if (needPoint) {
                 sb.append('.');

@@ -450,9 +450,9 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         //记录日志
         StringBuilder builder=new StringBuilder();
         builder.append("为用户(username=").append(user.getUsername()).append(")分配角色，角色从:");
-        roleSet.forEach(r->builder.append(r));
-        builder.append("=======>>>");
         roleSetFromDb.forEach(r->builder.append(r));
+        builder.append("===>>");
+        roleSet.forEach(r->builder.append(r));
         operateLogService.addOperateLog(builder.toString(), OperateLogTypeEnum.ROLE_ALLOCATE);
     }
     
