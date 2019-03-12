@@ -84,6 +84,10 @@ function tranTime(fromTime,format){
 }
 
 var interval;
+
+/**
+ * 获取未读消息
+ */
 function websocketConnect(){
 	$.post('/user/message/count',{},function(res){ $("#messageCount").html(res.data);});
 	

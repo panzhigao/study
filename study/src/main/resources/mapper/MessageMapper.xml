@@ -20,12 +20,7 @@
     id, message_id, status, receiver_user_id, sender_name, sender_user_id, message_type, 
     content_id, content_name, create_time, comment_content
   </sql>
-    
-  <!-- 查询用户的所有消息 -->  
-  <select id="findByReceiverUserId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_message where receiver_user_id=#{receiverUserId} order by create_time desc
-  </select>
-  
+
   <insert id="insertSelective" parameterType="com.pan.entity.Message">
     insert into t_message
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,19 +95,31 @@
     </trim>
   </insert>
   
-  <!-- 查询所有未读消息条数 -->
   <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryMessage">
   	select count(0) from t_message 
-  	<where>
-  	 	<if test="receiverUserId != null">
-        	and receiver_user_id=#{receiverUserId,jdbcType=VARCHAR}
-        </if>
-  		<if test="status != null">
-        	and status=#{status,jdbcType=INTEGER}
-      	</if>
-  	</where>
+    <include refid="whereSql"/>
   </select>
-  
+
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryMessage">
+    select <include refid="Base_Column_List"/> from t_message
+    <include refid="whereSql"/>
+    order by create_time desc
+    <if test="offset!=null and row !=null">
+      limit #{offset},#{row}
+    </if>
+  </select>
+
+  <sql id="whereSql">
+    <where>
+      <if test="receiverUserId != null">
+        and receiver_user_id=#{receiverUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and status=#{status,jdbcType=INTEGER}
+      </if>
+    </where>
+  </sql>
+
   <!-- 消息标为已读 -->
   <update id="cleanMessage">
   	update t_message set status=1

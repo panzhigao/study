@@ -78,7 +78,7 @@ layuiXtree.prototype.Loading = function (options) {
         }
     }
     var url=options.data+"?"+temp;
-    //TODO 修改成可配参数
+
     obj.open('get', url, true);
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200 || obj.status == 304) { //回调成功

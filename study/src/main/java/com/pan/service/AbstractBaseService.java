@@ -16,7 +16,6 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      * @return
      */
 	protected abstract M getBaseMapper();
-
     /**
      * 根据id获取唯一一条数据
      *
@@ -27,8 +26,6 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     public T selectByPrimaryKey(Long id){
         return getBaseMapper().selectByPrimaryKey(id);
     }
-
-
     /**
      * 根据主键删除
      *
@@ -39,7 +36,6 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     public int deleteByPrimaryKey(Long id) {
         return getBaseMapper().deleteByPrimaryKey(id);
     }
-
     /**
      * 新增记录
      *
@@ -50,9 +46,8 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     public int insertSelective(T t){
         return getBaseMapper().insertSelective(t);
     }
-
     /**
-     * 更新非空字段
+     * 根据主键更新非空字段
      * @param t
      * @return
      */
@@ -60,12 +55,20 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     public int updateByPrimaryKeySelective(T t){
         return getBaseMapper().updateByPrimaryKeySelective(t);
     }
-
+    /**
+     * 分页查询
+     * @param queryBase
+     * @return
+     */
     @Override
     public List<T> findPageable(QueryBase queryBase) {
         return getBaseMapper().findPageable(queryBase);
     }
-
+    /**
+     * 查询数据条数
+     * @param queryBase
+     * @return
+     */
 	@Override
 	public int countByParams(QueryBase queryBase) {
 		return getBaseMapper().countByParams(queryBase);

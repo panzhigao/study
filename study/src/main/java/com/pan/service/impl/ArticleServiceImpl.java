@@ -136,7 +136,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 	@Override
 	public Map<String, Object> findByParams(QueryArticle queryArticle) {
-		Map<String, Object> pageData = new HashMap<String, Object>(2);
+		Map<String, Object> pageData = new HashMap<String, Object>(4);
 		List<Article> list = new ArrayList<Article>();
 		try {
 			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticle));
@@ -188,9 +188,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		checkArticle(article);
 		String articleId = article.getArticleId();
 		Article articleInDb = getAndCheckByUserId(loginUser.getUserId(),articleId);
-		if (ArticleTypeEnum.TYPE_SYSTEM_MESSAGE.getCode().equals(articleInDb.getType())) {
-			logger.error("系统消息不可修改", articleInDb);
-			throw new BusinessException("系统消息不可修改");
+		if (ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode().equals(articleInDb.getType())) {
+			logger.error("系统公告不可修改", articleInDb);
+			throw new BusinessException("系统公告不可修改");
 		}
 		if (ArticleStatusEnum.IN_CHECK.getCode().equals(articleInDb.getStatus())) {
 			logger.error("当前文章处于审核中,不可修改", articleInDb);
@@ -304,7 +304,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		article.setPublishTime(new Date());
 		article.setArticleId(IdUtils.generateArticleId());
 		//系统消息文章
-		article.setType(ArticleTypeEnum.TYPE_SYSTEM_MESSAGE.getCode());
+		article.setType(ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode());
 		Message message = new Message();
 		message.setMessageType(MessageTypeEnum.NOTICE.getCode());
 		message.setContentName(article.getTitle());

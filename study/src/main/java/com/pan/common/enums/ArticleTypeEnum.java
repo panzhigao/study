@@ -1,5 +1,8 @@
 package com.pan.common.enums;
 
+/**
+ * @author panzhigao
+ */
 public enum ArticleTypeEnum {
 	/**
 	 * 文章
@@ -8,7 +11,7 @@ public enum ArticleTypeEnum {
 	/**
 	 * 审核未通过
 	 */
-	TYPE_SYSTEM_MESSAGE(2, "系统消息");
+	TYPE_SYSTEM_NOTICE(2, "系统公告");
 
 	private Integer code;
 
