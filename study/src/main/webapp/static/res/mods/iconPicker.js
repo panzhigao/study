@@ -126,7 +126,6 @@ layui.define(['laypage', 'form'], function (exports) {
                     pageHtml = '',
                     listHtml = $('<div class="layui-iconpicker-list">')//'<div class="layui-iconpicker-list">';
 
-                // 判断是否分页 TODO
                 if (page){
                     pageHtml = '<div class="layui-iconpicker-page">' +
                         '' +

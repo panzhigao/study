@@ -283,10 +283,11 @@ function loadComments(articleId){
                         var total=map.total;
                         var hasData = pageSize*pageNo<total;
                         var length=data.length;
+                        var arr=[];
                         for(var i=0;i<length;i++){
-                            addComment(data[i]);
+                        	arr.push(createComment(data[i]));
                         }
-                        next('', hasData);
+                        next(arr.join(''), hasData);
                         if(length==0){
                             $('.layui-flow-more').html('消灭零回复');
                         }
@@ -310,7 +311,7 @@ function sendComment(params){
 				if(result.code=='200'){
 					$('.fly-none').hide();
 					layer.msg(result.msg);
-					addComment(result.data);	
+					$('#commonList').prepend(createComment(result.data));
 					$('#L_content').val('');
 					var count = $('#commentCount').html()|0;
 					$('#commentCount').html(++count);
@@ -327,7 +328,10 @@ var adminPart='<div class="jieda-admin">'+
     '<span class="jieda-accept" type="accept">采纳</span>'+
     '</div>';
 
-function addComment(comment){
+/**
+ * 将数据转成评论显示
+ */
+function createComment(comment){
 	var isZan=comment.isChecked?'zanok':'';
 	var isMeArticle=comment.userId==articleUserId?'<span>(楼主)</span>':'';
 	var commentPart = '<a name="'+comment.commentId+'"></a><li data-id="'+comment.commentId+'">'+
@@ -359,7 +363,7 @@ function addComment(comment){
 		commentPart+=adminPart;
 	}
 	commentPart+='</div></li>';  
-	$('#commonList').prepend(commentPart);
+	return commentPart;
 }
 
 function getHotArticleList(){

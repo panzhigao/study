@@ -4,15 +4,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
-
 import com.pan.common.annotation.LogMeta;
 import com.pan.entity.Permission;
-import com.pan.entity.Role;
 import org.apache.commons.collections.CollectionUtils;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ValidationResult;
@@ -86,9 +83,9 @@ public class ValidationUtils {
 					String afterValue = String.valueOf(f.get(after));
 					builder.append(desc);
 					if(!beforeValue.equals(afterValue)){
-						builder.append(":").append(beforeValue).append("-->").append(afterValue).append(";");
+						builder.append("：").append(beforeValue).append("-->").append(afterValue).append("；");
 					}else{
-						builder.append("未修改;");
+						builder.append("未修改；");
 					}
 				} catch (IllegalAccessException e) {
 					logger.error("获取属性失败",e);

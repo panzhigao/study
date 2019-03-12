@@ -203,7 +203,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		String changedFields = ValidationUtils.getChangedFields(permission, permissionInDb);
 		permissionMapper.updateByPrimaryKeySelective(permission);
 		//记录操作日志
-		operateLogService.addOperateLog(String.format("权限id:%s,编辑内容:%s",permissionId,changedFields),OperateLogTypeEnum.PERMISSION_EDIT);
+		operateLogService.addOperateLog(String.format("权限id：%s，编辑内容：%s",permissionId,changedFields),OperateLogTypeEnum.PERMISSION_EDIT);
 		TokenUtils.clearAllUserAuth();
 	}
 

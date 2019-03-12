@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.pan.entity.Article;
-import com.pan.query.QueryArticle;
-import com.pan.util.JsonUtils;
 import com.pan.util.TransFieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

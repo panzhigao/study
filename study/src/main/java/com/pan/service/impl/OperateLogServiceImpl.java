@@ -38,12 +38,15 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
     protected OperateLogMapper getBaseMapper() {
         return operateLogMapper;
     }
-
+    
+    /**
+     * 新增操作日志
+     */
     @Override
     public int addOperateLog(String content, OperateLogTypeEnum operateLogTypeEnum) {
         User loginUser = TokenUtils.getLoginUser();
         StringBuilder stringBuilder=new StringBuilder(loginUser.getNickname()+"("+loginUser.getUsername()+")");
-        stringBuilder.append(operateLogTypeEnum.getName()).append(":");
+        stringBuilder.append(operateLogTypeEnum.getName()).append("：");
         stringBuilder.append(content);
         OperateLog operateLog=new OperateLog();
         operateLog.setUserId(loginUser.getUserId());

@@ -2,7 +2,6 @@ package com.pan.service;
 
 
 import com.pan.entity.Message;
-import com.pan.query.QueryArticle;
 import com.pan.query.QueryMessage;
 
 import java.util.Map;

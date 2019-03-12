@@ -89,18 +89,19 @@
 		<!-- from t_comment a left join t_praise b on a.comment_id=b.comment_id -->
 		<!-- join t_user c on c.user_id=a.user_id where article_id=#{articleId} -->
 		select
-		a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,
-		a.create_time,a.praise_counts,c.user_portrait,c.nickname
+		tc.id,tc.comment_id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
+		tc.create_time,tc.praise_counts,tu.user_portrait,tu.nickname
 		<if test="userId != null and userId !=''">
 			,
-			ifnull(b.user_id,null) isChecked
+			ifnull(tp.user_id,null) isChecked
 		</if>
-		from t_comment a
+		from t_comment tc
 		<if test="userId != null and userId !=''">
 			left join (select comment_id,user_id from t_praise where
-			user_id=#{userId}) b on a.comment_id=b.comment_id
+			user_id=#{userId}) tp on tc.comment_id=tp.comment_id
 		</if>
-		join t_user c on c.user_id=a.user_id where article_id=#{articleId}
+		join t_user tu on tu.user_id=tc.user_id where tc.article_id=#{articleId}
+		order by tc.create_time desc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
