@@ -2,6 +2,7 @@ package com.pan.mapper;
 
 import java.util.List;
 import com.pan.entity.Comment;
+import com.pan.query.QueryComment;
 import com.pan.vo.CommentVO;
 
 /**
@@ -12,13 +13,13 @@ import com.pan.vo.CommentVO;
 //TODO 优化
 public interface CommentMapper extends BaseMapper<Comment>{
 	
-	public List<CommentVO> findVOByArticleId(Comment comment);
+	List<CommentVO> findVOByParams(QueryComment queryComment);
 	
-	public Comment findByCommentId(String commentId);
+	Comment findByCommentId(String commentId);
 	
-	public void deleteByCommentId(String commentId);
+	void deleteByCommentId(String commentId);
 	
-	public void updatePraiseCounts(String commentId);
+	void updatePraiseCounts(String commentId);
 	
-	public List<Comment> findByUserId(String userId);
+	List<Comment> findVOByUserId(String userId);
 }

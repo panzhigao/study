@@ -125,16 +125,13 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	}
 	
 	/**
-	 * 根据文章id加载评论
-	 * @param articleId
+	 * 加载评论
+	 * @param queryComment
 	 * @return
 	 */
 	@Override
-	public List<CommentVO> loadComments(String userId,String articleId){
-		Comment comment=new Comment();
-		comment.setUserId(userId);
-		comment.setArticleId(articleId);
-		return commentMapper.findVOByArticleId(comment);
+	public List<CommentVO> loadComments(QueryComment queryComment){
+		return commentMapper.findVOByParams(queryComment);
 	}
 	
 	@Override
@@ -161,7 +158,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 
 	@Override
 	public List<Comment> loadUserComments(String userId) {
-		return commentMapper.findByUserId(userId);
+		return commentMapper.findVOByUserId(userId);
 	}
 
 }

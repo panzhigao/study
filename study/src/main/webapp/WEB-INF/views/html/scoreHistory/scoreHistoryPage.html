@@ -40,7 +40,7 @@ layui.config({
 	//流加载图片
     var scoreDateEnd =new Date().format('yyyy-MM-dd');
     var scoreDateStart=minusDays(new Date(),5);
-    var flow = layui.flow,form = layui.form;
+    var flow = layui.flow;
     flow.load({
         elem: '#scoreList', //流加载容器
         done: function(pageNo, next){ //加载下一页
@@ -88,7 +88,7 @@ layui.config({
         					listArr.push(one);
         				}
         				next(listArr.join(''), result.data.hasData);
-                        form.render();
+                        //form.render();
         			}else{
         				layer.msg("加载积分历史失败");
         			}

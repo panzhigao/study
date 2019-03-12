@@ -1,7 +1,11 @@
 package com.pan.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.pan.query.QueryComment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,12 +53,19 @@ public class CommentController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/loadComments")
 	@ResponseBody
-	public ResultMsg loadComments(String articleId){
-		//TODO 分页
-		String loingUserId = TokenUtils.getLoginUserId();
-		List<CommentVO> comments = commentService.loadComments(loingUserId,articleId);
-		TransFieldUtils.transEntityCollection(comments);
-		return ResultMsg.ok("获取评论信息成功",comments);
+	public ResultMsg loadComments(QueryComment queryComment){
+		String loginUserId = TokenUtils.getLoginUserId();
+		queryComment.setUserId(loginUserId);
+		int count = commentService.countByParams(queryComment);
+		List<CommentVO> resultList=new ArrayList<>();
+		if(count>0){
+			resultList= commentService.loadComments(queryComment);
+			TransFieldUtils.transEntityCollection(resultList);
+		}
+		Map<String,Object> resultMap=new HashMap<>(4);
+		resultMap.put("total", count);
+		resultMap.put("data", resultList);
+		return ResultMsg.ok("获取评论信息成功",resultMap);
 	}
 	
 	/**

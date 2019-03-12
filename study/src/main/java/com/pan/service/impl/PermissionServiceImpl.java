@@ -182,6 +182,10 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		return list.size()==1?list.get(0):null;
 	}
 
+	/**
+	 * 更新权限，记录日志
+	 * @param permission
+	 */
 	@Override
 	public void updatePermission(Permission permission) {
 		if(StringUtils.isBlank(permission.getPermissionId())){
@@ -195,7 +199,11 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		String loginUserId = TokenUtils.getLoginUserId();
 		permission.setUpdateUser(loginUserId);
 		permission.setUpdateTime(new Date());
+		String permissionId=permission.getPermissionId();
+		String changedFields = ValidationUtils.getChangedFields(permission, permissionInDb);
 		permissionMapper.updateByPrimaryKeySelective(permission);
+		//记录操作日志
+		operateLogService.addOperateLog(String.format("权限id:%s,编辑内容:%s",permissionId,changedFields),OperateLogTypeEnum.PERMISSION_EDIT);
 		TokenUtils.clearAllUserAuth();
 	}
 

@@ -3,7 +3,11 @@ package com.pan.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author panzhigao
+ */
 public class StringUtils {
+
 	public static final char UNDERLINE = '_';
 
 	public static String camelToUnderline(String param) {

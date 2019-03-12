@@ -81,8 +81,7 @@
 		</trim>
 	</insert>
 
-	<select id="findVOByArticleId" resultMap="VOMap"
-		parameterType="com.pan.entity.Comment">
+	<select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryComment">
 		<!-- select c.id,comment_id,c.article_id,c.user_id,comment_content,reply_to_user_id,c.create_time,u.user_portrait,u.nickname 
 			from t_comment c join t_user u on c.user_id=u.user_id where article_id=#{articleId} -->
 		<!-- select a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,a.create_time,a.praise_counts,c.user_portrait,c.nickname,case 
@@ -102,6 +101,9 @@
 			user_id=#{userId}) b on a.comment_id=b.comment_id
 		</if>
 		join t_user c on c.user_id=a.user_id where article_id=#{articleId}
+		<if test="offset!=null and row !=null">
+			limit #{offset},#{row}
+		</if>
 	</select>
 
 	<select id="findByCommentId" resultMap="BaseResultMap">
@@ -117,7 +119,7 @@
 		<include refid="whereSql"/>
 	</select>
 	
-	<select id="countByParams" resultType="int">
+	<select id="countByParams" resultType="int" parameterType="com.pan.query.QueryComment">
 		select count(0) from t_comment
 		<include refid="whereSql"/>
 	</select>
@@ -125,7 +127,7 @@
 	<sql id="whereSql">
 		<where>
 			<if test="articleId != null">
-				and articleId=#{articleId,jdbcType=VARCHAR},
+				and article_id=#{articleId,jdbcType=VARCHAR}
 			</if>
 			<if test="commentId != null">
 				and comment_id=#{commentId,,jdbcType=VARCHAR}
@@ -155,7 +157,7 @@
 		</foreach>
 	</delete>
 
-	<select id="findByUserId" resultMap="VOMap">
+	<select id="findVOByUserId" resultMap="VOMap">
 		select
 		a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,
 		a.create_time,a.praise_counts,c.user_portrait,c.nickname,d.title
