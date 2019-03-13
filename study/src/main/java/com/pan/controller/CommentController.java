@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.pan.query.QueryComment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Comment;
 import com.pan.entity.User;
@@ -21,6 +19,9 @@ import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
 import com.pan.vo.CommentVO;
 
+/**
+ * @author panzhigao
+ */
 @Controller
 @RequestMapping("/api")
 public class CommentController {
@@ -54,8 +55,6 @@ public class CommentController {
 	@RequestMapping(method=RequestMethod.POST,value="/loadComments")
 	@ResponseBody
 	public ResultMsg loadComments(QueryComment queryComment){
-		String loginUserId = TokenUtils.getLoginUserId();
-		queryComment.setUserId(loginUserId);
 		int count = commentService.countByParams(queryComment);
 		List<CommentVO> resultList=new ArrayList<>();
 		if(count>0){
