@@ -49,15 +49,15 @@
 				</div>
 			</a>
 		</div>
-		#end #hasPermission('/user/article/mine')
+		#end #hasPermission('/user/articleCheck')
 		<div class="panel col">
-			<a href="javascript:;" data-url="/user/article/mine?status=2#index">
+			<a href="javascript:;" data-url="/user/articleCheck">
 				<div class="panel_icon" style="background-color: #F7B824;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>$!{articleWaitReviewCount}</span> <cite>审核中文章数</cite> <input
-						type="hidden" value="审核中文章数">
+					<span>$!{articleWaitCheckCount}</span> <cite>待审核文章数</cite> <input
+						type="hidden" value="审核文章">
 				</div>
 			</a>
 		</div>

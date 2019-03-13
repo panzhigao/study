@@ -22,7 +22,7 @@ public class QueryArticleCheck extends QueryBase{
 	/**
 	 * 文章状态 0-审核未通过，1-草稿，2-发布中
 	 */
-	private String completeFlag;
+	private Integer completeFlag;
 	/**
 	 * 文章标题
 	 */
