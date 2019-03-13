@@ -1,5 +1,7 @@
 package com.pan.util;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -13,8 +15,9 @@ import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 import javax.crypto.Cipher;
 
-import org.junit.Test;
-
+/**
+ * @author panzhigao
+ */
 public class RSAUtil {
 
 	// 生成秘钥对
