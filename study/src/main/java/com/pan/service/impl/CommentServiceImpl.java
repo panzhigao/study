@@ -119,7 +119,6 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		message.setCreateTime(new Date());
 		message.setCommentContent(comment.getCommentContent());
 		messageService.addMessage(message);
-		//String messageStr=message.getSenderName()+"评论了您的文章："+articleInDb.getTitle();
 		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
 		return comment;
 	}

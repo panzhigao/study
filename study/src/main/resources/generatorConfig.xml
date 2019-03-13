@@ -7,7 +7,7 @@
     <!--导入属性配置 -->
     <properties resource="generator.properties"></properties>
 
-    <classPathEntry location="${jdbc.driverLocation}" />
+    <classPathEntry location="C:/Users/panzhigao/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" />
 
     <context id="mysql" defaultModelType="flat" targetRuntime="MyBatis3">
         <commentGenerator>
@@ -78,7 +78,7 @@
 
 
         <!-- 表生成映射 -->
-		<table tableName="t_score_history"  domainObjectName="ScoreHistory"
+		<table tableName="t_collection"  domainObjectName="Collection"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

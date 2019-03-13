@@ -1,9 +1,15 @@
 package com.pan.service;
 
 import com.pan.entity.BaseEntity;
+import com.pan.entity.Message;
 import com.pan.mapper.BaseMapper;
 import com.pan.query.QueryBase;
+import com.pan.util.TransFieldUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 抽象
@@ -63,6 +69,26 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
     @Override
     public List<T> findPageable(QueryBase queryBase) {
         return getBaseMapper().findPageable(queryBase);
+    }
+
+    /**
+     * 分页查询
+     * @param queryBase
+     * @return
+     */
+    @Override
+    public Map<String, Object> findPageableMap(QueryBase queryBase) {
+        Map<String, Object> pageData = new HashMap<>(4);
+        List<T> list = new ArrayList<>();
+        int total=countByParams(queryBase);
+        if(total>0){
+            list=findPageable(queryBase);
+        }
+        pageData.put("data", list);
+        pageData.put("total", total);
+        pageData.put("code", "200");
+        pageData.put("msg", "");
+        return pageData;
     }
     /**
      * 查询数据条数

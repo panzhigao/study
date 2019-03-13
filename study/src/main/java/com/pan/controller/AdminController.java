@@ -35,7 +35,7 @@ import com.pan.util.TokenUtils;
 import com.pan.vo.LoginHistoryVO;
 
 /**
- * 网站首页
+ * 用户后台管理
  * @author Administrator
  *
  */
@@ -68,7 +68,7 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/admin")
-	public ModelAndView toAdminPage(HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toAdminPage(){
 		ModelAndView mav=new ModelAndView("html/admin");
 		return mav;
 	}
@@ -95,7 +95,7 @@ public class AdminController {
 		//收藏数
 		QueryCollection queryCollection=new QueryCollection();
 		queryCollection.setUserId(loingUserId);
-		int collectionCount = collectionService.getCount(queryCollection);
+		int collectionCount = collectionService.countByParams(queryCollection);
 		UserExtension findByUserId = userExtensionService.findByUserId(loingUserId);
 		Integer score = findByUserId.getScore();
 		QueryPraise queryPraise=new QueryPraise();

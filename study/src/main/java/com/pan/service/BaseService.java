@@ -4,6 +4,7 @@ import com.pan.entity.BaseEntity;
 import com.pan.query.QueryBase;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author panzhigao
@@ -40,13 +41,18 @@ public interface BaseService<T extends BaseEntity> {
      * @return
      */
     int updateByPrimaryKeySelective(T t);
-
     /**
      * 分页查询
      * @param queryBase
      * @return
      */
     List<T> findPageable(QueryBase queryBase);
+    /**
+     * 查询分页数据，包括总条数
+     * @param queryBase
+     * @return
+     */
+    Map<String, Object> findPageableMap(QueryBase queryBase);
     /**
      * 查询记录数
      * @param queryBase

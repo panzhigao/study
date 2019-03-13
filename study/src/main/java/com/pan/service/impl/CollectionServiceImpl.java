@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.pan.service.AbstractBaseService;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,7 @@ import com.pan.util.JsonUtils;
  * 
  */
 @Service
-public class CollectionServiceImpl implements CollectionService {
+public class CollectionServiceImpl extends AbstractBaseService<Collection,CollectionMapper> implements CollectionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CollectionServiceImpl.class);
 	
@@ -35,24 +38,12 @@ public class CollectionServiceImpl implements CollectionService {
 	
 	@Autowired
 	private CollectionMapper collectionMapper;
-	
+
 	@Override
-	public Map<String, Object> findByParams(QueryCollection queryCollection) {
-		Map<String,Object> pageData=new HashMap<String, Object>(2);
-		List<Collection> list = new ArrayList<Collection>();
-		try {
-			logger.info("分页查询收藏参数为:{}", JsonUtils.toJson(queryCollection));
-			list = collectionMapper.findByParams(queryCollection);
-			pageData.put("data", list);
-			int total=collectionMapper.getCountByParams(queryCollection);
-			pageData.put("total", total);
-			pageData.put("code", "200");
-			pageData.put("msg", "");
-		} catch (Exception e) {
-			logger.error("分页收藏文章异常", e);
-		}
-		return pageData;
+	protected CollectionMapper getBaseMapper() {
+		return collectionMapper;
 	}
+
 
 	@Override
 	public void addCollection(Collection collection) {
@@ -67,7 +58,7 @@ public class CollectionServiceImpl implements CollectionService {
 		collection.setCreateTime(new Date());
 		collection.setTitle(articleInDb.getTitle());
 		collection.setCollectionId(IdUtils.generateCollectionId());
-		collectionMapper.addCollection(collection);
+		collectionMapper.insertSelective(collection);
 	}
 
 	@Override
@@ -78,15 +69,13 @@ public class CollectionServiceImpl implements CollectionService {
 
 	@Override
 	public Collection findUserCollection(String userId, String articleId) {
-		Map<String,Object> params=new HashMap<String, Object>(2);
-		params.put("userId", userId);
-		params.put("articleId", articleId);
-		Collection collection = collectionMapper.findUserCollection(userId, articleId);
-		return collection;
+		QueryCollection queryCollection=new QueryCollection();
+		queryCollection.setUserId(userId);
+		queryCollection.setArticleId(articleId);
+		List<Collection> list = collectionMapper.findPageable(queryCollection);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0);
+		}
+		return null;
 	}
-
-	@Override
-	public int getCount(QueryCollection queryCollectionVO) {
-		return collectionMapper.getCountByParams(queryCollectionVO);
-	}	
 }
