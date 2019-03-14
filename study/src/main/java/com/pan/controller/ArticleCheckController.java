@@ -2,7 +2,6 @@ package com.pan.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class ArticleCheckController {
 		}else{			
 			queryArticleCheck.setOrderCondition("create_time desc");
 		}
-		Map<String,Object> pageData=articleCheckService.findByParams(queryArticleCheck);
+		Map<String,Object> pageData=articleCheckService.findPageableMap(queryArticleCheck);
 		return pageData;
 	}
 	

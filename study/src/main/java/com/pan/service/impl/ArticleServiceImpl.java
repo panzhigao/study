@@ -134,27 +134,6 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return articleMapper.findListByUserId(userId);
 	}
 
-	@Override
-	public Map<String, Object> findByParams(QueryArticle queryArticle) {
-		Map<String, Object> pageData = new HashMap<String, Object>(4);
-		List<Article> list = new ArrayList<Article>();
-		try {
-			logger.info("分页查询文章参数为:{}", JsonUtils.toJson(queryArticle));
-			int total = articleMapper.countByParams(queryArticle);
-			// 当查询记录大于0时，查询数据库记录，否则直接返回空集合
-			if (total > 0) {
-				list = articleMapper.findPageable(queryArticle);
-			}
-			pageData.put("data", list);
-			pageData.put("total", total);
-			pageData.put("code", "200");
-			pageData.put("msg", "");
-		} catch (Exception e) {
-			logger.error("分页查询文章异常", e);
-		}
-		return pageData;
-	}
-	
 	/**
 	 * 通过文章id获取文章信息，并校验文章的userId是否与传入的userId一致
 	 * @param userId

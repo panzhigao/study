@@ -1,10 +1,6 @@
 package com.pan.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.CheckTypeEnum;
@@ -27,13 +23,11 @@ import com.pan.entity.UserExtension;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
-import com.pan.query.QueryArticleCheck;
 import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-import com.pan.vo.ArticleCheckVO;
 
 /**
  * @author panzhigao
@@ -62,28 +56,6 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	private UserExtensionService userExtensionService;
 
 
-
-	@Override
-	public Map<String,Object> findByParams(QueryArticleCheck queryArticleCheck) {
-		Map<String,Object> pageData=new HashMap<String, Object>(16);
-		List<ArticleCheckVO> list = new ArrayList<ArticleCheckVO>();
-		try {
-			logger.info("分页查询文章审核信息，参数为:{}", JsonUtils.toJson(queryArticleCheck));
-			int total=articleCheckMapper.countByParams(queryArticleCheck);
-			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
-			if(total>0){				
-				list = articleCheckMapper.findVOByParams(queryArticleCheck);
-			}
-			pageData.put("data", list);
-			pageData.put("total", total);
-			pageData.put("code", "200");
-			pageData.put("msg", "");
-		} catch (Exception e) {
-			logger.error("分页查询文章异常", e);
-		}
-		return pageData;
-	}
-	
 	/**
 	 * 新增文章审核记录
 	 * @param articleCheck

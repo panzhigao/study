@@ -100,7 +100,7 @@ public class ArticleController {
 		}else{			
 			queryArticle.setOrderCondition("create_time desc");
 		}
-		Map<String,Object> pageData=articleService.findByParams(queryArticle);
+		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
 		return pageData;
 	}
 	
@@ -201,18 +201,18 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,Integer type){
-		QueryArticle articleVO=new QueryArticle();
-		articleVO.setUserId(userId);
-		articleVO.setPageSize(pageSize);
-		articleVO.setPageNo(pageNo);
-		articleVO.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-		articleVO.setIsHot(isHot);
-		articleVO.setType(type);
-		articleVO.setOrderCondition("publish_time desc");
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setUserId(userId);
+		queryArticle.setPageSize(pageSize);
+		queryArticle.setPageNo(pageNo);
+		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
+		queryArticle.setIsHot(isHot);
+		queryArticle.setType(type);
+		queryArticle.setOrderCondition("publish_time desc");
 		if(type==null){
-			articleVO.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
+			queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
-		Map<String,Object> pageData=articleService.findByParams(articleVO);
+		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
 		return pageData;
 	}
 	

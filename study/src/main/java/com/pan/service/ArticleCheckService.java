@@ -1,19 +1,11 @@
 package com.pan.service;
 
-import java.util.Map;
 import com.pan.entity.ArticleCheck;
-import com.pan.query.QueryArticleCheck;
 
 /**
  * @author panzhigao
  */
 public interface ArticleCheckService extends BaseService<ArticleCheck>{
-	/**
-	 * 分页查询
-	 * @param articleCheckVO
-	 * @return
-	 */
-	Map<String,Object> findByParams(QueryArticleCheck articleCheckVO);
 	/**
 	 * 新增文章审核记录
 	 * @param articleCheck

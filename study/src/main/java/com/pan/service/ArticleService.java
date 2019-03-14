@@ -26,12 +26,6 @@ public interface ArticleService extends BaseService<Article>{
 	 */
 	List<Article> findListByUserId(String userId);
 	/**
-	 * 多条件查询，支持分页
-	 * @param queryArticle 条件有userId,articleId
-	 * @return
-	 */
-	Map<String,Object> findByParams(QueryArticle queryArticle);
-	/**
 	 * 校验并获取用户的文章详细信息，
 	 * @param userId
 	 * @param articleId

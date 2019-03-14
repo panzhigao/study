@@ -65,13 +65,10 @@ public class SystemNoticeController {
     @RequestMapping(method=RequestMethod.POST,value="/user/systemNotice/getPageData")
     @ResponseBody
     @RequiresPermissions(value="/user/systemNotice")
-    public Map<String,Object> getArticleList(Integer pageSize, Integer pageNo){
-        QueryArticle queryArticle=new QueryArticle();
-        queryArticle.setPageSize(pageSize);
-        queryArticle.setPageNo(pageNo);
+    public Map<String,Object> getArticleList(QueryArticle queryArticle){
         queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
         queryArticle.setType(ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode());
-        Map<String,Object> pageData=articleService.findByParams(queryArticle);
+        Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
         return pageData;
     }
 }

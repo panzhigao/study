@@ -56,6 +56,8 @@ public class CommentController {
 	@ResponseBody
 	public ResultMsg loadComments(QueryComment queryComment){
 		int count = commentService.countByParams(queryComment);
+		//假如用户登录，查询加载的评论是否该用户点赞过
+		queryComment.setUserId(TokenUtils.getLoginUserId());
 		List<CommentVO> resultList=new ArrayList<>();
 		if(count>0){
 			resultList= commentService.loadComments(queryComment);
