@@ -1,6 +1,8 @@
 package com.pan.service.impl;
 
 import java.util.List;
+
+import com.pan.service.AbstractBaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +18,16 @@ import com.pan.service.UserExtensionService;
  * 类说明
  */
 @Service
-public class UserExtensionServiceImpl implements UserExtensionService{
+public class UserExtensionServiceImpl extends AbstractBaseService<UserExtension,UserExtensionMapper> implements UserExtensionService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(UserExtensionServiceImpl.class);
 	
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
-	
+
 	@Override
-	public List<UserExtension> findByParams(QueryUserExtension queryUserExtensionVO) {
-		return userExtensionMapper.findByParams(queryUserExtensionVO);
+	protected UserExtensionMapper getBaseMapper() {
+		return userExtensionMapper;
 	}
 
 	@Override

@@ -26,7 +26,7 @@
   	select <include refid="Base_Column_List"/> from t_user_extension where user_id=#{userId}
   </select>
   
-  <insert id="saveUserExtension" parameterType="com.pan.entity.UserExtension">
+  <insert id="insertSelective" parameterType="com.pan.entity.UserExtension">
   	insert into t_user_extension (
   	<trim suffixOverrides=",">
   		<if test="userId !=null and userId !='' ">
@@ -142,7 +142,7 @@
   	where user_id=#{userId}
   </update>
   
-  <select id="findByParams" resultMap="BaseResultMap" parameterType="com.pan.query.QueryUserExtension">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryUserExtension">
   	select <include refid="Base_Column_List"/> from t_user_extension 
   	<include refid="whereSql"/>
   	<if test="orderCondition !=null and orderCondition !=''">

@@ -1,21 +1,15 @@
 package com.pan.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import redis.clients.jedis.Jedis;
-
 import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.ArticleOperateEnum;
 import com.pan.common.enums.ArticleStatusEnum;
@@ -101,9 +95,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 */
 	@Override
 	public void saveArticle(Article article) {
-		User loingUser = TokenUtils.getLoginUser();
-		article.setUserId(loingUser.getUserId());
-		article.setUsername(loingUser.getUsername());
+		User loginUser = TokenUtils.getLoginUser();
+		article.setUserId(loginUser.getUserId());
+		article.setUsername(loginUser.getUsername());
 		checkArticle(article);
 		// 默认草稿状态
 		if (article.getStatus()==null) {
@@ -118,8 +112,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		//发布文章,新增审核记录
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(loingUser.getUserId());
-			articleCheck.setUsername(loingUser.getUserId());
+			articleCheck.setUserId(loginUser.getUserId());
+			articleCheck.setUsername(loginUser.getUsername());
 			articleCheck.setArticleId(article.getArticleId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
@@ -258,7 +252,6 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Article article = new Article();
 		article.setArticleId(articleId);
 		article.setCommentCount(commentCount);
-		article.setUpdateTime(new Date());
 		return articleMapper.updateArticleByArticleId(article);
 	}
 
@@ -267,7 +260,6 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Article article = new Article();
 		article.setArticleId(articleId);
 		article.setViewCount(viewCount);
-		article.setUpdateTime(new Date());
 		return articleMapper.updateArticleByArticleId(article);
 	}
 	

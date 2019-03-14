@@ -12,20 +12,26 @@ import com.pan.entity.RolePermission;
 public interface RolePermissionService {
 	/**
 	 * 根据权限删除角色权限信息
-	 * @param permissionId
+	 * @param permissionId 权限id
+	 * @return
 	 */
 	int deleteRolePermissionByPermissionId(String permissionId);
 	/**
 	 * 
-	 * @param roleId
+	 * @param roleId 角色id
+	 * @return
 	 */
 	int deleteRolePermissionByRoleId(String roleId);
 	/**
 	 * 新增角色权限
+	 * @param list 角色权限集合
+	 * @return
 	 */
 	int addRolePermission(List<RolePermission> list);
 	/**
 	 * 新增角色权限
+	 * @param rolePermission
+	 * @return
 	 */
 	int addRolePermission(RolePermission rolePermission);
 	

@@ -12,5 +12,5 @@ public interface PraiseService extends BaseService<Praise>{
 	 * 点赞
 	 * @param praise
 	 */
-	public void addPraise(Praise praise);
+	void addPraise(Praise praise);
 }

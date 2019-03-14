@@ -74,27 +74,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		operateLogService.addOperateLog(role.toString(), OperateLogTypeEnum.ROLE_ADD);
 	}
 
-	@Override
-	public Map<String, Object> findPageData(QueryRole queryRole) {
-		Map<String,Object> pageData=new HashMap<String, Object>(2);
-		List<Role> list = new ArrayList<Role>();
-		try {
-			logger.info("分页权限参数为:{}", JsonUtils.toJson(queryRole));
-			int total=roleMapper.countByParams(queryRole);
-			//当查询记录大于0时，查询数据库记录，否则直接返回空集合
-			if(total>0){				
-				list = findPageable(queryRole);
-			}
-			pageData.put("data", list);
-			pageData.put("total", total);
-			pageData.put("code", "200");
-			pageData.put("msg", "");
-		} catch (Exception e) {
-			logger.error("分页查询权限异常", e);
-		}
-		return pageData;
-	}
-
 	/**
 	 * 删除角色，超级管理员角色不能删除，已被使用的角色不能删除
 	 * 记录日志

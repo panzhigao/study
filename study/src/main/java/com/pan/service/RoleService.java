@@ -18,18 +18,6 @@ public interface RoleService extends BaseService<Role>{
 	 */
 	void addRole(Role role);
 	/**
-	 * 多条件查询，支持分页
-	 * @param queryRoleVO
-	 * @return
-	 */
-	Map<String,Object> findPageData(QueryRole queryRoleVO);
-//	/**
-//	 * 多条件查询，支持分页
-//	 * @param queryRoleVO
-//	 * @return
-//	 */
-//	List<Role> findByParams(QueryRole queryRoleVO);
-	/**
 	 * 删除角色
 	 * @param roleId 角色id
 	 */

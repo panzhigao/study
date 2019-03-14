@@ -2,7 +2,6 @@ package com.pan.mapper;
 
 import com.pan.entity.BaseEntity;
 import com.pan.query.QueryBase;
-
 import java.util.List;
 
 /**

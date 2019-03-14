@@ -1,7 +1,6 @@
 package com.pan.service;
 
 import com.pan.entity.Collection;
-import com.pan.query.QueryCollection;
 
 /**
  * 

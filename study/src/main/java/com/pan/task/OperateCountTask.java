@@ -136,14 +136,14 @@ public class OperateCountTask {
 			if (RedisLock.tryGetDistributedLock(LOCK_LOGIN_AND_CHECK_IN, value, EXPIRE_TIME)) {
 				logger.info("------->>执行定时任务,更新登录天数和签到天数start,锁[key={},value={}]------", LOCK_LOGIN_AND_CHECK_IN,
 						value);
-				QueryUserExtension queryUserExtensionVO = new QueryUserExtension();
-				int total = userExtensionService.countByParams(queryUserExtensionVO);
+				QueryUserExtension queryUserExtension = new QueryUserExtension();
+				int total = userExtensionService.countByParams(queryUserExtension);
 				int pageTotal = total % PageConstant.PAGE_SIZE_20 == 0 ? total / PageConstant.PAGE_SIZE_20
 						: total / PageConstant.PAGE_SIZE_20 + 1;
 				for (int i = 1; i <= pageTotal; i++) {
-					queryUserExtensionVO.setPageSize(PageConstant.PAGE_SIZE_20);
-					queryUserExtensionVO.setPageNo(i);
-					List<UserExtension> resultList = userExtensionService.findByParams(queryUserExtensionVO);
+					queryUserExtension.setPageSize(PageConstant.PAGE_SIZE_20);
+					queryUserExtension.setPageNo(i);
+					List<UserExtension> resultList = userExtensionService.findPageable(queryUserExtension);
 					UserExtension updateExtension = new UserExtension();
 					QueryScoreHistory queryScoreHistory = new QueryScoreHistory();
 					queryScoreHistory.setScoreDate(new java.sql.Date(DateUtils.getYesterdayDate().getTime()));

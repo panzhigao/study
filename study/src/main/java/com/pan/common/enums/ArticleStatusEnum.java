@@ -1,5 +1,9 @@
 package com.pan.common.enums;
 
+/**
+ * @author panzhigao
+ */
+
 public enum ArticleStatusEnum {
 	/**
 	 * 审核未通过

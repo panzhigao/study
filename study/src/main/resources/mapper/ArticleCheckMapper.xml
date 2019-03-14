@@ -28,7 +28,7 @@
   </resultMap> 
   
   <sql id="Base_Column_List">
-  c.id,c.user_id,c.article_id,c.title,c.complete_flag,c.check_type,c.check_user_id,
+  c.id,c.user_id,c.username,c.article_id,c.title,c.complete_flag,c.check_type,c.check_user_id,
   c.check_username,c.create_time,c.check_time,c.approve_flag,remark
   </sql>  
   
@@ -66,17 +66,7 @@
   	</if>
   </select>
   
-    <select id="findVOByParams" resultMap="DetailResultMap" parameterType="com.pan.query.QueryArticleCheck">
-  	select <include refid="Base_Column_List"/>,user.nickname,user.username from t_article_check c left join t_user user on c.user_id=user.user_id
-  	<include refid="whereSql"/>
-  	<if test="orderCondition !=null and orderCondition !='' ">
-  		order by ${orderCondition}
-  	</if>
-  	<if test="offset!=null and row !=null">
-  		limit #{offset},#{row}
-  	</if>
-  </select>
-  
+
   <sql id="whereSql">
   	<where> 
   		1=1

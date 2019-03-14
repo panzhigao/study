@@ -57,7 +57,7 @@ public class RoleController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/role")
 	public Map<String,Object> loadRoles(QueryRole queryRole){
-		Map<String,Object> pageData=roleService.findPageData(queryRole);
+		Map<String,Object> pageData=roleService.findPageableMap(queryRole);
 		return pageData;
 	}
 	

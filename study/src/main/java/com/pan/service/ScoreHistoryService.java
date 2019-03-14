@@ -18,35 +18,34 @@ public interface ScoreHistoryService extends BaseService<ScoreHistory>{
     void addLoginScore(String userId);
     /**
      * 签到
-     *
-     * @param userId
+     * @param userId 用户id
      */
     void checkIn(String userId);
 
     /**
      * 保存积分
-     *
-     * @param userId        用户id
+     * @param userId 用户id
      * @param scoreTypeEnum 积分类型
+     * @return
      */
     ScoreHistory addScoreHistory(String userId, ScoreTypeEnum scoreTypeEnum);
     /**
      * 多条件查询，支持分页
      *
-     * @param historyVO
+     * @param queryScoreHistory
      * @return
      */
     List<ScoreHistoryVO> findVOPageable(QueryScoreHistory queryScoreHistory);
     /**
      * 获取今日签到积分
-     *
+     * @param continuousLoginDays
      * @return
      */
     int getTodayCheckInScore(int continuousLoginDays);
 
     /**
      * 获取积分数据，按日期分组，用于前端展示
-     *
+     * @param queryScoreHistory
      * @return
      */
     Map<String, List<ScoreHistory>> findShowData(QueryScoreHistory queryScoreHistory);

@@ -149,7 +149,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             userExtensionTemp.setUpdateTime(now);
             userExtensionTemp.setNickname(user.getNickname());
             userExtensionTemp.setUserPortrait(defaultPortrait);
-            userExtensionMapper.saveUserExtension(userExtensionTemp);
+            userExtensionMapper.insertSelective(userExtensionTemp);
             //新增积分信息
             ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreTypeEnum.REGISTER);
             //用户拓展表增加积分

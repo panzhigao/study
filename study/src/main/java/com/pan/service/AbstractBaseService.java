@@ -1,11 +1,8 @@
 package com.pan.service;
 
 import com.pan.entity.BaseEntity;
-import com.pan.entity.Message;
 import com.pan.mapper.BaseMapper;
 import com.pan.query.QueryBase;
-import com.pan.util.TransFieldUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

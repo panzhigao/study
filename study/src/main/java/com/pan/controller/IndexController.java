@@ -1,10 +1,8 @@
 package com.pan.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,12 +94,12 @@ public class IndexController {
 	@RequestMapping(method=RequestMethod.POST,value="/api/getActiveUsers")
 	@ResponseBody
 	public ResultMsg loadActiveUsers(){
-		QueryUserExtension extensionVO=new QueryUserExtension();
-		extensionVO.setPageNo(1);
-		extensionVO.setPageSize(12);
-		extensionVO.setOrderCondition("comment_counts desc");
-		extensionVO.setWhereCondition("comment_counts>0");
-		List<UserExtension> list = userExtensionService.findByParams(extensionVO);
+		QueryUserExtension queryUserExtension=new QueryUserExtension();
+		queryUserExtension.setPageNo(1);
+		queryUserExtension.setPageSize(12);
+		queryUserExtension.setOrderCondition("comment_counts desc");
+		queryUserExtension.setWhereCondition("comment_counts>0");
+		List<UserExtension> list = userExtensionService.findPageable(queryUserExtension);
 		return ResultMsg.ok("获取活跃用户成功", list);
 	}
 	
@@ -124,12 +122,12 @@ public class IndexController {
 		historyVO.setOrderCondition("create_time asc");
 		List<ScoreHistoryVO> fastList = scoreHistoryService.findVOPageable(historyVO);
 		//总签到榜
-		QueryUserExtension extensionVO=new QueryUserExtension();
-		extensionVO.setPageNo(1);
-		extensionVO.setPageSize(20);
-		extensionVO.setWhereCondition("continuous_check_in_days>0");
-		extensionVO.setOrderCondition("continuous_check_in_days desc");
-		List<UserExtension> rankingList = userExtensionService.findByParams(extensionVO);
+		QueryUserExtension queryUserExtension=new QueryUserExtension();
+		queryUserExtension.setPageNo(1);
+		queryUserExtension.setPageSize(20);
+		queryUserExtension.setWhereCondition("continuous_check_in_days>0");
+		queryUserExtension.setOrderCondition("continuous_check_in_days desc");
+		List<UserExtension> rankingList = userExtensionService.findPageable(queryUserExtension);
 		Map<String,Object> map=new HashMap<>(3);
 		map.put("0", newList);
 		map.put("1", fastList);

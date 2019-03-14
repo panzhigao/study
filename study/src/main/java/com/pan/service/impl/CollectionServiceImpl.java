@@ -1,15 +1,9 @@
 package com.pan.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.pan.service.AbstractBaseService;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.exception.BusinessException;
@@ -20,7 +14,6 @@ import com.pan.query.QueryCollection;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
 import com.pan.util.IdUtils;
-import com.pan.util.JsonUtils;
 
 
 /**
@@ -31,7 +24,6 @@ import com.pan.util.JsonUtils;
 @Service
 public class CollectionServiceImpl extends AbstractBaseService<Collection,CollectionMapper> implements CollectionService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CollectionServiceImpl.class);
 	
 	@Autowired
 	private ArticleService articleService;
