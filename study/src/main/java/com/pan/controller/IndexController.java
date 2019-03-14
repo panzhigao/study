@@ -58,7 +58,7 @@ public class IndexController {
 			QueryScoreHistory queryScoreHistory=new QueryScoreHistory();
 			queryScoreHistory.setUserId(TokenUtils.getLoginUserId());
 			queryScoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
-			queryScoreHistory.setScoreDate(new java.sql.Date(new Date().getTime()));
+			queryScoreHistory.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 			List<ScoreHistory> list = scoreHistoryService.findPageable(queryScoreHistory);
 			//今日已签到
 			if(list.size()==1){
@@ -115,7 +115,7 @@ public class IndexController {
 		//最新签到
 		QueryScoreHistory historyVO=new QueryScoreHistory();
 		historyVO.setType(ScoreTypeEnum.CHECK_IN.getCode());
-		historyVO.setScoreDate(new java.sql.Date(new Date().getTime()));
+		historyVO.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 		historyVO.setOrderCondition("create_time desc");
 		historyVO.setPageNo(1);
 		historyVO.setPageSize(20);
@@ -130,7 +130,7 @@ public class IndexController {
 		extensionVO.setWhereCondition("continuous_check_in_days>0");
 		extensionVO.setOrderCondition("continuous_check_in_days desc");
 		List<UserExtension> rankingList = userExtensionService.findByParams(extensionVO);
-		Map<String,Object> map=new HashMap<>();
+		Map<String,Object> map=new HashMap<>(3);
 		map.put("0", newList);
 		map.put("1", fastList);
 		map.put("2", rankingList);

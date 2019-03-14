@@ -47,12 +47,14 @@ public class StringUtils {
 		return sb.toString();
 	}
 
+	public static final Pattern LINE_PATTERN= Pattern.compile("_");
+
 	public static String underlineToCamel2(String param) {
 		if (param == null || "".equals(param.trim())) {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder(param);
-		Matcher mc = Pattern.compile("_").matcher(param);
+		Matcher mc = LINE_PATTERN.matcher(param);
 		int i = 0;
 		while (mc.find()) {
 			int position = mc.end() - (i++);

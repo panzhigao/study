@@ -207,15 +207,6 @@ public class MyRealm extends AuthorizingRealm {
 	 *  @param userId 用户id
 	 */
 	public boolean isOnline(String userId,Collection<Session> activeSessions) {
-//		Subject subject = SecurityUtils.getSubject();
-//		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-//		SimplePrincipalCollection principals = new SimplePrincipalCollection(userId, realmName);
-//		subject.runAs(principals);
-//		//boolean authenticated = subject.isAuthenticated();
-//		boolean authenticated = getAuthenticationCache()!=null;
-//		subject.releaseRunAs();
-//		return authenticated;
-//		Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
 		for (Session session : activeSessions) {
 			User user=(User) session.getAttribute("user");
 			if(user!=null&&StringUtils.equals(user.getUserId(), userId)){

@@ -28,7 +28,7 @@ public class RegexUtils {
 		return check(str, TELEPHONE_REGEX);
 	}
 	
-	 public static void main( String args[] ){
+	 public static void main( String[] args){
 		 System.out.println(checkTelephone(null));
 	   }
 }

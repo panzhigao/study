@@ -4,6 +4,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 
+/**
+ * @author panzhigao
+ */
 public class InitTheContext implements ApplicationListener<ContextRefreshedEvent> {
 	
 

@@ -10,6 +10,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author panzhigao
+ */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 public class XSSFilter implements Filter{
 
 	@Override

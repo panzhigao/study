@@ -22,6 +22,9 @@ import com.pan.service.ScoreHistoryService;
 import com.pan.util.DateUtils;
 import com.pan.vo.ScoreHistoryVO;
 
+/**
+ * @author panzhigao
+ */
 @Service
 public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, ScoreHistoryMapper> implements ScoreHistoryService{
 	
@@ -45,7 +48,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	public void checkIn(String userId) {
 		QueryScoreHistory query=new QueryScoreHistory();
 		query.setUserId(userId);
-		query.setScoreDate(new java.sql.Date(new Date().getTime()));
+		query.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 		int count = scoreHistoryMapper.countByParams(query);
 		if(count>0){
 			throw new BusinessException("今天已签到过了");
@@ -65,7 +68,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 		QueryScoreHistory vo=new QueryScoreHistory();
 		vo.setUserId(userId);
 		vo.setType(ScoreTypeEnum.LOGIN.getCode());
-		vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+		vo.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 		int counts = scoreHistoryMapper.countByParams(vo);
 		if(counts>0){
 			logger.debug("{}今日已获取过登陆积分",userId);
@@ -98,7 +101,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
-			vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+			vo.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 			int counts = scoreHistoryMapper.countByParams(vo);
 			//今日获取过签到积分，不能再次获取
 			if(counts>0){
@@ -120,7 +123,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 			QueryScoreHistory vo=new QueryScoreHistory();
 			vo.setUserId(userId);
 			vo.setType(scoreType.getCode());
-			vo.setScoreDate(new java.sql.Date(new Date().getTime()));
+			vo.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
 			int counts = scoreHistoryMapper.countByParams(vo);
 			//今日获取过登陆积分，不能再次获取
 			if(counts>0){

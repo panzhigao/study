@@ -7,9 +7,16 @@ package com.pan.common.enums;
  *
  */
 public enum CheckTypeEnum {
-	CREATE(0, "创建"), UPDATE(1, "修改");
+	/**
+	 * 创建
+	 */
+	CREATE(0, "创建"),
+	/**
+	 * 修改
+	 */
+	UPDATE(1, "修改");
 
-	private CheckTypeEnum(Integer code, String name) {
+	CheckTypeEnum(Integer code, String name) {
 		this.code = code;
 		this.name = name;
 	}

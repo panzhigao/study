@@ -372,7 +372,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Article article=null;
 		try {
 			jedis= JedisUtils.getJedis();
-			if(jedis.exists(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId())){//存在缓存
+			//存在缓存
+			if(jedis.exists(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId())){
 				String string = jedis.get(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId());
 				logger.debug("从缓存读取数据,{}",string);
 				if(MyConstant.REDIS_NULL.equals(string)){

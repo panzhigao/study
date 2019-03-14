@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
+/**
+ * @author panzhigao
+ */
 public class RedisUtils {
 	
 	private RedisTemplate<String, Object> redisTemplate;

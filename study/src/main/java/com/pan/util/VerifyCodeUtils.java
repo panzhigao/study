@@ -85,9 +85,6 @@ public class VerifyCodeUtils {
                 g.drawLine(x, y, x1, y1);
             }
         }
-        // 写验证码
-        // g.setColor(getRandomColor());
-        // g.setColor(isSimpleColor?Color.BLACK:Color.WHITE);
         // 字体大小为图片高度的80%
         int fsize = (int) (height * 0.7);
         int fx = height - fsize;
@@ -95,7 +92,8 @@ public class VerifyCodeUtils {
         g.setFont(new Font("Default", Font.PLAIN, fsize));
         // 写验证码字符
         for (int i = 0; i < textCode.length(); i++) {
-            fy = randomLocation ? (int) ((Math.random() * 0.3 + 0.6) * height) : fy;// 每个字符高低是否随机
+            // 每个字符高低是否随机
+            fy = randomLocation ? (int) ((Math.random() * 0.3 + 0.6) * height) : fy;
             g.setColor(foreColor == null ? getRandomColor() : foreColor);
             g.drawString(textCode.charAt(i) + "", fx, fy);
             fx += fsize * 0.7;

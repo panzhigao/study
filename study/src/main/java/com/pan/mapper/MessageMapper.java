@@ -17,5 +17,5 @@ public interface MessageMapper extends BaseMapper<Message>{
 	 * @param messageId
 	 * @return
 	 */
-	public int cleanMessage(@Param("receiverUserId")String receiverUserId,@Param("messageId")String messageId);
+	int cleanMessage(@Param("receiverUserId")String receiverUserId,@Param("messageId")String messageId);
 }

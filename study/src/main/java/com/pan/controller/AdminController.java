@@ -3,9 +3,6 @@ package com.pan.controller;
 
 import java.util.Date;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,7 +65,9 @@ public class AdminController {
 	
 	@Autowired
 	private ArticleCheckService articleCheckService;
-	
+
+	private static final String ARTICLE_CHECK_PERMISSION="/user/articleCheck";
+
 	/**
 	 * 跳转用户后台
 	 * @return
@@ -96,7 +95,7 @@ public class AdminController {
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		int articleTotalCount = articleService.getCount(queryArticle);
 		//如果有审核文章的权限，查询待审核文章数
-		if(SecurityUtils.getSubject().isPermitted("/user/articleCheck")){
+		if(SecurityUtils.getSubject().isPermitted(ARTICLE_CHECK_PERMISSION)){
 			QueryArticleCheck queryArticleCheck=new QueryArticleCheck();
 			queryArticleCheck.setCompleteFlag(CompleteFlagEnum.NOT_COMPLETE.getCode());
 			int articleWaitCheckCount = articleCheckService.countByParams(queryArticleCheck);

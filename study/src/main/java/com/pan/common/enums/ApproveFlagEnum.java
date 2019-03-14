@@ -7,10 +7,16 @@ package com.pan.common.enums;
  *
  */
 public enum ApproveFlagEnum {
+	/**
+	 * 文章审核未通过
+	 */
+	NOT_APPROVED(0, "审核未通过"),
+	/**
+	 * 文章审核通过
+	 */
+	APPROVED(1, "审核通过");
 
-	NOT_APPROVED(0, "审核未通过"), APPROVED(1, "审核通过");
-
-	private ApproveFlagEnum(Integer code, String name) {
+	ApproveFlagEnum(Integer code, String name) {
 		this.code = code;
 		this.name = name;
 	}
