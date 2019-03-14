@@ -2,6 +2,8 @@ package com.pan.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.pan.common.enums.MethodEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -92,7 +94,10 @@ public class LoginController{
 		String redirectUrl="";
 		SavedRequest savedRequest = WebUtils.getSavedRequest(request);
 		if(savedRequest!=null){
-			redirectUrl=savedRequest.getRequestUrl();
+			String method = savedRequest.getMethod();
+			if(MethodEnum.GET.getMethodType().equals(method)){
+				redirectUrl=savedRequest.getRequestUrl();
+			}
 			logger.info("跳转登陆页前的url:{}",redirectUrl);
 		}
 		if(StringUtils.isNotBlank(redirectUrl)&&!MyConstant.DEFAULT_REQUEST_URL.equals(redirectUrl)){
