@@ -218,6 +218,7 @@
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
+var fly;
 layui.cache.page = 'jie';
 layui.cache.user = {
   username: '游客'
@@ -232,7 +233,7 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use(['fly', 'face','jie','util','flow'], function(){
-  var fly=layui.fly;
+  fly=layui.fly;
   var util=layui.util;
 	   util.fixbar({
 	    bgcolor: '#009688'
@@ -254,9 +255,6 @@ layui.config({
   
   form.on('submit(comment)', function(data){
 		params = data.field;
-		content=params.commentContent;
-		content = /^\{html\}/.test(content) ? content.replace(/^\{html\}/, ''):fly.content(content);
-		params.commentContent=content;
 		console.log(params);
 		sendComment(params);
 		return false;
@@ -332,6 +330,8 @@ var adminPart='<div class="jieda-admin">'+
  * 将数据转成评论显示
  */
 function createComment(comment){
+    var commentContent=comment.commentContent;
+    commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
 	var isZan=comment.isChecked?'zanok':'';
 	var isMeArticle=comment.userId==articleUserId?'<span>(楼主)</span>':'';
 	var commentPart = '<a name="'+comment.commentId+'"></a><li data-id="'+comment.commentId+'">'+
@@ -348,7 +348,7 @@ function createComment(comment){
         '<span>'+tranTime(comment.createTime)+'</span>'+
       '</div>'+
     '</div>'+
-    '<div class="detail-body jieda-body photos">'+comment.commentContent+
+    '<div class="detail-body jieda-body photos">'+commentContent+
     '</div>'+
     '<div class="jieda-reply">'+
 	'<span class="jieda-zan '+isZan+'" type="zan">'+
