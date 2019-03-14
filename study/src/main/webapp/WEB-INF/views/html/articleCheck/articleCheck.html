@@ -66,7 +66,7 @@ layui.use(['table','jquery'], function(){
     		  }
     		  layer.close(index);
     		  $.ajax({
-  	    		url:"$!{rc.contextPath}/user/check/notPass",
+  	    		url:"$!{rc.contextPath}/user/articleCheck/notPass",
   	    		type:"post",
   	    		data:{id:data.id,reason:reason},
   	    		success:function(res){
@@ -83,7 +83,7 @@ layui.use(['table','jquery'], function(){
 	    	layer.confirm('确定通过该文章么?', function(index){
 	    		layer.close(index);
 	    		$.ajax({
-	    			url:'$!{rc.contextPath}/user/check/pass',
+	    			url:'$!{rc.contextPath}/user/articleCheck/pass',
 	    			data:{id:data.id},
 	    			type:'post',
 	    			success:function(res){
@@ -128,7 +128,7 @@ layui.use(['table','jquery'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
+	    url: '$!{rc.contextPath}/user/articleCheck/getPageData', //数据接口
 	    page: true ,//开启分页
 	    done: function(res, curr, count){
 	    	$('#notCompleteCount').html(count);
@@ -204,7 +204,7 @@ layui.use(['table','jquery'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/check/getPageData', //数据接口
+	    url: '$!{rc.contextPath}/user/articleCheck/getPageData', //数据接口
 	    page: true ,//开启分页
 	    done: function(res, curr, count){
 	    	$('#completeCount').html(count);
@@ -262,7 +262,7 @@ function view(id){
 var index=layer.open({
 	type: 2,
 	title: '查看',
-	content: '/user/check/detail?id='+id,
+	content: '/user/articleCheck/detail?id='+id,
 	btn: ['关闭'],
 	maxmin: true,
 	shade: false,

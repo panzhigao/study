@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<body class="childrenBody" style="height:1100px;">
+<body class="childrenBody">
   <div class="fly-panel" pad20 style="padding-top: 5px;">
     <!--<div class="fly-none">没有权限</div>-->
     <div class="layui-form layui-form-pane">
@@ -98,6 +98,7 @@
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="editPublish" lay-submit>修改发布</button>
                 <button class="layui-btn" lay-filter="editSave" lay-submit>保存草稿</button>
+                <button class="layui-btn" type="button" onclick="history.go(-1)">返回</button>
               </div>
               #end
             </form>

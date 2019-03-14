@@ -86,7 +86,7 @@
   		<if test="articleId !=null and articleId !='' ">
   			and c.article_id=#{articleId}
   		</if>
-  		<if test="completeFlag !=null and completeFlag !='' ">
+  		<if test="completeFlag !=null">
   			and c.complete_flag=#{completeFlag}
   		</if>
   	</where>
@@ -160,7 +160,7 @@
         #{completeFlag,jdbcType=CHAR},
       </if>
       <if test="checkType != null">
-        #{checkType,jdbcType=CHAR},
+        #{checkType,jdbcType=INTEGER},
       </if>
       <if test="checkUserId != null">
         #{checkUserId,jdbcType=VARCHAR},
@@ -175,7 +175,7 @@
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="approveFlag != null">
-        #{approveFlag,jdbcType=VARCHAR},
+        #{approveFlag,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -190,7 +190,7 @@
   			check_Time=#{checkTime,jdbcType=TIMESTAMP},
   		</if>
   		<if test="completeFlag !=null ">
-  			complete_flag=#{completeFlag,jdbcType=VARCHAR},
+  			complete_flag=#{completeFlag,jdbcType=INTEGER},
   		</if>
   		<if test="checkUserId !=null ">
   			check_user_id=#{checkUserId,jdbcType=VARCHAR},
@@ -199,7 +199,7 @@
   			check_username=#{checkUsername,jdbcType=VARCHAR},
   		</if>
   		<if test="approveFlag !=null ">
-  			approve_flag=#{approveFlag,jdbcType=VARCHAR},
+  			approve_flag=#{approveFlag,jdbcType=INTEGER},
   		</if>
   		<if test="remark !=null ">
   			remark=#{remark,jdbcType=VARCHAR},

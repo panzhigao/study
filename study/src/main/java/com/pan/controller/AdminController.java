@@ -5,25 +5,28 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.constant.PageConstant;
-import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
+import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.dto.Tree;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
+import com.pan.query.QueryArticleCheck;
 import com.pan.query.QueryCollection;
 import com.pan.query.QueryLoginHistory;
 import com.pan.query.QueryPicture;
 import com.pan.query.QueryPraise;
+import com.pan.service.ArticleCheckService;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
 import com.pan.service.LoginHistoryService;
@@ -63,6 +66,9 @@ public class AdminController {
 	@Autowired
 	private LoginHistoryService loginHistoryService;
 	
+	@Autowired
+	private ArticleCheckService articleCheckService;
+	
 	/**
 	 * 跳转用户后台
 	 * @return
@@ -89,9 +95,13 @@ public class AdminController {
 		queryArticle.setUserId(loingUserId);
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		int articleTotalCount = articleService.getCount(queryArticle);
-		//待审核文章数
-		queryArticle.setStatus(ArticleStatusEnum.IN_CHECK.getCode());
-		int articleWaitReviewCount = articleService.getCount(queryArticle);
+		//如果有审核文章的权限，查询待审核文章数
+		if(SecurityUtils.getSubject().isPermitted("/user/articleCheck")){
+			QueryArticleCheck queryArticleCheck=new QueryArticleCheck();
+			queryArticleCheck.setCompleteFlag(CompleteFlagEnum.NOT_COMPLETE.getCode());
+			int articleWaitCheckCount = articleCheckService.countByParams(queryArticleCheck);
+			mav.addObject("articleWaitCheckCount", articleWaitCheckCount);
+		}
 		//收藏数
 		QueryCollection queryCollection=new QueryCollection();
 		queryCollection.setUserId(loingUserId);
@@ -115,7 +125,6 @@ public class AdminController {
 		List<LoginHistoryVO> loginHistoryList = loginHistoryService.findVOPageable(queryLoginHistory);
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
-		mav.addObject("articleWaitReviewCount", articleWaitReviewCount);
 		mav.addObject("collectionCount", collectionCount);
 		mav.addObject("score", score);
 		mav.addObject("praiseCount", praiseCount);

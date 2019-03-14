@@ -32,8 +32,8 @@ public class ArticleCheckController {
 	 * 跳转文章审核页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/check")
-	@RequiresPermissions("/user/article/doSave")
+	@RequestMapping(method=RequestMethod.GET,value="/user/articleCheck")
+	@RequiresPermissions("/user/articleCheck")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/articleCheck/articleCheck");
 		return mav;
@@ -43,9 +43,9 @@ public class ArticleCheckController {
 	 * 加载审核数据
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/check/getPageData")
+	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/getPageData")
 	@ResponseBody
-	@RequiresPermissions(value="/user/check")
+	@RequiresPermissions(value="/user/articleCheck")
 	public Map<String,Object> getArticleCheckList(QueryArticleCheck queryArticleCheck){
 		if(StringUtils.isNotBlank(queryArticleCheck.getOrderCondition())){
 			queryArticleCheck.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticleCheck.getOrderCondition()));
@@ -60,9 +60,9 @@ public class ArticleCheckController {
 	 * 文章审核通过
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/check/pass")
+	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/pass")
 	@ResponseBody
-	@RequiresPermissions(value="/user/check")
+	@RequiresPermissions(value="/user/articleCheck")
 	public ResultMsg articlePass(Long id){
 		articleCheckService.passArticleCheck(id);
 		return ResultMsg.ok("文章通过审核");
@@ -72,9 +72,9 @@ public class ArticleCheckController {
 	 * 文章未审核通过
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/check/notPass")
+	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/notPass")
 	@ResponseBody
-	@RequiresPermissions(value="/user/check")
+	@RequiresPermissions(value="/user/articleCheck")
 	public ResultMsg articleNotPass(Long id,String reason){
 		articleCheckService.notPassArticle(id, reason);
 		return ResultMsg.ok("文章未通过审核");
@@ -84,8 +84,8 @@ public class ArticleCheckController {
 	 * 文章审核详情
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/check/detail")
-	@RequiresPermissions(value="/user/check")
+	@RequestMapping(method=RequestMethod.GET,value="/user/articleCheck/detail")
+	@RequiresPermissions(value="/user/articleCheck")
 	public ModelAndView articleCheckDetail(Long id){
 		ModelAndView mav=new ModelAndView();
 		mav.setViewName("html/articleCheck/articleCheckDetail");
