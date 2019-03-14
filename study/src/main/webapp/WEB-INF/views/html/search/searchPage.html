@@ -135,7 +135,7 @@ layui.config({
 	version: "3.0.0"
 	,base: '$!{rc.contextPath}/static/res/mods/'
 }).extend({
-   fly: 'index'
+   
 }).use('fly');
 
 layui.use(['layer','util'], function(){
@@ -149,6 +149,7 @@ layui.use(['layer','util'], function(){
 		      }
 		    }
 		  });
+	$('#searchBtn').unbind("click");  
 	$('#searchBtn').click(function(){
 		var q=$('#q').val();
 		if(!q){

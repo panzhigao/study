@@ -380,9 +380,13 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 				}
 			}else{//不存在缓存
 				article=articleMapper.findByArticleId(queryArticleVO.getArticleId());
-				logger.debug("从缓存读取数据,{}",article);
+				logger.debug("从数据库读取文章数据,{}",article);
 				if(article==null){
 					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
+					throw new BusinessException("文章不存在");
+				}
+				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+					logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 					throw new BusinessException("文章不存在");
 				}
 				if(ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())){					
