@@ -181,6 +181,7 @@ function loadUserComment(){
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
 				var commentContent=one.commentContent;
+                commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
 				var info='<li>'+
 		          '<p>'+
 		          '<span>'+tranTime(one.createTime)+'</span>'+

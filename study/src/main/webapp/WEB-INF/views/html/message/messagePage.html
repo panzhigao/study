@@ -29,6 +29,7 @@
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
+var fly;
 layui.cache.page = 'user';
 layui.cache.user = {
   username: '游客'
@@ -44,6 +45,7 @@ layui.config({
   fly: 'index'
 }).use(['fly','flow','form'],function(){
     var flow = layui.flow,form = layui.form;
+    fly=layui.fly;
     var pageSize=5;
     flow.load({
         elem: '#msg-list', //流加载容器
@@ -75,10 +77,12 @@ layui.config({
                             }
                             var one='';
                             if(message.messageType=='1'){
+                                var commentContent=message.commentContent;
+                                commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
                                 one='<li data-messageid="'+message.messageId+'">'+
                                     '<blockquote class="layui-elem-quote">'+
                                     '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'#comment"><cite>'+message.contentName+'</cite></a>'+
-                                    '<cite style="color:black;">'+message.commentContent+'</cite>'+
+                                    '<cite style="color:black;">'+commentContent+'</cite>'+
                                     '</blockquote>'+
                                     '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                     '</li>';
