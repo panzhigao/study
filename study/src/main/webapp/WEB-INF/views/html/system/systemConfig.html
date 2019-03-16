@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
+  <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+</head>
+<body class="childrenBody">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user"> 
+	           
+	  <form class="layui-form">              
+	      <table class="layui-table">
+				<colgroup>
+					<col width="200">
+					<col width="200">
+					<col width="200">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>网站参数</th>
+						<th>参数值</th>
+						<th>变量名</th>
+					</tr>
+				</thead>
+				<tbody>
+				    #foreach($item in $params)
+					<tr>
+						<td>$!{item.paramDesc}</td>
+						<td>
+						#if($!{item.paramDesc}=='备案信息'||$!{item.paramDesc}=='网站公共代码'||$!{item.paramDesc}=='网站埋点代码')
+							<textarea name="$!{item.paramName}" required lay-verify="required" placeholder="请输入" class="layui-textarea">$!{item.paramValue}</textarea>
+						#else
+							<input type="text" name="$!{item.paramName}" value="$!{item.paramValue}" class="layui-input" lay-verify="required" placeholder="请输入$!{item.paramDesc}"/>
+						#end
+						</td>
+						<td>$!{item.paramName}</td>
+					</tr>
+					#end
+				</tbody>
+			</table>
+		
+		<div class="layui-btn-group">
+	     	<button class="layui-btn" lay-filter="save" lay-submit>保存</button>
+  		</div>
+  		
+  		</form>
+    </div>
+  </div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.min.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script type="text/javascript">
+
+layui.use(['form'], function(){
+	var form = layui.form;
+	form.on('submit(save)', function(data){
+		params = data.field;
+		console.log(params);
+		save(params);
+		return false;
+	});
+})
+
+function save(params){
+	$.ajax({
+		type:'post',
+		url:'$!{rc.contextPath}/user/systemConfig/edit',
+		data:params,
+		dataType:'json',
+		success:function(res){
+			if(res.code==200){
+				layer.msg('编辑系统配置成功');
+			}else{
+				layer.msg(res.msg);
+			}
+		}
+		
+	})
+}
+
+</script>
+#parse("./html/common/common.html")
+</body>
+</html>

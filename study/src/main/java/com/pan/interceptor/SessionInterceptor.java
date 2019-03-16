@@ -9,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.entity.User;
 import com.pan.util.IPUtils;
+import com.pan.util.SystemConfigUtils;
 import com.pan.util.TokenUtils;
 
 
@@ -50,6 +51,7 @@ public class SessionInterceptor implements HandlerInterceptor{
 			if(loginUser!=null){			
 				modelAndView.addObject(MyConstant.USER,loginUser);
 			}
+			modelAndView.addObject(MyConstant.SYSTEM_CONFIG,SystemConfigUtils.getSystemConfig());
 		}
 	}
 	

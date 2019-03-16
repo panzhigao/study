@@ -1,6 +1,5 @@
 package com.pan.service;
 
-import java.util.List;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryUserExtension;
 

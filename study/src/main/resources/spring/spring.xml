@@ -27,6 +27,8 @@
 	</bean>
 
 	<bean id="springContextUtils" class="com.pan.util.SpringContextUtils" />
+	
+	<bean id="systemConfigUtils" class="com.pan.util.SystemConfigUtils" init-method="init"/>
 
 	<bean id="client" factory-bean="esClientBuilder" factory-method="build" />
 

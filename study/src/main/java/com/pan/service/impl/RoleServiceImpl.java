@@ -2,9 +2,7 @@ package com.pan.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.service.*;
@@ -22,7 +20,6 @@ import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
 import com.pan.query.QueryRole;
 import com.pan.util.IdUtils;
-import com.pan.util.JsonUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 

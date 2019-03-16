@@ -1,10 +1,8 @@
 package com.pan.service;
 
 import java.util.List;
-import java.util.Map;
 import com.pan.dto.Tree;
 import com.pan.entity.Role;
-import com.pan.query.QueryRole;
 
 /**
  * 

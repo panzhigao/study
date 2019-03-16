@@ -40,7 +40,12 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 用户开启
 	 */
-	USER_ENABLE(302,"用户开启");
+	USER_ENABLE(302,"用户开启"),
+	/**
+	 * 编辑系统配置
+	 */
+	SYSTEM_CONFIG_EDIT(401,"编辑系统配置");
+	
 	
     private Integer code;
 

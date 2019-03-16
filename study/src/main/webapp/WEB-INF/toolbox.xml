@@ -10,7 +10,7 @@
     </tool>
     <!--日期格式化-->
     <tool>
-        <key>date</key>
+        <key>dateTool</key>
         <scope>application</scope>
         <class>org.apache.velocity.tools.generic.DateTool</class>
     </tool>

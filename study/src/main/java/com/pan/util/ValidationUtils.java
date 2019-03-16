@@ -63,8 +63,25 @@ public class ValidationUtils {
 			throw new BusinessException(stringBuilder.toString());
 		}
 	}
-
+	
+	/**
+	 * 比较对象前后修改的值,默认记录未修改的值
+	 * @param before
+	 * @param after
+	 * @return
+	 */
 	public static String getChangedFields(Object before,Object after){
+		return getChangedFields(before, after, false);
+	}
+	
+	/**
+	 * 比较对象前后修改的值
+	 * @param before
+	 * @param after
+	 * @param showUnchanged 是否记录未修改内容
+	 * @return
+	 */
+	public static String getChangedFields(Object before,Object after,boolean showUnchanged){
 		if(before==null||after==null){
 			throw new BusinessException("比较对象不能为空");
 		}
@@ -81,10 +98,11 @@ public class ValidationUtils {
 					String desc=annotation.fieldDesc();
 					String beforeValue = String.valueOf(f.get(before));
 					String afterValue = String.valueOf(f.get(after));
-					builder.append(desc);
 					if(!beforeValue.equals(afterValue)){
+						builder.append(desc);
 						builder.append("：").append(beforeValue).append("-->").append(afterValue).append("；");
-					}else{
+					}else if(showUnchanged){
+						builder.append(desc);
 						builder.append("未修改；");
 					}
 				} catch (IllegalAccessException e) {

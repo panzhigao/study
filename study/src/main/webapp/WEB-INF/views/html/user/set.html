@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>帐号设置</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="好好学习社区">
-  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
   <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -382,6 +382,6 @@ function confirmBind(params){
 	});
 }
 </script>
-<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
+#parse("./html/common/common.html")
 </body>
 </html>

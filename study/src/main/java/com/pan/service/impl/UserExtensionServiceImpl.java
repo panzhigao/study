@@ -1,6 +1,5 @@
 package com.pan.service.impl;
 
-import java.util.List;
 
 import com.pan.service.AbstractBaseService;
 import org.slf4j.Logger;
