@@ -20,6 +20,10 @@ public class Praise extends BaseEntity{
 	 */
 	private String praiseId;
 	/**
+	 * 文章id
+	 */
+	private String articleId;
+	/**
 	 * 评论id
 	 */
 	@NotEmpty(message="评论id不能为空")

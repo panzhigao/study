@@ -9,8 +9,8 @@ import com.pan.entity.Praise;
  */
 public interface PraiseService extends BaseService<Praise>{
 	/**
-	 * 点赞
+	 * 点赞评论
 	 * @param praise
 	 */
-	void addPraise(Praise praise);
+	void addCommentPraise(Praise praise);
 }

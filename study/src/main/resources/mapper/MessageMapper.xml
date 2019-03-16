@@ -10,15 +10,16 @@
     <result column="sender_name" jdbcType="VARCHAR" property="senderName" />
     <result column="sender_user_id" jdbcType="VARCHAR" property="senderUserId" />
     <result column="message_type" jdbcType="INTEGER" property="messageType" />
-    <result column="content_id" jdbcType="VARCHAR" property="contentId" />
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="comment_id" jdbcType="VARCHAR" property="commentId" />
     <result column="content_name" jdbcType="VARCHAR" property="contentName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   
   <sql id="Base_Column_List">
     id, message_id, status, receiver_user_id, sender_name, sender_user_id, message_type, 
-    content_id, content_name, create_time, comment_content
+    article_id, comment_id, content_name, comment_content, create_time
   </sql>
 
   <insert id="insertSelective" parameterType="com.pan.entity.Message">
@@ -45,17 +46,20 @@
       <if test="messageType != null">
         message_type,
       </if>
-      <if test="contentId != null">
-        content_id,
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="commentId != null">
+        comment_id,
       </if>
       <if test="contentName != null">
         content_name,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
       <if test="commentContent != null">
         comment_content,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -80,17 +84,20 @@
       <if test="messageType != null">
         #{messageType,jdbcType=INTEGER},
       </if>
-      <if test="contentId != null">
-        #{contentId,jdbcType=VARCHAR},
+      <if test="articleId != null">
+        #{articleId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentId != null">
+        #{commentId,jdbcType=VARCHAR},
       </if>
       <if test="contentName != null">
         #{contentName,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="commentContent != null">
         #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>

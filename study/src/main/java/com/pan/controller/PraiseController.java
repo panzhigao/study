@@ -28,7 +28,7 @@ public class PraiseController {
 		Praise praise=new Praise();
 		praise.setUserId(loingUserId);
 		praise.setCommentId(commentId);
-		praiseService.addPraise(praise);
+		praiseService.addCommentPraise(praise);
 		return ResultMsg.ok("点赞成功");
 	}
 }
