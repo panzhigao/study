@@ -67,12 +67,6 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     private String imgUrl;
 
     /**
-     * 图片保存路径
-     */
-    @Value("${picture.saveDir}")
-    private String pictureSaveDir;
-
-    /**
      * 新注册用户默认头像
      */
     @Value("${system.defaultPortrait}")
@@ -262,6 +256,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
+    	String pictureSaveDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
         User updateUser=new User();
         BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});

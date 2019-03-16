@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.Picture;
@@ -29,10 +28,7 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	
 	@Autowired
 	private PictureMapper pictureMapper;
-	
-	@Value("${picture.saveDir}")
-	private String pictureSaveDir;
-	
+		
 	@Override
 	protected PictureMapper getBaseMapper() {
 		return pictureMapper;

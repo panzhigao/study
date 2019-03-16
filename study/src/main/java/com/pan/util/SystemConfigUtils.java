@@ -26,7 +26,7 @@ public class SystemConfigUtils {
 	 */
 	public void init() {
 		logger.info("初始化系统配置。。。");
-		cache = CacheBuilder.newBuilder().expireAfterAccess(10, TimeUnit.SECONDS).build(new CacheLoader<String, SystemConfig>() {
+		cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<String, SystemConfig>() {
 			@Override
 			public SystemConfig load(String key) throws Exception {
 				logger.info("loading cache加载系统配置，key={}",key);

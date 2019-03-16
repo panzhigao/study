@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pan.common.annotation.HasPermission;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.SystemConfig;
 import com.pan.service.SystemConfigService;
@@ -30,6 +31,7 @@ public class SystemConfigController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemConfig")
+	@HasPermission("/user/systemConfig")
 	public ModelAndView toSystemConfigPage(){
 		ModelAndView mav=new ModelAndView("html/system/systemConfig");
 		List<SystemConfigParam> params = systemConfigService.findSystemConfigParamList();
@@ -39,6 +41,7 @@ public class SystemConfigController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="user/systemConfig/edit")
 	@ResponseBody
+	@HasPermission("/user/systemConfig")
 	public ResultMsg editSystemConfig(SystemConfig systemConfig){
 		systemConfigService.updateSystemConfig(systemConfig);
 		return ResultMsg.ok("编辑系统配置成功");	
