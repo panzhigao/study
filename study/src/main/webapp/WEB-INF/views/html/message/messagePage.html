@@ -102,7 +102,7 @@ layui.config({
                         	}else if(message.messageType=='4'){
                         		one='<li data-messageid="'+message.messageId+'">'+
                                 '<blockquote class="layui-elem-quote">'+
-                                '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>点赞了您的评论<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+message.commentContent+'</cite></a>'+
+                                '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>点赞了您的评论<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+commentContent+'</cite></a>'+
                                 '</blockquote>'+
                                 '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                 '</li>';

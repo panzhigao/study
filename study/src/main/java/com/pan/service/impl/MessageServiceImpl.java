@@ -66,7 +66,7 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 		logger.info("发送消息，接收消息userId={}",message.getReceiverUserId());
 		User loginUser = TokenUtils.getLoginUser();
 		message.setSenderUserId(loginUser.getUserId());
-		message.setSenderName(loginUser.getUsername());
+		message.setSenderName(loginUser.getNickname());
 		message.setMessageId(IdUtils.generateMessageId());
 		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		message.setMessageType(messageTypeEnum.getCode());
@@ -74,26 +74,4 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 		messageMapper.insertSelective(message);
 		MessageUtils.sendToUser(message.getReceiverUserId(), JsonUtils.toJson(message));
 	}
-
-//	@Override
-//	public Map<String, Object> findByParams(QueryMessage queryMessage) {
-//		Map<String, Object> pageData = new HashMap<>(4);
-//		List<Message> list = new ArrayList<>();
-//		try {
-//			int total =messageMapper.countByParams(queryMessage);
-//			// 当查询记录大于0时，查询数据库记录，否则直接返回空集合
-//			if (total > 0) {
-//				list = messageMapper.findPageable(queryMessage);
-//				TransFieldUtils.transEntityCollection(list);
-//			}
-//			pageData.put("data", list);
-//			pageData.put("total", total);
-//			pageData.put("code", "200");
-//			pageData.put("msg", "");
-//		} catch (Exception e) {
-//			logger.error("分页查询消息列表失败", e);
-//		}
-//		return pageData;
-//	}
-
 }
