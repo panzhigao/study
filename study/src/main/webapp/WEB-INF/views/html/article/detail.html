@@ -370,7 +370,7 @@ function createComment(comment){
 function getHotArticleList(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
-		type:'GET',
+		type:'pst',
 		data:{pageNo:1,pageSize:10,isHot:"1"},
 		success:function(res){
 			if(res.code=='200'){

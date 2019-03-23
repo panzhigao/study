@@ -226,9 +226,9 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/role/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'roleId', title: '角色ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'roleId', title: '角色ID', width:100, fixed: 'left'},
 	      {field: 'roleName', title: '角色名称', width:450},
-	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
+	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){

@@ -19,30 +19,6 @@ public class Article extends BaseEntity{
 	 *
 	 */
 	private static final long serialVersionUID = -4357328851427096260L;
-//	/**
-//	 * 审核未通过
-//	 */
-//	public static final String STATUS_NOT_PASS="0";
-//	/**
-//	 * 草稿状态
-//	 */
-//	public static final String STATUS_SKETCH="1";
-//	/**
-//	 * 审核中
-//	 */
-//	public static final String STATUS_IN_REVIEW="2";
-//	/**
-//	 * 发布成功
-//	 */
-//	public static final String STATUS_PUBLISHED="3";
-//	/**
-//	 * 文章类型 1-文章 2-系统消息
-//	 */
-//	public static final String TYPE_ARTICLE="1";
-//	/**
-//	 * 文章类型 1-文章 2-系统消息
-//	 */
-//	public static final String TYPE_SYSTEM_MESSAGE="2";
 	/**
 	 * 文章id
 	 */

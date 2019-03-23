@@ -78,7 +78,7 @@
 
 
         <!-- 表生成映射 -->
-		<table tableName="t_message"  domainObjectName="Message"
+		<table tableName="t_link"  domainObjectName="Link"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

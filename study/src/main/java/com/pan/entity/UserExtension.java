@@ -52,4 +52,12 @@ public class UserExtension extends BaseEntity{
 	 * 连续签到天数
 	 */
 	private Integer continuousCheckInDays;
+	/**
+	 * 总共登陆天数
+	 */
+	private Integer totalLoginDays;
+	/**
+	 * 总共签到天数
+	 */
+	private Integer totalCheckInDays;
 }

@@ -122,6 +122,7 @@ public class AdminController {
 		queryLoginHistory.setPageNo(PageConstant.DEFAULT_PAGE_NO);
 		queryLoginHistory.setPageSize(PageConstant.PAGE_SIZE_5);
 		List<LoginHistoryVO> loginHistoryList = loginHistoryService.findVOPageable(queryLoginHistory);
+		UserExtension extension = userExtensionService.findByUserId(loingUserId);
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
 		mav.addObject("collectionCount", collectionCount);
@@ -130,6 +131,7 @@ public class AdminController {
 		mav.addObject("lastLoginTime", lastLoginTime);
 		mav.addObject("pictureCount", pictureCount);
 		mav.addObject("loginHistoryList", loginHistoryList);
+		mav.addObject("extension", extension);
 		return mav;
 	}
 	

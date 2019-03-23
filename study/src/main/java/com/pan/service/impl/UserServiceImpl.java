@@ -227,8 +227,10 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 userExtension.setUpdateTime(now);
                 userExtension.setScore(addScoreHistory.getScore());
                 userExtension.setContinuousLoginDays(1);
+                userExtension.setTotalLoginDays(1);
                 userExtensionService.increaseCounts(userExtension);
             }
+            userInDb.setPassword(null);
             return userInDb;
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             logger.error("验证用户和数据库密码出错", e);
@@ -508,6 +510,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         userExtension.setUpdateTime(new Date());
         userExtension.setScore(addScoreHistory.getScore());
         userExtension.setContinuousCheckInDays(1);
+        userExtension.setTotalCheckInDays(1);
         userExtensionService.increaseCounts(userExtension);
         return addScoreHistory;
     }

@@ -1,14 +1,20 @@
 package com.pan.interceptor;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.pan.common.constant.MyConstant;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.entity.Link;
 import com.pan.entity.User;
+import com.pan.service.LinkService;
 import com.pan.util.IPUtils;
+import com.pan.util.SpringContextUtils;
 import com.pan.util.SystemConfigUtils;
 import com.pan.util.TokenUtils;
 
@@ -52,6 +58,9 @@ public class SessionInterceptor implements HandlerInterceptor{
 				modelAndView.addObject(MyConstant.USER,loginUser);
 			}
 			modelAndView.addObject(MyConstant.SYSTEM_CONFIG,SystemConfigUtils.getSystemConfig());
+			LinkService bean = SpringContextUtils.getBean(LinkService.class);
+			List<Link> onlieLinkList = bean.getOnlieLinkList();
+			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlieLinkList);
 		}
 	}
 	

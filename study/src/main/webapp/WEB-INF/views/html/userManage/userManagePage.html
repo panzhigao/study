@@ -24,7 +24,7 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 	      <div class="layui-tab-item layui-show">
-		         用户账号：
+		         用户名：
 	    	<div class="layui-inline">
 	    		<input placeholder="请输入用户名" class="layui-input" name="userName" id="userNameInput" autocomplete="off">
 	    	</div>
@@ -114,6 +114,7 @@ layui.use(['table','jquery','form'], function(){
 			  orderCondition=obj.field+" "+obj.type;
 		  }
 		  table.reload('userTab', {
+			  	page: {curr: 1},
 			    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
 			    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
 			      username: $('#userNameInput').val(),
@@ -181,13 +182,14 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/userList', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
+	      {fixed: 'left',title: '序号', width:50,type:'numbers'},
 	      {field: 'username', title: '用户账号', width:100, fixed: 'left',templet:function(d){
 	    	  return '<a href="/u/'+d.userId+'" target="_blank">'+d.username+'</a>';
 	      }},
 	      {field: 'nickname', title: '用户昵称', width:100, fixed: 'left',templet:function(d){
 	    	  return d.nickname;
 	      }},
-	      {field: 'sex', title: '用户性别', width:100, fixed: 'left',templet:function(d){
+	      {field: 'sex', title: '性别', width:60, fixed: 'left',templet:function(d){
 	    	  var sex='未知';
 	    	  if(d.sex==1){
 	    		  sex='男';
@@ -201,15 +203,15 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
-	    	  	  var p='#hasPermission("/user/manage/changeStatus") 1 #end';
-		    	  var temp='';
+	    	  	  var statusAuth='#hasPermission("/user/manage/changeStatus") 1 #end';
+	    	  	  if(!statusAuth){
+	    	  		statusAuth='disabled';
+	    	  	  }
+	    	  	  var checked='';
 		    	  if(d.status=='1'){
-		    		  var temp='checked';
-		    		  if(!p){
-		    			  temp+='  disabled';
-		    		  }
+		    		  checked='checked';
 		    	  }
-		    	  var s='<input value="1" userid="'+d.userId+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" '+temp+'>';
+		    	  var s='<input value="1" userid="'+d.userId+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" '+statusAuth+' '+checked+'>';
 		    	  return s;
 	      	  }
 	       },

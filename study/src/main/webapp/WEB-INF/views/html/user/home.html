@@ -144,7 +144,7 @@ layui.use(['fly','laypage', 'layer','jquery'], function(){
 function getData(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
-		type:'get',
+		type:'post',
 		data:{pageNo:pageNo,pageSize:pageSize,userId:userId},
 		success:function(res){
 			var length=res.data.length;

@@ -205,7 +205,7 @@
   			and tu.telephone=#{telephone}
   		</if>
   		<if test="username !=null and username!=''">
-  			and tu.username like CONCAT('%','${username}','%')
+  			and tu.username like CONCAT('%',#{username},'%')
   		</if>
   		<if test="nickname !=null and nickname!=''">
   			and tu.nickname=#{nickname}

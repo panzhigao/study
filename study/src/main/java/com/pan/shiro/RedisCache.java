@@ -63,7 +63,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K k) throws CacheException {
-		logger.debug("从redis读取权限",k);
+		logger.debug("------>>>从redis读取权限",k);
 		byte[] key = getKey(k);
 		if (key != null) {
 			return ((V) SerializeUtils.deserialize(JedisUtils.get(key)));

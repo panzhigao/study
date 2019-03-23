@@ -117,7 +117,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
       });
 	  
 	  $('#btnAdd').on('click', function() {
-		  showTab('添加权限',null,1);
+		  showAddTab('添加权限',null,1);
 	  });
 	  
 	  $('#btn-search').click(function () {
@@ -143,7 +143,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 	  
 });
 
-function showTab(title,pId,level){
+function showAddTab(title,pId,level){
 	layer.closeAll();
 	$.get('$!{rc.contextPath}/user/permission/addPage', null, function(form) {
 	if(form.code=='400'){
@@ -239,7 +239,7 @@ function deleteNode(id){
 
 function addSub(pId){
 	$('#selectPId').val(pId);
-	showTab('添加子权限',pId,2);
+	showAddTab('添加子权限',pId,2);
 }
 
 function edit(id){

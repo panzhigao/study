@@ -12,11 +12,16 @@ import com.pan.common.constant.MyConstant;
 import com.pan.entity.SystemConfig;
 import com.pan.service.SystemConfigService;
 
+/**
+ * 系统配置
+ * @author Administrator
+ *
+ */
 public class SystemConfigUtils {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SystemConfigUtils.class);
 	
-	public static LoadingCache<String, SystemConfig> cache;
+	public static LoadingCache<String, SystemConfig> systemConfigCache;
 	
 	@Autowired
 	private SystemConfigService systemConfigService;
@@ -26,10 +31,10 @@ public class SystemConfigUtils {
 	 */
 	public void init() {
 		logger.info("初始化系统配置。。。");
-		cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<String, SystemConfig>() {
+		systemConfigCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<String, SystemConfig>() {
 			@Override
 			public SystemConfig load(String key) throws Exception {
-				logger.info("loading cache加载系统配置，key={}",key);
+				logger.info("systemConfigCache加载系统配置，key={}",key);
 				SystemConfig selectByPrimaryKey = systemConfigService.selectByPrimaryKey(1L);
 				if(selectByPrimaryKey==null){
 					selectByPrimaryKey=new SystemConfig();
@@ -46,7 +51,7 @@ public class SystemConfigUtils {
 	 */
 	public static SystemConfig getSystemConfig(){
 		try {
-			return cache.get(MyConstant.SYSTEM_CONFIG);
+			return systemConfigCache.get(MyConstant.SYSTEM_CONFIG);
 		} catch (ExecutionException e) {
 			logger.error("获取系统配置失败",e);
 		}
@@ -57,6 +62,6 @@ public class SystemConfigUtils {
 	 * 重载系统配置
 	 */
 	public static void refreshSystemConfig(){
-		cache.refresh(MyConstant.SYSTEM_CONFIG);
+		systemConfigCache.refresh(MyConstant.SYSTEM_CONFIG);
 	}
 }

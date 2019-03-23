@@ -1,25 +1,20 @@
 package com.pan.common.enums;
 
-/**
- * 用户状态枚举
- * @author Administrator
- *
- */
-public enum UserStatusEnum {
+public enum LinkStatusEnum {
 	/**
-	 * 下线状态
+	 * 禁用状态
 	 */
-	STATUS_BLOCKED(0, "下线状态"),
+	STATUS_BLOCKED(0, "禁用状态"),
 	/**
-	 * 上线状态
+	 * 正常状态
 	 */
-	STATUS_NORMAL(1, "上线状态");
+	STATUS_NORMAL(1, "正常状态");
 
 	private Integer code;
 
 	private String name;
 
-	UserStatusEnum(Integer code, String name) {
+	LinkStatusEnum(Integer code, String name) {
 		this.code = code;
 		this.name = name;
 	}
@@ -31,5 +26,4 @@ public enum UserStatusEnum {
 	public String getName() {
 		return name;
 	}
-
 }

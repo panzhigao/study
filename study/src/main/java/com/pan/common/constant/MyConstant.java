@@ -66,4 +66,8 @@ public class MyConstant {
      * 系统配置
      */
     public static final String SYSTEM_CONFIG="systemConfig";
+    /**
+     * 上线链接
+     */
+    public static final String ONLINE_LINK_LIST="onlineLinkList";
 }
