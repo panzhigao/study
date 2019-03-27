@@ -51,7 +51,7 @@ public class MessageController {
 	public ResultMsg loadMessages(QueryMessage queryMessage){
 		String loginUserId = TokenUtils.getLoginUserId();
 		queryMessage.setReceiverUserId(loginUserId);
-		Map<String, Object> result = messageService.findByParams(queryMessage);
+		Map<String, Object> result = messageService.findPageableMap(queryMessage);
 		return ResultMsg.ok("加载消息成功", result);
 	}
 

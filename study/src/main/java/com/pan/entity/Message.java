@@ -6,12 +6,13 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 消息实体类
+ * 
  * @author Administrator
  *
  */
 @Data
-@EqualsAndHashCode(callSuper=true)
-public class Message extends BaseEntity{
+@EqualsAndHashCode(callSuper = true)
+public class Message extends BaseEntity {
 
 	private static final long serialVersionUID = -8041567985696094383L;
 	/**
@@ -39,9 +40,13 @@ public class Message extends BaseEntity{
 	 */
 	private Integer messageType;
 	/**
-	 * 内容id
+	 * 文章id
 	 */
-	private String contentId;
+	private String articleId;
+	/**
+	 * 评论id
+	 */
+	private String commentId;
 	/**
 	 * 内容名称
 	 */

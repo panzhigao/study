@@ -3,9 +3,7 @@ package com.pan.service.impl;
 import java.util.Date;
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
-import com.pan.common.enums.CheckTypeEnum;
 import com.pan.common.enums.CompleteFlagEnum;
-import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.service.*;
@@ -23,9 +21,6 @@ import com.pan.entity.UserExtension;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleCheckMapper;
 import com.pan.mapper.ArticleMapper;
-import com.pan.util.IdUtils;
-import com.pan.util.JsonUtils;
-import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -90,12 +85,18 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	
 	/**
 	 * 文章审核通过
+	 * 1.将该审核记录置为已审核，审核通过
+	 * 2.将文章状态修改为已发布，更新发布时间
+	 * 3.增加一条积分历史
+	 * 4.修改用户文章数和积分数
+	 * 5.发送消息
 	 * @param id 文章审核记录id
 	 */
 	@Override
 	public void passArticleCheck(Long id) {
 		ArticleCheck articleCheckInDb = getAndCheck(id);
 		User loginUser = TokenUtils.getLoginUser();
+		//1.将该审核记录置为已审核，审核通过
 		articleCheckInDb.setCheckTime(new Date());
 		//审核完成
 		articleCheckInDb.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
@@ -103,7 +104,8 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		articleCheckInDb.setCheckUsername(loginUser.getUsername());
 		articleCheckInDb.setApproveFlag(ApproveFlagEnum.APPROVED.getCode());
 		articleCheckMapper.updateByPrimaryKeySelective(articleCheckInDb);
-		//审核通过文章信息
+		
+		//2.审核通过文章信息
 		Article article = articleService.getAndCheckByArticleId(articleCheckInDb.getArticleId());
 		if(article==null){
 			throw new BusinessException("文章不存在");
@@ -112,24 +114,32 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 			throw new BusinessException("文章状态不为审核中");
 		}
 		//如果文章为修改，则将内容复制过去
-		if(CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
-			article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-			article.setTitle(articleCheckInDb.getTitle());
-			article.setContent(articleCheckInDb.getContent());
-		}
+//		if(CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
+//			article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
+//			article.setTitle(articleCheckInDb.getTitle());
+//			article.setContent(articleCheckInDb.getContent());
+//		}
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
 		articleMapper.updateArticleByArticleId(article);
-		//文章数加1，发表文章加5分
+		
+		//3.文章数加1，发表文章加5分
 		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(), ScoreTypeEnum.PUBLISH_ARTICLE);
-		//用户拓展表增加积分和文章数
+		
+		//4.用户拓展表增加积分和文章数
 		UserExtension userExtension=new UserExtension();
 		userExtension.setUserId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(addScoreHistory.getScore());
 		userExtension.setArticleCounts(1);
 		userExtensionService.increaseCounts(userExtension);
+		//5.发送消息
+		Message message=new Message();
+		message.setArticleId(article.getArticleId());
+		message.setContentName(article.getTitle());
+		message.setReceiverUserId(article.getUserId());
+		messageService.sendMessageToUser(message,MessageTypeEnum.ARTICLE_CHECK_PASS);
 	}
 
 	/**
@@ -166,20 +176,12 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		articleMapper.updateArticleByArticleId(updateArticle);
 		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
 		//发送消息
-		User user=TokenUtils.getLoginUser();
 		Message message=new Message();
-		message.setMessageId(IdUtils.generateMessageId());
-		message.setMessageType(MessageTypeEnum.SYSTEM_MESSAGE.getCode());
-		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
-		message.setContentId(article.getArticleId());
+		message.setArticleId(article.getArticleId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
-		message.setCreateTime(new Date());
 		message.setCommentContent(reason);
-		message.setSenderName(user.getUsername());
-		message.setSenderUserId(user.getUserId());
-		messageService.addMessage(message);
-		MessageUtils.sendToUser(article.getUserId(), JsonUtils.toJson(message));
+		messageService.sendMessageToUser(message,MessageTypeEnum.ARTICLE_CHECK_NOT_PASS);
 	}
 
 	@Override

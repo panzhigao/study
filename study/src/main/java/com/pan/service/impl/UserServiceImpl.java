@@ -67,12 +67,6 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     private String imgUrl;
 
     /**
-     * 图片保存路径
-     */
-    @Value("${picture.saveDir}")
-    private String pictureSaveDir;
-
-    /**
      * 新注册用户默认头像
      */
     @Value("${system.defaultPortrait}")
@@ -233,8 +227,10 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 userExtension.setUpdateTime(now);
                 userExtension.setScore(addScoreHistory.getScore());
                 userExtension.setContinuousLoginDays(1);
+                userExtension.setTotalLoginDays(1);
                 userExtensionService.increaseCounts(userExtension);
             }
+            userInDb.setPassword(null);
             return userInDb;
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             logger.error("验证用户和数据库密码出错", e);
@@ -262,6 +258,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
+    	String pictureSaveDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
         User updateUser=new User();
         BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});
@@ -513,6 +510,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         userExtension.setUpdateTime(new Date());
         userExtension.setScore(addScoreHistory.getScore());
         userExtension.setContinuousCheckInDays(1);
+        userExtension.setTotalCheckInDays(1);
         userExtensionService.increaseCounts(userExtension);
         return addScoreHistory;
     }

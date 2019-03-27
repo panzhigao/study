@@ -30,6 +30,7 @@ import com.pan.entity.Picture;
 import com.pan.service.PictureService;
 import com.pan.util.DateUtils;
 import com.pan.util.IdUtils;
+import com.pan.util.SystemConfigUtils;
 import com.pan.util.SystemUtils;
 import com.pan.util.TokenUtils;
 
@@ -47,13 +48,7 @@ public class FileUploadController {
 	
 	@Autowired
 	private PictureService pictureService;
-	
-	/**
-	 * 图片保存路径
-	 */
-	@Value("${picture.saveDir}")
-	private String pictureDir;
-	
+		
 	/**
 	 * 图片访问路径
 	 */
@@ -66,7 +61,8 @@ public class FileUploadController {
     	logger.info("上传文件开始");
         //获得物理路径webapp所在路径  
     	ResultMsg resultMsg=null;
-        String fileName="";  
+        String fileName=""; 
+        String pictureDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
         if(!file.isEmpty()){  
             //生成时间戳作为文件名称  
             String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
@@ -121,6 +117,7 @@ public class FileUploadController {
 		//创建一个通用的多部分解析器
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		Map<String,Object> map = new HashMap<String,Object>(5);
+		String pictureDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
 		//判断 request 是否有文件上传,即多部分请求
 		if(multipartResolver.isMultipart(request)){
 			//转换成多部分request

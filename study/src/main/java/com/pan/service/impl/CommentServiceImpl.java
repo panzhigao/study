@@ -2,7 +2,6 @@ package com.pan.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -28,8 +27,6 @@ import com.pan.service.UserExtensionService;
 import com.pan.service.UserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
-import com.pan.util.JsonUtils;
-import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.CommentVO;
@@ -105,21 +102,15 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		}
 		User userInDb = userService.findByUserId(comment.getUserId());
 		Message message=new Message();
-		if(userInDb!=null){
-			message.setSenderName(userInDb.getNickname());
-		}
 		message.setMessageId(IdUtils.generateMessageId());
-		message.setMessageType(MessageTypeEnum.COMMENT.getCode());
-		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		message.setSenderUserId(comment.getUserId());
 		message.setSenderName(userInDb.getNickname());
-		message.setContentId(comment.getArticleId());
+		message.setArticleId(comment.getArticleId());
 		message.setContentName(articleInDb.getTitle());
 		message.setReceiverUserId(articleInDb.getUserId());
 		message.setCreateTime(new Date());
 		message.setCommentContent(comment.getCommentContent());
-		messageService.addMessage(message);
-		MessageUtils.sendToUser(articleInDb.getUserId(), JsonUtils.toJson(message));
+		messageService.sendMessageToUser(message,MessageTypeEnum.COMMENT);
 		return comment;
 	}
 	

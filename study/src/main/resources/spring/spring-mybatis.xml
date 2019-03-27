@@ -55,6 +55,7 @@
 			<tx:method name="register*" />
 			<tx:method name="save*" />
 			<tx:method name="add*" />
+			<tx:method name="edit*" />
 			<tx:method name="update*" />
 			<tx:method name="insert*" />
 			<tx:method name="create*" />

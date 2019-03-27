@@ -7,19 +7,26 @@ package com.pan.common.enums;
 
 public enum MessageTypeEnum {
     /**
+     * 公告
+     * 用户页面主动弹出
+     */
+    NOTICE(0, "公告"),
+    /**
      * 评论
      */
     COMMENT(1, "评论"),
     /**
-     * 系统消息
-     * eg.文章审核通过，未通过
+     * 文章审核未通过
      */
-    SYSTEM_MESSAGE(2, "系统消息"),
+    ARTICLE_CHECK_NOT_PASS(2, "文章审核未通过"),
     /**
-     * 公告
-     * 用户页面主动弹出
+     * 文章审核通过
      */
-    NOTICE(3, "公告");
+    ARTICLE_CHECK_PASS(3, "文章审核通过"),
+    /**
+     * 点赞评论
+     */
+    COMMENT_PRAISE(4, "点赞评论");
 
     private Integer code;
 

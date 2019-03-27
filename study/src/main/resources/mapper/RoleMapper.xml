@@ -37,7 +37,7 @@
 	<sql id="whereSql">
 		<where>
 			<if test="roleName !=null">
-				and role_name like CONCAT('%','${roleName}','%')
+				and role_name like CONCAT('%',#{roleName},'%')
 			</if>
 			<if test="roleId !=null">
 				and role_id=#{roleId,jdbcType=VARCHAR}

@@ -1,10 +1,8 @@
 package com.pan.service;
 
 
+import com.pan.common.enums.MessageTypeEnum;
 import com.pan.entity.Message;
-import com.pan.query.QueryMessage;
-
-import java.util.Map;
 
 /**
  * 
@@ -13,10 +11,10 @@ import java.util.Map;
  */
 public interface MessageService extends BaseService<Message>{
 	/**
-	 * 新增通知
-	 * @param message
+	 * 发送消息到指定用户
+	 * @param message 消息内容
 	 */
-	void addMessage(Message message);
+	void sendMessageToUser(Message message,MessageTypeEnum messageTypeEnum);
 	/**
 	 * 统计用户未读消息条数
 	 * @param userId
@@ -32,10 +30,4 @@ public interface MessageService extends BaseService<Message>{
 	 */
 	//TODO 修改方法名
 	int cleanMessage(String userId,String messageId);
-	/**
-	 * 分页查询数据
-	 * @param queryMessage
-	 * @return
-	 */
-	Map<String, Object> findByParams(QueryMessage queryMessage);
 }

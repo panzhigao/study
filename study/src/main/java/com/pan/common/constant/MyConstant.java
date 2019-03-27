@@ -62,4 +62,12 @@ public class MyConstant {
      * 用户ip
      */
     public static final String USER_IP = "userIP";
+    /**
+     * 系统配置
+     */
+    public static final String SYSTEM_CONFIG="systemConfig";
+    /**
+     * 上线链接
+     */
+    public static final String ONLINE_LINK_LIST="onlineLinkList";
 }

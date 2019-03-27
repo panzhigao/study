@@ -40,7 +40,32 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 用户开启
 	 */
-	USER_ENABLE(302,"用户开启");
+	USER_ENABLE(302,"用户开启"),
+	/**
+	 * 编辑系统配置
+	 */
+	SYSTEM_CONFIG_EDIT(401,"编辑系统配置"),
+	/**
+	 * 链接新增
+	 */
+	LINK_ADD(501,"链接新增"),
+	/**
+	 * 链接编辑
+	 */
+	LINK_EDIT(502,"链接编辑"),
+	/**
+	 * 链接删除
+	 */
+	LINK_DELETE(503,"链接删除"),
+	/**
+	 * 链接下线
+	 */
+	LINK_DISABLE(504,"链接下线"),
+	/**
+	 * 链接上线
+	 */
+	LINK_ENABLE(504,"链接上线");
+	
 	
     private Integer code;
 

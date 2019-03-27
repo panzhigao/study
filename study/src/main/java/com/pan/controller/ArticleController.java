@@ -198,18 +198,12 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表成功的文章
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/getPageData")
+	@RequestMapping(method=RequestMethod.POST,value="/article/getPageData")
 	@ResponseBody
-	public Map<String,Object> getArticleList(Integer pageSize,Integer pageNo,String userId,String isHot,Integer type){
-		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setUserId(userId);
-		queryArticle.setPageSize(pageSize);
-		queryArticle.setPageNo(pageNo);
+	public Map<String,Object> getArticleList(QueryArticle queryArticle){
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-		queryArticle.setIsHot(isHot);
-		queryArticle.setType(type);
 		queryArticle.setOrderCondition("publish_time desc");
-		if(type==null){
+		if(queryArticle.getType()==null){
 			queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
 		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
@@ -220,7 +214,7 @@ public class ArticleController {
 	 * 获取文章条数
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/getCount")
+	@RequestMapping(method=RequestMethod.POST,value="/article/getCount")
 	@ResponseBody
 	public int getCount(Integer status,Integer type){
 		QueryArticle articleVO=new QueryArticle();

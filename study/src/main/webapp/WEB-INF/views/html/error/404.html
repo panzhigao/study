@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>404</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="好好学习社区">
-  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
   <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -50,6 +50,7 @@
           <dd><a href="$!{rc.contextPath}/user/admin?div=set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin?div=message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="$!{rc.contextPath}/u/${user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/admin"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe66f;</i>用户中心</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
         </dl>
@@ -96,7 +97,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="/" target="_blank">好好学习社区 </a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
+  <p><a href="/" target="_blank">$!{systemConfig.webName}</a> $!{systemConfig.recordInfo}</p>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -116,6 +117,6 @@ layui.config({
   fly: 'index'
 }).use('fly');
 </script>
-<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
+#parse("./html/common/common.html")
 </body>
 </html>

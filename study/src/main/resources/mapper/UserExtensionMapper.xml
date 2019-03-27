@@ -15,11 +15,13 @@
     <result column="score"              property="score"           jdbcType="INTEGER" />
     <result column="continuous_login_days"  property="continuousLoginDays" jdbcType="INTEGER" />
     <result column="continuous_check_in_days"  property="continuousCheckInDays" jdbcType="INTEGER" />
+    <result column="total_login_days"     property="totalLoginDays" jdbcType="INTEGER" />
+    <result column="total_check_in_days"  property="totalCheckInDays" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     id,user_id,nickname,user_portrait,user_brief,create_time,update_time,article_counts,comment_counts,score,
-    continuous_login_days,continuous_check_in_days
+    continuous_login_days,continuous_check_in_days,total_login_days,total_check_in_days
   </sql>
   
   <select id="findByUserId" resultMap="BaseResultMap">
@@ -137,6 +139,12 @@
   		</if>
   		<if test="continuousCheckInDays !=null ">
   			continuous_check_in_days=continuous_check_in_days+#{continuousCheckInDays,jdbcType=INTEGER},
+  		</if>
+  		<if test="totalLoginDays !=null ">
+  			total_login_days=total_login_days+#{totalLoginDays,jdbcType=INTEGER},
+  		</if>
+  		<if test="totalCheckInDays !=null ">
+  			total_check_in_days=total_check_in_days+#{totalCheckInDays,jdbcType=INTEGER},
   		</if>
   	</set>
   	where user_id=#{userId}

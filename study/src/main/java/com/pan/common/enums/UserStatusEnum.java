@@ -7,13 +7,13 @@ package com.pan.common.enums;
  */
 public enum UserStatusEnum {
 	/**
-	 * 禁用状态
+	 * 下线状态
 	 */
-	STATUS_BLOCKED(0, "禁用状态"),
+	STATUS_BLOCKED(0, "下线状态"),
 	/**
-	 * 正常状态
+	 * 上线状态
 	 */
-	STATUS_NORMAL(1, "正常状态");
+	STATUS_NORMAL(1, "上线状态");
 
 	private Integer code;
 

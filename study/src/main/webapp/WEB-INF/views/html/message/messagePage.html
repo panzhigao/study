@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>我的消息</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="好好学习社区">
-  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
   <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -29,7 +29,6 @@
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
-var fly;
 layui.cache.page = 'user';
 layui.cache.user = {
   username: '游客'
@@ -44,8 +43,7 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use(['fly','flow','form'],function(){
-    var flow = layui.flow,form = layui.form;
-    fly=layui.fly;
+    var flow = layui.flow,form = layui.form,fly=layui.fly;
     var pageSize=5;
     flow.load({
         elem: '#msg-list', //流加载容器
@@ -76,12 +74,12 @@ layui.config({
                                 tag='<a class="readed" style="float:right;color:#c2c2c2;">已读</a>';
                             }
                             var one='';
+                            var commentContent=message.commentContent;
+                            commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
                             if(message.messageType=='1'){
-                                var commentContent=message.commentContent;
-                                commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
                                 one='<li data-messageid="'+message.messageId+'">'+
                                     '<blockquote class="layui-elem-quote">'+
-                                    '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.contentId+'#comment"><cite>'+message.contentName+'</cite></a>'+
+                                    '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+message.contentName+'</cite></a>'+
                                     '<cite style="color:black;">'+commentContent+'</cite>'+
                                     '</blockquote>'+
                                     '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
@@ -90,11 +88,25 @@ layui.config({
                                 one='<li data-messageid="'+message.messageId+'">'+
                                     '<blockquote class="layui-elem-quote">'+
                                     '您发表的文章<cite>'+message.contentName+'</cite>因'+
-                                    message.commentContent+
+                                    commentContent+
                                     '未通过审核</blockquote>'+
                                     '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                     '</li>';
-                            }
+                            }else if(message.messageType=='3'){
+                                one='<li data-messageid="'+message.messageId+'">'+
+                                '<blockquote class="layui-elem-quote">'+
+                                '您发表的文章<cite>'+message.contentName+'</cite>'+
+                                '通过审核</blockquote>'+
+                                '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
+                                '</li>';
+                        	}else if(message.messageType=='4'){
+                        		one='<li data-messageid="'+message.messageId+'">'+
+                                '<blockquote class="layui-elem-quote">'+
+                                '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>点赞了您的评论<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+commentContent+'</cite></a>'+
+                                '</blockquote>'+
+                                '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
+                                '</li>';
+                        	}
                             listArr.push(one);
                         }
                         next(listArr.join(''), hasData);
@@ -110,6 +122,6 @@ layui.config({
 
 
 </script>
-<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
+#parse("./html/common/common.html")
 </body>
 </html>

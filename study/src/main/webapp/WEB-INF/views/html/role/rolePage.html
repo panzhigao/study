@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>用户中心</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="好好学习社区">
-  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
   <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -226,9 +226,9 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/role/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'roleId', title: '角色ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'roleId', title: '角色ID', width:100, fixed: 'left'},
 	      {field: 'roleName', title: '角色名称', width:450},
-	      {field: 'createTime', title: '创建时间', width:200, sort: true,templet:function(d){
+	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){
@@ -346,6 +346,6 @@ layui.use(['table','jquery','form'], function(){
 	  
 });
 </script>
-<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
+#parse("./html/common/common.html")
 </body>
 </html>

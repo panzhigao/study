@@ -10,7 +10,7 @@
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="pid" jdbcType="VARCHAR" property="pid" />
 		<result column="level" jdbcType="INTEGER" property="level" />
-		<result column="sort" jdbcType="BIGINT" property="sort" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
 		<result column="icon" jdbcType="VARCHAR" property="icon" />
 		<result column="type" jdbcType="INTEGER" property="type" />
 		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
@@ -50,8 +50,7 @@
 				and permission_id=#{permissionId}
 			</if>
 			<if test="permissionName !=null and permissionName !=''">
-				and permission_name like
-				CONCAT('%','${permissionName}','%')
+				and permission_name like CONCAT('%',#{permissionName},'%')
 			</if>
 		</where>
 		order by create_time desc
@@ -127,7 +126,7 @@
 				#{level,jdbcType=INTEGER},
 			</if>
 			<if test="sort != null">
-				#{sort,jdbcType=BIGINT},
+				#{sort,jdbcType=INTEGER},
 			</if>
 			<if test="icon != null">
 				#{icon,jdbcType=VARCHAR},
@@ -202,7 +201,7 @@
 				level = #{level,jdbcType=INTEGER},
 			</if>
 			<if test="sort != null">
-				sort = #{sort,jdbcType=BIGINT},
+				sort = #{sort,jdbcType=INTEGER},
 			</if>
 			<if test="icon != null">
 				icon = #{icon,jdbcType=VARCHAR},

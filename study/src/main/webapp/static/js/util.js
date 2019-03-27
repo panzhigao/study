@@ -108,8 +108,8 @@ function websocketConnect(){
 	ws.onmessage = function (msg) {	
 	  console.log("服务器传来消息："+msg.data);
 	  var message=JSON.parse(msg.data);
-	  //系统消息
-	  if(message&&message.messageType==3){
+	  //系统公告
+	  if(message&&message.messageType==0){
 		  //showMessage(message);
 		  showNotice(message);
 		  window.sessionStorage.setItem('message',JSON.stringify(message));

@@ -1,0 +1,24 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width:100px;">链接名称</label>
+			<div class="layui-input-block">
+				<input lay-verify="required" value="$!{link.linkName}" type="text" name="linkName" placeholder="请输入链接名称" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width:100px;">链接地址</label>
+			<div class="layui-input-block">
+				<input type="text" lay-verify="required" name="linkUrl" value="$!{link.linkUrl}" placeholder="请输入链接地址" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width:100px;">链接排序</label>
+			<div class="layui-input-block">
+				<input lay-verify="required" type="number" min="1" id="sort" name="sort" placeholder="请输入权限排序" autocomplete="off" class="layui-input" value="$!{link.sort}">
+			</div>
+		</div>
+		<input type="hidden" min="1"  name="id" value="$!{link.id}">
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

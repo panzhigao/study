@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>用户主页</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="好好学习社区">
-  <meta name="description" content="好好学习社区，致力于为web学习交流">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
   <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -52,7 +52,7 @@
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/admin?div=set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin?div=message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/user/admin"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe66f;</i>用户中心</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
         </dl>
@@ -75,7 +75,7 @@
 
   <p class="fly-home-info">
     <i class="iconfont icon-kiss" title="积分"></i><span style="color: #FF7200;">$!uExtension.score 积分</span>
-    <i class="iconfont icon-shijian"></i><span>$!date.format('yyyy-MM-dd',$!u.createTime) 加入</span>
+    <i class="iconfont icon-shijian"></i><span>$!dateTool.format('yyyy-MM-dd',$!u.createTime) 加入</span>
     #if($!u.address)<i class="iconfont icon-chengshi"></i><span>来自$!u.address</span>#end
   </p>
 
@@ -106,7 +106,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="/" target="_blank">好好学习社区 </a> 2018 &copy; <a href="/" target="_blank">panzhigao.vip 出品</a>京ICP备18031226号</p>
+  <p><a href="/" target="_blank">$!{systemConfig.webName}</a> $!{systemConfig.recordInfo}</p>
 </div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
@@ -144,7 +144,7 @@ layui.use(['fly','laypage', 'layer','jquery'], function(){
 function getData(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
-		type:'get',
+		type:'post',
 		data:{pageNo:pageNo,pageSize:pageSize,userId:userId},
 		success:function(res){
 			var length=res.data.length;
@@ -181,7 +181,7 @@ function loadUserComment(){
 			for(var i=0;i<length;i++){
 				var one=res.data[i];
 				var commentContent=one.commentContent;
-                commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
+				commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
 				var info='<li>'+
 		          '<p>'+
 		          '<span>'+tranTime(one.createTime)+'</span>'+
@@ -197,6 +197,6 @@ function loadUserComment(){
 	});
 }
 </script>
-<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274156186'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1274156186' type='text/javascript'%3E%3C/script%3E"));</script></div>
+#parse("./html/common/common.html")
 </body>
 </html>
