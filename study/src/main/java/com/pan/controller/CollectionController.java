@@ -28,7 +28,7 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/add")
 	@ResponseBody
-	public ResultMsg addCollection(String articleId){
+	public ResultMsg addCollection(Long articleId){
 		String loginUserId = TokenUtils.getLoginUserId();
 		Collection collection=new Collection();
 		collection.setArticleId(articleId);
@@ -55,7 +55,7 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/collection/find")
 	@ResponseBody
-	public ResultMsg findCollection(String articleId){
+	public ResultMsg findCollection(Long articleId){
 		String loginUserId = TokenUtils.getLoginUserId();
 		boolean flag = collectionService.checkArticleCollected(loginUserId, articleId);
 		if(flag){

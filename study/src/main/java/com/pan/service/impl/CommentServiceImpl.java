@@ -73,8 +73,8 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	@Override
 	public Comment addComment(Comment comment) {
 		ValidationUtils.validateEntity(comment);
-		String articleId=comment.getArticleId();
-		Article articleInDb = articleService.getByArticleId(articleId);
+		Long articleId=comment.getArticleId();
+		Article articleInDb = articleService.selectByPrimaryKey(articleId);
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}

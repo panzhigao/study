@@ -23,7 +23,7 @@ public class Collection extends BaseEntity{
 	 * 文章id
 	 */
 	@NotEmpty(message = "文章id不能为空")
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 文章标题
 	 */

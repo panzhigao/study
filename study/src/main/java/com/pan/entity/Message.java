@@ -42,7 +42,7 @@ public class Message extends BaseEntity {
 	/**
 	 * 文章id
 	 */
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 评论id
 	 */

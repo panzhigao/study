@@ -130,7 +130,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		userExtensionService.increaseCounts(userExtension);
 		//5.发送消息
 		Message message=new Message();
-		message.setArticleId(article.getArticleId());
+		message.setArticleId(article.getId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
 		messageService.sendMessageToUser(message,MessageTypeEnum.ARTICLE_CHECK_PASS);
@@ -164,13 +164,13 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 			throw new BusinessException("文章状态不为审核中");
 		}
 		Article updateArticle=new Article();
-		updateArticle.setArticleId(article.getArticleId());
+		updateArticle.setId(articleCheckInDb.getArticleId());
 		//审核未通过
 		updateArticle.setStatus(ArticleStatusEnum.FAIL_CHECKED.getCode());
 		articleMapper.updateArticleByArticleId(updateArticle);
 		//发送消息
 		Message message=new Message();
-		message.setArticleId(article.getArticleId());
+		message.setArticleId(article.getId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
 		message.setCommentContent(reason);

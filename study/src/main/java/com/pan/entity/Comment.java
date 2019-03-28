@@ -32,7 +32,7 @@ public class Comment extends BaseEntity{
 	 * 文章id
 	 */
 	@NotEmpty(message="文章id不能为空",groups = {LoginGroup.class})
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 评论内容
 	 */

@@ -58,7 +58,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * 
 	 * @param userId
 	 */
-	private Set<String> loadMenus(String userId) {
+	private Set<String> loadMenus(Long userId) {
 		logger.debug(">>>>>>>>>>>>>>>>>>>从数据库加载权限>>>>>>>>>>>>>>>>>>>");
 		List<Permission> permissionList = permissionService.findPermissionsByUserId(userId);
 		List<Tree> nodes = new ArrayList<Tree>(50);
@@ -75,8 +75,8 @@ public class MyRealm extends AuthorizingRealm {
 			}
 			Tree roleTree = new Tree();
 			roleTree.setTitle(permission.getPermissionName());
-			roleTree.setValue(permission.getPermissionId());
-			roleTree.setId(permission.getPermissionId());
+			roleTree.setValue(permission.getId()+"");
+			roleTree.setId(permission.getId()+"");
 			roleTree.setPId(permission.getPid());
 			roleTree.setUrl(permission.getUrl());
 			roleTree.setIcon(permission.getIcon());
@@ -96,7 +96,7 @@ public class MyRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-		String userId = (String) principals.getPrimaryPrincipal();
+		Long userId = (Long) principals.getPrimaryPrincipal();
 		// 角色信息
 		List<String> roles = roleService.getRoleIdsByUserId(userId);
 		// 权限信息
@@ -119,11 +119,11 @@ public class MyRealm extends AuthorizingRealm {
 		inputUser.setUsername(username);
 		inputUser.setPassword(inputPassword);
 		User userInDb=userService.checkLogin(inputUser);
-		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getUserId(), inputPassword, getName());
+		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInDb.getId(), inputPassword, getName());
 		TokenUtils.setAttribute(MyConstant.USER,userInDb);
-		TokenUtils.setAttribute(MyConstant.USER_ID, userInDb.getUserId());
+		TokenUtils.setAttribute(MyConstant.USER_ID, userInDb.getId());
 		//加载菜单到session
-		loadMenus(userInDb.getUserId());
+		loadMenus(userInDb.getId());
 		return authenticationInfo;
 	}
 	
@@ -153,11 +153,11 @@ public class MyRealm extends AuthorizingRealm {
 	 * 删除指定用户认证信息,即删除用户session信息,如果用户处于登录状态，会被踢出
 	 * @param userId 被删除人id
 	 */
-	public void clearAuth(String userId) {
+	public void clearAuth(Long userId) {
 		Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
 		for (Session session : activeSessions) {
 			User user=(User) session.getAttribute("user");
-			if(user!=null&&StringUtils.equals(user.getUserId(), userId)){
+			if(user!=null&&user.getId().equals(userId)){
 				redisSessionDAO.delete(session);
 			}
 		}
@@ -168,7 +168,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * 删除指定用户授权信息
 	 * @param userId 被删除人id
 	 */
-	public void clearAuthz(String userId) {
+	public void clearAuthz(Long userId) {
 		logger.info("删除指定用户授权信息,userId={}",userId);
 		Subject subject = SecurityUtils.getSubject();
 		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
@@ -206,10 +206,10 @@ public class MyRealm extends AuthorizingRealm {
 	 * 判断当前用户是否在线
 	 *  @param userId 用户id
 	 */
-	public boolean isOnline(String userId,Collection<Session> activeSessions) {
+	public boolean isOnline(Long userId,Collection<Session> activeSessions) {
 		for (Session session : activeSessions) {
 			User user=(User) session.getAttribute("user");
-			if(user!=null&&StringUtils.equals(user.getUserId(), userId)){
+			if(user!=null&&user.getId().equals(userId)){
 				return true;
 			}
 		}

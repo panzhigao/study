@@ -87,11 +87,11 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			String roleId=list.get(0).getRoleId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
 			rolePermission.setCreateTime(now);
-			rolePermission.setCreateUser(loginUser.getUserId());
+			rolePermission.setCreateUser(loginUser.getId());
 			rolePermissionService.addRolePermission(rolePermission);
 			List<User> users = userService.findUserByRoleId(roleId);
 			for (User user : users) {
-				TokenUtils.clearAuthz(user.getUserId());
+				TokenUtils.clearAuthz(user.getId());
 			}
 		}
 	}
@@ -196,7 +196,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		if(PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
 			permission.setUrl("  ");
 		}
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		permission.setUpdateUser(loginUserId);
 		permission.setUpdateTime(new Date());
 		String permissionId=permission.getPermissionId();
@@ -213,7 +213,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	}
 
 	@Override
-	public List<Permission> findPermissionsByUserId(String userId) {
+	public List<Permission> findPermissionsByUserId(Long userId) {
 		return permissionMapper.findPermissionsByUserId(userId);
 	}
 

@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.pan.entity.Collection">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="article_id" property="articleId" jdbcType="VARCHAR"/>
+        <result column="article_id" property="articleId" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
@@ -15,6 +15,12 @@
     id, collection_id, user_id, article_id, create_time, title
     </sql>
 
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_collection
+        where id = #{id,jdbcType=BIGINT}
+    </select>
 
     <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryCollection">
         select <include refid="Base_Column_List"/> from t_collection
@@ -68,7 +74,7 @@
                 #{userId,jdbcType=VARCHAR},
             </if>
             <if test="articleId != null">
-                #{articleId,jdbcType=VARCHAR},
+                #{articleId,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},

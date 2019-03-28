@@ -22,7 +22,7 @@ public class Praise extends BaseEntity{
 	/**
 	 * 文章id
 	 */
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 评论id
 	 */

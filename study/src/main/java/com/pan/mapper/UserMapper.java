@@ -12,12 +12,6 @@ import com.pan.query.QueryUser;
  */
 public interface UserMapper extends BaseMapper<User>{
 	/**
-	 * 根据userId查找用户信息，唯一一条用户数据
-	 * @param userId
-	 * @return
-	 */
-	User findByUserId(String userId);
-	/**
 	 * 根据手机号查找用户信息，唯一一条用户数据
 	 * @param telephone
 	 * @return
@@ -29,11 +23,6 @@ public interface UserMapper extends BaseMapper<User>{
 	 * @return
 	 */
 	User findByUsername(String username);
-	/**
-	 * 更新用户id更新用户信息
-	 * @param user
-	 */
-	void updateUserByUserId(User user);
 	/**
 	 * 分页查询用户信息
 	 * @param queryUserVO

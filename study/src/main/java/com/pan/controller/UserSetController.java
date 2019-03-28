@@ -1,5 +1,6 @@
 package com.pan.controller;
 
+import com.pan.service.UserExtensionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
+import javax.annotation.Resource;
+import java.util.Date;
+
 /**
  * 用户基本设置
  * 
@@ -32,6 +36,9 @@ public class UserSetController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserExtensionService userExtensionService;
 
 	@Value("${cookie.maxAge}")
 	private int cookieMaxage;
@@ -45,9 +52,9 @@ public class UserSetController {
 	@RequiresPermissions("/user/set")
 	public ModelAndView toSetPage() {
 		ModelAndView mav = new ModelAndView("html/user/set");
-		User loingUser = TokenUtils.getLoginUser();
-		UserExtension userExtension = userService.findExtensionByUserId(loingUser.getUserId());
-		mav.addObject("user", loingUser);
+		User loginUser = TokenUtils.getLoginUser();
+		UserExtension userExtension = userExtensionService.selectByPrimaryKey(loginUser.getId());
+		mav.addObject("user", loginUser);
 		mav.addObject("userExtension", userExtension);
 		return mav;
 	}
@@ -85,16 +92,17 @@ public class UserSetController {
 		if (!StringUtils.equals(passwordDTO.getNewPassword(), passwordDTO.getRePassword())) {
 			throw new BusinessException("确认密码与密码不一致");
 		}
-		String userId = TokenUtils.getLoginUserId();
-		User userInDb = userService.findByUserId(userId);
+		Long userId = TokenUtils.getLoginUserId();
+		User userInDb = userService.selectByPrimaryKey(userId);
 		boolean flag = PasswordUtils.validPassword(passwordDTO.getNowPassword(), userInDb.getPassword());
 		if (!flag) {
 			throw new BusinessException("密码输入错误");
 		}
 		User updateUser = new User();
-		updateUser.setUserId(userId);
+		updateUser.setId(userId);
 		updateUser.setPassword(PasswordUtils.getEncryptedPwd(passwordDTO.getNewPassword()));
-		userService.updateUserByUserId(updateUser);
+		updateUser.setUpdateTime(new Date());
+		userService.updateByPrimaryKeySelective(updateUser);
 		return ResultMsg.ok("密码修改成功");
 	}
 
@@ -122,9 +130,9 @@ public class UserSetController {
 	@ResponseBody
 	@RequiresPermissions(value = "/user/set")
 	public ResultMsg confirmBind(String telephone, String code) {
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		User user = new User();
-		user.setUserId(loginUserId);
+		user.setId(loginUserId);
 		user.setTelephone(telephone);
 		userService.bindTelephone(user, code);
 		return ResultMsg.ok("绑定手机成功");

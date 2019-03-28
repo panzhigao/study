@@ -74,8 +74,9 @@ public class OperateCountTask {
 				logger.info("------->>执行定时任务,更新文章数据库评论数start,锁[key={},value={}]", LOCK_COMMENT_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_COMMENT + "*", SCAN_COUNT);
 				for (String string : keys) {
-					String articleId = string.substring(KEY_COMMENT.length());
+					String articleIdStr = string.substring(KEY_COMMENT.length());
 					String countStr = JedisUtils.getString(string);
+					Long articleId=Long.valueOf(articleIdStr);
 					Integer commentCount = Integer.valueOf(countStr);
 					int updateArticleCommentCoumts = articleService.updateArticleCommentCount(articleId, commentCount);
 					if (updateArticleCommentCoumts == 1) {
@@ -106,11 +107,12 @@ public class OperateCountTask {
 				logger.info("------->>执行定时任务,更新文章数据库阅读数start,锁[key={},value={}]", LOCK_VIEW_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_VIEW + "*", SCAN_COUNT);
 				for (String string : keys) {
-					String articleId = string.substring(KEY_VIEW.length());
+					String articleIdStr = string.substring(KEY_VIEW.length());
 					String countStr = JedisUtils.getString(string);
+					Long articleId=Long.valueOf(articleIdStr);
 					Integer viewCount = Integer.valueOf(countStr);
-					int updateArticleCommentCoumts = articleService.updateArticleViewCount(articleId, viewCount);
-					if (updateArticleCommentCoumts == 1) {
+					int updateArticleCommentCounts = articleService.updateArticleViewCount(articleId, viewCount);
+					if (updateArticleCommentCounts == 1) {
 						JedisUtils.delete(string);
 					}
 				}

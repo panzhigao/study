@@ -22,7 +22,7 @@ public class Picture extends BaseEntity{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 图片路径
 	 */

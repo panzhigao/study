@@ -26,12 +26,12 @@ public class TokenUtils {
 		return user;
 	} 
 	
-	public static String getLoginUserId(){
+	public static Long getLoginUserId(){
 		User loginUser = getLoginUser();
 		if(loginUser==null){
 			return null;
 		}
-		return loginUser.getUserId();
+		return loginUser.getId();
 	} 
 	
 	public static Session getSession(){
@@ -61,7 +61,7 @@ public class TokenUtils {
 	 * 清空指定用户认证信息
 	 * @param userId 用户id
 	 */
-	public static void clearAuth(String userId){  
+	public static void clearAuth(Long userId){
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
 	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
 	    realm.clearAuth(userId);
@@ -71,10 +71,10 @@ public class TokenUtils {
 	 * 清空指定用户授权信息
 	 * @param userId 用户id
 	 */
-	public static void clearAuthz(String userId){  
+	public static void clearAuthz(Long userId){
 	    RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();  
 	    MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();  
-	    realm.clearAuthz(userId);  
+	    realm.clearAuthz(userId);
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class TokenUtils {
 	 * @param userId 用户id
 	 * @return
 	 */
-	public static boolean isOnline(String userId,Collection<Session> activeSessions){
+	public static boolean isOnline(Long userId,Collection<Session> activeSessions){
 		RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();
 		MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();
 		return realm.isOnline(userId,activeSessions);

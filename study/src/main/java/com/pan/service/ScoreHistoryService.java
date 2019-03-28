@@ -15,20 +15,19 @@ public interface ScoreHistoryService extends BaseService<ScoreHistory>{
     /**
      * 登陆奖励积分
      */
-    void addLoginScore(String userId);
+    void addLoginScore(Long userId);
     /**
      * 签到
      * @param userId 用户id
      */
-    void checkIn(String userId);
-
+    void checkIn(Long userId);
     /**
      * 保存积分
      * @param userId 用户id
      * @param scoreTypeEnum 积分类型
      * @return
      */
-    ScoreHistory addScoreHistory(String userId, ScoreTypeEnum scoreTypeEnum);
+    ScoreHistory addScoreHistory(Long userId, ScoreTypeEnum scoreTypeEnum);
     /**
      * 多条件查询，支持分页
      *

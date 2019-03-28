@@ -45,7 +45,7 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 	@Override
 	public void addCollection(Collection collection) {
 		ValidationUtils.validateEntity(collection);
-		Article articleInDb = articleService.getByArticleId(collection.getArticleId());
+		Article articleInDb = articleService.selectByPrimaryKey(collection.getArticleId());
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}
@@ -79,7 +79,7 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 	}
 
 	@Override
-	public boolean checkArticleCollected(String userId, String articleId) {
+	public boolean checkArticleCollected(String userId, Long articleId) {
 		QueryCollection queryCollection=new QueryCollection();
 		queryCollection.setUserId(userId);
 		queryCollection.setArticleId(articleId);

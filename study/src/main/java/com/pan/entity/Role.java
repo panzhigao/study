@@ -19,10 +19,6 @@ public class Role extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -504813221851725957L;
 	/**
-	 * 角色id
-	 */
-	private String roleId;
-	/**
 	 * 角色名称
 	 */
 	@NotEmpty(message="角色名称不能为空")

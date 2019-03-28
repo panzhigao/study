@@ -108,9 +108,9 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^\\d+}")
 	@ResponseBody
-	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
+	public ModelAndView toArticleDetailPage(@PathVariable("articleId")Long articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/article/detail");
 		String loginUserId=null;
@@ -142,7 +142,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
 	@ResponseBody
 	@RequiresPermissions("/user/article/doEdit")
-	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
+	public ModelAndView toArticlePage(@PathVariable("articleId")Long articleId){
 		ModelAndView mav=new ModelAndView("html/article/edit");
 		String loingUserId = TokenUtils.getLoginUserId();
 		Article article=articleService.getAndCheckByUserId(loingUserId, articleId);
@@ -177,7 +177,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doDelete")
-	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
+	public ResultMsg deleteArticle(Long articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
 		String userId=TokenUtils.getLoginUserId();
 		articleService.deleteArticle(articleId, userId);
@@ -232,7 +232,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
 	@RequiresPermissions("/user/article/set")
-	public ResultMsg set(String articleId,Integer stick,Integer highQuality){
+	public ResultMsg set(Long articleId,Integer stick,Integer highQuality){
 		articleService.setArticle(articleId, stick, highQuality);
 		return ResultMsg.ok();
 	}

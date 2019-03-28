@@ -4,7 +4,6 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Article">
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
-    <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
     <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
     <result column="username"        	property="username"        jdbcType="VARCHAR" />
     <result column="status"       	    property="status"          jdbcType="VARCHAR" />
@@ -31,7 +30,7 @@
   </resultMap> 
   
   <sql id="Base_Column_List">
-    id, article_id, user_id, status, create_time, update_time, publish_time, title, outline, 
+    id,user_id, status, create_time, update_time, publish_time, title, outline,
     image, comment_count, view_count, type, stick, high_quality
   </sql>
   
@@ -41,17 +40,17 @@
   
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    article_id,a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
+    a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
     image,comment_count,view_count,type,stick,high_quality
   </sql>
-  
-  <select id="findByArticleId" resultMap="BaseResultMap">
-  	select 
-  	<include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" /> from t_article where article_id=#{articleId,jdbcType=VARCHAR}
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   select
+   <include refid="Base_Column_List" />
+   ,
+   <include refid="Blob_Column_List" /> from t_article
+   where id = #{id,jdbcType=BIGINT}
   </select>
-  
 
   <select id="findPageable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
   	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
@@ -76,9 +75,6 @@
   <sql id="whereSql">
   	<where> 
   		    1=1
-  		<if test="articleId !=null and articleId!='' ">
-  			and a.article_id=#{articleId,jdbcType=VARCHAR}
-  		</if>
   		<if test="status !=null">
   			and a.status=#{status,jdbcType=INTEGER}
   		</if>
@@ -112,9 +108,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="articleId != null">
-        article_id,
       </if>
       <if test="userId != null">
         user_id,
@@ -166,9 +159,6 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
-      </if>
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
       </if>
@@ -217,7 +207,7 @@
     </trim>
   </insert>
   
-  <update id="updateArticleByArticleId" parameterType="com.pan.entity.Article">
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Article">
   	update t_article
   	<set>
   		<if test="title !=null and title !=''">
@@ -254,11 +244,11 @@
   			high_quality=#{highQuality,jdbcType=INTEGER},
   		</if>
   	</set>
-  	where article_id=#{articleId}
+  	where id=#{id}
   </update>
   
   <delete id="deleteByUserIdAndArticleId">
-  	delete from t_article where user_id=#{userId} and article_id=#{articleId}
+  	delete from t_article where user_id=#{userId} and id=#{articleId}
   </delete>
   
   <select id="getMaxStick" resultType="int">

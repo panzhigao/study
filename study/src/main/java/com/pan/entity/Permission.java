@@ -21,11 +21,6 @@ public class Permission extends BaseEntity {
      *
      */
     private static final long serialVersionUID = -338202844637487403L;
-
-    /**
-     * 权限id
-     */
-    private String permissionId;
     /**
      * 权限名
      */

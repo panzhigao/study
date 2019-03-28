@@ -3,6 +3,9 @@ package com.pan.query;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * @author panzhigao
+ */
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class QueryComment extends QueryBase{
@@ -17,5 +20,5 @@ public class QueryComment extends QueryBase{
 	/**
 	 * 文章id
 	 */
-	private String articleId;
+	private Long articleId;
 }

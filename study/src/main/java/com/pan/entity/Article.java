@@ -20,10 +20,6 @@ public class Article extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -4357328851427096260L;
 	/**
-	 * 文章id
-	 */
-	private String articleId;
-	/**
 	 * 用户id
 	 */
 	private String userId;

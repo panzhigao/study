@@ -22,8 +22,8 @@ public interface CollectionService extends BaseService<Collection>{
 	/**
 	 * 查看文章是否收藏
 	 * @param userId
-	 * @param articleId
+	 * @param articleId 文章id
 	 * @return
 	 */
-	boolean checkArticleCollected(String userId,String articleId);
+	boolean checkArticleCollected(String userId,Long articleId);
 }

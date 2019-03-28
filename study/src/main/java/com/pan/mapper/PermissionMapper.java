@@ -18,23 +18,23 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	 * 查找角色选中的权限
 	 * @return
 	 */
-	List<Permission> getPermissionSelectedByRoleId(String roleId);
+	List<Permission> getPermissionSelectedByRoleId(Long roleId);
 	/**
 	 * 查找角色所有权限
 	 * @param roleId
 	 * @return
 	 */
-	List<Permission> getPermissionByRoleId(String roleId);
+	List<Permission> getPermissionByRoleId(Long roleId);
 	/**
 	 * 获取用户权限
 	 * @param userId
 	 * @return
 	 */
-	List<Permission> findPermissionsByUserId(String userId);
+	List<Permission> findPermissionsByUserId(Long userId);
 	/**
 	 * 根据权限id查询唯一一条权限信息
 	 * @param permissionId
 	 * @return
 	 */
-	Permission selectByPermissionId(String permissionId);
+	Permission selectByPermissionId(Long permissionId);
 }

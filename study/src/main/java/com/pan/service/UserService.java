@@ -26,12 +26,6 @@ public interface UserService extends BaseService<User>{
 	 */
 	User findByUsername(String username);
 	/**
-	 * 根据用户Id查找唯一用户信息
-	 * @param userId
-	 * @return
-	 */
-	User findByUserId(String userId);
-	/**
 	 * 根据手机号查找唯一用户信息
 	 * @param telephone
 	 * @return
@@ -47,7 +41,7 @@ public interface UserService extends BaseService<User>{
 	 * 更新用户登陆时间
 	 * @param userId
 	 */
-	void updateUserLastLoginTime(String userId);
+	void updateUserLastLoginTime(Long userId);
 	/**
 	 * 修改用户信息
 	 * @param userExtension
@@ -58,7 +52,7 @@ public interface UserService extends BaseService<User>{
 	 * @param userId
 	 * @return 
 	 */
-	UserExtension findExtensionByUserId(String userId);
+	UserExtension findExtensionByUserId(Long userId);
 	/**
 	 * 发送验证码
 	 * @param user 用户信息
@@ -89,21 +83,23 @@ public interface UserService extends BaseService<User>{
 	 * @param userId
 	 * @param roles 角色id数组
 	 */
-	void allocateRoleToUser(String userId,String[] roles);
+	void allocateRoleToUser(Long userId,String[] roles);
 	/**
 	 * 修改用户状态
 	 * @param userId
 	 * @param status
 	 */
-	String changeUserStatus(String userId,Integer status);
+	String changeUserStatus(Long userId,Integer status);
 	/**
 	 * 根据角色id获取拥有该角色的用户
 	 * @param roleId
 	 * @return
 	 */
-	List<User> findUserByRoleId(String roleId);
+	List<User> findUserByRoleId(Long roleId);
 	/**
 	 * 用户签到
+	 * @param userId 用户id
+	 * @return
 	 */
-	ScoreHistory checkIn(String userId);
+	ScoreHistory checkIn(Long userId);
 }
