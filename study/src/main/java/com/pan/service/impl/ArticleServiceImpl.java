@@ -123,7 +123,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	@Override
-	public List<Article> findListByUserId(String userId) {
+	public List<Article> findListByUserId(Long userId) {
 		logger.info("用户id为:{}", userId);
 		return articleMapper.findListByUserId(userId);
 	}
@@ -134,13 +134,13 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * @param articleId 
 	 */
 	@Override
-	public Article getAndCheckByUserId(String userId, Long articleId) {
+	public Article getAndCheckByUserId(Long userId, Long articleId) {
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
-		if (StringUtils.isBlank(userId) || articleId==null) {
+		if (userId==null || articleId==null) {
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
 		Article article = getAndCheckByArticleId(articleId);
-		if(!StringUtils.equals(userId, article.getUserId())){
+		if(!userId.equals(article.getUserId())){
 			throw new BusinessException("您无权查看该文章信息");
 		}
 		return article;
@@ -154,12 +154,12 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}", article);
 		User loginUser = TokenUtils.getLoginUser();
-		article.setUserId(loginUser.getUserId());
+		article.setUserId(loginUser.getId());
 		article.setUsername(loginUser.getUsername());
 		// 校验前台传来的数据
 		checkArticle(article);
 		Long articleId = article.getId();
-		Article articleInDb = getAndCheckByUserId(loginUser.getUserId(),articleId);
+		Article articleInDb = getAndCheckByUserId(loginUser.getId(),articleId);
 		if (ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode().equals(articleInDb.getType())) {
 			logger.error("系统公告不可修改", articleInDb);
 			throw new BusinessException("系统公告不可修改");
@@ -174,7 +174,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			//新增审核记录
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(loginUser.getUserId());
+			articleCheck.setUserId(loginUser.getId());
 			articleCheck.setUsername(loginUser.getUsername());
 			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
@@ -196,7 +196,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	@Override
-	public void deleteArticle(Long articleId, String userId) {
+	public void deleteArticle(Long articleId, Long userId) {
 		if (articleId==null) {
 			throw new BusinessException("文章id不能为空");
 		}

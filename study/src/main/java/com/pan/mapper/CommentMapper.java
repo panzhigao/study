@@ -10,16 +10,11 @@ import com.pan.vo.CommentVO;
  * @author Administrator
  *
  */
-//TODO 优化
 public interface CommentMapper extends BaseMapper<Comment>{
 	
 	List<CommentVO> findVOByParams(QueryComment queryComment);
+
+	void updatePraiseCounts(Long commentId);
 	
-	Comment findByCommentId(String commentId);
-	
-	void deleteByCommentId(String commentId);
-	
-	void updatePraiseCounts(String commentId);
-	
-	List<Comment> findVOByUserId(String userId);
+	List<Comment> findVOByUserId(Long userId);
 }

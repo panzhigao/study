@@ -98,10 +98,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
      * @param message
      * @return
      */
-    public boolean sendMessageToAllUsersWithException(TextMessage message,Set<String> userIdSet) {
+    public boolean sendMessageToAllUsersWithException(TextMessage message,Set<Long> userIdSet) {
         boolean allSendSuccess = true;
         Set<Long> userIds = USERS.keySet();
-        WebSocketSession session = null;
+        WebSocketSession session;
         for (Long userId : userIds) {
         	if(userIdSet.contains(userId)){
         		continue;

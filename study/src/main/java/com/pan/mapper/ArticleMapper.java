@@ -15,7 +15,7 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	 * @param userId
 	 * @return
 	 */
-	List<Article> findListByUserId(String userId);
+	List<Article> findListByUserId(Long userId);
 	/**
 	 * 更新文章，返回更新文章条数
 	 * @param article
@@ -28,7 +28,7 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	 * @param articleId
 	 * @return
 	 */
-	int deleteByUserIdAndArticleId(@Param("userId")String userId,@Param("articleId")Long articleId);
+	int deleteByUserIdAndArticleId(@Param("userId")Long userId,@Param("articleId")Long articleId);
 	/**
 	 * 获取最大置顶值
 	 * @return

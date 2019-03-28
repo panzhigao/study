@@ -23,7 +23,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param userId
 	 * @return
 	 */
-	List<Article> findListByUserId(String userId);
+	List<Article> findListByUserId(Long userId);
 	/**
 	 * 校验并获取用户的文章详细信息，
 	 * @param userId
