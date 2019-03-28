@@ -113,12 +113,6 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		if(!ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			throw new BusinessException("文章状态不为审核中");
 		}
-		//如果文章为修改，则将内容复制过去
-//		if(CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
-//			article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-//			article.setTitle(articleCheckInDb.getTitle());
-//			article.setContent(articleCheckInDb.getContent());
-//		}
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
