@@ -31,12 +31,12 @@ public class UserRoleServiceImpl extends AbstractBaseService<UserRole,UserRoleMa
     }
 
     @Override
-    public int deleteUserRoleByUserId(String userId) {
+    public int deleteUserRoleByUserId(Long userId) {
         return userRoleMapper.deleteUserRoleByUserId(userId);
     }
 
     @Override
-    public int findUserCountByRoleId(String roleId) {
+    public int findUserCountByRoleId(Long roleId) {
         QueryUserRole queryUserRole=new QueryUserRole();
         queryUserRole.setRoleId(roleId);
         return userRoleMapper.countByParams(queryUserRole);

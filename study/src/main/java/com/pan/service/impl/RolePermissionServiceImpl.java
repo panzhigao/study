@@ -22,12 +22,12 @@ public class RolePermissionServiceImpl implements RolePermissionService{
 	private RolePermissionMapper rolePermissionMapper;
 	
 	@Override
-	public int deleteRolePermissionByPermissionId(String permissionId) {
+	public int deleteRolePermissionByPermissionId(Long permissionId) {
 		return rolePermissionMapper.deleteRolePermissionByPermissionId(permissionId);
 	}
 
 	@Override
-	public int deleteRolePermissionByRoleId(String roleId) {
+	public int deleteRolePermissionByRoleId(Long roleId) {
 		return rolePermissionMapper.deleteRolePermissionByRoleId(roleId);
 	}
 

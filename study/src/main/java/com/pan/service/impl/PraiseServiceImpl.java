@@ -66,14 +66,14 @@ public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper>
 		if(countByParams>0){
 			throw new BusinessException("已经点过赞了");
 		}
+		praise.setId(IdUtils.generateId());
 		praise.setArticleId(commentInDb.getArticleId());
 		praise.setCreateTime(new Date());
-		praise.setPraiseId(IdUtils.generatePraiseId());
 		praiseMapper.insertSelective(praise);
 		commentMapper.updatePraiseCounts(praise.getCommentId());
 		User loginUser = TokenUtils.getLoginUser();
 		//点赞人不是当前评论所有者
-		if(!loginUser.getUserId().equals(commentInDb.getUserId())){
+		if(!loginUser.getId().equals(commentInDb.getUserId())){
 			Message message=new Message();
 			message.setArticleId(praise.getArticleId());
 			message.setCommentId(praise.getCommentId());

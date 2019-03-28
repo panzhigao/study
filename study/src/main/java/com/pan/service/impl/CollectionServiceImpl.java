@@ -65,13 +65,13 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 	 * @param id 文章id
 	 */
 	@Override
-	public void removeCollection(String userId,Long id) {
+	public void removeCollection(Long userId,Long id) {
 		Collection collection = collectionMapper.selectByPrimaryKey(id);
 		if(collection==null){
 			logger.error("根据id={}，未查询到收藏信息",id);
 			throw new BusinessException("该收藏信息不存在");
 		}
-		if(!StringUtils.equals(userId,collection.getUserId())){
+		if(userId.equals(collection.getUserId())){
 			logger.error("被取消的收藏用户id={},当前登录人userId={}，两者不一致，不能取消非当前登录人的收藏，收藏id={}",collection.getUserId(),userId,id);
 			throw new BusinessException("只能取消自己的收藏");
 		}
@@ -79,7 +79,7 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 	}
 
 	@Override
-	public boolean checkArticleCollected(String userId, Long articleId) {
+	public boolean checkArticleCollected(Long userId, Long articleId) {
 		QueryCollection queryCollection=new QueryCollection();
 		queryCollection.setUserId(userId);
 		queryCollection.setArticleId(articleId);

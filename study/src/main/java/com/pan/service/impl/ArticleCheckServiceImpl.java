@@ -100,7 +100,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		articleCheckInDb.setCheckTime(new Date());
 		//审核完成
 		articleCheckInDb.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
-		articleCheckInDb.setCheckUserId(loginUser.getUserId());
+		articleCheckInDb.setCheckUserId(loginUser.getId());
 		articleCheckInDb.setCheckUsername(loginUser.getUsername());
 		articleCheckInDb.setApproveFlag(ApproveFlagEnum.APPROVED.getCode());
 		articleCheckMapper.updateByPrimaryKeySelective(articleCheckInDb);
@@ -123,7 +123,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		
 		//4.用户拓展表增加积分和文章数
 		UserExtension userExtension=new UserExtension();
-		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(addScoreHistory.getScore());
 		userExtension.setArticleCounts(1);
@@ -153,7 +153,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		updateArticleCheck.setId(id);
 		updateArticleCheck.setCheckTime(new Date());
 		updateArticleCheck.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
-		updateArticleCheck.setCheckUserId(loginUser.getUserId());
+		updateArticleCheck.setCheckUserId(loginUser.getId());
 		updateArticleCheck.setCheckUsername(loginUser.getUsername());
 		updateArticleCheck.setApproveFlag(ApproveFlagEnum.NOT_APPROVED.getCode());
 		updateArticleCheck.setRemark(reason);

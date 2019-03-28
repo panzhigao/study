@@ -18,12 +18,12 @@ public interface CollectionService extends BaseService<Collection>{
 	 * @param userId 用户id
 	 * @param id 收藏id
 	 */
-	void removeCollection(String userId,Long id);
+	void removeCollection(Long userId,Long id);
 	/**
 	 * 查看文章是否收藏
 	 * @param userId
 	 * @param articleId 文章id
 	 * @return
 	 */
-	boolean checkArticleCollected(String userId,Long articleId);
+	boolean checkArticleCollected(Long userId,Long articleId);
 }

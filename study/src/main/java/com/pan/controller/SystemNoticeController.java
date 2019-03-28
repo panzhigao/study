@@ -52,7 +52,7 @@ public class SystemNoticeController {
     @RequiresPermissions(value="/user/systemNotice")
     public ResultMsg sendMessage(Article article){
         logger.info("发布系统公告开始");
-        String userId= TokenUtils.getLoginUserId();
+        Long userId= TokenUtils.getLoginUserId();
         article.setUserId(userId);
         articleService.saveSystemMessage(article);
         return ResultMsg.ok("发布系统公告成功");

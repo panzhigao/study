@@ -26,7 +26,7 @@ public class Message extends BaseEntity {
 	/**
 	 * 消息接收者id
 	 */
-	private String receiverUserId;
+	private Long receiverUserId;
 	/**
 	 * 发送消息用户名
 	 */
@@ -34,7 +34,7 @@ public class Message extends BaseEntity {
 	/**
 	 * 发送者用户id
 	 */
-	private String senderUserId;
+	private Long senderUserId;
 	/**
 	 * 消息类别 1-评论 2-点赞 3-系统消息
 	 */

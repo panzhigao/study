@@ -48,12 +48,6 @@ public interface UserService extends BaseService<User>{
 	 */
 	void updateUserInfo(User user,UserExtension userExtension);
 	/**
-	 * 根据用户id查找用户其他信息
-	 * @param userId
-	 * @return 
-	 */
-	UserExtension findExtensionByUserId(Long userId);
-	/**
 	 * 发送验证码
 	 * @param user 用户信息
 	 * @param operateType 操作类型
@@ -83,7 +77,7 @@ public interface UserService extends BaseService<User>{
 	 * @param userId
 	 * @param roles 角色id数组
 	 */
-	void allocateRoleToUser(Long userId,String[] roles);
+	void allocateRoleToUser(Long userId,Long[] roles);
 	/**
 	 * 修改用户状态
 	 * @param userId

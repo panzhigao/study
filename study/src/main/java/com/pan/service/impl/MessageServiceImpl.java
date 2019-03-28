@@ -46,7 +46,7 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 	
 
 	@Override
-	public int countMessage(String userId, Integer status) {
+	public int countMessage(Long userId, Integer status) {
 		QueryMessage queryMessage=new QueryMessage();
 		queryMessage.setReceiverUserId(userId);
 		queryMessage.setStatus(status);
@@ -54,7 +54,7 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 	}
 
 	@Override
-	public int cleanMessage(String userId, String messageId) {
+	public int cleanMessage(Long userId, String messageId) {
 		return messageMapper.cleanMessage(userId, messageId);
 	}
 
@@ -65,7 +65,7 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 		}
 		logger.info("发送消息，接收消息userId={}",message.getReceiverUserId());
 		User loginUser = TokenUtils.getLoginUser();
-		message.setSenderUserId(loginUser.getUserId());
+		message.setSenderUserId(loginUser.getId());
 		message.setSenderName(loginUser.getNickname());
 		message.setMessageId(IdUtils.generateMessageId());
 		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());

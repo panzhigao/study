@@ -15,11 +15,11 @@ public class QueryUserRole extends QueryBase{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 用户id
 	 */
-	private String roleId;
+	private Long roleId;
 	/**
 	 * 创建人id
 	 */

@@ -36,8 +36,8 @@ public class CommentController {
 	@RequestMapping(value="/user/comment",method=RequestMethod.POST)
 	@ResponseBody
 	public ResultMsg comment(Comment comment){
-		String loingUserId = TokenUtils.getLoginUserId();
-		comment.setUserId(loingUserId);
+		Long loginUserId = TokenUtils.getLoginUserId();
+		comment.setUserId(loginUserId);
 		Comment addComment = commentService.addComment(comment);
 		User loginUser = TokenUtils.getLoginUser();
 		CommentVO commentVO=new CommentVO();
@@ -75,9 +75,9 @@ public class CommentController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/deleteComment")
 	@ResponseBody
-	public ResultMsg deleteComments(String commentId){
-		String loingUserId = TokenUtils.getLoginUserId();
-		commentService.deleteByCommentId(commentId, loingUserId);
+	public ResultMsg deleteComments(Long commentId){
+		Long loginUserId = TokenUtils.getLoginUserId();
+		commentService.deleteByCommentId(commentId, loginUserId);
 		return ResultMsg.ok("删除评论成功");
 	}
 	
@@ -87,7 +87,7 @@ public class CommentController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/u/loadUserComment")
 	@ResponseBody
-	public ResultMsg loadUserComments(String userId){
+	public ResultMsg loadUserComments(Long userId){
 		List<Comment> loadUserComments = commentService.loadUserComments(userId);
 		TransFieldUtils.transEntityCollection(loadUserComments);
 		return ResultMsg.ok("加载用户评论成功",loadUserComments);

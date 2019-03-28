@@ -14,7 +14,7 @@ public class UserInfoDTO {
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long id;
 	/**
 	 * 用户名
 	 */
@@ -42,7 +42,7 @@ public class UserInfoDTO {
 	
 	public UserInfoDTO(User user,UserExtension userExtension){
 		if(user!=null){
-			this.userId=user.getUserId();
+			this.id=user.getId();
 			this.username=user.getUsername();
 			this.nickname=user.getNickname();
 			this.telephone=user.getTelephone();

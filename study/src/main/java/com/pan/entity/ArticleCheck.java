@@ -47,7 +47,7 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 审核人id
 	 */
-	private String checkUserId;
+	private Long checkUserId;
 	/**
 	 * 审核人姓名
 	 */

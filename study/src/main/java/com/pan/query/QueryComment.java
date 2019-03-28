@@ -16,7 +16,7 @@ public class QueryComment extends QueryBase{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 文章id
 	 */

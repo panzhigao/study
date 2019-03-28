@@ -68,7 +68,7 @@ public class ForgetController {
 			//解密密码
 			String decodeByPrivateKey = RSAUtil.decodeByPrivateKey(newPassword, privateKey);
 			User updateUser=new User();
-			updateUser.setUserId(userInDb.getUserId());
+			updateUser.setId(userInDb.getId());
 			updateUser.setPassword(PasswordUtils.getEncryptedPwd(decodeByPrivateKey));
 			userService.updateUserByUserId(updateUser);
 		}else{

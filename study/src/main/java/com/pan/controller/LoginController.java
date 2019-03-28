@@ -53,7 +53,7 @@ public class LoginController{
 	@RequestMapping(method=RequestMethod.GET,value="/login")
 	public ModelAndView toLogin(){
 		if(TokenUtils.getLoginUserId()!=null){
-			 String loginUserId = TokenUtils.getLoginUserId();
+			Long loginUserId = TokenUtils.getLoginUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}
@@ -102,7 +102,7 @@ public class LoginController{
 		if(StringUtils.isNotBlank(redirectUrl)&&!MyConstant.DEFAULT_REQUEST_URL.equals(redirectUrl)){
 			return ResultMsg.build(ResultCodeEnum.REDIRECT, "用户登陆成功",redirectUrl);
 		}
-		return ResultMsg.ok("用户登陆成功",userInDb.getUserId());
+		return ResultMsg.ok("用户登陆成功",userInDb.getId());
 	}
 		
 	/**

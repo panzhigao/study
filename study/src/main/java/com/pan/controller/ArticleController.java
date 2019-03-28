@@ -92,8 +92,8 @@ public class ArticleController {
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(QueryArticle queryArticle){
-		String loingUserId = TokenUtils.getLoginUserId();
-		queryArticle.setUserId(loingUserId);
+		Long loginUserId = TokenUtils.getLoginUserId();
+		queryArticle.setUserId(loginUserId);
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		if(StringUtils.isNotBlank(queryArticle.getOrderCondition())){
 			queryArticle.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticle.getOrderCondition()));
@@ -113,7 +113,7 @@ public class ArticleController {
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")Long articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/article/detail");
-		String loginUserId=null;
+		Long loginUserId=null;
 		if(TokenUtils.isAuthenticated()){
 			loginUserId = TokenUtils.getLoginUserId();
 		}
@@ -130,7 +130,7 @@ public class ArticleController {
 		}else{
 			mav.addObject("viewCount",article.getViewCount());
 		}
-		User articleUser=userService.findByUserId(article.getUserId());
+		User articleUser=userService.selectByPrimaryKey(article.getUserId());
 		mav.addObject("articleUser", articleUser);
 		return mav;
 	}
@@ -144,8 +144,8 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")Long articleId){
 		ModelAndView mav=new ModelAndView("html/article/edit");
-		String loingUserId = TokenUtils.getLoginUserId();
-		Article article=articleService.getAndCheckByUserId(loingUserId, articleId);
+		Long loginUserId = TokenUtils.getLoginUserId();
+		Article article=articleService.getAndCheckByUserId(loginUserId, articleId);
 		mav.addObject("article", article);
 		return mav;
 	}
@@ -179,7 +179,7 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doDelete")
 	public ResultMsg deleteArticle(Long articleId,HttpServletRequest request){
 		logger.info("删除的文章id:{}",articleId);
-		String userId=TokenUtils.getLoginUserId();
+		Long userId=TokenUtils.getLoginUserId();
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
 	}

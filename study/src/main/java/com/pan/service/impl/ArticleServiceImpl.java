@@ -96,7 +96,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public void saveArticle(Article article) {
 		User loginUser = TokenUtils.getLoginUser();
-		article.setUserId(loginUser.getUserId());
+		article.setUserId(loginUser.getId());
 		article.setUsername(loginUser.getUsername());
 		checkArticle(article);
 		// 默认草稿状态
@@ -112,7 +112,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		//发布文章,新增审核记录
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(loginUser.getUserId());
+			articleCheck.setUserId(loginUser.getId());
 			articleCheck.setUsername(loginUser.getUsername());
 			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
@@ -260,8 +260,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		message.setMessageType(MessageTypeEnum.NOTICE.getCode());
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
-		String loginUserId = TokenUtils.getLoginUserId();
-		Set<String> set = new HashSet<String>();
+		Long loginUserId = TokenUtils.getLoginUserId();
+		Set<Long> set = new HashSet<Long>();
 		set.add(loginUserId);
 		MessageUtils.sendMessageToAllExceptionUser(JsonUtils.toJson(message), set);
 		articleMapper.insertSelective(article);
@@ -353,7 +353,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 				}else{
 					article=(Article) JsonUtils.fromJson(string, Article.class);
 					//如果文章不为发布状态，且不属于当前用户的文章，不能浏览
-					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&& !queryArticleVO.getUserId().equals(article.getUserId())){
 						logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 						throw new BusinessException("文章不存在");
 					}
@@ -365,7 +365,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
 					throw new BusinessException("文章不存在");
 				}
-				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!queryArticleVO.getUserId().equals(article.getUserId())){
 					logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 					throw new BusinessException("文章不存在");
 				}

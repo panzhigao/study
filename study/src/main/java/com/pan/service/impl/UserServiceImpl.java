@@ -377,7 +377,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      * @param roleIds  角色id数组
      */
     @Override
-    public void allocateRoleToUser(Long userId, String[] roleIds) {
+    public void allocateRoleToUser(Long userId, Long[] roleIds) {
         User user = selectByPrimaryKey(userId);
         if (user == null) {
             logger.error("为用户分配角色,根据userId({})未查询到用户信息", userId);
@@ -390,8 +390,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         Set<String> roleSet = roles.stream().map(r->r.getRoleName()+"("+r.getId()+")").collect(Collectors.toSet());
         //查询用户数据库里的角色信息
         List<String> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
-        String[] userRoleIds=new String[roleIdsByUserId.size()];
-        String[] array = roleIdsByUserId.toArray(userRoleIds);
+        Long[] userRoleIds=new Long[roleIdsByUserId.size()];
+        Long[] array = roleIdsByUserId.toArray(userRoleIds);
         List<Role> rolesInDb = roleMapper.findByRoleIds(array);
         Set<String> roleSetFromDb = rolesInDb.stream().map(r->r.getRoleName()+"("+r.getId()+")").collect(Collectors.toSet());
         if(Objects.deepEquals(roleSet, roleSetFromDb)){
@@ -404,8 +404,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         boolean hasAdmin = false;
         if (ArrayUtils.isNotEmpty(roleIds)) {
             List<UserRole> list = new ArrayList<UserRole>();
-            for (String roleId : roleIds) {
-                if (StringUtils.equals(adminRoleId, roleId)) {
+            for (Long roleId : roleIds) {
+                if (adminRoleId.equals(roleId)) {
                     hasAdmin = true;
                 }
                 UserRole userRole = new UserRole();
@@ -420,13 +420,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
                 user.setUpdateTime(new Date());
                 user.setUpdateUser(TokenUtils.getLoginUserId());
-                userMapper.updateUserByUserId(user);
+                userMapper.updateByPrimaryKeySelective(user);
             //取消用户admin权限    
             }else if(!hasAdmin && AdminFlagEnum.ADMIN_TRUE.getCode().equals(user.getAdminFlag())){
             	user.setAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
                 user.setUpdateTime(new Date());
                 user.setUpdateUser(TokenUtils.getLoginUserId());
-                userMapper.updateUserByUserId(user);
+                userMapper.updateByPrimaryKeySelective(user);
             }
             userRoleService.batchAddUserRole(list);
             //清空该用户权限缓存
@@ -482,7 +482,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
 
     @Override
-    public List<User> findUserByRoleId(String roleId) {
+    public List<User> findUserByRoleId(Long roleId) {
         return userMapper.findUserByRoleId(roleId);
     }
     
@@ -491,11 +491,11 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	 * 新增一条用户签到积分记录，用户连续签到天数加1
 	 */
     @Override
-    public ScoreHistory checkIn(String userId) {
+    public ScoreHistory checkIn(Long userId) {
         ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreTypeEnum.CHECK_IN);
         //用户拓展表增加积分,增加用户签到天数
         UserExtension userExtension = new UserExtension();
-        userExtension.setUserId(addScoreHistory.getUserId());
+        userExtension.setId(addScoreHistory.getUserId());
         userExtension.setUpdateTime(new Date());
         userExtension.setScore(addScoreHistory.getScore());
         userExtension.setContinuousCheckInDays(1);

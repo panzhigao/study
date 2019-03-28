@@ -81,7 +81,7 @@ public class FileUploadController {
 			}
             file.transferTo(destFile);  
             Picture picture=new Picture();
-            String userId=TokenUtils.getLoginUserId();
+			Long userId=TokenUtils.getLoginUserId();
             try {
             	 picture.setUserId(userId);
                  picture.setPictureId(IdUtils.generatePictureId());
@@ -147,7 +147,7 @@ public class FileUploadController {
 							}
 							try {
 								Picture picture=new Picture();
-					            String userId=TokenUtils.getLoginUserId();
+								Long userId=TokenUtils.getLoginUserId();
 								picture.setUserId(userId);
 				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPictureUrl(pictureUrl+destFileName);

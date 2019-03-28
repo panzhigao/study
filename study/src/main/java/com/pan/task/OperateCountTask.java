@@ -150,9 +150,9 @@ public class OperateCountTask {
 					QueryScoreHistory queryScoreHistory = new QueryScoreHistory();
 					queryScoreHistory.setScoreDate(new java.sql.Date(DateUtils.getYesterdayDate().getTime()));
 					for (UserExtension userExtension : resultList) {
-						updateExtension.setUserId(userExtension.getUserId());
+						updateExtension.setId(userExtension.getId());
 						// 查询昨日是否签到
-						queryScoreHistory.setUserId(userExtension.getUserId());
+						queryScoreHistory.setUserId(userExtension.getId());
 						queryScoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
 						int checkCount = scoreHistoryService.countByParams(queryScoreHistory);
 						// 昨天没有签到,连续签到天数重置为0
@@ -168,7 +168,7 @@ public class OperateCountTask {
 						if (updateExtension.getContinuousCheckInDays() != null
 								|| updateExtension.getContinuousLoginDays() != null) {
 							updateExtension.setUpdateTime(new Date());
-							userExtensionService.updateByUserId(updateExtension);
+							userExtensionService.updateByPrimaryKeySelective(userExtension);
 						}
 						updateExtension.setContinuousCheckInDays(null);
 						updateExtension.setContinuousLoginDays(null);

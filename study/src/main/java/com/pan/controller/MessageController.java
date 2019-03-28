@@ -34,7 +34,7 @@ public class MessageController {
 	@RequiresPermissions("/user/message")
 	public ModelAndView toIndex(){
 		ModelAndView mav=new ModelAndView("html//message/messagePage");
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.countMessage(loginUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		mav.addObject("unread",count>0);
 		return mav;
@@ -49,7 +49,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg loadMessages(QueryMessage queryMessage){
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		queryMessage.setReceiverUserId(loginUserId);
 		Map<String, Object> result = messageService.findPageableMap(queryMessage);
 		return ResultMsg.ok("加载消息成功", result);
@@ -63,7 +63,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg getUnreadMessageCount(){
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.countMessage(loginUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		return ResultMsg.ok("统计成功", count);
 	}
@@ -77,7 +77,7 @@ public class MessageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
 	public ResultMsg cleanMessage(String messageId){
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.cleanMessage(loginUserId, messageId);
 		return ResultMsg.ok("消息置为已读成功", count);
 	}

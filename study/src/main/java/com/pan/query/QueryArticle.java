@@ -20,7 +20,7 @@ public class QueryArticle extends QueryBase {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
     /**
      * 用户名
      */

@@ -84,7 +84,7 @@ public class PermissionController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/permission/doDelete")
-	public ResultMsg deletePermission(String permissionId){
+	public ResultMsg deletePermission(Long permissionId){
 		permissionService.deleteByPermissionId(permissionId);
 		return ResultMsg.ok("删除权限成功");
 	}
@@ -97,14 +97,14 @@ public class PermissionController {
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/getPermissionTree")
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission")
-	public List<Tree> loadRoleTree(String roleId){
+	public List<Tree> loadRoleTree(Long roleId){
 		return permissionService.getPermissionTreeData(roleId);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission/doEdit")
-	public ResultMsg loadPermissionDetail(String permissionId){
+	public ResultMsg loadPermissionDetail(Long permissionId){
 		Permission permission = permissionService.getByPermissionId(permissionId);
 		return ResultMsg.ok("获取权限信息成功", permission);
 	}

@@ -22,7 +22,7 @@ public class Article extends BaseEntity{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 用户名
 	 */

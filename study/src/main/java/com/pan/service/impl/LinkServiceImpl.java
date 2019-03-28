@@ -84,7 +84,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		Date now = new Date();
 		User loginUser = TokenUtils.getLoginUser();
 		link.setCreateTime(now);
-		link.setCreateUser(loginUser.getUserId());
+		link.setCreateUser(loginUser.getId());
 		insertSelective(link);
 		String content = String.format("链接名：%s，链接地址：%s", link.getLinkName(), link.getLinkUrl());
 		operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_ADD);

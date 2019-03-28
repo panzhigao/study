@@ -49,7 +49,7 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
         stringBuilder.append(operateLogTypeEnum.getName()).append("：");
         stringBuilder.append(content);
         OperateLog operateLog=new OperateLog();
-        operateLog.setUserId(loginUser.getUserId());
+        operateLog.setUserId(loginUser.getId());
         operateLog.setUsername(loginUser.getUsername());
         operateLog.setContent(stringBuilder.toString());
         operateLog.setOperateType(operateLogTypeEnum.getCode());

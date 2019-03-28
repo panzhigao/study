@@ -16,10 +16,6 @@ public class Praise extends BaseEntity{
 	 */
 	private static final long serialVersionUID = 2529849766641254538L;
 	/**
-	 * 赞id
-	 */
-	private String praiseId;
-	/**
 	 * 文章id
 	 */
 	private Long articleId;
@@ -31,5 +27,5 @@ public class Praise extends BaseEntity{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 }

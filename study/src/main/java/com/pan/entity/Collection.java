@@ -18,7 +18,7 @@ public class Collection extends BaseEntity{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 文章id
 	 */

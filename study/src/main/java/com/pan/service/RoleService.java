@@ -25,13 +25,7 @@ public interface RoleService extends BaseService<Role>{
 	 * @param roleId
 	 * @param permissions
 	 */
-	void allocatePermissionToRole(Long roleId,String[] permissions);
-	/**
-	 * 查找唯一角色
-	 * @param roleId
-	 * @return
-	 */
-	Role findByRoleId(Long roleId);
+	void allocatePermissionToRole(Long roleId,Long[] permissions);
 	/**
 	 * 根据角色id获取权限层级树数据
 	 * @return

@@ -34,10 +34,10 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/u/{userId}")
-	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")String userId){
+	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")Long userId){
 		ModelAndView mav=new ModelAndView("html/user/home");
 		//用户信息
-		User u = userService.findByUserId(userId);
+		User u = userService.selectByPrimaryKey(userId);
 		if(u==null){
 			throw new BusinessException("用户不存在");
 		}

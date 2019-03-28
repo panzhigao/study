@@ -30,7 +30,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param articleId
 	 * @return
 	 */
-	Article getAndCheckByUserId(String userId,Long articleId);
+	Article getAndCheckByUserId(Long userId,Long articleId);
 	/**
 	 * 修改文章信息
 	 * @param article
@@ -53,7 +53,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param articleId
 	 * @param userId
 	 */
-	void deleteArticle(Long articleId,String userId);
+	void deleteArticle(Long articleId,Long userId);
 	/**
 	 * 根据查询条件查询文章条数
 	 * @param queryArticle

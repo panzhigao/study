@@ -61,11 +61,11 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		if(countByParams>0){
 			throw new BusinessException("改角色名已存在，请重新输入");
 		}
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
+		role.setId(IdUtils.generateId());
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
 		role.setSuperAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
-		role.setRoleId(IdUtils.generateRoleId());
 		roleMapper.insertSelective(role);
 		//记录日志
 		operateLogService.addOperateLog(role.toString(), OperateLogTypeEnum.ROLE_ADD);
@@ -77,8 +77,8 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	 * @param roleId 角色id
 	 */
 	@Override
-	public void deleteRole(String roleId) {
-		Role roleInDb = this.findByRoleId(roleId);
+	public void deleteRole(Long roleId) {
+		Role roleInDb = this.selectByPrimaryKey(roleId);
 		if(roleInDb==null){
 			logger.error("根据角色id未查询到角色信息,roleId={}",roleId);
 			throw new BusinessException("该角色不存在");
@@ -105,11 +105,11 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	 * @param roleId
 	 * @return
 	 */
-	private Role getAndCheck(String roleId){
-		if(StringUtils.isBlank(roleId)){
+	private Role getAndCheck(Long roleId){
+		if(roleId==null){
 			throw new BusinessException("角色ID未传入");
 		}
-		Role role = findByRoleId(roleId);
+		Role role = selectByPrimaryKey(roleId);
 		if(role==null){
 			throw new BusinessException("该角色不存在");
 		}
@@ -122,7 +122,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	 * @param permissions 权限id数组
 	 */
 	@Override
-	public void allocatePermissionToRole(String roleId, String[] permissions) {
+	public void allocatePermissionToRole(Long roleId, Long[] permissions) {
 		Role role = getAndCheck(roleId);
 		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(role.getSuperAdminFlag())){
 			throw new BusinessException("超级管理员不能编辑");
@@ -132,9 +132,9 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		if(ArrayUtils.isNotEmpty(permissions)){
 			List<RolePermission> list=new ArrayList<RolePermission>();
-			for (String string : permissions) {
+			for (Long permissionId : permissions) {
 				RolePermission rolePermission=new RolePermission();
-				rolePermission.setPermissionId(string);
+				rolePermission.setPermissionId(permissionId);
 				rolePermission.setRoleId(roleId);
 				rolePermission.setCreateTime(new Date());
 				rolePermission.setCreateUser(TokenUtils.getLoginUserId());
@@ -145,23 +145,13 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		reCachePermissionByRoleId(roleId);
 	}
 
-	@Override
-	public Role findByRoleId(String roleId) {
-		QueryRole queryRoleVO=new QueryRole();
-		queryRoleVO.setRoleId(roleId);
-		List<Role> list = findPageable(queryRoleVO);
-		if(list.size()==1){
-			return list.get(0);
-		}
-		return null;
-	}
-	
+
 	/**
 	 * 获取角色层级树
 	 */
 	@Override
-	public List<Tree> getRoleTreeData(String userId) {
-		if(StringUtils.isBlank(userId)){
+	public List<Tree> getRoleTreeData(Long userId) {
+		if(userId==null){
 			return new ArrayList<Tree>();
 		}
 		List<Role> list = this.roleMapper.getRoleSelectedByUserId(userId);
@@ -169,8 +159,8 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		for (Role role : list) {
 			Tree roleTree=new Tree();
 			roleTree.setTitle(role.getRoleName());
-			roleTree.setValue(role.getRoleId());
-			roleTree.setId(role.getRoleId());
+			roleTree.setValue(role.getId()+"");
+			roleTree.setId(role.getId()+"");
 			roleTree.setPId("0");
 			if(!StringUtils.equals(role.getMarker(),"0")){
 				roleTree.setChecked(true);
@@ -181,7 +171,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	}
 
 	@Override
-	public List<String> getRoleIdsByUserId(String userId) {
+	public List<String> getRoleIdsByUserId(Long userId) {
 		return this.roleMapper.getRoleIdsByUserId(userId);
 	}
 	
@@ -191,11 +181,11 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	 * @param roleId
 	 */
 	@Override
-	public void reCachePermissionByRoleId(String roleId){
+	public void reCachePermissionByRoleId(Long roleId){
 		try {
 			List<User> list = userService.findUserByRoleId(roleId);
 			for (User user : list) {				
-				TokenUtils.clearAuthz(user.getUserId());
+				TokenUtils.clearAuthz(user.getId());
 			}
 		} catch (Exception e) {
 			logger.error("缓存角色权限失败,roleId:{}",roleId);
@@ -209,9 +199,9 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	@Override
 	public void updateRole(Role role) {
 		ValidationUtils.validateEntity(role);
-		Role roleInDb = getAndCheck(role.getRoleId());
+		Role roleInDb = getAndCheck(role.getId());
 		Role updateRole=new Role();
-		String different=role.getRoleId()+","+ roleInDb.getRoleName()+"-->"+role.getRoleName();
+		String different=role.getId()+","+ roleInDb.getRoleName()+"-->"+role.getRoleName();
 		updateRole.setId(roleInDb.getId());
 		updateRole.setRoleName(role.getRoleName());
 		updateRole.setUpdateTime(new Date());

@@ -20,5 +20,5 @@ public interface UserRoleMapper extends BaseMapper<UserRole>{
      * @param userId
      * @return
      */
-    int deleteUserRoleByUserId(String userId);
+    int deleteUserRoleByUserId(Long userId);
 }

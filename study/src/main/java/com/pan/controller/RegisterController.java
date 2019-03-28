@@ -45,7 +45,7 @@ public class RegisterController {
 	@RequestMapping(method=RequestMethod.GET,value="/register")
 	public ModelAndView toRegisterPage(){
 		if(TokenUtils.getLoginUserId()!=null){
-			String loginUserId = TokenUtils.getLoginUserId();
+			 Long loginUserId = TokenUtils.getLoginUserId();
 			 ModelAndView mv = new ModelAndView("redirect:/u/"+loginUserId);
 			 return mv;
 		}

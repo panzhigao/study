@@ -50,7 +50,7 @@ public class IndexController {
 		ModelAndView mav=new ModelAndView("html/index");
 		//用户已登录
 		if(TokenUtils.isAuthenticated()){
-			UserExtension extension = userExtensionService.findByUserId(TokenUtils.getLoginUserId());
+			UserExtension extension = userExtensionService.selectByPrimaryKey(TokenUtils.getLoginUserId());
 			mav.addObject("checkInDays", extension.getContinuousCheckInDays());
 			//查询今日是否已签到
 			QueryScoreHistory queryScoreHistory=new QueryScoreHistory();

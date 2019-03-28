@@ -16,5 +16,5 @@ public class QueryMessage extends QueryBase{
 	/**
 	 * 消息接收者id
 	 */
-	private String receiverUserId;
+	private Long receiverUserId;
 }

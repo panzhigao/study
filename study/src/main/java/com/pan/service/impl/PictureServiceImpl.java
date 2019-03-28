@@ -35,9 +35,9 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	}
 		
 	@Override
-	public void deleteByPictureIds(String userId,String pictureIds) {
+	public void deleteByPictureIds(Long userId,String pictureIds) {
 		logger.info("删除的图片ids为{}",pictureIds);
-		if(StringUtils.isBlank(pictureIds)){
+		if(pictureIds==null){
 			logger.info("图片id不能为空",userId);
 			throw new BusinessException("图片id不能为空");
 		}

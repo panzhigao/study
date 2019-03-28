@@ -69,7 +69,7 @@ public class RoleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/role/doDelete")
-	public ResultMsg deleteRole(String roleId){
+	public ResultMsg deleteRole(Long roleId){
 		roleService.deleteRole(roleId);
 		return ResultMsg.ok("删除角色成功");
 	}
@@ -81,7 +81,7 @@ public class RoleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocatePermission")
 	@ResponseBody
 	@RequiresPermissions("/user/role/allocatePermission")
-	public ResultMsg allocatePermission(String roleId,@RequestParam(value = "permissions[]",required=false)String[] permissions){
+	public ResultMsg allocatePermission(Long roleId,@RequestParam(value = "permissions[]",required=false)Long[] permissions){
 		roleService.allocatePermissionToRole(roleId, permissions);
 		return ResultMsg.ok("分配角色权限成功");
 	}
