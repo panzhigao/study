@@ -224,7 +224,7 @@ layui.use(['table','jquery'], function(){
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/collection/remove",
 	    		type:"post",
-	    		data:{articleId:data.articleId},
+	    		data:{id:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -263,6 +263,7 @@ layui.use(['table','jquery'], function(){
 	    	$('#collectionCounts').html(count);
 	    },
 	    cols: [[ //表头
+          {field: 'id', title: 'ID', width:100, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";

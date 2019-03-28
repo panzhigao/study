@@ -20,10 +20,6 @@ public class QueryCollection extends QueryBase{
 	 */
 	private String userId;
 	/**
-	 * 收藏
-	 */
-	private String collectionId;
-	/**
 	 * 文章标题
 	 */
 	private String title;

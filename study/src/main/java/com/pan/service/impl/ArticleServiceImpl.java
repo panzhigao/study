@@ -135,7 +135,6 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 */
 	@Override
 	public Article getAndCheckByUserId(String userId, String articleId) {
-		// TODO 修改判断
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
 		if (StringUtils.isBlank(userId) || StringUtils.isBlank(articleId)) {
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);

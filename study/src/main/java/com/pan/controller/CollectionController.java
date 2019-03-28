@@ -43,9 +43,9 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/remove")
 	@ResponseBody
-	public ResultMsg removeCollection(String articleId){
+	public ResultMsg removeCollection(Long id){
 		String loginUserId = TokenUtils.getLoginUserId();
-		collectionService.removeCollection(loginUserId, articleId);
+		collectionService.removeCollection(loginUserId,id);
 		return ResultMsg.ok("取消收藏成功");
 	}
 	
@@ -57,8 +57,8 @@ public class CollectionController {
 	@ResponseBody
 	public ResultMsg findCollection(String articleId){
 		String loginUserId = TokenUtils.getLoginUserId();
-		Collection collection = collectionService.findUserCollection(loginUserId, articleId);
-		if(collection!=null){
+		boolean flag = collectionService.checkArticleCollected(loginUserId, articleId);
+		if(flag){
 			return ResultMsg.ok("已收藏",true);
 		}
 		return ResultMsg.ok("未收藏",false);

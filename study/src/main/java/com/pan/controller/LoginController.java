@@ -69,7 +69,6 @@ public class LoginController{
 	@RequestMapping(method=RequestMethod.POST,value="/doLogin")
 	@ResponseBody
 	public ResultMsg doLogin(HttpServletRequest request,User user,String vercode) throws Exception{
-		//TODO 密码输入多次错误
 		logger.info("用户登陆，用户信息为：{}",user);
 		String vercodeInSession=(String)TokenUtils.getAttribute(MyConstant.VERCODE);
 		if(!StringUtils.equalsIgnoreCase(vercode, vercodeInSession)){

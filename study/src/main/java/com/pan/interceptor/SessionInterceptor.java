@@ -59,8 +59,8 @@ public class SessionInterceptor implements HandlerInterceptor{
 			}
 			modelAndView.addObject(MyConstant.SYSTEM_CONFIG,SystemConfigUtils.getSystemConfig());
 			LinkService bean = SpringContextUtils.getBean(LinkService.class);
-			List<Link> onlieLinkList = bean.getOnlieLinkList();
-			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlieLinkList);
+			List<Link> onlineLinkList = bean.getOnlineLinkList();
+			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlineLinkList);
 		}
 	}
 	

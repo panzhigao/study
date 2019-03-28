@@ -113,12 +113,6 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		if(!ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			throw new BusinessException("文章状态不为审核中");
 		}
-		//如果文章为修改，则将内容复制过去
-//		if(CheckTypeEnum.UPDATE.getCode().equals(articleCheckInDb.getCheckType())){
-//			article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-//			article.setTitle(articleCheckInDb.getTitle());
-//			article.setContent(articleCheckInDb.getContent());
-//		}
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
@@ -174,7 +168,6 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		//审核未通过
 		updateArticle.setStatus(ArticleStatusEnum.FAIL_CHECKED.getCode());
 		articleMapper.updateArticleByArticleId(updateArticle);
-		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
 		//发送消息
 		Message message=new Message();
 		message.setArticleId(article.getArticleId());

@@ -31,6 +31,10 @@ import com.pan.service.OperateLogService;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
+/**
+ * 链接管理
+ * @author panzhigao
+ */
 @Service
 public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> implements LinkService {
 
@@ -155,7 +159,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	}
 
 	@Override
-	public List<Link> getOnlieLinkList() {
+	public List<Link> getOnlineLinkList() {
 		try {
 			return (List<Link>) onlineLinkCache.get(MyConstant.ONLINE_LINK_LIST);
 		} catch (ExecutionException e) {

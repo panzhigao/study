@@ -9,7 +9,6 @@ import com.pan.entity.Message;
  * 
  * @author Administrator
  */
-//TODO 消息查询接口优化
 public interface MessageMapper extends BaseMapper<Message>{
 	/**
 	 * 消息标记为已读

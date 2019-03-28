@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.pan.entity.Link;
 
+/**
+ * @author panzhigao
+ */
 public interface LinkService extends BaseService<Link>{
 	/**
 	 * 新增链接
@@ -17,7 +20,7 @@ public interface LinkService extends BaseService<Link>{
 	void editLink(Link link);
 	/**
 	 * 编辑链接
-	 * @param link
+	 * @param id
 	 */
 	void deleteLink(Long id);
 	/**
@@ -31,5 +34,5 @@ public interface LinkService extends BaseService<Link>{
 	 * 获取上线链接
 	 * @return
 	 */
-	List<Link> getOnlieLinkList();
+	List<Link> getOnlineLinkList();
 }

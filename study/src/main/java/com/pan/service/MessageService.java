@@ -28,6 +28,5 @@ public interface MessageService extends BaseService<Message>{
 	 * @param messageId
 	 * @return
 	 */
-	//TODO 修改方法名
 	int cleanMessage(String userId,String messageId);
 }
