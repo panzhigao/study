@@ -4,13 +4,13 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.ArticleCheck">
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
-    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="user_id"        	property="userId"          jdbcType="BIGINT" />
     <result column="username"        	property="username"        jdbcType="VARCHAR" />
-    <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
+    <result column="article_id"        	property="articleId"       jdbcType="BIGINT" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
     <result column="complete_flag"      property="completeFlag"    jdbcType="INTEGER" />
     <result column="check_type"         property="checkType"       jdbcType="INTEGER" />
-    <result column="check_user_id"      property="checkUserId"     jdbcType="VARCHAR" />
+    <result column="check_user_id"      property="checkUserId"     jdbcType="BIGINT" />
     <result column="check_username"     property="checkUsername"   jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="check_time"         property="checkTime"       jdbcType="TIMESTAMP" />
@@ -135,13 +135,13 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>
       <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
+        #{articleId,jdbcType=BIGINT},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -153,7 +153,7 @@
         #{checkType,jdbcType=INTEGER},
       </if>
       <if test="checkUserId != null">
-        #{checkUserId,jdbcType=VARCHAR},
+        #{checkUserId,jdbcType=BIGINT},
       </if>
       <if test="checkUsername != null">
         #{checkUsername,jdbcType=VARCHAR},
@@ -183,7 +183,7 @@
   			complete_flag=#{completeFlag,jdbcType=INTEGER},
   		</if>
   		<if test="checkUserId !=null ">
-  			check_user_id=#{checkUserId,jdbcType=VARCHAR},
+  			check_user_id=#{checkUserId,jdbcType=BIGINT},
   		</if>
   		<if test="checkUsername !=null ">
   			check_username=#{checkUsername,jdbcType=VARCHAR},

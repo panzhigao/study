@@ -6,9 +6,9 @@
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="role_name" jdbcType="VARCHAR" property="roleName" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="create_user" jdbcType="BIGINT" property="createUser" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+		<result column="update_user" jdbcType="BIGINT" property="updateUser" />
 		<result column="super_admin_flag" jdbcType="INTEGER" property="superAdminFlag" />
 	</resultMap>
 
@@ -80,13 +80,13 @@
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="createUser != null">
-				#{createUser,jdbcType=VARCHAR},
+				#{createUser,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				#{updateTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="updateUser != null">
-				#{updateUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=BIGINT},
 			</if>
 			<if test="superAdminFlag != null">
 				#{superAdminFlag,jdbcType=INTEGER},

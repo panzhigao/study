@@ -84,7 +84,6 @@ public class FileUploadController {
 			Long userId=TokenUtils.getLoginUserId();
             try {
             	 picture.setUserId(userId);
-                 picture.setPictureId(IdUtils.generatePictureId());
                  picture.setPictureUrl(pictureUrl+fileName);
                  picture.setPicturePath(imgFilePath);
                  picture.setCreateTime(new Date());
@@ -149,7 +148,6 @@ public class FileUploadController {
 								Picture picture=new Picture();
 								Long userId=TokenUtils.getLoginUserId();
 								picture.setUserId(userId);
-				                picture.setPictureId(IdUtils.generatePictureId());
 				                picture.setPictureUrl(pictureUrl+destFileName);
 				                picture.setPicturePath(filePath);
 				                picture.setCreateTime(new Date());

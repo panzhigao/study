@@ -4,9 +4,8 @@
 
 	<resultMap id="BaseResultMap" type="com.pan.entity.Comment">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="comment_id" property="commentId" jdbcType="VARCHAR" />
-		<result column="article_id" property="articleId" jdbcType="VARCHAR" />
-		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="article_id" property="articleId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
 		<result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
 		<result column="reply_to_user_id" property="replyToUserId" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -22,7 +21,7 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id,comment_id,article_id,user_id,comment_content,reply_to_user_id,create_time,praise_counts
+		id,article_id,user_id,comment_content,reply_to_user_id,create_time,praise_counts
 	</sql>
 
 	<insert id="insertSelective" parameterType="com.pan.entity.Comment">
@@ -89,7 +88,7 @@
 		<!-- from t_comment a left join t_praise b on a.comment_id=b.comment_id -->
 		<!-- join t_user c on c.user_id=a.user_id where article_id=#{articleId} -->
 		select
-		tc.id,tc.comment_id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
+		tc.id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
 		tc.create_time,tc.praise_counts,tu.user_portrait,tu.nickname
 		<if test="userId != null and userId !=''">
 			,
@@ -97,8 +96,8 @@
 		</if>
 		from t_comment tc
 		<if test="userId != null and userId !=''">
-			left join (select comment_id,user_id from t_praise where
-			user_id=#{userId}) tp on tc.comment_id=tp.comment_id
+			left join (select id,user_id from t_praise where
+			user_id=#{userId}) tp on tc.comment_id=tp.id
 		</if>
 		join t_user tu on tu.user_id=tc.user_id where tc.article_id=#{articleId}
 		order by tc.create_time desc
@@ -107,11 +106,6 @@
 		</if>
 	</select>
 
-	<select id="findByCommentId" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from t_comment where comment_id=#{commentId}
-	</select>
 
 	<select id="findPageable" resultMap="BaseResultMap">
 		select
@@ -139,24 +133,15 @@
 		</where>
 	</sql>
 	
-	<delete id="deleteByCommentId">
-		delete from t_comment where comment_id=#{commentId}
+	<delete id="deleteByPrimaryKey">
+		delete from t_comment
+		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-	<update id="updatePraiseCounts">
+	<update id="updatePraiseCountsByPrimaryKey">
 		update t_comment set praise_counts=praise_counts+1
-		where
-		comment_id=#{commentId}
+		where id = #{id,jdbcType=BIGINT}
 	</update>
-	
-	<!-- 根据cid数组，删除多条数据 -->
-	<delete id="deleteByIdArray">
-		delete from t_comment where id in
-		<foreach collection="array" item="id" open="(" separator=","
-			close=")">
-			#{id}
-		</foreach>
-	</delete>
 
 	<select id="findVOByUserId" resultMap="VOMap">
 		select

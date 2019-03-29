@@ -11,10 +11,21 @@ import com.pan.vo.CommentVO;
  *
  */
 public interface CommentMapper extends BaseMapper<Comment>{
-	
+	/**
+	 *
+	 * @param queryComment
+	 * @return
+	 */
 	List<CommentVO> findVOByParams(QueryComment queryComment);
-
-	void updatePraiseCounts(Long commentId);
-	
+	/**
+	 *
+	 * @param commentId
+	 */
+	void updatePraiseCountsByPrimaryKey(Long commentId);
+	/**
+	 *
+	 * @param userId
+	 * @return
+	 */
 	List<Comment> findVOByUserId(Long userId);
 }

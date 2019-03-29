@@ -67,7 +67,6 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 		User loginUser = TokenUtils.getLoginUser();
 		message.setSenderUserId(loginUser.getId());
 		message.setSenderName(loginUser.getNickname());
-		message.setMessageId(IdUtils.generateMessageId());
 		message.setStatus(MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		message.setMessageType(messageTypeEnum.getCode());
 		message.setCreateTime(new Date());

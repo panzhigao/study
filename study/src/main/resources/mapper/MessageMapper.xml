@@ -4,21 +4,20 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Message">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="message_id" jdbcType="VARCHAR" property="messageId" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="receiver_user_id" jdbcType="VARCHAR" property="receiverUserId" />
+    <result column="receiver_user_id" jdbcType="BIGINT" property="receiverUserId" />
     <result column="sender_name" jdbcType="VARCHAR" property="senderName" />
-    <result column="sender_user_id" jdbcType="VARCHAR" property="senderUserId" />
+    <result column="sender_user_id" jdbcType="BIGINT" property="senderUserId" />
     <result column="message_type" jdbcType="INTEGER" property="messageType" />
-    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
-    <result column="comment_id" jdbcType="VARCHAR" property="commentId" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="comment_id" jdbcType="BIGINT" property="commentId" />
     <result column="content_name" jdbcType="VARCHAR" property="contentName" />
     <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id, message_id, status, receiver_user_id, sender_name, sender_user_id, message_type, 
+    id, status, receiver_user_id, sender_name, sender_user_id, message_type,
     article_id, comment_id, content_name, comment_content, create_time
   </sql>
 
@@ -27,9 +26,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="messageId != null">
-        message_id,
       </if>
       <if test="status != null">
         status,
@@ -65,9 +61,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
-      </if>
-      <if test="messageId != null">
-        #{messageId,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -134,8 +127,8 @@
   		<if test="receiverUserId !=null and receiverUserId !=''">
   		 and receiver_user_id=#{receiverUserId}
   		</if>
-  		<if test="messageId !=null and messageId !=''">
-  		 and message_id=#{messageId}
+  		<if test="id !=null and id !=''">
+  		 and id=#{id}
   		</if>
   	</where>
   </update>

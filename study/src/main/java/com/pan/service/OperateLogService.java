@@ -21,5 +21,5 @@ public interface OperateLogService extends BaseService<OperateLog>{
      * @param queryOperateLog
      * @return
      */
-    public Map<String, Object> findByParams(QueryOperateLog queryOperateLog);
+    Map<String, Object> findByParams(QueryOperateLog queryOperateLog);
 }

@@ -13,8 +13,8 @@ public interface MessageMapper extends BaseMapper<Message>{
 	/**
 	 * 消息标记为已读
 	 * @param receiverUserId
-	 * @param messageId
+	 * @param id 消息id
 	 * @return
 	 */
-	int cleanMessage(@Param("receiverUserId")Long receiverUserId,@Param("messageId")String messageId);
+	int cleanMessage(@Param("receiverUserId")Long receiverUserId,@Param("id")String id);
 }

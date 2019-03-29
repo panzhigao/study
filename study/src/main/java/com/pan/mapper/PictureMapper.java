@@ -11,12 +11,6 @@ import com.pan.entity.Picture;
  */
 public interface PictureMapper extends BaseMapper<Picture>{
 	/**
-	 * 根据pictureId查找图片
-	 * @param pictureId
-	 * @return
-	 */
-	Picture findByPictureId(Long pictureId);
-	/**
 	 * 根据图片ids删除图片
 	 * @param picIds
 	 * @param userId

@@ -16,6 +16,7 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	List<Permission> findAll();
 	/**
 	 * 查找角色选中的权限
+	 * @param roleId
 	 * @return
 	 */
 	List<Permission> getPermissionSelectedByRoleId(Long roleId);
@@ -31,10 +32,4 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	 * @return
 	 */
 	List<Permission> findPermissionsByUserId(Long userId);
-	/**
-	 * 根据权限id查询唯一一条权限信息
-	 * @param permissionId
-	 * @return
-	 */
-	Permission selectByPermissionId(Long permissionId);
 }

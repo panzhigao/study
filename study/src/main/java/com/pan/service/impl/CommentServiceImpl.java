@@ -78,7 +78,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}
-		comment.setCommentId(IdUtils.generateCommentId());
+		comment.setId(IdUtils.generateId());
 		comment.setCreateTime(new Date());
 		//新增评论
 		commentMapper.insertSelective(comment);
@@ -102,7 +102,6 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		}
 		User userInDb = userService.selectByPrimaryKey(articleInDb.getUserId());
 		Message message=new Message();
-		message.setMessageId(IdUtils.generateMessageId());
 		message.setSenderUserId(comment.getUserId());
 		message.setSenderName(userInDb.getNickname());
 		message.setArticleId(comment.getArticleId());

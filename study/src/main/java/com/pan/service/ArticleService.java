@@ -36,12 +36,6 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param article
 	 */
 	void updateArticle(Article article);
-//	/**
-//	 * 获取用户的文章详细信息
-//	 * @param articleId
-//	 * @return
-//	 */
-//	Article getByArticleId(Long articleId);
 	/**
 	 * 获取用户的文章详细信息,并校验文章是否存在
 	 * @param articleId
@@ -60,13 +54,6 @@ public interface ArticleService extends BaseService<Article>{
 	 * @return
 	 */
 	int getCount(QueryArticle queryArticle);
-//	/**
-//	 * 根据文章id和状态查找唯一文章信息
-//	 * @param articleId
-//	 * @param status
-//	 * @return
-//	 */
-//	Article findByArticleIdAndStatus(Long articleId,Integer status);
 	/**
 	 * 更新文章评论
 	 * @param articleId

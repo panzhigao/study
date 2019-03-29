@@ -16,10 +16,6 @@ public class Picture extends BaseEntity{
 	 */
 	private static final long serialVersionUID = 7161784937128201170L;
 	/**
-	 * 图片id
-	 */
-	private String pictureId;
-	/**
 	 * 用户id
 	 */
 	private Long userId;

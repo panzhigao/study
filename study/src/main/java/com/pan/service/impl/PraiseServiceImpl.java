@@ -54,7 +54,7 @@ public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper>
 	public void addCommentPraise(Praise praise) {
 		ValidationUtils.validateEntity(praise);
 		//查询点赞的评论是否存在
-		Comment commentInDb=commentMapper.findByCommentId(praise.getCommentId());
+		Comment commentInDb=commentMapper.selectByPrimaryKey(praise.getCommentId());
 		if(commentInDb==null){
 			logger.error("评论信息不存在:{}",praise.getCommentId());
 			throw new BusinessException("评论信息不存在");
@@ -70,7 +70,7 @@ public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper>
 		praise.setArticleId(commentInDb.getArticleId());
 		praise.setCreateTime(new Date());
 		praiseMapper.insertSelective(praise);
-		commentMapper.updatePraiseCounts(praise.getCommentId());
+		commentMapper.updatePraiseCountsByPrimaryKey(praise.getCommentId());
 		User loginUser = TokenUtils.getLoginUser();
 		//点赞人不是当前评论所有者
 		if(!loginUser.getId().equals(commentInDb.getUserId())){

@@ -21,10 +21,6 @@ public class Comment extends BaseEntity{
 	 */
 	private static final long serialVersionUID = 854160848698390694L;
 	/**
-	 * 评论id
-	 */
-	private String commentId;
-	/**
 	 * 用户id
 	 */
 	private Long userId;

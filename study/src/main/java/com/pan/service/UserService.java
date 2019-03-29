@@ -82,6 +82,7 @@ public interface UserService extends BaseService<User>{
 	 * 修改用户状态
 	 * @param userId
 	 * @param status
+	 * @return 返回状态内容
 	 */
 	String changeUserStatus(Long userId,Integer status);
 	/**

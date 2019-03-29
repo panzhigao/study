@@ -4,18 +4,17 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.Picture">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="picture_id" jdbcType="VARCHAR" property="pictureId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
     <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, picture_id, create_time, user_id, picture_url, picture_path
+    id, create_time, user_id, picture_url, picture_path
   </sql>
   
-  <select id="findByPictureId" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
   </select>
   
@@ -34,9 +33,6 @@
       <if test="id != null">
         id,
       </if>
-      <if test="pictureId != null">
-        picture_id,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -53,9 +49,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
-      </if>
-      <if test="pictureId != null">
-        #{pictureId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -86,9 +79,6 @@
   
   <sql id="whereSql">
   	<where>
-  		<if test="pictureId !=null and pictureId!='' ">
-  			and picture_id=#{pictureId}
-  		</if>
   		<if test="userId !=null and userId!=''">
   			and user_id=#{userId}
   		</if>

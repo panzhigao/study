@@ -4,11 +4,10 @@
 
 	<resultMap id="BaseResultMap" type="com.pan.entity.Permission">
 		<id column="id" jdbcType="BIGINT" property="id" />
-		<result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
 		<result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-		<result column="pid" jdbcType="VARCHAR" property="pid" />
+		<result column="pid" jdbcType="BIGINT" property="pid" />
 		<result column="level" jdbcType="INTEGER" property="level" />
 		<result column="sort" jdbcType="INTEGER" property="sort" />
 		<result column="icon" jdbcType="VARCHAR" property="icon" />
@@ -19,7 +18,7 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, permission_id, permission_name, url, create_time, pid,
+		id, permission_name, url, create_time, pid,
 		level, sort,
 		icon, type,create_user, update_time, update_user
 	</sql>
@@ -32,16 +31,7 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 
-	<select id="selectByPermissionId" parameterType="java.lang.String"
-		resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from t_permission
-		where permission_id = #{permissionId,jdbcType=VARCHAR}
-	</select>
-
-	<select id="findPageable" resultMap="BaseResultMap"
-		parameterType="com.pan.query.QueryPermission">
+	<select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPermission">
 		select
 		<include refid="Base_Column_List" />
 		from t_permission
@@ -65,9 +55,6 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
-			</if>
-			<if test="permissionId != null">
-				permission_id,
 			</if>
 			<if test="permissionName != null">
 				permission_name,
@@ -107,9 +94,6 @@
 			<if test="id != null">
 				#{id,jdbcType=BIGINT},
 			</if>
-			<if test="permissionId != null">
-				#{permissionId,jdbcType=VARCHAR},
-			</if>
 			<if test="permissionName != null">
 				#{permissionName,jdbcType=VARCHAR},
 			</if>
@@ -120,7 +104,7 @@
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="pid != null">
-				#{pid,jdbcType=VARCHAR},
+				#{pid,jdbcType=BIGINT},
 			</if>
 			<if test="level != null">
 				#{level,jdbcType=INTEGER},
@@ -160,31 +144,28 @@
 
 	<select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">
 		select
-		tp.permission_id,tp.permission_name,tp.url,max(ifnull(tr.role_id,0))marker,tp.pid,tp.sort
+		tp.id,tp.permission_name,tp.url,max(ifnull(tr.role_id,0))marker,tp.pid,tp.sort
 		from t_permission tp
 		left join t_role_permission trp on
-		trp.permission_id=tp.permission_id
+		trp.permission_id=tp.id
 		left join (select role_id from
 		t_role where role_id =#{roleId}) tr on
 		tr.role_id=trp.role_id
 		group by
-		tp.permission_id
+		tp.id
 	</select>
 
 	<select id="getPermissionByRoleId" resultMap="BaseResultMap">
 		select
-		tp.permission_id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort,tp.type
+		tp.id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort,tp.type
 		from t_role_permission trp join t_permission tp on
-		trp.permission_id=tp.permission_id
+		trp.permission_id=tp.id
 		where trp.role_id=#{roleId}
 	</select>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Permission">
 		update t_permission
 		<set>
-			<if test="permissionId != null">
-				permission_id = #{permissionId,jdbcType=VARCHAR},
-			</if>
 			<if test="permissionName != null">
 				permission_name = #{permissionName,jdbcType=VARCHAR},
 			</if>
@@ -224,13 +205,13 @@
 
 	<select id="findPermissionsByUserId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.permission_id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user
+		tp.id,tp.id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user
 		from t_user tu left
-		join t_user_role tur on tu.user_id=tur.user_id
+		join t_user_role tur on tu.id=tur.user_id
 		join
 		t_role_permission trp on trp.role_id=tur.role_id
 		join t_permission tp
-		on tp.permission_id=trp.permission_id where
-		tu.user_id=#{userId}
+		on tp.id=trp.permission_id where
+		tu.id=#{userId}
 	</select>
 </mapper>

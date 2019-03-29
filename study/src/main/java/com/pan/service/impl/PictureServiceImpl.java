@@ -54,7 +54,6 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	public void insertPicture(String pictureUrl, String picturePath) {
 		Picture picture=new Picture();
 		picture.setUserId(TokenUtils.getLoginUserId());
-        picture.setPictureId(IdUtils.generatePictureId());
         picture.setPictureUrl(pictureUrl);
         picture.setPicturePath(picturePath);
         picture.setCreateTime(new Date());

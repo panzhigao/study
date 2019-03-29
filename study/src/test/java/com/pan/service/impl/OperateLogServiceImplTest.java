@@ -27,10 +27,9 @@ public class OperateLogServiceImplTest extends BaseTest{
     }
 
     @Test
-    @Rollback(false)
     public void insertSelective() throws Exception {
         OperateLog operateLog=new OperateLog();
-        operateLog.setUserId("123");
+        operateLog.setUserId(123L);
         operateLog.setUsername("pzg");
         operateLog.setContent("77777");
         operateLog.setCreateTime(new Date());
@@ -41,7 +40,7 @@ public class OperateLogServiceImplTest extends BaseTest{
 
     @Test
     public void updateByPrimaryKeySelective() throws Exception {
-        OperateLog operateLog = operateLogService.selectByPrimaryKey(2L);
+        OperateLog operateLog = operateLogService.selectByPrimaryKey(26L);
         operateLog.setContent("111223455");
         int i = operateLogService.updateByPrimaryKeySelective(operateLog);
         Assert.assertEquals(1,i);

@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 点赞实体
  * @author panzhigao
@@ -22,8 +24,8 @@ public class Praise extends BaseEntity{
 	/**
 	 * 评论id
 	 */
-	@NotEmpty(message="评论id不能为空")
-	private String commentId;
+	@NotNull(message="评论id不能为空")
+	private Long commentId;
 	/**
 	 * 用户id
 	 */

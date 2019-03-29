@@ -16,10 +16,6 @@ public class Message extends BaseEntity {
 
 	private static final long serialVersionUID = -8041567985696094383L;
 	/**
-	 * 消息id
-	 */
-	private String messageId;
-	/**
 	 * 消息状态 0-未读 1-已读
 	 */
 	private Integer status;
@@ -46,7 +42,7 @@ public class Message extends BaseEntity {
 	/**
 	 * 评论id
 	 */
-	private String commentId;
+	private Long commentId;
 	/**
 	 * 内容名称
 	 */

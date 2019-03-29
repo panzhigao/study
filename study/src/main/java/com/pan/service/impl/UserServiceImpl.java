@@ -115,7 +115,6 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             logger.info("用户名已注册{}", userInDb);
             throw new BusinessException("用户名已注册");
         }
-        String dateStr = DateUtils.getNowDateStr(DateUtils.FORMAT_DATE2);
         String password = user.getPassword();
         //用户密码加密
         try {
@@ -213,7 +212,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             loginHistory.setUsername(userInDb.getUsername());
             loginHistory.setIp(IPUtils.ip2Integer(TokenUtils.getIp()));
             loginHistory.setCreateTime(now);
-            loginHistory.setUserAgent(TokenUtils.getAttribute(MyConstant.USER_AGENT).toString());
+            loginHistory.setUserAgent(String.valueOf(TokenUtils.getAttribute(MyConstant.USER_AGENT)));
             loginHistoryService.insertSelective(loginHistory);
             //积分历史表新增登录积分
             ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getId(), ScoreTypeEnum.LOGIN);
