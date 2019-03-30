@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.service.PictureService;
 import com.pan.util.DateUtils;
-import com.pan.util.IdUtils;
 import com.pan.util.SystemConfigUtils;
 import com.pan.util.SystemUtils;
 import com.pan.util.TokenUtils;
