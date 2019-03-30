@@ -7,7 +7,7 @@
 		<result column="article_id" property="articleId" jdbcType="BIGINT" />
 		<result column="user_id" property="userId" jdbcType="BIGINT" />
 		<result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
-		<result column="reply_to_user_id" property="replyToUserId" jdbcType="VARCHAR" />
+		<result column="reply_to_user_id" property="replyToUserId" jdbcType="BIGINT" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="praise_counts" property="praiseCounts" jdbcType="INTEGER" />
 	</resultMap>
@@ -69,7 +69,7 @@
 				#{commentContent,jdbcType=VARCHAR},
 			</if>
 			<if test="replyToUserId != null">
-				#{replyToUserId,jdbcType=VARCHAR},
+				#{replyToUserId,jdbcType=BIGINT},
 			</if>
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
@@ -122,10 +122,10 @@
 	<sql id="whereSql">
 		<where>
 			<if test="articleId != null">
-				and article_id=#{articleId,jdbcType=VARCHAR}
+				and article_id=#{articleId,jdbcType=BIGINT}
 			</if>
 			<if test="commentId != null">
-				and comment_id=#{commentId,,jdbcType=VARCHAR}
+				and comment_id=#{commentId,,jdbcType=BIGINT}
 			</if>
 			<if test="userId != null">
 				and user_id=#{userId,,jdbcType=VARCHAR}

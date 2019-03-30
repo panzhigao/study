@@ -12,7 +12,7 @@
 
 
     <sql id="Base_Column_List">
-    id, collection_id, user_id, article_id, create_time, title
+    id, user_id, article_id, create_time, title
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

@@ -4,10 +4,10 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.RolePermission">
       <id column="id" jdbcType="BIGINT" property="id" />
-      <result column="role_id" jdbcType="VARCHAR" property="roleId" />
-      <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+      <result column="role_id" jdbcType="BIGINT" property="roleId" />
+      <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
       <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-      <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+      <result column="create_user" jdbcType="BIGINT" property="createUser" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -25,7 +25,7 @@
   <insert id="batchAddRolePermission" parameterType="java.util.List">
   	insert into t_role_permission (role_id,permission_id,create_time,create_user) values
   	<foreach collection="list" item="item" separator="," >
-  		  (#{item.roleId,jdbcType=VARCHAR},#{item.permissionId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP},#{item.createUser,jdbcType=VARCHAR})
+  		  (#{item.roleId,jdbcType=BIGINT},#{item.permissionId,jdbcType=BIGINT},#{item.createTime,jdbcType=TIMESTAMP},#{item.createUser,jdbcType=VARCHAR})
   	</foreach>
   </insert>
 </mapper>

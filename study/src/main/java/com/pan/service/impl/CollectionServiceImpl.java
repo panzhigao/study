@@ -1,11 +1,8 @@
 package com.pan.service.impl;
 
 import java.util.Date;
-import java.util.List;
 import com.pan.service.AbstractBaseService;
 import com.pan.util.ValidationUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import com.pan.mapper.CollectionMapper;
 import com.pan.query.QueryCollection;
 import com.pan.service.ArticleService;
 import com.pan.service.CollectionService;
-import com.pan.util.IdUtils;
 
 
 /**

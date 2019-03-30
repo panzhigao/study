@@ -22,7 +22,6 @@ import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
 import com.pan.query.QueryRole;
-import com.pan.util.IdUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -75,7 +74,6 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		permission.setCreateTime(now);
 		User loginUser = TokenUtils.getLoginUser();
 		permission.setCreateUser(loginUser.getId());
-		permission.setId(IdUtils.generateId());
 		permissionMapper.insertSelective(permission);
 		//记录操作日志
 		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_ADD);

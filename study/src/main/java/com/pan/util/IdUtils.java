@@ -23,8 +23,6 @@ public class IdUtils {
 
 	private static final String PRAISE_KEY="praise_id";
 
-	private static final String COLLECTION_KEY="collection_id";
-
 	private static final String MESSAGE_KEY="message_id";
 
 	private static final String PERMISSION_KEY="permission_id";

@@ -22,10 +22,17 @@
     id,nickname,user_portrait,user_brief,create_time,update_time,article_counts,comment_counts,score,
     continuous_login_days,continuous_check_in_days,total_login_days,total_check_in_days
   </sql>
-
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_extension
+    where id = #{id,jdbcType=BIGINT}
+  </select>	
+	
   <insert id="insertSelective" parameterType="com.pan.entity.UserExtension">
   	insert into t_user_extension (
-  	<trim suffixOverrides=",">
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
   		<if test="id !=null">
   			id,
   		</if>
@@ -54,10 +61,7 @@
   			score,
   		</if>
   	</trim>
-  	) 
-  	values 
-  	(
-  	<trim suffixOverrides=",">
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
   		<if test="id !=null">
   			#{id,jdbcType=BIGINT},
   		</if>

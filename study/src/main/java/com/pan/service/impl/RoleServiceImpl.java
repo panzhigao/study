@@ -19,7 +19,6 @@ import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.RoleMapper;
 import com.pan.query.QueryRole;
-import com.pan.util.IdUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -62,7 +61,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 			throw new BusinessException("改角色名已存在，请重新输入");
 		}
 		Long loginUserId = TokenUtils.getLoginUserId();
-		role.setId(IdUtils.generateId());
 		role.setCreateTime(new Date());
 		role.setCreateUser(loginUserId);
 		role.setSuperAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());

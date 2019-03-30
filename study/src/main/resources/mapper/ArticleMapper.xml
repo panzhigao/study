@@ -40,7 +40,7 @@
   
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
-    a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
+    a.id,a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
     image,comment_count,view_count,type,stick,high_quality
   </sql>
 
@@ -53,8 +53,8 @@
   </select>
 
   <select id="findPageable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
-  	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.user_id as u_user_id from t_article a join t_user u
-  	on a.user_id=u.user_id 
+  	select <include refid="Simple_Column_List"/>,u.nickname,u.user_portrait,u.id as u_user_id from t_article a join t_user u
+  	on a.user_id=u.id 
   	<include refid="whereSql"/>
   	<choose>
   		<when  test="isHot !=null and isHot !=''">
@@ -240,7 +240,7 @@
   		<if test="stick != null">
   			stick=#{stick,jdbcType=INTEGER},
   		</if>
-  		<if test="highQuality != null and highQuality !=''">
+  		<if test="highQuality != null">
   			high_quality=#{highQuality,jdbcType=INTEGER},
   		</if>
   	</set>

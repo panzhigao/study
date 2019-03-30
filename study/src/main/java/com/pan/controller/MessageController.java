@@ -76,9 +76,9 @@ public class MessageController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/clean")
 	@ResponseBody
 	@RequiresPermissions(value="/user/message")
-	public ResultMsg cleanMessage(String messageId){
+	public ResultMsg cleanMessage(Long messageId){
 		Long loginUserId = TokenUtils.getLoginUserId();
-		int count=messageService.cleanMessage(loginUserId, messageId);
+		int count=messageService.updateMessageReaded(loginUserId, messageId);
 		return ResultMsg.ok("消息置为已读成功", count);
 	}
 }

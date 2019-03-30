@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
-import com.pan.query.QueryUserExtension;
 import com.pan.service.UserExtensionService;
 
 /**

@@ -2,7 +2,8 @@ package com.pan.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * 收藏实体
@@ -22,7 +23,7 @@ public class Collection extends BaseEntity{
 	/**
 	 * 文章id
 	 */
-	@NotEmpty(message = "文章id不能为空")
+	@NotNull(message = "文章id不能为空")
 	private Long articleId;
 	/**
 	 * 文章标题

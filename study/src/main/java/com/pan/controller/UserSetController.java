@@ -21,8 +21,6 @@ import com.pan.util.PasswordUtils;
 import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
-
-import javax.annotation.Resource;
 import java.util.Date;
 
 /**

@@ -2,25 +2,19 @@ package com.pan.service.impl;
 
 
 import java.util.Date;
-
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//import com.pan.util.TransFieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.MessageTypeEnum;
+import com.pan.common.exception.BusinessException;
 import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.MessageMapper;
 import com.pan.query.QueryMessage;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.MessageService;
-import com.pan.util.IdUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
@@ -52,10 +46,27 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 		queryMessage.setStatus(status);
 		return messageMapper.countByParams(queryMessage);
 	}
-
+	
+	/**
+	 * 消息置为已读
+	 * @param userId 用户id
+	 * @param messageId 消息id
+	 * @return
+	 */
 	@Override
-	public int cleanMessage(Long userId, String messageId) {
-		return messageMapper.cleanMessage(userId, messageId);
+	public int updateMessageReaded(Long userId, Long messageId) {
+		Message selectByPrimaryKey = messageMapper.selectByPrimaryKey(messageId);
+		if(selectByPrimaryKey==null){
+			logger.error("根据消息id={}未查询到消息信息",messageId);
+			throw new BusinessException("该消息不存在");
+		}
+		if(!selectByPrimaryKey.getReceiverUserId().equals(userId)){
+			throw new BusinessException("不能操作非本人的消息");
+		}
+		Message message=new Message();
+		message.setId(messageId);
+		message.setStatus(MessageStatusEnum.MESSAGE_READED.getCode());
+		return messageMapper.updateByPrimaryKeySelective(message);
 	}
 
 	@Override

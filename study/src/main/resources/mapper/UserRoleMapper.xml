@@ -6,7 +6,7 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
   </resultMap>
 
   <sql id="Base_Column_List">

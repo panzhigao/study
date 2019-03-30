@@ -17,6 +17,13 @@
 		update_user, super_admin_flag
 	</sql>
 	
+   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+	
 	<select id="findPageable" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -100,15 +107,15 @@
 	</delete>
 
 	<select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
-		select tr.id,tr.role_name,max(ifnull(tr.user_id,0))marker from t_role
+		select tr.id,tr.role_name,max(ifnull(tr.id,0))marker from t_role
 		tr
 		left join t_user_role tur on tur.role_id=tr.id
-		left join (select user_id from t_user where user_id =#{userId}) tr on
-		tr.user_id=tur.user_id
-		group by tr.role_id
+		left join (select id from t_user where id =1) u on
+		u.id=tur.user_id
+		group by tr.id
 	</select>
 
-	<select id="getRoleIdsByUserId" resultType="String">
+	<select id="getRoleIdsByUserId" resultType="Long">
 		select role_id from t_user_role where user_id=#{userId}
 	</select>
 
@@ -122,13 +129,13 @@
 				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="createUser != null">
-				create_user = #{createUser,jdbcType=VARCHAR},
+				create_user = #{createUser,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="updateUser != null">
-				update_user = #{updateUser,jdbcType=VARCHAR},
+				update_user = #{updateUser,jdbcType=BIGINT},
 			</if>
 			<if test="superAdminFlag != null">
 				super_admin_flag = #{superAdminFlag,jdbcType=INTEGER},

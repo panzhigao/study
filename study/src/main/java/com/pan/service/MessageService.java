@@ -29,5 +29,5 @@ public interface MessageService extends BaseService<Message>{
 	 * @param messageId
 	 * @return
 	 */
-	int cleanMessage(Long userId,String messageId);
+	int updateMessageReaded(Long userId, Long messageId);
 }

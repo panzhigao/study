@@ -1,8 +1,6 @@
 package com.pan.controller;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
 import com.pan.service.UserExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

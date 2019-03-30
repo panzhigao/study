@@ -1,7 +1,6 @@
 package com.pan.service;
 
 import com.pan.entity.UserExtension;
-import com.pan.query.QueryUserExtension;
 
 /**
  * @author 作者
