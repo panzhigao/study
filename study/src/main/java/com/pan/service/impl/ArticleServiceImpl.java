@@ -168,7 +168,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			throw new BusinessException("当前文章处于审核中,不可修改");
 		}
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 		//文章处于审核状态，新增审核记录
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			//新增审核记录
@@ -328,7 +328,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			throw new BusinessException("参数有误");
 		}
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 	}
 	
 	/**

@@ -31,7 +31,7 @@ public class UserController {
 	 * 跳转用户主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/u/{userId}")
+	@RequestMapping(method=RequestMethod.GET,value="/u/{userId:^\\d+}")
 	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")Long userId){
 		ModelAndView mav=new ModelAndView("html/user/home");
 		//用户信息

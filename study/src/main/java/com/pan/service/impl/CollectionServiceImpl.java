@@ -67,7 +67,7 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 			logger.error("根据id={}，未查询到收藏信息",id);
 			throw new BusinessException("该收藏信息不存在");
 		}
-		if(userId.equals(collection.getUserId())){
+		if(!userId.equals(collection.getUserId())){
 			logger.error("被取消的收藏用户id={},当前登录人userId={}，两者不一致，不能取消非当前登录人的收藏，收藏id={}",collection.getUserId(),userId,id);
 			throw new BusinessException("只能取消自己的收藏");
 		}

@@ -12,14 +12,14 @@
 		<result column="icon" jdbcType="VARCHAR" property="icon" />
 		<result column="type" jdbcType="INTEGER" property="type" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-		<result column="create_user" jdbcType="BIGINT" property="createUser" />
+		<result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-		<result column="update_user" jdbcType="BIGINT" property="updateUser" />
+		<result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, permission_name, url, pid,level, sort,
-		icon, type,create_time,create_user, update_time, update_user
+		icon, type,create_time,create_user_id, update_time, update_user_id
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
@@ -39,12 +39,11 @@
 				and permission_name like CONCAT('%',#{permissionName},'%')
 			</if>
 		</where>
-		order by create_time desc
+		order by create_time asc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
 	</select>
-
 
 	<insert id="insertSelective" parameterType="com.pan.entity.Permission" useGeneratedKeys="true" keyProperty="id">
 		insert into t_permission
@@ -76,14 +75,14 @@
 			<if test="createTime != null">
 				create_time,
 			</if>
-			<if test="createUser != null">
-				create_user,
+			<if test="createUserId != null">
+				create_user_id,
 			</if>
 			<if test="updateTime != null">
 				update_time,
 			</if>
-			<if test="updateUser != null">
-				update_user,
+			<if test="updateUserId != null">
+				update_user_id,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -114,14 +113,14 @@
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="createUser != null">
-				#{createUser,jdbcType=BIGINT},
+			<if test="createUserId != null">
+				#{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				#{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				#{updateUser,jdbcType=BIGINT},
+			<if test="updateUserId != null">
+				#{updateUserId,jdbcType=BIGINT},
 			</if>
 		</trim>
 	</insert>
@@ -139,7 +138,7 @@
 
 	<select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.permission_name,tp.url,max(ifnull(tr.role_id,0))marker,tp.pid,tp.sort
+		tp.id,tp.permission_name,tp.url,max(ifnull(tr.id,0))marker,tp.pid,tp.sort
 		from t_permission tp
 		left join t_role_permission trp on
 		trp.permission_id=tp.id
@@ -185,14 +184,14 @@
 			<if test="createTime != null">
 				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="createUser != null">
-				create_user = #{createUser,jdbcType=BIGINT},
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				update_user = #{updateUser,jdbcType=BIGINT},
+			<if test="updateUserId != null">
+				update_user_id = #{updateUserId,jdbcType=BIGINT},
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
@@ -200,7 +199,7 @@
 
 	<select id="findPermissionsByUserId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user
+		tp.id,tp.id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user_id
 		from t_user tu left
 		join t_user_role tur on tu.id=tur.user_id
 		join

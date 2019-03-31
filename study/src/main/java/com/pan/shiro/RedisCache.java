@@ -48,7 +48,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
             return preKey.getBytes();
         } else if(key instanceof PrincipalCollection){
         	PrincipalCollection principalCollection=(PrincipalCollection) key;
-        	String userId=(String) principalCollection.getPrimaryPrincipal();
+        	Long userId=(Long) principalCollection.getPrimaryPrincipal();
             return (CACHE_PREFIX + userId).getBytes();
         }else{
             return SerializeUtils.serialize(key);

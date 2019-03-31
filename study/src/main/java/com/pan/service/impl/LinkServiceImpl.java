@@ -84,7 +84,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		Date now = new Date();
 		User loginUser = TokenUtils.getLoginUser();
 		link.setCreateTime(now);
-		link.setCreateUser(loginUser.getId());
+		link.setCreateUserId(loginUser.getId());
 		insertSelective(link);
 		String content = String.format("链接名：%s，链接地址：%s", link.getLinkName(), link.getLinkUrl());
 		operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_ADD);
@@ -104,7 +104,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		}
 		Date now = new Date();
 		link.setUpdateTime(now);
-		link.setUpdateUser(TokenUtils.getLoginUserId());
+		link.setUpdateUserId(TokenUtils.getLoginUserId());
 		updateByPrimaryKeySelective(link);
 		// 记录日志
 		String changedFields = ValidationUtils.getChangedFields(linkInDb, link);
@@ -139,7 +139,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		updateLink.setId(id);
 		updateLink.setStatus(status);
 		updateLink.setUpdateTime(new Date());
-		updateLink.setUpdateUser(TokenUtils.getLoginUserId());
+		updateLink.setUpdateUserId(TokenUtils.getLoginUserId());
 		if (UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
 			message = "下线链接成功";
 			String content = "下线链接，链接id=" + id;

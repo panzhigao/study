@@ -84,8 +84,8 @@
       <if test="userPortrait != null">
         user_portrait,
       </if>
-      <if test="updateUser != null">
-        update_user,
+      <if test="updateUserId != null">
+        update_user_id,
       </if>
       <if test="adminFlag != null">
         admin_flag,
@@ -128,8 +128,8 @@
       <if test="userPortrait != null">
         #{userPortrait,jdbcType=VARCHAR},
       </if>
-      <if test="updateUser != null">
-        #{updateUser,jdbcType=BIGINT},
+      <if test="updateUserId != null">
+        #{updateUserId,jdbcType=BIGINT},
       </if>
       <if test="adminFlag != null">
         #{adminFlag,jdbcType=CHAR},
@@ -170,8 +170,8 @@
   		<if test="updateTime != null">
   			update_time=#{updateTime,jdbcType=TIMESTAMP},
   		</if>
-  		<if test="updateUser !=null and updateUser !=''">
-  			update_user=#{updateUser,jdbcType=BIGINT},
+  		<if test="updateUserId !=null and updateUserId !=''">
+  			update_user_id=#{updateUserId,jdbcType=BIGINT},
   		</if>
   		<if test="adminFlag !=null">
   			admin_flag=#{adminFlag,jdbcType=VARCHAR},
@@ -210,7 +210,7 @@
   	
   <select id="findByParams" resultMap="MoreResultMap">
   	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names
-  	from t_user tu left join t_user_role tur on tu.id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
+  	from t_user tu left join t_user_role tur on tu.id=tur.user_id left join t_role tr on tr.id= tur.role_id
   	<include refid="whereSql"/>
   	group by tu.id
   	<choose>

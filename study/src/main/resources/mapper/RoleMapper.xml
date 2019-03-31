@@ -6,15 +6,15 @@
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="role_name" jdbcType="VARCHAR" property="roleName" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-		<result column="create_user" jdbcType="BIGINT" property="createUser" />
+		<result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-		<result column="update_user" jdbcType="BIGINT" property="updateUser" />
+		<result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 		<result column="super_admin_flag" jdbcType="INTEGER" property="superAdminFlag" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id,role_name, create_time, create_user, update_time,
-		update_user, super_admin_flag
+		id,role_name, create_time, create_user_id, update_time,
+		update_user_id, super_admin_flag
 	</sql>
 	
    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -29,7 +29,7 @@
 		<include refid="Base_Column_List" />
 		from t_role
 		<include refid="whereSql"/>
-		order by create_time desc
+		order by create_time asc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
@@ -63,14 +63,14 @@
 			<if test="createTime != null">
 				create_time,
 			</if>
-			<if test="createUser != null">
-				create_user,
+			<if test="createUserId != null">
+				create_user_id,
 			</if>
 			<if test="updateTime != null">
 				update_time,
 			</if>
-			<if test="updateUser != null">
-				update_user,
+			<if test="updateUserId != null">
+				update_user_id,
 			</if>
 			<if test="superAdminFlag != null">
 				super_admin_flag,
@@ -86,14 +86,14 @@
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="createUser != null">
-				#{createUser,jdbcType=BIGINT},
+			<if test="createUserId != null">
+				#{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				#{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				#{updateUser,jdbcType=BIGINT},
+			<if test="updateUserId != null">
+				#{updateUserId,jdbcType=BIGINT},
 			</if>
 			<if test="superAdminFlag != null">
 				#{superAdminFlag,jdbcType=INTEGER},
@@ -106,17 +106,15 @@
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-	<select id="getRoleSelectedByUserId" resultMap="BaseResultMap">
-		select tr.id,tr.role_name,max(ifnull(tr.id,0))marker from t_role
-		tr
-		left join t_user_role tur on tur.role_id=tr.id
-		left join (select id from t_user where id =1) u on
-		u.id=tur.user_id
-		group by tr.id
+	<select id="getRoleSelectedByUserId" resultMap="BaseResultMap">		
+		select tr.id,tr.role_name,max(ifnull(u.user_id,0))marker from t_role tr 
+		left join t_user_role tur on tur.role_id=tr.id 
+		left join (select id as user_id from t_user where id =#{userId}) u on u.user_id=tur.user_id 
+		group by tr.id 
 	</select>
 
 	<select id="getRoleIdsByUserId" resultType="Long">
-		select role_id from t_user_role where user_id=#{userId}
+		select id from t_user_role where user_id=#{userId}
 	</select>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Role">
@@ -128,14 +126,14 @@
 			<if test="createTime != null">
 				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="createUser != null">
-				create_user = #{createUser,jdbcType=BIGINT},
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				update_user = #{updateUser,jdbcType=BIGINT},
+			<if test="updateUserId != null">
+				update_user_id = #{updateUserId,jdbcType=BIGINT},
 			</if>
 			<if test="superAdminFlag != null">
 				super_admin_flag = #{superAdminFlag,jdbcType=INTEGER},
@@ -147,7 +145,7 @@
 	<select id="findByRoleIds" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from t_role where role_id in
+		from t_role where id in
 		<foreach collection="array" item="roleId" open="(" close=")" separator=",">
 			#{roleId}
 		</foreach>

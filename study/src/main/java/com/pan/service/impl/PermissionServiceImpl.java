@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.PermissionTypeEnum;
-import com.pan.query.QueryPermission;
 import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -73,7 +72,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		Date now=new Date();
 		permission.setCreateTime(now);
 		User loginUser = TokenUtils.getLoginUser();
-		permission.setCreateUser(loginUser.getId());
+		permission.setCreateUserId(loginUser.getId());
 		permissionMapper.insertSelective(permission);
 		//记录操作日志
 		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_ADD);
@@ -85,7 +84,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			Long roleId=list.get(0).getId();
 			RolePermission rolePermission=new RolePermission(roleId,permission.getId());
 			rolePermission.setCreateTime(now);
-			rolePermission.setCreateUser(loginUser.getId());
+			rolePermission.setCreateUserId(loginUser.getId());
 			rolePermissionService.addRolePermission(rolePermission);
 			List<User> users = userService.findUserByRoleId(roleId);
 			for (User user : users) {
@@ -172,13 +171,6 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		return permissionMapper.getPermissionByRoleId(roleId);
 	}
 
-	@Override
-	public Permission getByPermissionId(Long permissionId) {
-		QueryPermission queryPermission=new QueryPermission();
-		queryPermission.setPermissionId(permissionId);
-		List<Permission> list = this.permissionMapper.findPageable(queryPermission);
-		return list.size()==1?list.get(0):null;
-	}
 
 	/**
 	 * 更新权限，记录日志
@@ -195,7 +187,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			permission.setUrl("  ");
 		}
 		Long loginUserId = TokenUtils.getLoginUserId();
-		permission.setUpdateUser(loginUserId);
+		permission.setUpdateUserId(loginUserId);
 		permission.setUpdateTime(new Date());
 		Long permissionId=permission.getId();
 		String changedFields = ValidationUtils.getChangedFields(permission, permissionInDb);

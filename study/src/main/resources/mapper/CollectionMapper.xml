@@ -71,7 +71,7 @@
                 #{id,jdbcType=BIGINT},
             </if>
             <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
+                #{userId,jdbcType=BIGINT},
             </if>
             <if test="articleId != null">
                 #{articleId,jdbcType=BIGINT},

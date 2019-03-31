@@ -121,7 +121,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             String encryptedPwd = PasswordUtils.getEncryptedPwd(password);
             user.setPassword(encryptedPwd);
             Long userId=IdUtils.generateId();
-            user.setId(IdUtils.generateId());
+            user.setId(userId);
             user.setCreateTime(new Date());
             //用户状态正常
             user.setStatus(UserStatusEnum.STATUS_NORMAL.getCode());
@@ -150,7 +150,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             //为用户添加用户角色信息
             UserRole userRole = new UserRole(userId, defaultRoleId);
             userRole.setCreateTime(new Date());
-            userRole.setCreateUser(userId);
+            userRole.setCreateUserId(userId);
             userRoleService.addUserRole(userRole);
             //用户验证,用明文密码验证
             user.setPassword(password);
@@ -387,7 +387,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         List<Role> roles = roleMapper.findByRoleIds(roleIds);
         Set<String> roleSet = roles.stream().map(r->r.getRoleName()+"("+r.getId()+")").collect(Collectors.toSet());
         //查询用户数据库里的角色信息
-        List<String> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
+        List<Long> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
         Long[] userRoleIds=new Long[roleIdsByUserId.size()];
         Long[] array = roleIdsByUserId.toArray(userRoleIds);
         List<Role> rolesInDb = roleMapper.findByRoleIds(array);
@@ -410,20 +410,20 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 userRole.setRoleId(roleId);
                 userRole.setUserId(userId);
                 userRole.setCreateTime(new Date());
-                userRole.setCreateUser(TokenUtils.getLoginUserId());
+                userRole.setCreateUserId(TokenUtils.getLoginUserId());
                 list.add(userRole);
             }
             //如果给用户分配管理员角色，更新改用户的管理员字段
             if (hasAdmin && AdminFlagEnum.ADMIN_FALSE.getCode().equals(user.getAdminFlag())) {
                 user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
                 user.setUpdateTime(new Date());
-                user.setUpdateUser(TokenUtils.getLoginUserId());
+                user.setUpdateUserId(TokenUtils.getLoginUserId());
                 userMapper.updateByPrimaryKeySelective(user);
             //取消用户admin权限    
             }else if(!hasAdmin && AdminFlagEnum.ADMIN_TRUE.getCode().equals(user.getAdminFlag())){
             	user.setAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
                 user.setUpdateTime(new Date());
-                user.setUpdateUser(TokenUtils.getLoginUserId());
+                user.setUpdateUserId(TokenUtils.getLoginUserId());
                 userMapper.updateByPrimaryKeySelective(user);
             }
             userRoleService.batchAddUserRole(list);
@@ -458,7 +458,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         if (loginUserId.equals(userId)) {
             throw new BusinessException("不能修改自己的状态");
         }
-        user.setUpdateUser(loginUserId);
+        user.setUpdateUserId(loginUserId);
         user.setUpdateTime(new Date());
         if (UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
             message = "禁用账号成功";

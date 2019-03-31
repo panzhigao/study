@@ -57,7 +57,7 @@ public class ArticleController {
 	 * 保存文章，文章为草稿状态或者待审核状态
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
+	@RequestMapping(value={"/user/article/doSave"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doSave")
 	public ResultMsg saveArticle(Article article){
@@ -88,7 +88,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/article/getPageData")
+	@RequestMapping(value="/user/article/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(QueryArticle queryArticle){
@@ -198,7 +198,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表成功的文章
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/article/getPageData")
+	@RequestMapping(value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(QueryArticle queryArticle){
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
@@ -214,7 +214,7 @@ public class ArticleController {
 	 * 获取文章条数
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/article/getCount")
+	@RequestMapping(value="/article/getCount")
 	@ResponseBody
 	public int getCount(Integer status,Integer type){
 		QueryArticle articleVO=new QueryArticle();

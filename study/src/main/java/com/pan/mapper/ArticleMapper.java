@@ -17,12 +17,6 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	 */
 	List<Article> findListByUserId(Long userId);
 	/**
-	 * 更新文章，返回更新文章条数
-	 * @param article
-	 * @return
-	 */
-	int updateArticleByArticleId(Article article);
-	/**
 	 * 删除文章
 	 * @param userId
 	 * @param articleId

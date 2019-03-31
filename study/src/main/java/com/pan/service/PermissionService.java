@@ -37,12 +37,6 @@ public interface PermissionService extends BaseService<Permission>{
 	 */
 	List<Permission> getPermissionByRoleId(Long roleId);
 	/**
-	 * 根据permissionId查找唯一数据
-	 * @param permissionId
-	 * @return
-	 */
-	Permission getByPermissionId(Long permissionId);
-	/**
 	 * 更新权限
 	 */
 	void updatePermission(Permission permission);

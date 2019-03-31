@@ -210,7 +210,7 @@ layui.use(['table','jquery'], function(){
 	    	$('#completeCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:80,fixed: 'left'},
+	      {field: 'id', title: 'ID', width:40,fixed: 'left'},
 	      {field: 'username', title: '用户名', width:100, fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.username+'</a>';
 	      }},

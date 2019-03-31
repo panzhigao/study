@@ -13,8 +13,7 @@
 	</resultMap>
 
 	<resultMap type="com.pan.vo.CommentVO" id="VOMap" extends="BaseResultMap">
-		<result column="user_portrait" property="userPortrait"
-			jdbcType="VARCHAR" />
+		<result column="user_portrait" property="userPortrait" jdbcType="VARCHAR" />
 		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
 		<result column="isChecked" property="isChecked" jdbcType="VARCHAR" />
 		<result column="title" property="title" jdbcType="VARCHAR" />
@@ -23,15 +22,19 @@
 	<sql id="Base_Column_List">
 		id,article_id,user_id,comment_content,reply_to_user_id,create_time,praise_counts
 	</sql>
-
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	   select
+	   <include refid="Base_Column_List" />
+	   from t_comment
+	   where id = #{id,jdbcType=BIGINT}
+    </select>
+	
 	<insert id="insertSelective" parameterType="com.pan.entity.Comment">
 		insert into t_comment
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
-			</if>
-			<if test="commentId != null">
-				comment_id,
 			</if>
 			<if test="userId != null">
 				user_id,
@@ -56,11 +59,8 @@
 			<if test="id != null">
 				#{id,jdbcType=BIGINT},
 			</if>
-			<if test="commentId != null">
-				#{commentId,jdbcType=VARCHAR},
-			</if>
 			<if test="userId != null">
-				#{userId,jdbcType=VARCHAR},
+				#{userId,jdbcType=BIGINT},
 			</if>
 			<if test="articleId != null">
 				#{articleId,jdbcType=VARCHAR},
@@ -81,12 +81,6 @@
 	</insert>
 
 	<select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryComment">
-		<!-- select c.id,comment_id,c.article_id,c.user_id,comment_content,reply_to_user_id,c.create_time,u.user_portrait,u.nickname 
-			from t_comment c join t_user u on c.user_id=u.user_id where article_id=#{articleId} -->
-		<!-- select a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,a.create_time,a.praise_counts,c.user_portrait,c.nickname,case 
-			when b.user_id=#{userId} then 1 else null end isChecked -->
-		<!-- from t_comment a left join t_praise b on a.comment_id=b.comment_id -->
-		<!-- join t_user c on c.user_id=a.user_id where article_id=#{articleId} -->
 		select
 		tc.id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
 		tc.create_time,tc.praise_counts,tu.user_portrait,tu.nickname
@@ -96,10 +90,10 @@
 		</if>
 		from t_comment tc
 		<if test="userId != null and userId !=''">
-			left join (select id,user_id from t_praise where
-			user_id=#{userId}) tp on tc.comment_id=tp.id
+			left join (select comment_id,user_id from t_praise where
+			user_id=#{userId} and article_id=#{articleId}) tp on tc.id=tp.comment_id
 		</if>
-		join t_user tu on tu.user_id=tc.user_id where tc.article_id=#{articleId}
+		join t_user tu on tu.id=tc.user_id where tc.article_id=#{articleId}
 		order by tc.create_time desc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
@@ -124,11 +118,8 @@
 			<if test="articleId != null">
 				and article_id=#{articleId,jdbcType=BIGINT}
 			</if>
-			<if test="commentId != null">
-				and comment_id=#{commentId,,jdbcType=BIGINT}
-			</if>
 			<if test="userId != null">
-				and user_id=#{userId,,jdbcType=VARCHAR}
+				and user_id=#{userId,,jdbcType=BIGINT}
 			</if>
 		</where>
 	</sql>

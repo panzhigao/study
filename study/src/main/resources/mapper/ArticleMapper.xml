@@ -240,7 +240,7 @@
   		<if test="stick != null">
   			stick=#{stick,jdbcType=INTEGER},
   		</if>
-  		<if test="highQuality != null">
+  		<if test="highQuality != null and highQuality !=''">
   			high_quality=#{highQuality,jdbcType=INTEGER},
   		</if>
   	</set>

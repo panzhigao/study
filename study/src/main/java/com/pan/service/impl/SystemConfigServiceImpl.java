@@ -77,7 +77,7 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		SystemConfig systemConfigInDb = systemConfigMapper.selectByPrimaryKey(1L);
 		systemConfig.setId(1L);
 		systemConfig.setUpdateTime(new Date());
-		systemConfig.setUpdateUser(TokenUtils.getLoginUserId());
+		systemConfig.setUpdateUserId(TokenUtils.getLoginUserId());
 		int count = systemConfigMapper.updateByPrimaryKeySelective(systemConfig);
 		logger.info("更新系统配置，更新条数：{}",count);
 		String changedFields = ValidationUtils.getChangedFields(systemConfigInDb, systemConfig);

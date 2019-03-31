@@ -20,7 +20,7 @@ public interface RoleMapper extends BaseMapper<Role>{
 	 * @param userId
 	 * @return
 	 */
-	List<String> getRoleIdsByUserId(Long userId);
+	List<Long> getRoleIdsByUserId(Long userId);
 	/**
 	 * 根据角色id查询多条角色信息
 	 * @param roleIds

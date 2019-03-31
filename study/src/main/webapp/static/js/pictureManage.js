@@ -24,7 +24,7 @@ layui.config({
                         var hasData = pageSize*pageNo<total;
                         setTimeout(function(){
                             for(var i=0; i<data.length; i++){
-                                imgList.push('<li><img src="'+ data[i].pictureUrl +'"><div class="operate"><div class="check"><input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary" title="'+data[i].pictureId+'"></div><i class="layui-icon img_del">&#xe640;</i></div></li>')
+                                imgList.push('<li><img src="'+ data[i].pictureUrl +'"><div class="operate"><div class="check"><input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary"  pictureid="'+data[i].id+'"></div><i class="layui-icon img_del">&#xe640;</i></div></li>')
                             }
                             next(imgList.join(''), hasData);
                             form.render();
@@ -38,8 +38,8 @@ layui.config({
     //删除单张图片
     $("body").on("click",".img_del",function(){
         var _this = $(this);
-        layer.confirm('确定删除图片"'+_this.siblings().find("input").attr("title")+'"吗？',{icon:3, title:'提示信息'},function(index){
-            var pictureIds=_this.siblings().find("input").attr("title");
+        layer.confirm('确定删除图片"'+_this.siblings().find("input").attr("pictureid")+'"吗？',{icon:3, title:'提示信息'},function(index){
+            var pictureIds=_this.siblings().find("input").attr("pictureid");
         	$.ajax({
             	url:'/user/deletePicture',
             	type:'post',
@@ -90,9 +90,9 @@ layui.config({
                 var index = layer.msg('删除中，请稍候',{icon: 16,time:false,shade:0.8});
                 var arr=[];
                 $checkbox.each(function(){
-                	arr.push($(this).attr('title'));
+                	arr.push($(this).attr('pictureid'));
                 });
-                var pictureIds=arr=arr.join(',');
+                var pictureIds=arr.join(',');
                 $.ajax({
                 	url:'/user/deletePicture',
                 	type:'post',

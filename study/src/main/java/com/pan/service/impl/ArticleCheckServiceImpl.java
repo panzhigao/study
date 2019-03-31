@@ -116,7 +116,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 		
 		//3.文章数加1，发表文章加5分
 		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(), ScoreTypeEnum.PUBLISH_ARTICLE);
@@ -167,7 +167,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		updateArticle.setId(articleCheckInDb.getArticleId());
 		//审核未通过
 		updateArticle.setStatus(ArticleStatusEnum.FAIL_CHECKED.getCode());
-		articleMapper.updateArticleByArticleId(updateArticle);
+		articleMapper.updateByPrimaryKeySelective(updateArticle);
 		//发送消息
 		Message message=new Message();
 		message.setArticleId(article.getId());

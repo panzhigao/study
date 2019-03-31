@@ -29,7 +29,7 @@ public class BaseEntity implements Serializable{
 	/**
 	 * 创建人
 	 */
-	protected Long createUser;
+	protected Long createUserId;
 	/**
 	 * 更新时间
 	 */
@@ -37,5 +37,5 @@ public class BaseEntity implements Serializable{
 	/**
 	 * 修改人
 	 */
-	protected Long updateUser;
+	protected Long updateUserId;
 }

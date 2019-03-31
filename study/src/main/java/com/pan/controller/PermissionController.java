@@ -105,7 +105,7 @@ public class PermissionController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission/doEdit")
 	public ResultMsg loadPermissionDetail(Long permissionId){
-		Permission permission = permissionService.getByPermissionId(permissionId);
+		Permission permission = permissionService.selectByPrimaryKey(permissionId);
 		return ResultMsg.ok("获取权限信息成功", permission);
 	}
 	

@@ -31,7 +31,7 @@
   </select>	
 	
   <insert id="insertSelective" parameterType="com.pan.entity.UserExtension">
-  	insert into t_user_extension (
+  	insert into t_user_extension 
   	<trim prefix="(" suffix=")" suffixOverrides=",">
   		<if test="id !=null">
   			id,
@@ -90,7 +90,6 @@
   			#{score,jdbcType=INTEGER},
   		</if>
   	</trim>
-  	)
   </insert>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.UserExtension">

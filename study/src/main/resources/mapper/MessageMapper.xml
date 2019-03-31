@@ -20,7 +20,51 @@
     id, status, receiver_user_id, sender_name, sender_user_id, message_type,
     article_id, comment_id, content_name, comment_content, create_time
   </sql>
-
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+     select
+     <include refid="Base_Column_List"/>
+     from t_message
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Message">
+    update t_message
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="receiverUserId != null">
+        receiver_user_id = #{receiverUserId,jdbcType=BIGINT},
+      </if>
+      <if test="senderName != null">
+        sender_name = #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="senderUserId != null">
+        sender_user_id = #{senderUserId,jdbcType=BIGINT},
+      </if>
+      <if test="messageType != null">
+        message_type = #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="commentId != null">
+        comment_id = #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="contentName != null">
+        content_name = #{contentName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentContent != null">
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
   <insert id="insertSelective" parameterType="com.pan.entity.Message">
     insert into t_message
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -66,22 +110,22 @@
         #{status,jdbcType=INTEGER},
       </if>
       <if test="receiverUserId != null">
-        #{receiverUserId,jdbcType=VARCHAR},
+        #{receiverUserId,jdbcType=BIGINT},
       </if>
       <if test="senderName != null">
         #{senderName,jdbcType=VARCHAR},
       </if>
       <if test="senderUserId != null">
-        #{senderUserId,jdbcType=VARCHAR},
+        #{senderUserId,jdbcType=BIGINT},
       </if>
       <if test="messageType != null">
         #{messageType,jdbcType=INTEGER},
       </if>
       <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
+        #{articleId,jdbcType=BIGINT},
       </if>
       <if test="commentId != null">
-        #{commentId,jdbcType=VARCHAR},
+        #{commentId,jdbcType=BIGINT},
       </if>
       <if test="contentName != null">
         #{contentName,jdbcType=VARCHAR},
@@ -112,25 +156,12 @@
   <sql id="whereSql">
     <where>
       <if test="receiverUserId != null">
-        and receiver_user_id=#{receiverUserId,jdbcType=VARCHAR}
+        and receiver_user_id=#{receiverUserId,jdbcType=BIGINT}
       </if>
       <if test="status != null">
         and status=#{status,jdbcType=INTEGER}
       </if>
     </where>
   </sql>
-
-  <!-- 消息标为已读 -->
-  <update id="cleanMessage">
-  	update t_message set status=1
-  	<where>
-  		<if test="receiverUserId !=null and receiverUserId !=''">
-  		 and receiver_user_id=#{receiverUserId}
-  		</if>
-  		<if test="id !=null and id !=''">
-  		 and id=#{id}
-  		</if>
-  	</where>
-  </update>
   
 </mapper>

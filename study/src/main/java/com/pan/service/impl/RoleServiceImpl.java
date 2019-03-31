@@ -62,7 +62,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		}
 		Long loginUserId = TokenUtils.getLoginUserId();
 		role.setCreateTime(new Date());
-		role.setCreateUser(loginUserId);
+		role.setCreateUserId(loginUserId);
 		role.setSuperAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
 		roleMapper.insertSelective(role);
 		//记录日志
@@ -135,7 +135,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 				rolePermission.setPermissionId(permissionId);
 				rolePermission.setRoleId(roleId);
 				rolePermission.setCreateTime(new Date());
-				rolePermission.setCreateUser(TokenUtils.getLoginUserId());
+				rolePermission.setCreateUserId(TokenUtils.getLoginUserId());
 				list.add(rolePermission);
 			}
 			rolePermissionService.addRolePermission(list);
@@ -169,7 +169,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	}
 
 	@Override
-	public List<String> getRoleIdsByUserId(Long userId) {
+	public List<Long> getRoleIdsByUserId(Long userId) {
 		return this.roleMapper.getRoleIdsByUserId(userId);
 	}
 	
@@ -203,7 +203,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		updateRole.setId(roleInDb.getId());
 		updateRole.setRoleName(role.getRoleName());
 		updateRole.setUpdateTime(new Date());
-		updateRole.setUpdateUser(TokenUtils.getLoginUserId());
+		updateRole.setUpdateUserId(TokenUtils.getLoginUserId());
 		roleMapper.updateByPrimaryKeySelective(updateRole);
 		operateLogService.addOperateLog(different,OperateLogTypeEnum.ROLE_EDIT);
 	}

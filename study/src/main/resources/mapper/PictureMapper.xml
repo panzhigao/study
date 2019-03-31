@@ -15,7 +15,7 @@
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_picture where picture_id=#{pictureId}
+  	select <include refid="Base_Column_List"/> from t_picture where id=#{pictureId}
   </select>
   
   <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPicture">
@@ -54,7 +54,7 @@
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="pictureUrl != null">
         #{pictureUrl,jdbcType=VARCHAR},
@@ -66,7 +66,7 @@
   </insert>
   
   <delete id="deleteByPictureIds">
-  	delete from t_picture where user_id=#{userId} and picture_id in
+  	delete from t_picture where user_id=#{userId} and id in
   	<foreach collection="picIds" item="picId" open="(" close=")" separator=",">
   		#{picId}
   	</foreach>

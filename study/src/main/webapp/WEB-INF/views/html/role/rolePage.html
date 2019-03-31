@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>角色管理</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="$!{systemConfig.keywords}">
   <meta name="description" content="$!{systemConfig.description}">
@@ -198,11 +198,11 @@ layui.use(['table','jquery','form'], function(){
 	      });
 	    }else if(obj.event==='allocate'){
 	    	$('#myTree').modal('show');
-	    	xtree3._options.params={roleId:data.roleId};
+	    	xtree3._options.params={roleId:data.id};
 	    	xtree3.render();
-	    	$('#selectedRoleId').val(data.roleId);
+	    	$('#selectedRoleId').val(data.id);
 	    }else if(obj.event==='edit'){
-	    	$('#selectedRoleId').val(data.roleId);
+	    	$('#selectedRoleId').val(data.id);
 	    	$('#newRoleName').val(data.roleName);
 	    	$('#editModal').modal('show');
 	    }
@@ -226,7 +226,7 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/role/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'roleId', title: '角色ID', width:100, fixed: 'left'},
+	      {field: 'id', title: '角色ID', width:100, fixed: 'left'},
 	      {field: 'roleName', title: '角色名称', width:450},
 	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
@@ -329,7 +329,7 @@ layui.use(['table','jquery','form'], function(){
 	  	  }
           $.ajax({
         	  url:'$!{rc.contextPath}/user/role/doEdit',
-        	  data:{roleId:selectedRoleId,roleName:newRoleName},
+        	  data:{id:selectedRoleId,roleName:newRoleName},
         	  dataType:'json',
         	  type:'post',
         	  success:function(res){

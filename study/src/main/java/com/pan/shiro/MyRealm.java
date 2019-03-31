@@ -98,11 +98,12 @@ public class MyRealm extends AuthorizingRealm {
 			PrincipalCollection principals) {
 		Long userId = (Long) principals.getPrimaryPrincipal();
 		// 角色信息
-		List<String> roles = roleService.getRoleIdsByUserId(userId);
+		List<Long> roles = roleService.getRoleIdsByUserId(userId);
+		Set<String> roleSet = roles.stream().map(r-> String.valueOf(r)).collect(Collectors.toSet());
 		// 权限信息
 		Set<String> permissions = loadMenus(userId);
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-		simpleAuthorizationInfo.addRoles(roles);
+		simpleAuthorizationInfo.addRoles(roleSet);
 		simpleAuthorizationInfo.addStringPermissions(permissions);
 		return simpleAuthorizationInfo;
 	}

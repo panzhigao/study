@@ -22,6 +22,7 @@ import com.pan.util.PermissionUtils;
  * @version 创建时间：2018年4月2日 下午5:42:28
  * 类说明
  */
+@Deprecated
 public class PermissionInterceptor implements HandlerInterceptor{
 
 	@Override

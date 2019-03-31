@@ -36,7 +36,7 @@ public interface RoleService extends BaseService<Role>{
 	 * @param userId
 	 * @return
 	 */
-	List<String> getRoleIdsByUserId(Long userId);
+	List<Long> getRoleIdsByUserId(Long userId);
 	/**
 	 * 重新缓存指定角色用户权限
 	 * @param roleId

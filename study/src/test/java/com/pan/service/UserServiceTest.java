@@ -3,7 +3,6 @@ package com.pan.service;
 import com.pan.entity.User;
 import com.pan.query.QueryUser;
 import com.pan.test.base.BaseTest;
-import com.pan.util.SpringContextUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.junit.Test;
