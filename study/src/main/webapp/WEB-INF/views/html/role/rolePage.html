@@ -185,7 +185,7 @@ layui.use(['table','jquery','form'], function(){
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/role/doDelete",
 	    		type:"post",
-	    		data:{roleId:data.roleId},
+	    		data:{roleId:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -240,6 +240,7 @@ layui.use(['table','jquery','form'], function(){
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
 	    	  var show='';
+	    	  
 	    	  if(p_edit){
 	    		  show+=edit;
 	    	  }
@@ -259,7 +260,6 @@ layui.use(['table','jquery','form'], function(){
 		   active[type] ? active[type].call(this) : '';
 	  });
 	  
-  
 	  var form = layui.form;
       xtree3= new layuiXtree({
           elem: 'xtree3'                  

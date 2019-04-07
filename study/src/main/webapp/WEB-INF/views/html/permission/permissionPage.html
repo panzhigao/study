@@ -246,7 +246,7 @@ function addSub(pId){
 
 function edit(id){
 	layer.closeAll();
-	$.get('$!{rc.contextPath}/user/permissionEdit', null, function(form) {
+	$.get('$!{rc.contextPath}/user/permission/editPage', null, function(form) {
 		var index=layer.open({
 				type: 1,
 				title: '修改权限',

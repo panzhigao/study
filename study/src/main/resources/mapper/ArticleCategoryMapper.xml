@@ -90,6 +90,9 @@
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
+       <if test="sort != null">
+        sort=#{sort,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>

@@ -72,6 +72,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			logger.error("根据文章分类id未查询到信息，id={}",articleCategory.getId());
 			throw new BusinessException("该文章分类不存在");
 		}
+		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
 	}

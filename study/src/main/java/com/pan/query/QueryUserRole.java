@@ -23,5 +23,5 @@ public class QueryUserRole extends QueryBase{
 	/**
 	 * 创建人id
 	 */
-	private String createUser;
+	private String createUserId;
 }

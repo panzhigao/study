@@ -40,6 +40,5 @@ public class ArticleCategory extends BaseEntity{
     /**
      * 状态，0-未启用，1-启用
      */
-	@LogMeta(fieldDesc = "状态")
     private Integer status;
 }

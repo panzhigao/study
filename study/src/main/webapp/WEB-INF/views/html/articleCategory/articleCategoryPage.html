@@ -20,11 +20,9 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 
-	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
-	    
 	    <div class="layui-btn-group">
-	    	#hasPermission("/user/role/doAdd")
-	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增角色</button>
+	    	#hasPermission("/user/articleCategory/doAdd")
+	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增分类</button>
 	     	#end
   		</div>
   		
@@ -79,9 +77,9 @@ layui.use(['table','jquery','form'], function(){
 	      layer.confirm('确定删除该分类么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/role/doDelete",
+	    		url:"$!{rc.contextPath}/user/articleCategory/doDelete",
 	    		type:"post",
-	    		data:{roleId:data.roleId},
+	    		data:{articleCategoryId:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -92,15 +90,65 @@ layui.use(['table','jquery','form'], function(){
 	    		}
 	    	});  
 	      });
-	    }else if(obj.event==='allocate'){
-	    	$('#myTree').modal('show');
-	    	xtree3._options.params={roleId:data.id};
-	    	xtree3.render();
-	    	$('#selectedRoleId').val(data.id);
 	    }else if(obj.event==='edit'){
-	    	$('#selectedRoleId').val(data.id);
-	    	$('#newRoleName').val(data.roleName);
-	    	$('#editModal').modal('show');
+	    	layer.closeAll();
+	    	$.get('$!{rc.contextPath}/user/articleCategory/editPage',{articleCategoryId:data.id}, function(form) {
+	    	if(form.code=='400'){
+	    		layer.msg(form.msg);
+	    		return;
+	    	}	
+	    	var index=layer.open({
+	    			type: 1,
+	    			title: '编辑分类',
+	    			content: form,
+	    			btn: ['保存', '取消'],
+	    			shade: false,
+	    			maxmin: true,
+	    			offset: ['50px', '20%'],
+	    			area: ['800px', '300px'],
+	    		yes: function(index) {
+	    			//触发表单的提交事件
+	    			$('form.layui-form').find('button[lay-filter=edit]').click();
+	    		},
+	    		full: function(elem) {
+	    			var win = window.top === window.self ? window : parent.window;
+	    			$(win).on('resize', function() {
+	    				var $this = $(this);
+	    				elem.width($this.width()).height($this.height()).css({
+	    					top: 0,
+	    					left: 0
+	    				});
+	    				elem.children('div.layui-layer-content').height($this.height() - 95);
+	    			});
+	    		},
+	    		success: function(layero, index) {
+	    			//弹出窗口成功后渲染表单
+	    			var form = layui.form;
+	    			form.render();
+	    			form.on('submit(edit)', function(data) {
+	    				 $.ajax({
+	    					 url:'$!{rc.contextPath}/user/articleCategory/doEdit',
+	    					 type:'post',
+	    					 data:data.field,
+	    					 success:function(res){
+	    						 if(res.code=='200'){
+	    							 layer.msg(res.msg);
+	    							 layer.close(index);
+	    							 table.reload('tab');
+	    						 }else{
+	    							 layer.msg(res.msg);
+	    						 }
+	    					 }
+	    				 });
+	    				//这里可以写ajax方法提交表单
+	    				return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。									
+	    			});
+	    		},
+	    		end: function() {
+	    			addBoxIndex = -1;
+	    		}
+	    		});
+	    	});
 	    }
 	  });
 	  
@@ -141,8 +189,8 @@ layui.use(['table','jquery','form'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
-        	  var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
+	    	  var p_edit='#hasPermission("/user/articleCategory/doEdit") 1 #end';
+        	  var p_delete='#hasPermission("/user/articleCategory/doDelete") 1 #end';
 	    	  
 	    	  var btn_edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var btn_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
@@ -158,70 +206,75 @@ layui.use(['table','jquery','form'], function(){
 	    ]]
 	  });
 	  
-	  $('#search').on('click', function(){
-		   var type = $(this).data('type');
-		   active[type] ? active[type].call(this) : '';
-	  });
-	  
-  
-	  $('#btnSave').click(function(){
-		  var selectedRoleId=$('#selectedRoleId').val();
-		  if(!selectedRoleId){
-			  layer.alert('未选择角色');
-			  return;
-		  }
-		  var oCks = xtree3.GetAllChecked(); //这是方法
-		  var arr=[];
-          for (var i = 0; i < oCks.length; i++) {
-        	  if(oCks[i].value=='on'){
-        		  continue;
-        	  }
-              arr.push(oCks[i].value);
-          }
-          var permissions = JSON.stringify(arr);
-          console.log(permissions);
-          $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/allocatePermission',
-        	  data:{roleId:selectedRoleId,permissions:arr},
-        	  dataType:'json',
-        	  type:'post',
-        	  success:function(res){
-        		  if(res.code=='200'){
-	    				layer.alert(res.msg);
-	    				$('#myTree').modal('hide');
-	    			}else{	    				
-	    				layer.alert(res.msg);
-	    			}
-        	  }
-          });
-	  });
-	  
-	  $('#btnEdit').click(function(){
-		  var selectedRoleId=$('#selectedRoleId').val();
-		  if(!selectedRoleId){
-			  layer.alert('未选择角色');
-			  return;
-		  }
-		  var newRoleName=$('#newRoleName').val();
-		  if(!newRoleName){
-			 layer.msg('权限名称不能为空');
-			 return;
-	  	  }
-          $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/doEdit',
-        	  data:{id:selectedRoleId,roleName:newRoleName},
-        	  dataType:'json',
-        	  type:'post',
-        	  success:function(res){
-        		  if(res.code=='200'){
-	    				layer.alert(res.msg);
-	    				$('#editModal').modal('hide');
-	    				table.reload('tab');
-	    			}else{	    				
-	    				layer.alert(res.msg);
-	    			}
-        	  }
-          });
+	  $('#btnAdd').on('click', function() {
+		  layer.closeAll();
+			$.get('$!{rc.contextPath}/user/articleCategory/addPage', null, function(form) {
+			if(form.code=='400'){
+				layer.msg(form.msg);
+				return;
+			}	
+			var index=layer.open({
+					type: 1,
+					title: title,
+					content: form,
+					btn: ['保存', '取消'],
+					shade: false,
+					maxmin: true,
+					offset: ['50px', '20%'],
+					area: ['800px', '400px'],
+				yes: function(index) {
+					//触发表单的提交事件
+					$('form.layui-form').find('button[lay-filter=edit]').click();
+				},
+				full: function(elem) {
+					var win = window.top === window.self ? window : parent.window;
+					$(win).on('resize', function() {
+						var $this = $(this);
+						elem.width($this.width()).height($this.height()).css({
+							top: 0,
+							left: 0
+						});
+						elem.children('div.layui-layer-content').height($this.height() - 95);
+					});
+				},
+				success: function(layero, index) {
+					//弹出窗口成功后渲染表单
+					var form = layui.form;
+					form.render();
+					form.on('radio(type)', function(data){
+						 if(data.value=='0'){
+							 $('#urlDiv').hide();
+							 $('#url').val('');
+							 $('#url').attr('lay-verify',null);
+						 }else{
+							 $('#urlDiv').show();
+							 $('#url').attr('lay-verify','required');
+						 } 
+					});
+					form.on('submit(add)', function(data) {
+						 $.ajax({
+							 url:'$!{rc.contextPath}/user/permission/doAdd',
+							 type:'post',
+							 data:data.field,
+							 success:function(res){
+								 if(res.code=='200'){
+									 layer.msg('新增权限成功');
+									 layer.close(index);
+									 treeTable.reload();
+								 }else{
+									 layer.msg(res.msg);
+								 }
+							 }
+						 });
+						//这里可以写ajax方法提交表单
+						return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。									
+					});
+				},
+				end: function() {
+					addBoxIndex = -1;
+				}
+				});
+			});
 	  });
 	  
 });

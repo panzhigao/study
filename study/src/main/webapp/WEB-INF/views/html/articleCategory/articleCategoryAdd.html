@@ -1,0 +1,17 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">分类名</label>
+			<div class="layui-input-block">
+				<input lay-verify="required" type="text" name="categoryName" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-block">
+				<input type="number" min="1" id="sort" name="sort" placeholder="请输入排序" autocomplete="off" class="layui-input" value="1">
+			</div>
+		</div>
+		<button lay-filter="add" lay-submit style="display: none;"></button>
+	</form>
+</div>
