@@ -64,8 +64,19 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 链接上线
 	 */
-	LINK_ENABLE(504,"链接上线");
-	
+	LINK_ENABLE(504,"链接上线"),
+	/**
+	 * 文章分类新增
+	 */
+	ARTICLE_CATEGORY_ADD(601,"文章分类新增"),
+	/**
+	 * 文章分类编辑
+	 */
+	ARTICLE_CATEGORY_EDIT(602,"文章分类编辑"),
+	/**
+	 * 文章分类删除
+	 */
+	ARTICLE_CATEGORY_DELETE(603,"文章分类删除");
 	
     private Integer code;
 

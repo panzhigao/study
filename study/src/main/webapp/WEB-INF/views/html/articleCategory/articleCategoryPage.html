@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>文章分类</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="$!{systemConfig.keywords}">
+  <meta name="description" content="$!{systemConfig.description}">
+  <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <link rel="stylesheet" href="$!{rc.contextPath}/static/css/bootstrap.css" >
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
+  <script type="text/javascript" src="$!{rc.contextPath}/static/js/bootstrap.min.js"></script>
+</head>
+<body class="childrenBody">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
+      <div class="layui-tab-content" style="padding:0;">
+	    <div class="layui-tab-item layui-show">
+
+	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
+	    
+	    <div class="layui-btn-group">
+	    	#hasPermission("/user/role/doAdd")
+	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增角色</button>
+	     	#end
+  		</div>
+  		
+	    <table id="categoryTable" lay-filter="categoryTab"></table>
+	        
+	    </div>
+      </div>
+    </div>
+  </div>
+
+<script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/res/layui-xtree/layui-xtree.js"></script>
+<script>
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly');
+
+//table
+layui.use(['table','jquery','form'], function(){
+	  var table = layui.table;
+	  var $ = layui.$ , active = {
+	    reload: function(){
+	        var roleNameInput = $('#roleNameInput');
+	        //执行重载
+	        table.reload('tab', {
+	          page: {
+	            curr: 1 //重新从第 1 页开始
+	          }
+	          ,where: {
+	        	  roleName: roleNameInput.val()
+	          }
+	        });
+	      }
+	    };
+	  
+	  //监听工具条
+	  table.on('tool(categoryTab)', function(obj){
+	    var data = obj.data;
+	     if(obj.event === 'del'){
+	      layer.confirm('确定删除该分类么', function(index){
+	        layer.close(index);
+	    	$.ajax({
+	    		url:"$!{rc.contextPath}/user/role/doDelete",
+	    		type:"post",
+	    		data:{roleId:data.roleId},
+	    		success:function(data){
+	    			if(data.code=='200'){
+	    				layer.alert(data.msg);
+	    				table.reload('tab');
+	    			}else{	    				
+	    				layer.alert(data.msg);
+	    			}
+	    		}
+	    	});  
+	      });
+	    }else if(obj.event==='allocate'){
+	    	$('#myTree').modal('show');
+	    	xtree3._options.params={roleId:data.id};
+	    	xtree3.render();
+	    	$('#selectedRoleId').val(data.id);
+	    }else if(obj.event==='edit'){
+	    	$('#selectedRoleId').val(data.id);
+	    	$('#newRoleName').val(data.roleName);
+	    	$('#editModal').modal('show');
+	    }
+	  });
+	  
+	  //第一个实例
+	  table.render({
+		id: 'tab',  
+	    method: 'post',  
+	    elem: '#categoryTable',
+	    height: 500,
+	    request: {
+	    	pageName: 'pageNo', //页码的参数名称，默认：page
+	    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	    },
+	    response: {
+	        statusCode: 200, //成功的状态码，默认：0
+	        countName: 'total', //数据总数的字段名称，默认：count
+	        dataName: 'data' //数据列表的字段名称，默认：data
+	    },
+	    url: '$!{rc.contextPath}/user/articleCategory/getPageData', //数据接口
+	    page: true ,//开启分页
+	    cols: [[ //表头
+	      {field: 'id', title: '角色ID', width:100, fixed: 'left'},
+	      {field: 'categoryName', title: '分类名称', width:200},
+	      {field: 'sort', title: '排序', width:100},
+	      {field: 'status', title: '是否启用', width:100,templet:function(d){
+	    	  var statusAuth='#hasPermission("/user/manage/changeStatus") 1 #end';
+    	  	  if(!statusAuth){
+    	  		statusAuth='disabled';
+    	  	  }
+    	  	  var checked='';
+	    	  if(d.status=='1'){
+	    		  checked='checked';
+	    	  }
+	    	  var s='<input value="1" userid="'+d.id+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="启用|未启用" '+statusAuth+' '+checked+'>';
+	    	  return s;
+          }},
+	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
+	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
+	      }},
+	      {title:'操作',width:200,templet:function(row){
+	    	  var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
+        	  var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
+	    	  
+	    	  var btn_edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+	    	  var btn_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+	    	  var show='';
+	    	  if(p_edit){
+	    		  show+=btn_edit;
+	    	  }
+	    	  if(p_delete){
+	    		  show+=btn_delete;
+	    	  }
+	    	  return show;
+	      }}
+	    ]]
+	  });
+	  
+	  $('#search').on('click', function(){
+		   var type = $(this).data('type');
+		   active[type] ? active[type].call(this) : '';
+	  });
+	  
+  
+	  $('#btnSave').click(function(){
+		  var selectedRoleId=$('#selectedRoleId').val();
+		  if(!selectedRoleId){
+			  layer.alert('未选择角色');
+			  return;
+		  }
+		  var oCks = xtree3.GetAllChecked(); //这是方法
+		  var arr=[];
+          for (var i = 0; i < oCks.length; i++) {
+        	  if(oCks[i].value=='on'){
+        		  continue;
+        	  }
+              arr.push(oCks[i].value);
+          }
+          var permissions = JSON.stringify(arr);
+          console.log(permissions);
+          $.ajax({
+        	  url:'$!{rc.contextPath}/user/role/allocatePermission',
+        	  data:{roleId:selectedRoleId,permissions:arr},
+        	  dataType:'json',
+        	  type:'post',
+        	  success:function(res){
+        		  if(res.code=='200'){
+	    				layer.alert(res.msg);
+	    				$('#myTree').modal('hide');
+	    			}else{	    				
+	    				layer.alert(res.msg);
+	    			}
+        	  }
+          });
+	  });
+	  
+	  $('#btnEdit').click(function(){
+		  var selectedRoleId=$('#selectedRoleId').val();
+		  if(!selectedRoleId){
+			  layer.alert('未选择角色');
+			  return;
+		  }
+		  var newRoleName=$('#newRoleName').val();
+		  if(!newRoleName){
+			 layer.msg('权限名称不能为空');
+			 return;
+	  	  }
+          $.ajax({
+        	  url:'$!{rc.contextPath}/user/role/doEdit',
+        	  data:{id:selectedRoleId,roleName:newRoleName},
+        	  dataType:'json',
+        	  type:'post',
+        	  success:function(res){
+        		  if(res.code=='200'){
+	    				layer.alert(res.msg);
+	    				$('#editModal').modal('hide');
+	    				table.reload('tab');
+	    			}else{	    				
+	    				layer.alert(res.msg);
+	    			}
+        	  }
+          });
+	  });
+	  
+});
+</script>
+#parse("./html/common/common.html")
+</body>
+</html>

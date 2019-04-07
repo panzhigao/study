@@ -136,11 +136,12 @@
 
 	<select id="findVOByUserId" resultMap="VOMap">
 		select
-		a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,
-		a.create_time,a.praise_counts,c.user_portrait,c.nickname,d.title
+		tc.id,tc.id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
+		tc.create_time,tc.praise_counts,tc.user_portrait,tu.nickname,ta.title
 		from
-		t_comment a left join t_user c on a.user_id=c.user_id join t_article d
-		on d.article_id=a.article_id
-		where a.user_id=#{userId}
+		t_comment tc left 
+		join t_user tu on tc.user_id=tc.id 
+		join t_article ta on ta.article_id=tc.article_id
+		where tc.user_id=#{userId}
 	</select>
 </mapper>

@@ -125,7 +125,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		if(AdminFlagEnum.ADMIN_TRUE.getCode().equals(role.getSuperAdminFlag())){
 			throw new BusinessException("超级管理员不能编辑");
 		}
-		//TODO 增加日志
 		//删除该角色下的所有权限，再重新添加
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		if(ArrayUtils.isNotEmpty(permissions)){

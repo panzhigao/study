@@ -216,12 +216,12 @@ layui.use(['table','jquery','form'], function(){
 		    	  return s;
 	      	  }
 	       },
-            {field: 'isOnline', title: '是否在线', width:80,templet:function(d){
+          {field: 'isOnline', title: '是否在线', width:80,templet:function(d){
                 if(d.isOnline==true){
                     return '在线';
                 }
                 return '离线';
-            }},
+          }},
 	      {field: 'createTime', title: '创建时间', width:160, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
 	      }},

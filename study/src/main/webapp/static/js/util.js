@@ -1,14 +1,3 @@
-/*$("body").on('error','img',function(){
-	$(this).attr('src','/static/images/404.jpg');
-});*/
-
-//$(window).load(function() { 
-//	  $('img').each(function() {
-//	    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
-//	      this.src = '/static/images/404.jpg'; 
-//	      } 
-//	   });
-//});
 Date.prototype.format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份 
@@ -122,6 +111,9 @@ function websocketConnect(){
 
 function showNotice(message){
 	var obj;
+	if(!message){
+		return;
+	}
 	if(!message||typeof(message)=='string'){
 		obj=new Object();
 		obj['contentName']='消息';
