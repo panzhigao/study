@@ -129,7 +129,7 @@ layui.config({
 }).use('fly');
 var pageNo=1;
 var pageSize=10;
-var userId='$!{u.userId}';
+var userId='$!{u.id}';
 var fly;
 layui.use(['fly','laypage', 'layer','jquery'], function(){
 	fly=layui.fly;
@@ -158,7 +158,7 @@ function getData(){
 					jing='<span class="fly-jing">精</span>';
 				}
 				var info='<li>'+jing+
-	            '<a style="max-width: 60%;" target="_blank" href="$!{rc.contextPath}/article/'+one.articleId+'" class="jie-title">'+one.title+'</a>'+
+	            '<a style="max-width: 60%;" target="_blank" href="$!{rc.contextPath}/article/'+one.id+'" class="jie-title">'+one.title+'</a>'+
 	            '<i>'+tranTime(one.createTime,'yyyy-MM-dd')+'</i>'+
 	            '<em class="layui-hide-xs">'+one.viewCount+'阅/'+one.commentCount+'评论</em>'+
 	          '</li>';
