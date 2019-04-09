@@ -19,4 +19,17 @@ public interface ArticleCategoryService extends BaseService<ArticleCategory>{
 	 * @param articleCategory
 	 */
 	void updateArticleCategory(ArticleCategory articleCategory);
+	/**
+	 * 修改文章分类状态
+	 * @param articleCategoryId 分类id
+	 * @param status
+	 * @return 返回状态内容
+	 */
+	String changeCategoryStatus(Long articleCategoryId,Integer status);
+	/**
+	 * 通过获取分类名称
+	 * @param articleCategoryId
+	 * @return
+	 */
+	String getCategoryNameByIdThroughCache(Long articleCategoryId);
 }

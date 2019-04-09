@@ -76,7 +76,15 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 文章分类删除
 	 */
-	ARTICLE_CATEGORY_DELETE(603,"文章分类删除");
+	ARTICLE_CATEGORY_DELETE(603,"文章分类删除"),
+	/**
+	 * 文章分类删除
+	 */
+	ARTICLE_CATEGORY_DISABLE(603,"文章分类下线"),
+	/**
+	 * 文章分类删除
+	 */
+	ARTICLE_CATEGORY_ENABLE(603,"文章分类上线");
 	
     private Integer code;
 

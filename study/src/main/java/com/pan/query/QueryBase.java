@@ -2,6 +2,7 @@ package com.pan.query;
 
 import com.pan.common.constant.PageConstant;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author 作者
@@ -28,6 +29,13 @@ public class QueryBase {
 
     public Integer getPageSize() {
         return pageSize;
+    }
+
+    public void setOrderCondition(String orderCondition) {
+        this.orderCondition = orderCondition;
+        if(StringUtils.isNotBlank(orderCondition)){
+            this.orderCondition= com.pan.util.StringUtils.camelToUnderline(orderCondition);
+        }
     }
 
     /**

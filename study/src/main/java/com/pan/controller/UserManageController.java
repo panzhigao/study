@@ -51,9 +51,6 @@ public class UserManageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/manage")
 	public Map<String,Object> getUserList(QueryUser queryUser){
-		if(StringUtils.isNotBlank(queryUser.getOrderCondition())){
-			queryUser.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryUser.getOrderCondition()));
-		}
 		Map<String,Object> pageData=userService.findPageData(queryUser);
 		return pageData;
 	}

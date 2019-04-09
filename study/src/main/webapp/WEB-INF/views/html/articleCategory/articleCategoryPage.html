@@ -22,7 +22,7 @@
 
 	    <div class="layui-btn-group">
 	    	#hasPermission("/user/articleCategory/doAdd")
-	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增分类</button>
+	     	<button class="layui-btn" id="btnAdd" data-toggle="modal" data-target="#myModal">新增分类</button>
 	     	#end
   		</div>
   		
@@ -40,7 +40,7 @@
 layui.cache.page = 'user';
 layui.cache.user = {
   username: '游客'
-  ,uid: -1
+  ,uid: 5
   ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
   ,experience: 83
   ,sex: '男'
@@ -55,6 +55,7 @@ layui.config({
 //table
 layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
+      var form=layui.form;
 	  var $ = layui.$ , active = {
 	    reload: function(){
 	        var roleNameInput = $('#roleNameInput');
@@ -105,7 +106,7 @@ layui.use(['table','jquery','form'], function(){
 	    			shade: false,
 	    			maxmin: true,
 	    			offset: ['50px', '20%'],
-	    			area: ['800px', '300px'],
+	    			area: ['800px', '260px'],
 	    		yes: function(index) {
 	    			//触发表单的提交事件
 	    			$('form.layui-form').find('button[lay-filter=edit]').click();
@@ -151,6 +152,61 @@ layui.use(['table','jquery','form'], function(){
 	    	});
 	    }
 	  });
+
+     form.on('switch(categoryStatus)', function(data){
+        var articleCategoryId=$(data.elem).attr('cid');
+        var new_status =this.checked ? '1' : '0';
+        var tipText = '确定下线该分类？';
+        if(data.elem.checked){
+            tipText = '确定上线该分类？'
+        }
+        layer.confirm(tipText,{
+            icon: 3,
+            title:'系统提示',
+            cancel : function(index){
+                data.elem.checked = !data.elem.checked;
+                form.render();
+                layer.close(index);
+            }
+        },function(index){//确认
+            $.ajax({
+                url:'$!{rc.contextPath}/user/articleCategory/changeStatus',
+                data:{articleCategoryId:articleCategoryId,status:new_status},
+                dataType:'json',
+                type:'post',
+                success:function(res){
+                    if(res.code=='200'){
+                        layer.alert(res.msg);
+                    }else{
+                        data.elem.checked = !data.elem.checked;
+                        form.render();
+                        layer.alert(res.msg);
+                    }
+                    layer.close(index);
+                }
+            });
+
+        },function(index){//取消
+            data.elem.checked = !data.elem.checked;
+            form.render();
+            layer.close(index);
+        });
+    });
+
+
+    table.on('sort(categoryTab)', function(obj){
+        var orderCondition=null;
+        if(obj){
+            orderCondition=obj.field+" "+obj.type;
+        }
+        table.reload('tab', {
+            page: {curr: 1},
+            initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+            ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                orderCondition:orderCondition
+            }
+        });
+      });
 	  
 	  //第一个实例
 	  table.render({
@@ -172,9 +228,9 @@ layui.use(['table','jquery','form'], function(){
 	    cols: [[ //表头
 	      {field: 'id', title: '角色ID', width:100, fixed: 'left'},
 	      {field: 'categoryName', title: '分类名称', width:200},
-	      {field: 'sort', title: '排序', width:100},
+	      {field: 'sort', title: '排序', width:100,sort:true},
 	      {field: 'status', title: '是否启用', width:100,templet:function(d){
-	    	  var statusAuth='#hasPermission("/user/manage/changeStatus") 1 #end';
+	    	  var statusAuth='#hasPermission("/user/articleCategory/changeStatus") 1 #end';
     	  	  if(!statusAuth){
     	  		statusAuth='disabled';
     	  	  }
@@ -182,7 +238,7 @@ layui.use(['table','jquery','form'], function(){
 	    	  if(d.status=='1'){
 	    		  checked='checked';
 	    	  }
-	    	  var s='<input value="1" userid="'+d.id+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="启用|未启用" '+statusAuth+' '+checked+'>';
+	    	  var s='<input value="1" cid="'+d.id+'" lay-filter="categoryStatus" type="checkbox" name="status" lay-skin="switch" lay-text="启用|未启用" '+statusAuth+' '+checked+'>';
 	    	  return s;
           }},
 	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
@@ -215,16 +271,16 @@ layui.use(['table','jquery','form'], function(){
 			}	
 			var index=layer.open({
 					type: 1,
-					title: title,
+					title: '新增分类',
 					content: form,
 					btn: ['保存', '取消'],
 					shade: false,
 					maxmin: true,
 					offset: ['50px', '20%'],
-					area: ['800px', '400px'],
+					area: ['800px', '260px'],
 				yes: function(index) {
 					//触发表单的提交事件
-					$('form.layui-form').find('button[lay-filter=edit]').click();
+					$('form.layui-form').find('button[lay-filter=add]').click();
 				},
 				full: function(elem) {
 					var win = window.top === window.self ? window : parent.window;
@@ -241,26 +297,16 @@ layui.use(['table','jquery','form'], function(){
 					//弹出窗口成功后渲染表单
 					var form = layui.form;
 					form.render();
-					form.on('radio(type)', function(data){
-						 if(data.value=='0'){
-							 $('#urlDiv').hide();
-							 $('#url').val('');
-							 $('#url').attr('lay-verify',null);
-						 }else{
-							 $('#urlDiv').show();
-							 $('#url').attr('lay-verify','required');
-						 } 
-					});
 					form.on('submit(add)', function(data) {
 						 $.ajax({
-							 url:'$!{rc.contextPath}/user/permission/doAdd',
+							 url:'$!{rc.contextPath}/user/articleCategory/doAdd',
 							 type:'post',
 							 data:data.field,
 							 success:function(res){
 								 if(res.code=='200'){
-									 layer.msg('新增权限成功');
+                                     layer.msg(res.msg);
 									 layer.close(index);
-									 treeTable.reload();
+                                     table.reload('tab');
 								 }else{
 									 layer.msg(res.msg);
 								 }
@@ -276,7 +322,6 @@ layui.use(['table','jquery','form'], function(){
 				});
 			});
 	  });
-	  
 });
 </script>
 #parse("./html/common/common.html")

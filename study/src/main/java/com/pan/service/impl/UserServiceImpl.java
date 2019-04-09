@@ -447,7 +447,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	 */
     @Override
     public String changeUserStatus(Long userId, Integer status) {
-        String message = null;
+        String message;
         User userInDb = userMapper.selectByPrimaryKey(userId);
         if (userInDb == null) {
             throw new BusinessException("用户不存在");

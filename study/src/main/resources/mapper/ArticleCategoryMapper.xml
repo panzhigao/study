@@ -122,6 +122,9 @@
   	 <include refid="Base_Column_List" />
      from t_article_category
   	 <include refid="whereSql"/>
+     <if test="orderCondition !=null and orderCondition !=''">
+      order by ${orderCondition}
+     </if>
   	 <if test="offset!=null and row !=null">
   		limit #{offset},#{row}
   	</if>

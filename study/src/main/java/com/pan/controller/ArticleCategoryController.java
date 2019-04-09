@@ -1,10 +1,13 @@
 package com.pan.controller;
 
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
@@ -102,5 +105,18 @@ public class ArticleCategoryController {
 		articleCategoryService.deleteByArticleCategoryId(articleCategoryId);
 		return ResultMsg.ok("删除文章分类成功");
 	}
-	
+
+	/**
+	 * 修改分类状态
+	 * 禁用和启用
+	 * @return
+	 */
+	@RequestMapping(method= RequestMethod.POST,value="changeStatus")
+	@ResponseBody
+	@RequiresPermissions("/user/articleCategory/changeStatus")
+	public ResultMsg changeCategoryStatus(Long articleCategoryId, Integer status){
+		String message = articleCategoryService.changeCategoryStatus(articleCategoryId,status);
+		return ResultMsg.ok(message);
+	}
+
 }
