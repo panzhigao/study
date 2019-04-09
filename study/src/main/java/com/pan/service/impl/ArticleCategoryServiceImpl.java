@@ -63,7 +63,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			@Override
 			public ArticleCategory load(Long key) throws Exception {
 				logger.info("初始化文章分类缓存，key={}",key);
-				ArticleCategory articleCategory = articleCategoryMapper.selectByPrimaryKey(1L);
+				ArticleCategory articleCategory = articleCategoryMapper.selectByPrimaryKey(key);
 				if(articleCategory==null){
 					articleCategory=new ArticleCategory();
 					articleCategory.setCategoryName("");
@@ -79,9 +79,13 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 				return all;
 			}
 		});
-
 	}
-	
+
+	private void refreshCache(){
+		categoryCache.cleanUp();
+		allCategoryCache.cleanUp();
+	}
+
 	/**
 	 * 新增文章分类，
 	 * 校验是否有同名分类，如果有，不允许添加
@@ -96,6 +100,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategory.setCreateUserId(TokenUtils.getLoginUserId());
 		articleCategoryMapper.insertSelective(articleCategory);
 		operateLogService.addOperateLog("分类名称"+articleCategory.getCategoryName(), OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
+		refreshCache();
 	}
 	
 	/**
@@ -113,6 +118,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
+		refreshCache();
 		return deleteByPrimaryKey;
 	}
 
@@ -147,6 +153,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
+		refreshCache();
 	}
 
 	/**
@@ -182,6 +189,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
+		refreshCache();
 		return message;
 	}
 

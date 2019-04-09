@@ -143,6 +143,7 @@ layui.use(['table','jquery'], function(){
           {field: 'categoryName', title: '文章分类', width:90},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
+	            var temp;
 	    	  	switch(d.status){
 		    	  	case 0:temp='审核未通过';break;
 		    	  	case 1:temp='草稿';break;
