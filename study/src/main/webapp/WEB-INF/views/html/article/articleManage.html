@@ -140,6 +140,7 @@ layui.use(['table','jquery'], function(){
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.id+"'>"+d.title+"</a>";
 	      }},
+          {field: 'categoryName', title: '文章分类', width:90},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
 	    	  	switch(d.status){

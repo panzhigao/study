@@ -51,4 +51,8 @@ public class QueryArticle extends QueryBase {
      * 是否是精品贴
      */
     private Integer highQuality;
+    /**
+     * 文章分类
+     */
+    private Long categoryId;
 }

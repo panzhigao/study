@@ -2,6 +2,8 @@ package com.pan.service;
 
 import com.pan.entity.ArticleCategory;
 
+import java.util.List;
+
 public interface ArticleCategoryService extends BaseService<ArticleCategory>{
 	/**
 	 * 新增文章分类
@@ -26,10 +28,4 @@ public interface ArticleCategoryService extends BaseService<ArticleCategory>{
 	 * @return 返回状态内容
 	 */
 	String changeCategoryStatus(Long articleCategoryId,Integer status);
-	/**
-	 * 通过获取分类名称
-	 * @param articleCategoryId
-	 * @return
-	 */
-	String getCategoryNameByIdThroughCache(Long articleCategoryId);
 }

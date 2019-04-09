@@ -1,9 +1,9 @@
 package com.pan.service.impl;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import com.pan.query.QueryBase;
+import com.pan.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +23,6 @@ import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
 import com.pan.query.QueryArticle;
-import com.pan.service.AbstractBaseService;
-import com.pan.service.ArticleCheckService;
-import com.pan.service.ArticleService;
-import com.pan.service.EsClientService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -56,7 +52,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 	@Autowired
 	private ArticleCheckService articleCheckService;
-	
+
 	@Override
 	protected ArticleMapper getBaseMapper() {
 		return articleMapper;
@@ -285,11 +281,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return queryFromEsByCondition(queryArticleVO);
 	}
 
-//	@Override
-//	public List<Article> findByCondition(QueryArticle queryArticle) {
-//		return articleMapper.findPageable(queryArticle);
-//	}
-
+	/**
+	 * 获取文章最大置顶值
+	 * @return
+	 */
 	@Override
 	public int getMaxStick() {
 		return articleMapper.getMaxStick();
@@ -340,7 +335,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public Article checkAndGetArticle(QueryArticle queryArticleVO) {
 		Jedis jedis =null;
-		Article article=null;
+		Article article;
 		try {
 			jedis= JedisUtils.getJedis();
 			//存在缓存
@@ -385,4 +380,27 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return article;
 	}
 
+	/**
+	 * 分页查询
+	 * @param queryArticle
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> findDTOPageableMap(QueryArticle queryArticle) {
+		Map<String, Object> pageData = new HashMap<>(4);
+		List<ArticleDTO> list = new ArrayList<>();
+		int total=countByParams(queryArticle);
+		if(total>0){
+			list=articleMapper.findDTOPageable(queryArticle);
+			for(ArticleDTO articleDTO:list){
+				String name = ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(articleDTO.getCategoryId());
+				articleDTO.setCategoryName(name);
+			}
+		}
+		pageData.put("data", list);
+		pageData.put("total", total);
+		pageData.put("code", "200");
+		pageData.put("msg", "");
+		return pageData;
+	}
 }

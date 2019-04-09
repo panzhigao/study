@@ -1,8 +1,9 @@
 package com.pan.controller;
 
+import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
+import com.pan.entity.ArticleCategory;
+import com.pan.service.impl.ArticleCategoryServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class ArticleController {
 	
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -50,6 +51,8 @@ public class ArticleController {
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView toAddPage(){
 		ModelAndView mav=new ModelAndView("html/article/add");
+		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
+		mav.addObject("categoryList",allThroughCache);
 		return mav;
 	}
 	
@@ -100,7 +103,7 @@ public class ArticleController {
 		}else{			
 			queryArticle.setOrderCondition("create_time desc");
 		}
-		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
+		Map<String,Object> pageData=articleService.findDTOPageableMap(queryArticle);
 		return pageData;
 	}
 	
@@ -147,6 +150,8 @@ public class ArticleController {
 		Long loginUserId = TokenUtils.getLoginUserId();
 		Article article=articleService.getAndCheckByUserId(loginUserId, articleId);
 		mav.addObject("article", article);
+		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
+		mav.addObject("categoryList",allThroughCache);
 		return mav;
 	}
 	
@@ -177,7 +182,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doDelete")
-	public ResultMsg deleteArticle(Long articleId,HttpServletRequest request){
+	public ResultMsg deleteArticle(Long articleId){
 		logger.info("删除的文章id:{}",articleId);
 		Long userId=TokenUtils.getLoginUserId();
 		articleService.deleteArticle(articleId, userId);
@@ -206,7 +211,7 @@ public class ArticleController {
 		if(queryArticle.getType()==null){
 			queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
-		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
+		Map<String,Object> pageData=articleService.findDTOPageableMap(queryArticle);
 		return pageData;
 	}
 	

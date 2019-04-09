@@ -116,7 +116,13 @@
 	  select count(0) from t_article_category
 	  <include refid="whereSql"/>
   </select>
- 
+
+  <select id="findAll" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCategory">
+    select
+    <include refid="Base_Column_List" />
+    from t_article_category
+  </select>
+
   <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticleCategory">
      select
   	 <include refid="Base_Column_List" />

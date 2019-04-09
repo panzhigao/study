@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ScoreTypeEnum;
+import com.pan.dto.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,14 +78,14 @@ public class IndexController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/api/getStickData")
 	@ResponseBody
-	public ResultMsg loadStickData(){
+	public Map<String,Object> loadStickData(){
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setPageNo(1);
 		queryArticle.setPageSize(4);
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		queryArticle.setWhereCondition("stick>0");
-		List<Article> list = articleService.findPageable(queryArticle);
-		return ResultMsg.ok("获取置顶帖成功", list);
+		Map<String, Object> dtoPageableMap = articleService.findDTOPageableMap(queryArticle);
+		return dtoPageableMap;
 	}
 	
 	/**

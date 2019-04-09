@@ -1,17 +1,20 @@
 package com.pan.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
 import com.pan.common.enums.ArticleCategoryStatusEnum;
 import com.pan.common.enums.UserStatusEnum;
-import com.pan.entity.SystemConfig;
 import com.pan.query.QueryArticleCategory;
-import com.pan.util.TransFieldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +43,8 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 
 	public static LoadingCache<Long, ArticleCategory> categoryCache;
 
+	public static LoadingCache<Long, List<ArticleCategory>> allCategoryCache;
+
 	@Autowired
 	private ArticleCategoryMapper articleCategoryMapper;
 	
@@ -66,6 +71,15 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 				return articleCategory;
 			}
 		});
+		allCategoryCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<Long,List<ArticleCategory>>() {
+			@Override
+			public List<ArticleCategory> load(Long key) throws Exception {
+				logger.info("初始化文章分类缓存，key={}",key);
+				List<ArticleCategory> all = articleCategoryMapper.findAll();
+				return all;
+			}
+		});
+
 	}
 	
 	/**
@@ -171,8 +185,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		return message;
 	}
 
-	@Override
-	public String getCategoryNameByIdThroughCache(Long articleCategoryId) {
+	public static String getCategoryNameByIdThroughCache(Long articleCategoryId) {
 		try {
 			ArticleCategory articleCategory = categoryCache.get(articleCategoryId);
 			return articleCategory.getCategoryName();
@@ -180,5 +193,16 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			logger.error("通过loadingCache获取分类名称失败，id={}",articleCategoryId);
 		}
 		return "";
+	}
+
+	private static final Long ALL_KEY=0L;
+
+	public static List<ArticleCategory> getAllThroughCache() {
+		try {
+			return allCategoryCache.get(ALL_KEY);
+		} catch (ExecutionException e) {
+			logger.error("通过loadingCache获取所有分类失败");
+		}
+		return Lists.newArrayList();
 	}
 }

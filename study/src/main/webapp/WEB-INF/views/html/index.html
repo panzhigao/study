@@ -311,7 +311,7 @@ function getStickData(){
 	 	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
 	 	            '</a>'+
 	 	            '<h2>'+
-	 	              '<a class="layui-badge">分享</a>'+
+	 	              '<a class="layui-badge">'+article.categoryName+'</a>'+
 	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 	 	            '</h2>'+
 	 	            '<div class="fly-list-info">'+
@@ -359,7 +359,7 @@ function getArticleList(){
 	 	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
 	 	            '</a>'+
 	 	            '<h2>'+
-	 	              '<a class="layui-badge">分享</a>'+
+	 	              '<a class="layui-badge">'+article.categoryName+'</a>'+
 	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 	 	            '</h2>'+
 	 	            '<div class="fly-list-info">'+

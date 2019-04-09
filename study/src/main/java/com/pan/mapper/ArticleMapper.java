@@ -1,6 +1,9 @@
 package com.pan.mapper;
 
 import java.util.List;
+
+import com.pan.dto.ArticleDTO;
+import com.pan.query.QueryArticle;
 import org.apache.ibatis.annotations.Param;
 import com.pan.entity.Article;
 
@@ -28,4 +31,10 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	 * @return
 	 */
 	int getMaxStick();
+	/**
+	 * 分页查询文章信息
+	 * @param queryArticle
+	 * @return
+	 */
+	List<ArticleDTO> findDTOPageable(QueryArticle queryArticle);
 }
