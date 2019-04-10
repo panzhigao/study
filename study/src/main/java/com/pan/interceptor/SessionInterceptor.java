@@ -2,16 +2,12 @@ package com.pan.interceptor;
 
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.pan.common.constant.MyConstant;
-import com.pan.service.ArticleCategoryService;
 import com.pan.service.impl.ArticleCategoryServiceImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.entity.Link;
 import com.pan.entity.User;
 import com.pan.service.LinkService;
