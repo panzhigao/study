@@ -1,12 +1,10 @@
 package com.pan.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -81,9 +79,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		});
 	}
 
-	private void refreshCache(){
-		categoryCache.cleanUp();
-		allCategoryCache.cleanUp();
+	private void refreshCache(Long articleCategoryId){
+		categoryCache.refresh(articleCategoryId);
+		allCategoryCache.refresh(ALL_KEY);
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategory.setCreateUserId(TokenUtils.getLoginUserId());
 		articleCategoryMapper.insertSelective(articleCategory);
 		operateLogService.addOperateLog("分类名称"+articleCategory.getCategoryName(), OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
-		refreshCache();
+		refreshCache(ALL_KEY);
 	}
 	
 	/**
@@ -118,7 +116,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
-		refreshCache();
+		refreshCache(articleCategoryId);
 		return deleteByPrimaryKey;
 	}
 
@@ -153,7 +151,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
-		refreshCache();
+		refreshCache(articleCategory.getId());
 	}
 
 	/**
@@ -189,7 +187,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
-		refreshCache();
+		refreshCache(articleCategoryId);
 		return message;
 	}
 
@@ -212,5 +210,11 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			logger.error("通过loadingCache获取所有分类失败");
 		}
 		return Lists.newArrayList();
+	}
+
+	public static List<ArticleCategory> getOnlineCategoryThroughCache() {
+		List<ArticleCategory> articleCategories = getAllThroughCache();
+		return articleCategories.stream().filter(
+				s -> (ArticleCategoryStatusEnum.STATUS_NORMAL.getCode().equals(s.getStatus()))).collect(Collectors.toList());
 	}
 }

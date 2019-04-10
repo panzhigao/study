@@ -1,12 +1,17 @@
 package com.pan.service.impl;
 
-import java.util.Date;
+import java.util.*;
+
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
+import com.pan.query.QueryArticleCheck;
+import com.pan.query.QueryBase;
 import com.pan.service.*;
+import com.pan.util.BeanUtils;
+import com.pan.vo.ArticleCheckVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +55,10 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	@Autowired
 	private UserExtensionService userExtensionService;
 
+	@Override
+	protected ArticleCheckMapper getBaseMapper() {
+		return articleCheckMapper;
+	}
 
 	/**
 	 * 新增文章审核记录
@@ -178,7 +187,24 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	}
 
 	@Override
-	protected ArticleCheckMapper getBaseMapper() {
-		return articleCheckMapper;
+	public Map<String, Object> findVOPageableMap(QueryArticleCheck queryArticleCheck) {
+		Map<String, Object> pageData = new HashMap<>(4);
+		List<ArticleCheckVO> list = new ArrayList<>();
+		int total=countByParams(queryArticleCheck);
+		if(total>0){
+			List<ArticleCheck> pageable = findPageable(queryArticleCheck);
+			for(ArticleCheck articleCheck:pageable){
+				ArticleCheckVO articleCheckVO=new ArticleCheckVO();
+				BeanUtils.copyProperties(articleCheck,articleCheckVO);
+				articleCheckVO.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(articleCheck.getCategoryId()));
+				list.add(articleCheckVO);
+			}
+		}
+		pageData.put("data", list);
+		pageData.put("total", total);
+		pageData.put("code", "200");
+		pageData.put("msg", "");
+		return pageData;
 	}
+
 }

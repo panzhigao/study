@@ -178,7 +178,7 @@
         content,
       </if>
       <if test="categoryId != null">
-          category_id,
+        category_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">

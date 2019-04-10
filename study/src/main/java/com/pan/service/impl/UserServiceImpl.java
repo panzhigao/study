@@ -298,12 +298,12 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         ValidationUtils.validateEntityWithGroups(user, TelephoneBindGroup.class);
         //校验手机号是否被占用
         User userInDb = findByUserTelephone(user.getTelephone());
-        if (MyConstant.OPERATETYPE_SET.equals(operateType)) {
+        if (MyConstant.OPERATE_TYPE_SET.equals(operateType)) {
             if (userInDb != null) {
                 logger.info("该手机号已被使用：{}", user.getTelephone());
                 throw new BusinessException("该手机号已被使用，请更换手机号");
             }
-        } else if (MyConstant.OPERATETYPE_FINDPASSWORD.equals(operateType)) {
+        } else if (MyConstant.OPERATE_TYPE_FIND_PASSWORD.equals(operateType)) {
             if (userInDb == null) {
                 logger.info("该手机号未注册：{}", user.getTelephone());
                 throw new BusinessException("该手机号未注册");

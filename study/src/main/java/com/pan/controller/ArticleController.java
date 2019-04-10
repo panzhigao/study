@@ -50,7 +50,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView toAddPage(){
-		ModelAndView mav=new ModelAndView("html/article/add");
+		ModelAndView mav=new ModelAndView("html/article/articleAdd");
 		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
 		mav.addObject("categoryList",allThroughCache);
 		return mav;
@@ -115,7 +115,7 @@ public class ArticleController {
 	@ResponseBody
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")Long articleId){
 		//不存在抛出异常
-		ModelAndView mav=new ModelAndView("html/article/detail");
+		ModelAndView mav=new ModelAndView("html/article/articleDetail");
 		Long loginUserId=null;
 		if(TokenUtils.isAuthenticated()){
 			loginUserId = TokenUtils.getLoginUserId();
@@ -146,7 +146,7 @@ public class ArticleController {
 	@ResponseBody
 	@RequiresPermissions("/user/article/doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")Long articleId){
-		ModelAndView mav=new ModelAndView("html/article/edit");
+		ModelAndView mav=new ModelAndView("html/article/articleEdit");
 		Long loginUserId = TokenUtils.getLoginUserId();
 		Article article=articleService.getAndCheckByUserId(loginUserId, articleId);
 		mav.addObject("article", article);
@@ -194,8 +194,9 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/index")
-	public ModelAndView toArticleIndex(){
-		ModelAndView mav=new ModelAndView("html/article/index");
+	public ModelAndView toArticleIndex(Long categoryId){
+		ModelAndView mav=new ModelAndView("html/article/articleIndex");
+		mav.addObject("categoryId",categoryId);
 		return mav;
 	}
 	

@@ -138,10 +138,12 @@
  	
   <sql id="whereSql">
   	<where> 
-  		1=1
   		<if test="status !=null">
-  			and a.status=#{status,jdbcType=INTEGER}
+  			and status=#{status,jdbcType=INTEGER}
   		</if>
+        <if test="categoryName !=null">
+            and category_name=#{categoryName,jdbcType=VARCHAR}
+        </if>
   	</where>
   </sql>
 </mapper>

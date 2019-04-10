@@ -68,13 +68,10 @@
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a href="$!{rc.contextPath}">首页</a></li> 
-      <li><a href="/">提问</a></li> 
-      <li><a href="/">分享<span class="layui-badge-dot"></span></a></li> 
-      <li><a href="/">讨论</a></li> 
-      <li><a href="/">建议</a></li> 
-      <li><a href="/">公告</a></li> 
-      <li><a href="/">动态</a></li> 
+      <li class="layui-hide-xs layui-this"><a href="$!{rc.contextPath}">首页</a></li>
+      #foreach($item in $onlineArticleCategoryList)
+      <li><a href="$!{rc.contextPath}/article/index?categoryId=$item.id">$!{item.categoryName}</a></li>
+      #end
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       <!-- 用户登入后显示 -->
       #if($user)

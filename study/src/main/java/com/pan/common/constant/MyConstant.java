@@ -17,11 +17,11 @@ public class MyConstant {
     /**
      * 重置
      */
-    public static final String OPERATETYPE_SET = "set";
+    public static final String OPERATE_TYPE_SET = "set";
     /**
      * 找回密码
      */
-    public static final String OPERATETYPE_FINDPASSWORD = "findPassword";
+    public static final String OPERATE_TYPE_FIND_PASSWORD = "findPassword";
     /**
      * 用户
      */
@@ -70,4 +70,8 @@ public class MyConstant {
      * 上线链接
      */
     public static final String ONLINE_LINK_LIST="onlineLinkList";
+    /**
+     * 上线文章分类
+     */
+    public static final String ONLINE_ARTICLE_CATEGORY_LIST="onlineArticleCategoryList";
 }

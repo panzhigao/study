@@ -69,5 +69,8 @@ public class ArticleCheck extends BaseEntity{
 	 * 审核备注
 	 */
 	private String remark;
-
+	/**
+	 * 分类id
+	 */
+	private Long categoryId;
 }

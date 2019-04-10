@@ -22,8 +22,6 @@ import com.pan.util.TransFieldUtils;
 @Controller
 public class ArticleCheckController {
 	
-//	private static final Logger logger=LoggerFactory.getLogger(ArticleController.class);
-	
 	@Autowired
 	private ArticleCheckService articleCheckService;
 	
@@ -51,7 +49,7 @@ public class ArticleCheckController {
 		}else{			
 			queryArticleCheck.setOrderCondition("create_time desc");
 		}
-		Map<String,Object> pageData=articleCheckService.findPageableMap(queryArticleCheck);
+		Map<String,Object> pageData=articleCheckService.findVOPageableMap(queryArticleCheck);
 		return pageData;
 	}
 	
