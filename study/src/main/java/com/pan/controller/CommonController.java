@@ -45,7 +45,7 @@ public class CommonController {
 	 * @return
 	 * @throws Exception 
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/publicKey")
+	@RequestMapping(value="/publicKey")
 	@ResponseBody
 	public String generatePublicKey() throws Exception{
 		KeyPair keyPair = RSAUtil.getKeyPair();

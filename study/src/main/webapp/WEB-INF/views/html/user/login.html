@@ -143,6 +143,7 @@ function getKey(){
 		url:'/api/publicKey',
 		type:'post',
 		async:false,
+        dataType:'text',
 		success:function(res){
 			key=res;
 		}

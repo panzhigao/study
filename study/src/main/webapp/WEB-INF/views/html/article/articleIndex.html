@@ -68,7 +68,7 @@
     <ul class="layui-clear">
       <li class="layui-hide-xs"><a href="$!{rc.contextPath}/">首页</a></li>
       #foreach($item in $onlineArticleCategoryList)
-      <li #if($item.id==$categoryId) class="layui-this" #end ><a href="$!{rc.contextPath}/article/index?categoryId=$item.id">$!{item.categoryName}</a></li>
+      <li #if($item.id==$categoryId) class="layui-this" #end ><a href="$!{rc.contextPath}/article/category/$item.id">$!{item.categoryName}</a></li>
       #end
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       
