@@ -32,6 +32,11 @@ public class JedisUtils {
 
 	private static final String REDIS_ERROR = "Could not get a resource from the pool";
 
+	/**
+	 * redis连接成功
+	 */
+	public static final String REDIS_CONNECT_SUCCESS="PONG";
+
 	public void setJedisPool(JedisPool jedisPool) {
 		JedisUtils.jedisPool = jedisPool;
 		Jedis jedis = null;

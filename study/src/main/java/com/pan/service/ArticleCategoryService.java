@@ -2,8 +2,10 @@ package com.pan.service;
 
 import com.pan.entity.ArticleCategory;
 
-import java.util.List;
 
+/**
+ * @author panzhigao
+ */
 public interface ArticleCategoryService extends BaseService<ArticleCategory>{
 	/**
 	 * 新增文章分类

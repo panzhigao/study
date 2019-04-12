@@ -15,6 +15,8 @@
 	<!-- 自动扫描(自动注入) -->
 	<context:component-scan base-package="com.pan.controller" />
 
+	<bean class="com.pan.init.InitTheContext"/>
+
 	<mvc:annotation-driven >
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">

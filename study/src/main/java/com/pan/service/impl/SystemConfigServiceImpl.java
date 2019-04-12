@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pan.common.constant.RedisChannelConstant;
+import com.pan.common.enums.CacheSyncEnum;
+import com.pan.util.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +85,7 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		logger.info("更新系统配置，更新条数：{}",count);
 		String changedFields = ValidationUtils.getChangedFields(systemConfigInDb, systemConfig);
 		operateLogService.addOperateLog(changedFields,OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
-		SystemConfigUtils.refreshSystemConfig();
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, CacheSyncEnum.SYSTEM_CONFIG.getName()+":"+1);
 	}
 
 }

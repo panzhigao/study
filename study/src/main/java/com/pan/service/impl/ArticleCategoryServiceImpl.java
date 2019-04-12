@@ -1,18 +1,19 @@
 package com.pan.service.impl;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
+import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleCategoryStatusEnum;
+import com.pan.common.enums.CacheSyncEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.query.QueryArticleCategory;
+import com.pan.util.Publisher;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		categoryCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<Long,ArticleCategory>() {
 			@Override
 			public ArticleCategory load(Long key) throws Exception {
-				logger.info("初始化文章分类缓存，key={}",key);
+				logger.info("从数据库加载单条文章分类，key={}",key);
 				ArticleCategory articleCategory = articleCategoryMapper.selectByPrimaryKey(key);
 				if(articleCategory==null){
 					articleCategory=new ArticleCategory();
@@ -72,14 +73,18 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		allCategoryCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<Long,List<ArticleCategory>>() {
 			@Override
 			public List<ArticleCategory> load(Long key) throws Exception {
-				logger.info("初始化文章分类缓存，key={}",key);
+				logger.info("从数据库加载所有文章分类，key={}",key);
 				List<ArticleCategory> all = articleCategoryMapper.findAll();
 				return all;
 			}
 		});
 	}
 
-	private void refreshCache(Long articleCategoryId){
+	/**
+	 * 刷新缓存
+	 * @param articleCategoryId
+	 */
+	public static void refreshCache(Long articleCategoryId){
 		categoryCache.refresh(articleCategoryId);
 		allCategoryCache.refresh(ALL_KEY);
 	}
@@ -98,7 +103,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategory.setCreateUserId(TokenUtils.getLoginUserId());
 		articleCategoryMapper.insertSelective(articleCategory);
 		operateLogService.addOperateLog("分类名称"+articleCategory.getCategoryName(), OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
-		refreshCache(ALL_KEY);
+		//refreshCache(ALL_KEY);
+		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+ALL_KEY;
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 	
 	/**
@@ -116,7 +123,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
-		refreshCache(articleCategoryId);
+		//refreshCache(articleCategoryId);
+		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return deleteByPrimaryKey;
 	}
 
@@ -151,7 +160,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
-		refreshCache(articleCategory.getId());
+		//refreshCache(articleCategory.getId());
+		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 
 	/**
@@ -187,7 +198,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
-		refreshCache(articleCategoryId);
+		//refreshCache(articleCategoryId);
+		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return message;
 	}
 
