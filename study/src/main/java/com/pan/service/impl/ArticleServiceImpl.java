@@ -1,8 +1,6 @@
 package com.pan.service.impl;
 
 import java.util.*;
-
-import com.pan.query.QueryBase;
 import com.pan.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

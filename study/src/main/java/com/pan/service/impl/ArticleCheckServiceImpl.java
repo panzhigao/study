@@ -1,14 +1,12 @@
 package com.pan.service.impl;
 
 import java.util.*;
-
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.query.QueryArticleCheck;
-import com.pan.query.QueryBase;
 import com.pan.service.*;
 import com.pan.util.BeanUtils;
 import com.pan.vo.ArticleCheckVO;

@@ -102,7 +102,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategory.setCreateTime(new Date());
 		articleCategory.setCreateUserId(TokenUtils.getLoginUserId());
 		articleCategoryMapper.insertSelective(articleCategory);
-		operateLogService.addOperateLog("分类名称"+articleCategory.getCategoryName(), OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
+		operateLogService.addOperateLog("分类名称（"+articleCategory.getCategoryName()+")", OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
 		//refreshCache(ALL_KEY);
 		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+ALL_KEY;
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
@@ -123,7 +123,6 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
-		//refreshCache(articleCategoryId);
 		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return deleteByPrimaryKey;
@@ -160,7 +159,6 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
-		//refreshCache(articleCategory.getId());
 		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
@@ -198,7 +196,6 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
-		//refreshCache(articleCategoryId);
 		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return message;

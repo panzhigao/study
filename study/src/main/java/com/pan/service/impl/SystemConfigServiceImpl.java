@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.CacheSyncEnum;
 import com.pan.util.Publisher;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LogMeta;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.SystemConfig;
@@ -20,7 +18,6 @@ import com.pan.mapper.SystemConfigMapper;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.OperateLogService;
 import com.pan.service.SystemConfigService;
-import com.pan.util.SystemConfigUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.SystemConfigParam;

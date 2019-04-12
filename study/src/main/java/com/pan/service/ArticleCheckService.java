@@ -2,8 +2,6 @@ package com.pan.service;
 
 import com.pan.entity.ArticleCheck;
 import com.pan.query.QueryArticleCheck;
-import com.pan.query.QueryBase;
-
 import java.util.Map;
 
 /**
