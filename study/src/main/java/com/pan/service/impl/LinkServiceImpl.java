@@ -17,6 +17,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.constant.RedisChannelConstant;
+import com.pan.common.enums.CacheSyncEnum;
 import com.pan.common.enums.LinkStatusEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.UserStatusEnum;
@@ -28,6 +30,7 @@ import com.pan.query.QueryLink;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.LinkService;
 import com.pan.service.OperateLogService;
+import com.pan.util.Publisher;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -43,7 +46,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	/**
 	 * 上线链接
 	 */
-	public LoadingCache<String, List<Link>> onlineLinkCache;
+	public static LoadingCache<Long, List<Link>> onlineLinkCache;
 
 	@Autowired
 	private LinkMapper linkMapper;
@@ -60,9 +63,9 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	public void initCache() {
 		logger.info("初始化上线链接系统配置。。。");
 		onlineLinkCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS)
-				.build(new CacheLoader<String, List<Link>>() {
+				.build(new CacheLoader<Long, List<Link>>() {
 					@Override
-					public List<Link> load(String key) throws Exception {
+					public List<Link> load(Long key) throws Exception {
 						logger.info("onlineLinkCache加载上线链接，key={}", key);
 						QueryLink queryLink = new QueryLink();
 						queryLink.setStatus(LinkStatusEnum.STATUS_NORMAL.getCode());
@@ -109,7 +112,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		// 记录日志
 		String changedFields = ValidationUtils.getChangedFields(linkInDb, link);
 		operateLogService.addOperateLog("id=" + link.getId() + changedFields, OperateLogTypeEnum.LINK_EDIT);
-		onlineLinkCache.refresh(MyConstant.ONLINE_LINK_LIST);
+		sendChannelMessage();
 	}
 	
 	/**
@@ -124,7 +127,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 		}
 		deleteByPrimaryKey(id);
 		operateLogService.addOperateLog(linkInDb.toString(), OperateLogTypeEnum.LINK_DELETE);
-		onlineLinkCache.refresh(MyConstant.ONLINE_LINK_LIST);
+		sendChannelMessage();
 	}
 
 	@Override
@@ -144,24 +147,32 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 			message = "下线链接成功";
 			String content = "下线链接，链接id=" + id;
 			updateByPrimaryKeySelective(updateLink);
-			operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_ENABLE);
-			onlineLinkCache.refresh(MyConstant.ONLINE_LINK_LIST);
+			operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_DISABLE);
+			sendChannelMessage();
 		} else if (UserStatusEnum.STATUS_NORMAL.getCode().equals(status)) {
 			message = "上线链接成功";
 			String content = "上线链接，链接id=" + id;
 			updateByPrimaryKeySelective(updateLink);
-			operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_DISABLE);
-			onlineLinkCache.refresh(MyConstant.ONLINE_LINK_LIST);
+			operateLogService.addOperateLog(content, OperateLogTypeEnum.LINK_ENABLE);
+			sendChannelMessage();
 		} else {
 			message = "操作错误，请稍后重试";
 		}
 		return message;
 	}
-
+	
+	/**
+	 * 发送消息通知
+	 */
+	private void sendChannelMessage(){
+		String channelMessage=CacheSyncEnum.LINK.getName()+":"+MyConstant.DEFAULT_KEY;
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+	}
+	
 	@Override
 	public List<Link> getOnlineLinkList() {
 		try {
-			return (List<Link>) onlineLinkCache.get(MyConstant.ONLINE_LINK_LIST);
+			return (List<Link>) onlineLinkCache.get(MyConstant.DEFAULT_KEY);
 		} catch (ExecutionException e) {
 			logger.error("获取上线链接失败",e);
 		}

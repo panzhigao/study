@@ -12,7 +12,11 @@ public enum CacheSyncEnum {
     /**
      * 系统配置
      */
-    SYSTEM_CONFIG(1,"config");
+    SYSTEM_CONFIG(1,"config"),
+    /**
+     * 链接
+     */
+    LINK(2,"link");
 
     private Integer code;
 

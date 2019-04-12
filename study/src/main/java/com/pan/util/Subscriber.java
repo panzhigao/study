@@ -1,8 +1,11 @@
 package com.pan.util;
 
+import com.pan.common.constant.MyConstant;
 import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.CacheSyncEnum;
 import com.pan.service.impl.ArticleCategoryServiceImpl;
+import com.pan.service.impl.LinkServiceImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisPubSub;
@@ -38,6 +41,9 @@ public class Subscriber extends JedisPubSub{
                 }else if(CacheSyncEnum.SYSTEM_CONFIG.getName().equals(type)){
                     logger.info("同步文章系统配置缓存");
                     SystemConfigUtils.refreshSystemConfig();
+                }else if(CacheSyncEnum.LINK.getName().equals(type)){
+                	logger.info("同步链接缓存");
+                    LinkServiceImpl.onlineLinkCache.refresh(MyConstant.DEFAULT_KEY);
                 }
             }
         }

@@ -193,7 +193,17 @@ public class ArticleController {
 	 * 跳转文章主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value={"/article/index/","/article/category/{categoryId:^\\d+}"})
+	@RequestMapping(method=RequestMethod.GET,value={"/article/index"})
+	public ModelAndView toArticleIndex(){
+		ModelAndView mav=new ModelAndView("html/article/articleIndex");
+		return mav;
+	}
+	
+	/**
+	 * 跳转文章主页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value={"/article/category/{categoryId:^\\d+}"})
 	public ModelAndView toArticleIndex(@PathVariable("categoryId")Long categoryId){
 		ModelAndView mav=new ModelAndView("html/article/articleIndex");
 		mav.addObject("categoryId",categoryId);

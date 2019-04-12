@@ -74,4 +74,8 @@ public class MyConstant {
      * 上线文章分类
      */
     public static final String ONLINE_ARTICLE_CATEGORY_LIST="onlineArticleCategoryList";
+    /**
+     * 默认key
+     */
+    public static final Long DEFAULT_KEY=0L;
 }

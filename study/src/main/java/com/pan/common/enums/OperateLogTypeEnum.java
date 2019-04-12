@@ -64,7 +64,7 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 链接上线
 	 */
-	LINK_ENABLE(504,"链接上线"),
+	LINK_ENABLE(505,"链接上线"),
 	/**
 	 * 文章分类新增
 	 */
