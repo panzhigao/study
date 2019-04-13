@@ -15,13 +15,13 @@ public interface RolePermissionService {
 	 * @param permissionId 权限id
 	 * @return
 	 */
-	int deleteRolePermissionByPermissionId(String permissionId);
+	int deleteRolePermissionByPermissionId(Long permissionId);
 	/**
 	 * 
 	 * @param roleId 角色id
 	 * @return
 	 */
-	int deleteRolePermissionByRoleId(String roleId);
+	int deleteRolePermissionByRoleId(Long roleId);
 	/**
 	 * 新增角色权限
 	 * @param list 角色权限集合

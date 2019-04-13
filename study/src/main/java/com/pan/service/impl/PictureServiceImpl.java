@@ -3,7 +3,6 @@ package com.pan.service.impl;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.pan.entity.Picture;
 import com.pan.mapper.PictureMapper;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.PictureService;
-import com.pan.util.IdUtils;
 import com.pan.util.TokenUtils;
 
 /**
@@ -35,9 +33,9 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	}
 		
 	@Override
-	public void deleteByPictureIds(String userId,String pictureIds) {
+	public void deleteByPictureIds(Long userId,String pictureIds) {
 		logger.info("删除的图片ids为{}",pictureIds);
-		if(StringUtils.isBlank(pictureIds)){
+		if(pictureIds==null){
 			logger.info("图片id不能为空",userId);
 			throw new BusinessException("图片id不能为空");
 		}
@@ -54,7 +52,6 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	public void insertPicture(String pictureUrl, String picturePath) {
 		Picture picture=new Picture();
 		picture.setUserId(TokenUtils.getLoginUserId());
-        picture.setPictureId(IdUtils.generatePictureId());
         picture.setPictureUrl(pictureUrl);
         picture.setPicturePath(picturePath);
         picture.setCreateTime(new Date());

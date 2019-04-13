@@ -20,7 +20,7 @@ public class LoginHistoryMapperTest extends BaseTest {
     @Test
     public void insert() throws Exception {
         LoginHistory loginHistory=new LoginHistory();
-        loginHistory.setUserId("123");
+        loginHistory.setUserId(123L);
         loginHistory.setUsername("pzg");
         loginHistory.setIp(IPUtils.ip2Integer("127.0.0.1"));
         loginHistory.setUserAgent("22222222222222222222222222222222222222222222");

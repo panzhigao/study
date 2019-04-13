@@ -1,5 +1,6 @@
 package com.pan.entity;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.pan.common.annotation.LoginGroup;
@@ -21,18 +22,14 @@ public class Comment extends BaseEntity{
 	 */
 	private static final long serialVersionUID = 854160848698390694L;
 	/**
-	 * 评论id
-	 */
-	private String commentId;
-	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 文章id
 	 */
-	@NotEmpty(message="文章id不能为空",groups = {LoginGroup.class})
-	private String articleId;
+	@NotNull(message="文章id不能为空",groups = {LoginGroup.class})
+	private Long articleId;
 	/**
 	 * 评论内容
 	 */

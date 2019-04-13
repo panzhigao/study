@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class ArticleCheckVO extends ArticleCheck{
-
 	/**
 	 * 
 	 */
@@ -25,4 +24,8 @@ public class ArticleCheckVO extends ArticleCheck{
 	 * 昵称
 	 */
 	private String nickname;
+	/**
+	 * 分类名称
+	 */
+	private String categoryName;
 }

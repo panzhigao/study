@@ -19,17 +19,17 @@ public class UserRole extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -2179680256579852350L;
 	/**
-	 * {@link User.userId}
+	 * {@link User.id}
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
-	 * {@link Role.roleId}
+	 * {@link Role.id}
 	 * 角色id
 	 */
-	private String roleId;
+	private Long roleId;
 
-	public UserRole(String userId, String roleId) {
+	public UserRole(Long userId, Long roleId) {
 		this.userId = userId;
 		this.roleId = roleId;
 	}

@@ -19,6 +19,7 @@
         <constructor-arg index="2" value="${jedis.port}" name="port" type="int"/>
         <constructor-arg index="3" value="${jedis.timeout}" name="timeout" type="int"/>
         <constructor-arg index="4" value="${jedis.password}" name="password" type="java.lang.String"/>
+        <constructor-arg index="5" value="${jedis.database}" name="database" type="int"/>
     </bean>
 
     <!--redis连接工厂 -->

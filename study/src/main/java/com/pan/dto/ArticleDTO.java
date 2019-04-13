@@ -23,4 +23,8 @@ public class ArticleDTO extends Article{
 	 * 用户头像
 	 */
 	private String userPortrait;
+	/**
+	 * 分类名称
+	 */
+	private String categoryName;
 }

@@ -17,10 +17,6 @@ public class UserExtension extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -9116871386273495175L;
 	/**
-	 * 用户id
-	 */
-	private String userId;
-	/**
 	 * 用户昵称
 	 */
 	private String nickname;

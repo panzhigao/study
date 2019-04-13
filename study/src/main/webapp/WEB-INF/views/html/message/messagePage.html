@@ -77,7 +77,7 @@ layui.config({
                             var commentContent=message.commentContent;
                             commentContent=/^\{html\}/.test(commentContent) ? commentContent.replace(/^\{html\}/, ''):fly.content(commentContent);
                             if(message.messageType=='1'){
-                                one='<li data-messageid="'+message.messageId+'">'+
+                                one='<li data-messageid="'+message.id+'">'+
                                     '<blockquote class="layui-elem-quote">'+
                                     '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>评论了您的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+message.contentName+'</cite></a>'+
                                     '<cite style="color:black;">'+commentContent+'</cite>'+
@@ -85,7 +85,7 @@ layui.config({
                                     '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                     '</li>';
                             }else if(message.messageType=='2'){
-                                one='<li data-messageid="'+message.messageId+'">'+
+                                one='<li data-messageid="'+message.id+'">'+
                                     '<blockquote class="layui-elem-quote">'+
                                     '您发表的文章<cite>'+message.contentName+'</cite>因'+
                                     commentContent+
@@ -93,14 +93,14 @@ layui.config({
                                     '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                     '</li>';
                             }else if(message.messageType=='3'){
-                                one='<li data-messageid="'+message.messageId+'">'+
+                                one='<li data-messageid="'+message.id+'">'+
                                 '<blockquote class="layui-elem-quote">'+
                                 '您发表的文章<cite>'+message.contentName+'</cite>'+
                                 '通过审核</blockquote>'+
                                 '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                 '</li>';
                         	}else if(message.messageType=='4'){
-                        		one='<li data-messageid="'+message.messageId+'">'+
+                        		one='<li data-id="'+message.id+'">'+
                                 '<blockquote class="layui-elem-quote">'+
                                 '<a href="$!{rc.contextPath}/u/'+message.senderUserId+'" target="_blank"><cite>'+message.senderName+'</cite></a>点赞了您的评论<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'#comment"><cite>'+commentContent+'</cite></a>'+
                                 '</blockquote>'+

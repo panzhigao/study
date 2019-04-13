@@ -12,9 +12,9 @@ public class QueryPraise extends QueryBase{
 	/**
 	 * 评论id
 	 */
-	private String commentId;
+	private Long commentId;
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 }

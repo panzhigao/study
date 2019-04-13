@@ -1,6 +1,7 @@
 package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import com.pan.service.UserExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,20 +23,23 @@ public class UserController {
 		
 	@Autowired
 	private UserService userService;
-	
+
+	@Autowired
+	private UserExtensionService userExtensionService;
+
 	/**
 	 * 跳转用户主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/u/{userId}")
-	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")String userId){
+	@RequestMapping(method=RequestMethod.GET,value="/u/{userId:^\\d+}")
+	public ModelAndView toUserIndex(HttpServletRequest request,@PathVariable("userId")Long userId){
 		ModelAndView mav=new ModelAndView("html/user/home");
 		//用户信息
-		User u = userService.findByUserId(userId);
+		User u = userService.selectByPrimaryKey(userId);
 		if(u==null){
 			throw new BusinessException("用户不存在");
 		}
-		UserExtension userExtension=userService.findExtensionByUserId(u.getUserId());
+		UserExtension userExtension=userExtensionService.selectByPrimaryKey(u.getId());
 		mav.addObject("u",u);
 		mav.addObject("uExtension",userExtension);
 		return mav;

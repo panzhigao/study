@@ -4,8 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.pan.entity.Collection">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="collection_id" property="collectionId" jdbcType="VARCHAR"/>
-        <result column="article_id" property="articleId" jdbcType="VARCHAR"/>
+        <result column="article_id" property="articleId" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
@@ -13,9 +12,15 @@
 
 
     <sql id="Base_Column_List">
-    id, collection_id, user_id, article_id, create_time, title
+    id, user_id, article_id, create_time, title
     </sql>
 
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_collection
+        where id = #{id,jdbcType=BIGINT}
+    </select>
 
     <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryCollection">
         select <include refid="Base_Column_List"/> from t_collection
@@ -48,9 +53,6 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="collectionId != null">
-                collection_id,
-            </if>
             <if test="userId != null">
                 user_id,
             </if>
@@ -68,14 +70,11 @@
             <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="collectionId != null">
-                #{collectionId,jdbcType=VARCHAR},
-            </if>
             <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
+                #{userId,jdbcType=BIGINT},
             </if>
             <if test="articleId != null">
-                #{articleId,jdbcType=VARCHAR},
+                #{articleId,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -86,8 +85,8 @@
         </trim>
     </insert>
 
-    <delete id="deleteByUserIdAndArticleId">
-  	delete from t_collection where user_id=#{userId} and article_id=#{articleId}
-  </delete>
+    <delete id="deleteByPrimaryKey">
+  	  delete from t_collection where id=#{id}
+    </delete>
 
 </mapper>

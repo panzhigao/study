@@ -4,36 +4,37 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.ArticleCheck">
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
-    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
+    <result column="user_id"        	property="userId"          jdbcType="BIGINT" />
     <result column="username"        	property="username"        jdbcType="VARCHAR" />
-    <result column="article_id"        	property="articleId"       jdbcType="VARCHAR" />
+    <result column="article_id"        	property="articleId"       jdbcType="BIGINT" />
     <result column="title"              property="title"           jdbcType="VARCHAR" />
     <result column="complete_flag"      property="completeFlag"    jdbcType="INTEGER" />
     <result column="check_type"         property="checkType"       jdbcType="INTEGER" />
-    <result column="check_user_id"      property="checkUserId"     jdbcType="VARCHAR" />
+    <result column="check_user_id"      property="checkUserId"     jdbcType="BIGINT" />
     <result column="check_username"     property="checkUsername"   jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="check_time"         property="checkTime"       jdbcType="TIMESTAMP" />
     <result column="approve_flag"       property="approveFlag"     jdbcType="INTEGER" />
-    <result column="remark"             property="remark"     jdbcType="VARCHAR" />
+    <result column="remark"             property="remark"          jdbcType="VARCHAR" />
+    <result column="category_id"        property="categoryId"      jdbcType="BIGINT" />
   </resultMap>
   
   <resultMap id="ResultMapWithBLOBs" type="com.pan.entity.ArticleCheck" extends="BaseResultMap">  
     <result column="content"    		property="content"        jdbcType="LONGVARCHAR" />
   </resultMap> 
   
-  <resultMap id="DetailResultMap" type="com.pan.vo.ArticleCheckVO" extends="BaseResultMap">  
-    <result column="username"    		property="username"        jdbcType="VARCHAR" />
-    <result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />
-  </resultMap> 
+  <!--<resultMap id="DetailResultMap" type="com.pan.vo.ArticleCheckVO" extends="BaseResultMap">  -->
+    <!--<result column="username"    		property="username"        jdbcType="VARCHAR" />-->
+    <!--<result column="nickname"    		property="nickname"        jdbcType="VARCHAR" />-->
+  <!--</resultMap> -->
   
   <sql id="Base_Column_List">
-  c.id,c.user_id,c.username,c.article_id,c.title,c.complete_flag,c.check_type,c.check_user_id,
-  c.check_username,c.create_time,c.check_time,c.approve_flag,remark
+  id,user_id,username,article_id,title,complete_flag,check_type,check_user_id,
+  check_username,create_time,check_time,approve_flag,remark,category_id
   </sql>  
   
   <sql id="Blob_Column_List">
-    c.content
+    content
   </sql>
        
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
@@ -69,15 +70,14 @@
 
   <sql id="whereSql">
   	<where> 
-  		1=1
   		<if test="userId !=null and userId !='' ">
-  			and c.user_id=#{userId}
+  			and user_id=#{userId}
   		</if>    
   		<if test="articleId !=null and articleId !='' ">
-  			and c.article_id=#{articleId}
+  			and article_id=#{articleId}
   		</if>
   		<if test="completeFlag !=null">
-  			and c.complete_flag=#{completeFlag}
+  			and complete_flag=#{completeFlag}
   		</if>
   	</where>
   </sql>
@@ -129,19 +129,22 @@
       <if test="content != null">
         content,
       </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>
       <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
+        #{articleId,jdbcType=BIGINT},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -153,7 +156,7 @@
         #{checkType,jdbcType=INTEGER},
       </if>
       <if test="checkUserId != null">
-        #{checkUserId,jdbcType=VARCHAR},
+        #{checkUserId,jdbcType=BIGINT},
       </if>
       <if test="checkUsername != null">
         #{checkUsername,jdbcType=VARCHAR},
@@ -170,6 +173,9 @@
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   
@@ -183,7 +189,7 @@
   			complete_flag=#{completeFlag,jdbcType=INTEGER},
   		</if>
   		<if test="checkUserId !=null ">
-  			check_user_id=#{checkUserId,jdbcType=VARCHAR},
+  			check_user_id=#{checkUserId,jdbcType=BIGINT},
   		</if>
   		<if test="checkUsername !=null ">
   			check_username=#{checkUsername,jdbcType=VARCHAR},

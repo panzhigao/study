@@ -4,12 +4,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import com.pan.common.constant.RedisChannelConstant;
+import com.pan.common.enums.CacheSyncEnum;
+import com.pan.util.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.pan.common.annotation.LogMeta;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.SystemConfig;
@@ -17,7 +18,6 @@ import com.pan.mapper.SystemConfigMapper;
 import com.pan.service.AbstractBaseService;
 import com.pan.service.OperateLogService;
 import com.pan.service.SystemConfigService;
-import com.pan.util.SystemConfigUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 import com.pan.vo.SystemConfigParam;
@@ -77,12 +77,12 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		SystemConfig systemConfigInDb = systemConfigMapper.selectByPrimaryKey(1L);
 		systemConfig.setId(1L);
 		systemConfig.setUpdateTime(new Date());
-		systemConfig.setUpdateUser(TokenUtils.getLoginUserId());
+		systemConfig.setUpdateUserId(TokenUtils.getLoginUserId());
 		int count = systemConfigMapper.updateByPrimaryKeySelective(systemConfig);
 		logger.info("更新系统配置，更新条数：{}",count);
 		String changedFields = ValidationUtils.getChangedFields(systemConfigInDb, systemConfig);
 		operateLogService.addOperateLog(changedFields,OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
-		SystemConfigUtils.refreshSystemConfig();
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, CacheSyncEnum.SYSTEM_CONFIG.getName()+":"+1);
 	}
 
 }

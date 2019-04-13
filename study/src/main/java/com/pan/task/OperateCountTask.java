@@ -74,8 +74,9 @@ public class OperateCountTask {
 				logger.info("------->>执行定时任务,更新文章数据库评论数start,锁[key={},value={}]", LOCK_COMMENT_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_COMMENT + "*", SCAN_COUNT);
 				for (String string : keys) {
-					String articleId = string.substring(KEY_COMMENT.length());
+					String articleIdStr = string.substring(KEY_COMMENT.length());
 					String countStr = JedisUtils.getString(string);
+					Long articleId=Long.valueOf(articleIdStr);
 					Integer commentCount = Integer.valueOf(countStr);
 					int updateArticleCommentCoumts = articleService.updateArticleCommentCount(articleId, commentCount);
 					if (updateArticleCommentCoumts == 1) {
@@ -106,11 +107,12 @@ public class OperateCountTask {
 				logger.info("------->>执行定时任务,更新文章数据库阅读数start,锁[key={},value={}]", LOCK_VIEW_COUNT, value);
 				List<String> keys = JedisUtils.scan(KEY_VIEW + "*", SCAN_COUNT);
 				for (String string : keys) {
-					String articleId = string.substring(KEY_VIEW.length());
+					String articleIdStr = string.substring(KEY_VIEW.length());
 					String countStr = JedisUtils.getString(string);
+					Long articleId=Long.valueOf(articleIdStr);
 					Integer viewCount = Integer.valueOf(countStr);
-					int updateArticleCommentCoumts = articleService.updateArticleViewCount(articleId, viewCount);
-					if (updateArticleCommentCoumts == 1) {
+					int updateArticleCommentCounts = articleService.updateArticleViewCount(articleId, viewCount);
+					if (updateArticleCommentCounts == 1) {
 						JedisUtils.delete(string);
 					}
 				}
@@ -148,9 +150,9 @@ public class OperateCountTask {
 					QueryScoreHistory queryScoreHistory = new QueryScoreHistory();
 					queryScoreHistory.setScoreDate(new java.sql.Date(DateUtils.getYesterdayDate().getTime()));
 					for (UserExtension userExtension : resultList) {
-						updateExtension.setUserId(userExtension.getUserId());
+						updateExtension.setId(userExtension.getId());
 						// 查询昨日是否签到
-						queryScoreHistory.setUserId(userExtension.getUserId());
+						queryScoreHistory.setUserId(userExtension.getId());
 						queryScoreHistory.setType(ScoreTypeEnum.CHECK_IN.getCode());
 						int checkCount = scoreHistoryService.countByParams(queryScoreHistory);
 						// 昨天没有签到,连续签到天数重置为0
@@ -166,7 +168,7 @@ public class OperateCountTask {
 						if (updateExtension.getContinuousCheckInDays() != null
 								|| updateExtension.getContinuousLoginDays() != null) {
 							updateExtension.setUpdateTime(new Date());
-							userExtensionService.updateByUserId(updateExtension);
+							userExtensionService.updateByPrimaryKeySelective(userExtension);
 						}
 						updateExtension.setContinuousCheckInDays(null);
 						updateExtension.setContinuousLoginDays(null);

@@ -275,7 +275,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       .replace(/\n/g, '<br>') //转义换行   
       return content;
     }
-    
+
+    //TODO 消息通知修改
     //新消息通知
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');

@@ -4,24 +4,22 @@
 
 	<resultMap id="BaseResultMap" type="com.pan.entity.Permission">
 		<id column="id" jdbcType="BIGINT" property="id" />
-		<result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
 		<result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
-		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-		<result column="pid" jdbcType="VARCHAR" property="pid" />
+		<result column="pid" jdbcType="BIGINT" property="pid" />
 		<result column="level" jdbcType="INTEGER" property="level" />
 		<result column="sort" jdbcType="INTEGER" property="sort" />
 		<result column="icon" jdbcType="VARCHAR" property="icon" />
 		<result column="type" jdbcType="INTEGER" property="type" />
-		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+		<result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, permission_id, permission_name, url, create_time, pid,
-		level, sort,
-		icon, type,create_user, update_time, update_user
+		id, permission_name, url, pid,level, sort,
+		icon, type,create_time,create_user_id, update_time, update_user_id
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
@@ -32,51 +30,32 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 
-	<select id="selectByPermissionId" parameterType="java.lang.String"
-		resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from t_permission
-		where permission_id = #{permissionId,jdbcType=VARCHAR}
-	</select>
-
-	<select id="findPageable" resultMap="BaseResultMap"
-		parameterType="com.pan.query.QueryPermission">
+	<select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPermission">
 		select
 		<include refid="Base_Column_List" />
 		from t_permission
 		<where>
-			<if test="permissionId !=null and permissionId !=''">
-				and permission_id=#{permissionId}
-			</if>
 			<if test="permissionName !=null and permissionName !=''">
 				and permission_name like CONCAT('%',#{permissionName},'%')
 			</if>
 		</where>
-		order by create_time desc
+		order by create_time asc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
 	</select>
 
-
-	<insert id="insertSelective" parameterType="com.pan.entity.Permission">
+	<insert id="insertSelective" parameterType="com.pan.entity.Permission" useGeneratedKeys="true" keyProperty="id">
 		insert into t_permission
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
-			</if>
-			<if test="permissionId != null">
-				permission_id,
 			</if>
 			<if test="permissionName != null">
 				permission_name,
 			</if>
 			<if test="url != null">
 				url,
-			</if>
-			<if test="createTime != null">
-				create_time,
 			</if>
 			<if test="pid != null">
 				pid,
@@ -93,22 +72,22 @@
 			<if test="type != null">
 				type,
 			</if>
-			<if test="createUser != null">
-				create_user,
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createUserId != null">
+				create_user_id,
 			</if>
 			<if test="updateTime != null">
 				update_time,
 			</if>
-			<if test="updateUser != null">
-				update_user,
+			<if test="updateUserId != null">
+				update_user_id,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				#{id,jdbcType=BIGINT},
-			</if>
-			<if test="permissionId != null">
-				#{permissionId,jdbcType=VARCHAR},
 			</if>
 			<if test="permissionName != null">
 				#{permissionName,jdbcType=VARCHAR},
@@ -116,11 +95,8 @@
 			<if test="url != null">
 				#{url,jdbcType=VARCHAR},
 			</if>
-			<if test="createTime != null">
-				#{createTime,jdbcType=TIMESTAMP},
-			</if>
 			<if test="pid != null">
-				#{pid,jdbcType=VARCHAR},
+				#{pid,jdbcType=BIGINT},
 			</if>
 			<if test="level != null">
 				#{level,jdbcType=INTEGER},
@@ -134,21 +110,23 @@
 			<if test="type != null">
 				#{type,jdbcType=INTEGER},
 			</if>
-			<if test="createUser != null">
-				#{createUser,jdbcType=VARCHAR},
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUserId != null">
+				#{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				#{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				#{updateUser,jdbcType=VARCHAR},
+			<if test="updateUserId != null">
+				#{updateUserId,jdbcType=BIGINT},
 			</if>
 		</trim>
 	</insert>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from
-		t_permission
+		delete from t_permission
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
@@ -160,39 +138,33 @@
 
 	<select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">
 		select
-		tp.permission_id,tp.permission_name,tp.url,max(ifnull(tr.role_id,0))marker,tp.pid,tp.sort
+		tp.id,tp.permission_name,tp.url,max(ifnull(tr.id,0))marker,tp.pid,tp.sort
 		from t_permission tp
 		left join t_role_permission trp on
-		trp.permission_id=tp.permission_id
-		left join (select role_id from
-		t_role where role_id =#{roleId}) tr on
-		tr.role_id=trp.role_id
+		trp.permission_id=tp.id
+		left join (select id from
+		t_role where id =#{roleId}) tr on
+		tr.id=trp.role_id
 		group by
-		tp.permission_id
+		tp.id
 	</select>
 
 	<select id="getPermissionByRoleId" resultMap="BaseResultMap">
 		select
-		tp.permission_id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort,tp.type
+		tp.id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort,tp.type
 		from t_role_permission trp join t_permission tp on
-		trp.permission_id=tp.permission_id
+		trp.permission_id=tp.id
 		where trp.role_id=#{roleId}
 	</select>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.Permission">
 		update t_permission
 		<set>
-			<if test="permissionId != null">
-				permission_id = #{permissionId,jdbcType=VARCHAR},
-			</if>
 			<if test="permissionName != null">
 				permission_name = #{permissionName,jdbcType=VARCHAR},
 			</if>
 			<if test="url != null">
 				url = #{url,jdbcType=VARCHAR},
-			</if>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="pid != null">
 				pid = #{pid,jdbcType=VARCHAR},
@@ -209,14 +181,17 @@
 			<if test="type != null">
 				type = #{type,jdbcType=INTEGER},
 			</if>
-			<if test="createUser != null">
-				create_user = #{createUser,jdbcType=VARCHAR},
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=BIGINT},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="updateUser != null">
-				update_user = #{updateUser,jdbcType=VARCHAR},
+			<if test="updateUserId != null">
+				update_user_id = #{updateUserId,jdbcType=BIGINT},
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
@@ -224,13 +199,13 @@
 
 	<select id="findPermissionsByUserId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.permission_id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user
+		tp.id,tp.id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user_id
 		from t_user tu left
-		join t_user_role tur on tu.user_id=tur.user_id
+		join t_user_role tur on tu.id=tur.user_id
 		join
 		t_role_permission trp on trp.role_id=tur.role_id
 		join t_permission tp
-		on tp.permission_id=trp.permission_id where
-		tu.user_id=#{userId}
+		on tp.id=trp.permission_id where
+		tu.id=#{userId}
 	</select>
 </mapper>

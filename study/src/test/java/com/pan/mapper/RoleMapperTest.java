@@ -22,7 +22,7 @@ public class RoleMapperTest extends BaseTest {
 
 	@Test
 	public void testFindByRoleIds() {
-		String[] roleIds={"r10006","r1001308"};
+		Long[] roleIds={10006L,1001308L};
 		List<Role> findByRoleIds = roleMapper.findByRoleIds(roleIds);
 		System.out.println(findByRoleIds);
 	}

@@ -41,7 +41,7 @@ public class ForgetController {
 	public ResultMsg sendValidationCode(String telephone){
 		User user=new User();
 		user.setTelephone(telephone);
-		String sendValidationCode = userService.sendValidationCode(user,MyConstant.OPERATETYPE_FINDPASSWORD);
+		String sendValidationCode = userService.sendValidationCode(user,MyConstant.OPERATE_TYPE_FIND_PASSWORD);
 		return ResultMsg.ok("发送验证码成功",sendValidationCode);
 	}
 	
@@ -68,7 +68,7 @@ public class ForgetController {
 			//解密密码
 			String decodeByPrivateKey = RSAUtil.decodeByPrivateKey(newPassword, privateKey);
 			User updateUser=new User();
-			updateUser.setUserId(userInDb.getUserId());
+			updateUser.setId(userInDb.getId());
 			updateUser.setPassword(PasswordUtils.getEncryptedPwd(decodeByPrivateKey));
 			userService.updateUserByUserId(updateUser);
 		}else{

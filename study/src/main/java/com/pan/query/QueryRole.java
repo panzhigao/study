@@ -17,7 +17,7 @@ public class QueryRole extends QueryBase {
 	/**
 	 * 角色id
 	 */
-	private String roleId;
+	private Long roleId;
 	/**
 	 * 角色名称
 	 */

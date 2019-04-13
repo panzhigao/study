@@ -6,11 +6,11 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, user_id, role_id, create_time, create_user
+    id, user_id, role_id, create_time, create_user_id
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -41,8 +41,8 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="createUser != null">
-        create_user,
+      <if test="createUserId != null">
+        create_user_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -50,7 +50,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="roleId != null">
         #{roleId,jdbcType=VARCHAR},
@@ -58,8 +58,8 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        #{createUser,jdbcType=VARCHAR},
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -68,7 +68,7 @@
     update t_user_role
     <set>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="roleId != null">
         role_id = #{roleId,jdbcType=VARCHAR},
@@ -76,17 +76,17 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        create_user = #{createUser,jdbcType=VARCHAR},
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
 
   <insert id="batchAddUserRole" parameterType="java.util.List">
-    insert into t_user_role (user_id,role_id,create_time,create_user) values
+    insert into t_user_role (user_id,role_id,create_time,create_user_id) values
     <foreach collection="list" item="item" separator="," close=";">
-      (#{item.userId,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP},#{item.createUser,jdbcType=VARCHAR})
+      (#{item.userId,jdbcType=VARCHAR},#{item.roleId,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP},#{item.createUserId,jdbcType=VARCHAR})
     </foreach>
   </insert>
 
@@ -102,13 +102,13 @@
   <sql id="whereSql">
     <where>
       <if test="userId != null">
-        and user_id = #{userId,jdbcType=VARCHAR}
+        and user_id = #{userId,jdbcType=BIGINT}
       </if>
       <if test="roleId != null">
         and role_id = #{roleId,jdbcType=VARCHAR}
       </if>
-      <if test="createUser != null">
-        and create_user = #{createUser,jdbcType=VARCHAR}
+      <if test="createUserId != null">
+        and create_user_id = #{createUserId,jdbcType=VARCHAR}
       </if>
     </where>
   </sql>

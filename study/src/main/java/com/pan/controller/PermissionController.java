@@ -21,6 +21,7 @@ import com.pan.service.PermissionService;
  *
  */
 @Controller
+@RequestMapping("/user/permission")
 public class PermissionController {
 	
 	@Autowired
@@ -30,7 +31,7 @@ public class PermissionController {
 	 * 跳转权限管理页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/permission")
+	@RequestMapping(method=RequestMethod.GET,value="")
 	@RequiresPermissions("/user/permission")
 	public String toPermissionPage(){
 		return "html/permission/permissionPage";
@@ -40,20 +41,10 @@ public class PermissionController {
 	 * 跳转权限新增页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/permission/addPage")
+	@RequestMapping(method=RequestMethod.GET,value="addPage")
 	@RequiresPermissions("/user/permission/doAdd")
 	public String toPermissionAddPage(){
 		return "html/permission/permissionAdd";
-	}
-	
-	/**
-	 * 跳转权限编辑页面
-	 * @return
-	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/permissionEdit")
-	@RequiresPermissions("/user/permission/doEdit")
-	public String toPermissionEditPage(){
-		return "html/permission/permissionEdit";
 	}
 	
 	/**
@@ -61,7 +52,7 @@ public class PermissionController {
 	 * @param permission
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doAdd")
+	@RequestMapping(method=RequestMethod.POST,value="doAdd")
 	@ResponseBody
 	@RequiresPermissions("/user/permission/doAdd")
 	public ResultMsg addPermission(Permission permission){
@@ -70,10 +61,28 @@ public class PermissionController {
 	}
 	
 	/**
+	 * 跳转权限编辑页面
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="editPage")
+	@RequiresPermissions("/user/permission/doEdit")
+	public String toPermissionEditPage(){
+		return "html/permission/permissionEdit";
+	}
+	
+	@RequestMapping(method=RequestMethod.POST,value="doEdit")
+	@ResponseBody
+	@RequiresPermissions("/user/permission/doEdit")
+	public ResultMsg editPermission(Permission permission){
+		permissionService.updatePermission(permission);
+		return ResultMsg.ok();
+	}
+	
+	/**
 	 * 获取权限数据
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/getData")
+	@RequestMapping(method=RequestMethod.POST,value="getData")
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission")
 	public ResultMsg loadPermissions(){
@@ -81,10 +90,10 @@ public class PermissionController {
 		return ResultMsg.build(ResultCodeEnum.SUCCESS, ResultCodeEnum.SUCCESS.getMsg(),nodes);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doDelete")
+	@RequestMapping(method=RequestMethod.POST,value="doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/permission/doDelete")
-	public ResultMsg deletePermission(String permissionId){
+	public ResultMsg deletePermission(Long permissionId){
 		permissionService.deleteByPermissionId(permissionId);
 		return ResultMsg.ok("删除权限成功");
 	}
@@ -94,26 +103,19 @@ public class PermissionController {
 	 * @param roleId
 	 * @return
 	 */
-	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/permission/getPermissionTree")
+	@RequestMapping(value="getPermissionTree")
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission")
-	public List<Tree> loadRoleTree(String roleId){
+	public List<Tree> loadRoleTree(Long roleId){
 		return permissionService.getPermissionTreeData(roleId);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/detail")
+	@RequestMapping(method=RequestMethod.POST,value="detail")
 	@ResponseBody
 	@RequiresPermissions(value="/user/permission/doEdit")
-	public ResultMsg loadPermissionDetail(String permissionId){
-		Permission permission = permissionService.getByPermissionId(permissionId);
+	public ResultMsg loadPermissionDetail(Long permissionId){
+		Permission permission = permissionService.selectByPrimaryKey(permissionId);
 		return ResultMsg.ok("获取权限信息成功", permission);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/user/permission/doEdit")
-	@ResponseBody
-	@RequiresPermissions("/user/permission/doEdit")
-	public ResultMsg editPermission(Permission permission){
-		permissionService.updatePermission(permission);
-		return ResultMsg.ok();
-	}
 }

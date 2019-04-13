@@ -72,7 +72,7 @@ layui.use(['table','jquery'], function(){
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'detail'){
-	      window.open("$!{rc.contextPath}/article/"+data.articleId, '_blank').location;
+	      window.open("$!{rc.contextPath}/article/"+data.id, '_blank').location;
 	    } else if(obj.event === 'del'){
     	  if(data.status==3){
     		 layer.alert('发布中文章不能删除');
@@ -83,7 +83,7 @@ layui.use(['table','jquery'], function(){
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/article/doDelete",
 	    		type:"post",
-	    		data:{articleId:data.articleId},
+	    		data:{articleId:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -105,7 +105,7 @@ layui.use(['table','jquery'], function(){
 	    		 layer.alert('发布中文章不能编辑');
 	    		 return;
 	    	 }
-	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.articleId;	
+	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.id;	
 	    }
 	  });
 	  
@@ -136,12 +136,14 @@ layui.use(['table','jquery'], function(){
 	    },
 	    where:{status:'$!{status}'},
 	    cols: [[ //表头
-	      {field: 'articleId', title: '文章ID', width:100,fixed: 'left'},
+	      {field: 'id', title: '文章ID', width:100,fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:200,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.id+"'>"+d.title+"</a>";
 	      }},
+          {field: 'categoryName', title: '文章分类', width:90},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
+	            var temp;
 	    	  	switch(d.status){
 		    	  	case 0:temp='审核未通过';break;
 		    	  	case 1:temp='草稿';break;
@@ -224,7 +226,7 @@ layui.use(['table','jquery'], function(){
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/collection/remove",
 	    		type:"post",
-	    		data:{articleId:data.articleId},
+	    		data:{id:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -263,6 +265,7 @@ layui.use(['table','jquery'], function(){
 	    	$('#collectionCounts').html(count);
 	    },
 	    cols: [[ //表头
+          {field: 'id', title: 'ID', width:100, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, fixed: 'left'},
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";

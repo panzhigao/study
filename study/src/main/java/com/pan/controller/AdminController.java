@@ -86,12 +86,12 @@ public class AdminController {
 	public ModelAndView toMainPage(){
 		ModelAndView mav=new ModelAndView("html/main/mainPage");
 		User loginUser = TokenUtils.getLoginUser();
-		String loingUserId = loginUser.getUserId();
+		Long loginUserId = loginUser.getId();
 		//未读消息数
-		int unReadMessageCount = messageService.countMessage(loingUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
+		int unReadMessageCount = messageService.countMessage(loginUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
 		//文章总数
 		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setUserId(loingUserId);
+		queryArticle.setUserId(loginUserId);
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		int articleTotalCount = articleService.getCount(queryArticle);
 		//如果有审核文章的权限，查询待审核文章数
@@ -103,16 +103,16 @@ public class AdminController {
 		}
 		//收藏数
 		QueryCollection queryCollection=new QueryCollection();
-		queryCollection.setUserId(loingUserId);
+		queryCollection.setUserId(loginUserId);
 		int collectionCount = collectionService.countByParams(queryCollection);
-		UserExtension findByUserId = userExtensionService.findByUserId(loingUserId);
+		UserExtension findByUserId = userExtensionService.selectByPrimaryKey(loginUserId);
 		Integer score = findByUserId.getScore();
 		QueryPraise queryPraise=new QueryPraise();
-		queryPraise.setUserId(loingUserId);
+		queryPraise.setUserId(loginUserId);
 		//我的点赞数
 		int praiseCount = praiseService.countByParams(queryPraise);
 		QueryPicture queryPicture=new QueryPicture();
-		queryPicture.setUserId(loingUserId);
+		queryPicture.setUserId(loginUserId);
 		int pictureCount = pictureService.countByParams(queryPicture);
 		//上次登陆时间
 		Date lastLoginTime = loginUser.getLastLoginTime();
@@ -122,7 +122,7 @@ public class AdminController {
 		queryLoginHistory.setPageNo(PageConstant.DEFAULT_PAGE_NO);
 		queryLoginHistory.setPageSize(PageConstant.PAGE_SIZE_5);
 		List<LoginHistoryVO> loginHistoryList = loginHistoryService.findVOPageable(queryLoginHistory);
-		UserExtension extension = userExtensionService.findByUserId(loingUserId);
+		UserExtension extension = userExtensionService.selectByPrimaryKey(loginUserId);
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
 		mav.addObject("collectionCount", collectionCount);

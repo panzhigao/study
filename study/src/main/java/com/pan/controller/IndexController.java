@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
-import com.pan.entity.Article;
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
@@ -50,7 +49,7 @@ public class IndexController {
 		ModelAndView mav=new ModelAndView("html/index");
 		//用户已登录
 		if(TokenUtils.isAuthenticated()){
-			UserExtension extension = userExtensionService.findByUserId(TokenUtils.getLoginUserId());
+			UserExtension extension = userExtensionService.selectByPrimaryKey(TokenUtils.getLoginUserId());
 			mav.addObject("checkInDays", extension.getContinuousCheckInDays());
 			//查询今日是否已签到
 			QueryScoreHistory queryScoreHistory=new QueryScoreHistory();
@@ -77,14 +76,14 @@ public class IndexController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/api/getStickData")
 	@ResponseBody
-	public ResultMsg loadStickData(){
+	public Map<String,Object> loadStickData(){
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setPageNo(1);
 		queryArticle.setPageSize(4);
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		queryArticle.setWhereCondition("stick>0");
-		List<Article> list = articleService.findPageable(queryArticle);
-		return ResultMsg.ok("获取置顶帖成功", list);
+		Map<String, Object> dtoPageableMap = articleService.findDTOPageableMap(queryArticle);
+		return dtoPageableMap;
 	}
 	
 	/**

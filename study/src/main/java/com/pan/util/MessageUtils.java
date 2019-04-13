@@ -27,7 +27,7 @@ public class MessageUtils {
 	 * @param message
 	 * @return
 	 */
-	public static boolean sendToUser(String userId,String message){
+	public static boolean sendToUser(Long userId,String message){
 		boolean sendMessageToUser = myHandler.sendMessageToUser(userId, new TextMessage(message));
 		return sendMessageToUser;
 	}
@@ -47,7 +47,7 @@ public class MessageUtils {
 	 * @param message
 	 * @return 是否全部发送成功
 	 */
-	public static boolean sendMessageToAllExceptionUser(String message,Set<String> userIdSet){
+	public static boolean sendMessageToAllExceptionUser(String message,Set<Long> userIdSet){
 		boolean sendMessageToAllUsers = myHandler.sendMessageToAllUsersWithException(new TextMessage(message),userIdSet);
 		return sendMessageToAllUsers;
 	}

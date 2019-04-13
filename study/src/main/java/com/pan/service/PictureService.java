@@ -11,14 +11,14 @@ public interface PictureService extends BaseService<Picture>{
 	/**
 	 * 批量删除用户下的图片
 	 * @param userId
-	 * @param pictureId
+	 * @param pictureIds
 	 */
-	public void deleteByPictureIds(String userId,String pictureId);
+	void deleteByPictureIds(Long userId,String pictureIds);
 	/**
 	 * 
 	 * @param pictureUrl 图片访问url
 	 * @param picturePath 图片保存路径
 	 * @return
 	 */
-	public void insertPicture(String pictureUrl,String picturePath);
+	void insertPicture(String pictureUrl,String picturePath);
 }

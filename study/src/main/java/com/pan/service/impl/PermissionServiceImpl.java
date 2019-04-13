@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.PermissionTypeEnum;
-import com.pan.query.QueryPermission;
 import com.pan.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
 import com.pan.query.QueryRole;
-import com.pan.util.IdUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -65,8 +63,8 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 				throw new BusinessException("url不能为空");
 			}
 		}
-		if(StringUtils.isBlank(permission.getPid())){
-			permission.setPid("0");
+		if(permission.getPid()==null){
+			permission.setPid(0L);
 		}
 		if(permission.getSort()==null){
 			permission.setSort(1);
@@ -74,8 +72,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		Date now=new Date();
 		permission.setCreateTime(now);
 		User loginUser = TokenUtils.getLoginUser();
-		permission.setCreateUser(loginUser.getUserId());
-		permission.setPermissionId(IdUtils.generatePermissionId());
+		permission.setCreateUserId(loginUser.getId());
 		permissionMapper.insertSelective(permission);
 		//记录操作日志
 		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_ADD);
@@ -84,14 +81,14 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		//自动为超级管理员添加权限
 		List<Role> list = roleService.findPageable(queryRoleVO);
 		if(list.size()>0){
-			String roleId=list.get(0).getRoleId();
-			RolePermission rolePermission=new RolePermission(roleId,permission.getPermissionId());
+			Long roleId=list.get(0).getId();
+			RolePermission rolePermission=new RolePermission(roleId,permission.getId());
 			rolePermission.setCreateTime(now);
-			rolePermission.setCreateUser(loginUser.getUserId());
+			rolePermission.setCreateUserId(loginUser.getId());
 			rolePermissionService.addRolePermission(rolePermission);
 			List<User> users = userService.findUserByRoleId(roleId);
 			for (User user : users) {
-				TokenUtils.clearAuthz(user.getUserId());
+				TokenUtils.clearAuthz(user.getId());
 			}
 		}
 	}
@@ -100,8 +97,8 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	 * 通过权限id获取权限信息并校验
 	 * @param permissionId
 	 */
-	private Permission getAndCheck(String permissionId){
-		Permission permission = permissionMapper.selectByPermissionId(permissionId);
+	private Permission getAndCheck(Long permissionId){
+		Permission permission = permissionMapper.selectByPrimaryKey(permissionId);
 		if(permission==null){
 			logger.error("根据权限id未查询到权限信息，permissionId={}",permissionId);
 			throw new BusinessException("该权限点不存在");
@@ -114,12 +111,12 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	 * 同时删除缓存中角色的权限信息，记录操作日志
 	 */
 	@Override
-	public int deleteByPermissionId(String permissionId) {
+	public int deleteByPermissionId(Long permissionId) {
 		Permission permission = getAndCheck(permissionId);
 		//删除权限信息
 		int p = permissionMapper.deleteByPrimaryKey(permission.getId());
 		//删除角色权限管联信息
-		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getPermissionId());
+		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getId());
 		logger.info("删除权限点，删除权限点条数：{}，删除角色权限关联信息条数：{}",p,rp);
 		//记录日志
 		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_DELETE);
@@ -134,8 +131,8 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		List<TreeNode> nodes=new ArrayList<TreeNode>();
 		for (Permission permission : list) {
 			TreeNode treeNode=new TreeNode();
-			treeNode.setId(permission.getPermissionId());
-			treeNode.setpId(permission.getPid());
+			treeNode.setId(permission.getId()+"");
+			treeNode.setpId(permission.getPid()+"");
 			treeNode.setName(permission.getPermissionName());
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
@@ -147,8 +144,8 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	}
 
 	@Override
-	public List<Tree> getPermissionTreeData(String roleId) {
-		if(StringUtils.isBlank(roleId)){
+	public List<Tree> getPermissionTreeData(Long roleId) {
+		if(roleId==null){
 			return new ArrayList<Tree>();
 		}
 		List<Permission> list = this.permissionMapper.getPermissionSelectedByRoleId(roleId);
@@ -156,9 +153,9 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		for (Permission permission : list) {
 			Tree permissionTree=new Tree();
 			permissionTree.setTitle(permission.getPermissionName());
-			permissionTree.setValue(permission.getPermissionId());
-			permissionTree.setId(permission.getPermissionId());
-			permissionTree.setPId(permission.getPid());
+			permissionTree.setValue(permission.getId()+"");
+			permissionTree.setId(permission.getId()+"");
+			permissionTree.setPId(permission.getPid()+"");
 			permissionTree.setIcon(permission.getIcon());
 			permissionTree.setSort(permission.getSort());
 			if(!StringUtils.equals(permission.getMarker(),"0")){
@@ -170,17 +167,10 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	}
 
 	@Override
-	public List<Permission> getPermissionByRoleId(String roleId) {
+	public List<Permission> getPermissionByRoleId(Long roleId) {
 		return permissionMapper.getPermissionByRoleId(roleId);
 	}
 
-	@Override
-	public Permission getByPermissionId(String permissionId) {
-		QueryPermission queryPermission=new QueryPermission();
-		queryPermission.setPermissionId(permissionId);
-		List<Permission> list = this.permissionMapper.findPageable(queryPermission);
-		return list.size()==1?list.get(0):null;
-	}
 
 	/**
 	 * 更新权限，记录日志
@@ -188,18 +178,18 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	 */
 	@Override
 	public void updatePermission(Permission permission) {
-		if(StringUtils.isBlank(permission.getPermissionId())){
+		if(permission.getId()==null){
 			throw new BusinessException("参数有误，权限id为空");
 		}
-		Permission permissionInDb = getAndCheck(permission.getPermissionId());
+		Permission permissionInDb = getAndCheck(permission.getId());
 		permission.setId(permissionInDb.getId());
 		if(PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
 			permission.setUrl("  ");
 		}
-		String loginUserId = TokenUtils.getLoginUserId();
-		permission.setUpdateUser(loginUserId);
+		Long loginUserId = TokenUtils.getLoginUserId();
+		permission.setUpdateUserId(loginUserId);
 		permission.setUpdateTime(new Date());
-		String permissionId=permission.getPermissionId();
+		Long permissionId=permission.getId();
 		String changedFields = ValidationUtils.getChangedFields(permission, permissionInDb);
 		permissionMapper.updateByPrimaryKeySelective(permission);
 		//记录操作日志
@@ -213,7 +203,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	}
 
 	@Override
-	public List<Permission> findPermissionsByUserId(String userId) {
+	public List<Permission> findPermissionsByUserId(Long userId) {
 		return permissionMapper.findPermissionsByUserId(userId);
 	}
 

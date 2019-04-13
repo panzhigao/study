@@ -46,7 +46,7 @@ public class ScoreHistoryController {
 	@ResponseBody
 	@RequiresPermissions("/user/scoreHistory")
 	public ResultMsg getScoreHistory(QueryScoreHistory queryScoreHistory){
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		queryScoreHistory.setUserId(loginUserId);
 		queryScoreHistory.setOrderCondition("create_time desc");
 		Map<String, List<ScoreHistory>> findShowData = scoreHistoryService.findShowData(queryScoreHistory);

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.dto.UserDTO;
@@ -52,13 +51,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      * 默认角色id,新注册用户默认角色
      */
     @Value("${system.defaultRoleId}")
-    private String defaultRoleId;
+    private Long defaultRoleId;
 
     /**
      * 管理员角色
      */
     @Value("${system.adminRoleId}")
-    private String adminRoleId;
+    private Long adminRoleId;
 
     /**
      * 图片访问路径
@@ -115,18 +114,14 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             logger.info("用户名已注册{}", userInDb);
             throw new BusinessException("用户名已注册");
         }
-        String dateStr = DateUtils.getNowDateStr(DateUtils.FORMAT_DATE2);
         String password = user.getPassword();
         //用户密码加密
         try {
         	Date now = new Date();
             String encryptedPwd = PasswordUtils.getEncryptedPwd(password);
             user.setPassword(encryptedPwd);
-            //生成userId
-            String uuid = UUID.randomUUID().toString();
-            uuid = uuid.substring(uuid.lastIndexOf("-") + 1);
-            String userId = dateStr + uuid;
-            user.setUserId(userId);
+            Long userId=IdUtils.generateId();
+            user.setId(userId);
             user.setCreateTime(new Date());
             //用户状态正常
             user.setStatus(UserStatusEnum.STATUS_NORMAL.getCode());
@@ -138,7 +133,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             userMapper.insertSelective(user);
             //新增用户拓展信息
             UserExtension userExtensionTemp = new UserExtension();
-            userExtensionTemp.setUserId(userId);
+            userExtensionTemp.setId(userId);
             userExtensionTemp.setCreateTime(now);
             userExtensionTemp.setUpdateTime(now);
             userExtensionTemp.setNickname(user.getNickname());
@@ -148,14 +143,14 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreTypeEnum.REGISTER);
             //用户拓展表增加积分
             UserExtension userExtension = new UserExtension();
-            userExtension.setUserId(addScoreHistory.getUserId());
+            userExtension.setId(addScoreHistory.getUserId());
             userExtension.setUpdateTime(new Date());
             userExtension.setScore(addScoreHistory.getScore());
             userExtensionService.increaseCounts(userExtension);
             //为用户添加用户角色信息
             UserRole userRole = new UserRole(userId, defaultRoleId);
             userRole.setCreateTime(new Date());
-            userRole.setCreateUser(userId);
+            userRole.setCreateUserId(userId);
             userRoleService.addUserRole(userRole);
             //用户验证,用明文密码验证
             user.setPassword(password);
@@ -209,21 +204,21 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             }
             Date now = new Date();
             //修改用户最近登录时间
-            updateUserLastLoginTime(userInDb.getUserId());
+            updateUserLastLoginTime(userInDb.getId());
             //记录用户登录历史
             LoginHistory loginHistory = new LoginHistory();
-            loginHistory.setUserId(userInDb.getUserId());
+            loginHistory.setUserId(userInDb.getId());
             loginHistory.setUsername(userInDb.getUsername());
             loginHistory.setIp(IPUtils.ip2Integer(TokenUtils.getIp()));
             loginHistory.setCreateTime(now);
-            loginHistory.setUserAgent(TokenUtils.getAttribute(MyConstant.USER_AGENT).toString());
+            loginHistory.setUserAgent(String.valueOf(TokenUtils.getAttribute(MyConstant.USER_AGENT)));
             loginHistoryService.insertSelective(loginHistory);
             //积分历史表新增登录积分
-            ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getUserId(), ScoreTypeEnum.LOGIN);
+            ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userInDb.getId(), ScoreTypeEnum.LOGIN);
             //如果不是今日首次登录，连续登录天数加1
             if (addScoreHistory != null) {
                 UserExtension userExtension = new UserExtension();
-                userExtension.setUserId(addScoreHistory.getUserId());
+                userExtension.setId(addScoreHistory.getUserId());
                 userExtension.setUpdateTime(now);
                 userExtension.setScore(addScoreHistory.getScore());
                 userExtension.setContinuousLoginDays(1);
@@ -239,18 +234,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     }
 
     @Override
-    public void updateUserLastLoginTime(String userId) {
+    public void updateUserLastLoginTime(Long userId) {
         User user = new User();
-        user.setUserId(userId);
+        user.setId(userId);
         user.setLastLoginTime(new Date());
-        userMapper.updateUserByUserId(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
-    @Override
-    public User findByUserId(String userId) {
-        logger.info("用户id:{}", userId);
-        return userMapper.findByUserId(userId);
-    }
 
     /**
      * 更新当前登录人用户信息,只更新性别，昵称，用户头像，地址，同时更新用户缓存信息
@@ -262,8 +252,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
         User updateUser=new User();
         BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});
-        String userId = TokenUtils.getLoginUserId();
-        updateUser.setUserId(userId);
+        Long userId = TokenUtils.getLoginUserId();
+        updateUser.setId(userId);
         updateUser.setUpdateTime(new Date());
         //新图片访问url路径
         String newPortraitUrl = null;
@@ -280,12 +270,12 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 updateUser.setUserPortrait(null);
             }
         }
-        userMapper.updateUserByUserId(updateUser);
-        User userInDb = userMapper.findByUserId(userId);
+        userMapper.updateByPrimaryKeySelective(updateUser);
+        User userInDb = userMapper.selectByPrimaryKey(userId);
         //重置用户登陆信息
         TokenUtils.setAttribute(MyConstant.USER, userInDb);
         String userBrief = userExtension.getUserBrief();
-        userExtension.setUserId(userId);
+        userExtension.setId(userId);
         //更新用户拓展信息
         if (StringUtils.isBlank(userBrief)) {
             userExtension.setUserBrief(null);
@@ -293,7 +283,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         Date now = new Date();
         userExtension.setUserPortrait(newPortraitUrl);
         userExtension.setUpdateTime(now);
-        userExtensionMapper.updateUserExtensionByUserId(userExtension);
+        userExtensionMapper.updateByPrimaryKeySelective(userExtension);
     }
 
     @Override
@@ -302,22 +292,18 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         return userMapper.findByTelephone(telephone);
     }
 
-    @Override
-    public UserExtension findExtensionByUserId(String userId) {
-        return userExtensionMapper.findByUserId(userId);
-    }
 
     @Override
     public String sendValidationCode(User user, String operateType) {
         ValidationUtils.validateEntityWithGroups(user, TelephoneBindGroup.class);
         //校验手机号是否被占用
         User userInDb = findByUserTelephone(user.getTelephone());
-        if (MyConstant.OPERATETYPE_SET.equals(operateType)) {
+        if (MyConstant.OPERATE_TYPE_SET.equals(operateType)) {
             if (userInDb != null) {
                 logger.info("该手机号已被使用：{}", user.getTelephone());
                 throw new BusinessException("该手机号已被使用，请更换手机号");
             }
-        } else if (MyConstant.OPERATETYPE_FINDPASSWORD.equals(operateType)) {
+        } else if (MyConstant.OPERATE_TYPE_FIND_PASSWORD.equals(operateType)) {
             if (userInDb == null) {
                 logger.info("该手机号未注册：{}", user.getTelephone());
                 throw new BusinessException("该手机号未注册");
@@ -342,8 +328,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             throw new BusinessException("验证码有误");
         }
         user.setUpdateTime(new Date());
+        userMapper.updateByPrimaryKeySelective(user);
         User loginUser = TokenUtils.getLoginUser();
-        userMapper.updateUserByUserId(user);
         loginUser.setTelephone(user.getTelephone());
         TokenUtils.setAttribute(MyConstant.USER, loginUser);
         JedisUtils.existsKey(redisCode);
@@ -352,7 +338,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     @Override
     public void updateUserByUserId(User user) {
         user.setUpdateTime(new Date());
-        userMapper.updateUserByUserId(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override
@@ -368,7 +354,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
                 list = userMapper.findByParams(queryUser);
                 list.forEach(s->{
-                    boolean online = TokenUtils.isOnline(s.getUserId(),activeSessions);
+                    boolean online = TokenUtils.isOnline(s.getId(),activeSessions);
                     s.setIsOnline(online);
                 });
             }
@@ -389,8 +375,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      * @param roleIds  角色id数组
      */
     @Override
-    public void allocateRoleToUser(String userId, String[] roleIds) {
-        User user = this.findByUserId(userId);
+    public void allocateRoleToUser(Long userId, Long[] roleIds) {
+        User user = selectByPrimaryKey(userId);
         if (user == null) {
             logger.error("为用户分配角色,根据userId({})未查询到用户信息", userId);
             throw new BusinessException("该用户不存在");
@@ -399,13 +385,13 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         	throw new BusinessException("至少选择一个角色");
         }
         List<Role> roles = roleMapper.findByRoleIds(roleIds);
-        Set<String> roleSet = roles.stream().map(r->r.getRoleName()+"("+r.getRoleId()+")").collect(Collectors.toSet());
+        Set<String> roleSet = roles.stream().map(r->r.getRoleName()+"("+r.getId()+")").collect(Collectors.toSet());
         //查询用户数据库里的角色信息
-        List<String> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
-        String[] userRoleIds=new String[roleIdsByUserId.size()];
-        String[] array = roleIdsByUserId.toArray(userRoleIds);
+        List<Long> roleIdsByUserId = roleMapper.getRoleIdsByUserId(userId);
+        Long[] userRoleIds=new Long[roleIdsByUserId.size()];
+        Long[] array = roleIdsByUserId.toArray(userRoleIds);
         List<Role> rolesInDb = roleMapper.findByRoleIds(array);
-        Set<String> roleSetFromDb = rolesInDb.stream().map(r->r.getRoleName()+"("+r.getRoleId()+")").collect(Collectors.toSet());
+        Set<String> roleSetFromDb = rolesInDb.stream().map(r->r.getRoleName()+"("+r.getId()+")").collect(Collectors.toSet());
         if(Objects.deepEquals(roleSet, roleSetFromDb)){
         	throw new BusinessException("分配的角色未修改，请重新选择");
         }
@@ -416,29 +402,29 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         boolean hasAdmin = false;
         if (ArrayUtils.isNotEmpty(roleIds)) {
             List<UserRole> list = new ArrayList<UserRole>();
-            for (String roleId : roleIds) {
-                if (StringUtils.equals(adminRoleId, roleId)) {
+            for (Long roleId : roleIds) {
+                if (adminRoleId.equals(roleId)) {
                     hasAdmin = true;
                 }
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(roleId);
                 userRole.setUserId(userId);
                 userRole.setCreateTime(new Date());
-                userRole.setCreateUser(TokenUtils.getLoginUserId());
+                userRole.setCreateUserId(TokenUtils.getLoginUserId());
                 list.add(userRole);
             }
             //如果给用户分配管理员角色，更新改用户的管理员字段
             if (hasAdmin && AdminFlagEnum.ADMIN_FALSE.getCode().equals(user.getAdminFlag())) {
                 user.setAdminFlag(AdminFlagEnum.ADMIN_TRUE.getCode());
                 user.setUpdateTime(new Date());
-                user.setUpdateUser(TokenUtils.getLoginUserId());
-                userMapper.updateUserByUserId(user);
+                user.setUpdateUserId(TokenUtils.getLoginUserId());
+                userMapper.updateByPrimaryKeySelective(user);
             //取消用户admin权限    
             }else if(!hasAdmin && AdminFlagEnum.ADMIN_TRUE.getCode().equals(user.getAdminFlag())){
             	user.setAdminFlag(AdminFlagEnum.ADMIN_FALSE.getCode());
                 user.setUpdateTime(new Date());
-                user.setUpdateUser(TokenUtils.getLoginUserId());
-                userMapper.updateUserByUserId(user);
+                user.setUpdateUserId(TokenUtils.getLoginUserId());
+                userMapper.updateByPrimaryKeySelective(user);
             }
             userRoleService.batchAddUserRole(list);
             //清空该用户权限缓存
@@ -460,29 +446,30 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	 * @param status
 	 */
     @Override
-    public String changeUserStatus(String userId, Integer status) {
-        String message = null;
-        User userInDb = userMapper.findByUserId(userId);
+    public String changeUserStatus(Long userId, Integer status) {
+        String message;
+        User userInDb = userMapper.selectByPrimaryKey(userId);
         if (userInDb == null) {
             throw new BusinessException("用户不存在");
         }
-        User user = new User(userId, status);
-        String loginUserId = TokenUtils.getLoginUserId();
-        if (StringUtils.equals(userId, loginUserId)) {
+        User user = new User();
+        user.setStatus(status);
+        Long loginUserId = TokenUtils.getLoginUserId();
+        if (loginUserId.equals(userId)) {
             throw new BusinessException("不能修改自己的状态");
         }
-        user.setUpdateUser(loginUserId);
+        user.setUpdateUserId(loginUserId);
         user.setUpdateTime(new Date());
         if (UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
             message = "禁用账号成功";
-            userMapper.updateUserByUserId(user);
+            userMapper.updateByPrimaryKeySelective(user);
             String content="禁用"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
             operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_DISABLE);
             //清空用户授权信息
             TokenUtils.clearAuth(userId);
         } else if (UserStatusEnum.STATUS_NORMAL.getCode().equals(status)) {
             message = "启用账号成功";
-            userMapper.updateUserByUserId(user);
+            userMapper.updateByPrimaryKeySelective(user);
             String content="开启"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
             operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_ENABLE);
         } else {
@@ -493,7 +480,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
 
     @Override
-    public List<User> findUserByRoleId(String roleId) {
+    public List<User> findUserByRoleId(Long roleId) {
         return userMapper.findUserByRoleId(roleId);
     }
     
@@ -502,11 +489,11 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	 * 新增一条用户签到积分记录，用户连续签到天数加1
 	 */
     @Override
-    public ScoreHistory checkIn(String userId) {
+    public ScoreHistory checkIn(Long userId) {
         ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(userId, ScoreTypeEnum.CHECK_IN);
         //用户拓展表增加积分,增加用户签到天数
         UserExtension userExtension = new UserExtension();
-        userExtension.setUserId(addScoreHistory.getUserId());
+        userExtension.setId(addScoreHistory.getUserId());
         userExtension.setUpdateTime(new Date());
         userExtension.setScore(addScoreHistory.getScore());
         userExtension.setContinuousCheckInDays(1);

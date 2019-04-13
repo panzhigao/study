@@ -28,8 +28,8 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/add")
 	@ResponseBody
-	public ResultMsg addCollection(String articleId){
-		String loginUserId = TokenUtils.getLoginUserId();
+	public ResultMsg addCollection(Long articleId){
+		Long loginUserId = TokenUtils.getLoginUserId();
 		Collection collection=new Collection();
 		collection.setArticleId(articleId);
 		collection.setUserId(loginUserId);
@@ -43,9 +43,9 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/collection/remove")
 	@ResponseBody
-	public ResultMsg removeCollection(String articleId){
-		String loginUserId = TokenUtils.getLoginUserId();
-		collectionService.removeCollection(loginUserId, articleId);
+	public ResultMsg removeCollection(Long id){
+		Long loginUserId = TokenUtils.getLoginUserId();
+		collectionService.removeCollection(loginUserId,id);
 		return ResultMsg.ok("取消收藏成功");
 	}
 	
@@ -55,10 +55,10 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/collection/find")
 	@ResponseBody
-	public ResultMsg findCollection(String articleId){
-		String loginUserId = TokenUtils.getLoginUserId();
-		Collection collection = collectionService.findUserCollection(loginUserId, articleId);
-		if(collection!=null){
+	public ResultMsg findCollection(Long articleId){
+		Long loginUserId = TokenUtils.getLoginUserId();
+		boolean flag = collectionService.checkArticleCollected(loginUserId, articleId);
+		if(flag){
 			return ResultMsg.ok("已收藏",true);
 		}
 		return ResultMsg.ok("未收藏",false);
@@ -71,7 +71,7 @@ public class CollectionController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
 	public Map<String,Object> getUserCollectionList(QueryCollection collection){
-		String loginUserId = TokenUtils.getLoginUserId();
+		Long loginUserId = TokenUtils.getLoginUserId();
 		collection.setUserId(loginUserId);
 		Map<String,Object> pageData=collectionService.findPageableMap(collection);
 		return pageData;

@@ -37,7 +37,7 @@
 		values
 		<trim suffixOverrides="," prefix="(" suffix=")">
 			<if test="userId != null">
-				#{userId,jdbcType=VARCHAR},
+				#{userId,jdbcType=BIGINT},
 			</if>
 			<if test="username != null">
 				#{username,jdbcType=VARCHAR},

@@ -1,12 +1,15 @@
 package com.pan.service.impl;
 
-import java.util.Date;
+import java.util.*;
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
+import com.pan.query.QueryArticleCheck;
 import com.pan.service.*;
+import com.pan.util.BeanUtils;
+import com.pan.vo.ArticleCheckVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +53,10 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	@Autowired
 	private UserExtensionService userExtensionService;
 
+	@Override
+	protected ArticleCheckMapper getBaseMapper() {
+		return articleCheckMapper;
+	}
 
 	/**
 	 * 新增文章审核记录
@@ -100,7 +107,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		articleCheckInDb.setCheckTime(new Date());
 		//审核完成
 		articleCheckInDb.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
-		articleCheckInDb.setCheckUserId(loginUser.getUserId());
+		articleCheckInDb.setCheckUserId(loginUser.getId());
 		articleCheckInDb.setCheckUsername(loginUser.getUsername());
 		articleCheckInDb.setApproveFlag(ApproveFlagEnum.APPROVED.getCode());
 		articleCheckMapper.updateByPrimaryKeySelective(articleCheckInDb);
@@ -116,21 +123,21 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setPublishTime(new Date());
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 		
 		//3.文章数加1，发表文章加5分
 		ScoreHistory addScoreHistory = scoreHistoryService.addScoreHistory(article.getUserId(), ScoreTypeEnum.PUBLISH_ARTICLE);
 		
 		//4.用户拓展表增加积分和文章数
 		UserExtension userExtension=new UserExtension();
-		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(addScoreHistory.getScore());
 		userExtension.setArticleCounts(1);
 		userExtensionService.increaseCounts(userExtension);
 		//5.发送消息
 		Message message=new Message();
-		message.setArticleId(article.getArticleId());
+		message.setArticleId(article.getId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
 		messageService.sendMessageToUser(message,MessageTypeEnum.ARTICLE_CHECK_PASS);
@@ -153,7 +160,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		updateArticleCheck.setId(id);
 		updateArticleCheck.setCheckTime(new Date());
 		updateArticleCheck.setCompleteFlag(CompleteFlagEnum.COMPLETE.getCode());
-		updateArticleCheck.setCheckUserId(loginUser.getUserId());
+		updateArticleCheck.setCheckUserId(loginUser.getId());
 		updateArticleCheck.setCheckUsername(loginUser.getUsername());
 		updateArticleCheck.setApproveFlag(ApproveFlagEnum.NOT_APPROVED.getCode());
 		updateArticleCheck.setRemark(reason);
@@ -164,14 +171,13 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 			throw new BusinessException("文章状态不为审核中");
 		}
 		Article updateArticle=new Article();
-		updateArticle.setArticleId(article.getArticleId());
+		updateArticle.setId(articleCheckInDb.getArticleId());
 		//审核未通过
 		updateArticle.setStatus(ArticleStatusEnum.FAIL_CHECKED.getCode());
-		articleMapper.updateArticleByArticleId(updateArticle);
-		// TODO 审核未通过发送消息 记录原因  是否新建记录表未定
+		articleMapper.updateByPrimaryKeySelective(updateArticle);
 		//发送消息
 		Message message=new Message();
-		message.setArticleId(article.getArticleId());
+		message.setArticleId(article.getId());
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
 		message.setCommentContent(reason);
@@ -179,7 +185,24 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	}
 
 	@Override
-	protected ArticleCheckMapper getBaseMapper() {
-		return articleCheckMapper;
+	public Map<String, Object> findVOPageableMap(QueryArticleCheck queryArticleCheck) {
+		Map<String, Object> pageData = new HashMap<>(4);
+		List<ArticleCheckVO> list = new ArrayList<>();
+		int total=countByParams(queryArticleCheck);
+		if(total>0){
+			List<ArticleCheck> pageable = findPageable(queryArticleCheck);
+			for(ArticleCheck articleCheck:pageable){
+				ArticleCheckVO articleCheckVO=new ArticleCheckVO();
+				BeanUtils.copyProperties(articleCheck,articleCheckVO);
+				articleCheckVO.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(articleCheck.getCategoryId()));
+				list.add(articleCheckVO);
+			}
+		}
+		pageData.put("data", list);
+		pageData.put("total", total);
+		pageData.put("code", "200");
+		pageData.put("msg", "");
+		return pageData;
 	}
+
 }

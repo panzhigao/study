@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,12 +72,12 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	@Override
 	public Comment addComment(Comment comment) {
 		ValidationUtils.validateEntity(comment);
-		String articleId=comment.getArticleId();
-		Article articleInDb = articleService.getByArticleId(articleId);
+		Long articleId=comment.getArticleId();
+		Article articleInDb = articleService.selectByPrimaryKey(articleId);
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}
-		comment.setCommentId(IdUtils.generateCommentId());
+		comment.setId(IdUtils.generateId());
 		comment.setCreateTime(new Date());
 		//新增评论
 		commentMapper.insertSelective(comment);
@@ -89,7 +88,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		//修改当前登录人评论数
 		//用户拓展表增加积分
 		UserExtension userExtension=new UserExtension();
-		userExtension.setUserId(addScoreHistory.getUserId());
+		userExtension.setId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(addScoreHistory.getScore());
 		userExtension.setCommentCounts(1);
@@ -97,12 +96,11 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		
 		//发送消息
 		//当文章用户评论自己的文章时，不发送消息
-		if(StringUtils.equals(articleInDb.getUserId(),comment.getUserId())){
+		if(articleInDb.getUserId().equals(comment.getUserId())){
 			return comment;
 		}
-		User userInDb = userService.findByUserId(comment.getUserId());
+		User userInDb = userService.selectByPrimaryKey(articleInDb.getUserId());
 		Message message=new Message();
-		message.setMessageId(IdUtils.generateMessageId());
 		message.setSenderUserId(comment.getUserId());
 		message.setSenderName(userInDb.getNickname());
 		message.setArticleId(comment.getArticleId());
@@ -125,21 +123,21 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	}
 	
 	@Override
-	public void deleteByCommentId(String commentId,String userId) {
+	public void deleteByCommentId(Long commentId,Long userId) {
 		logger.info("评论id:{}",commentId);
-		Comment comment = commentMapper.findByCommentId(commentId);
+		Comment comment = commentMapper.selectByPrimaryKey(commentId);
 		if(comment==null){
 			throw new BusinessException("评论不存在");
 		}
-		if(!StringUtils.equals(comment.getUserId(), userId)){
+		if(!comment.getUserId().equals(userId)){
 			throw new BusinessException("评论不属于当前登录用户");
 		}
-		commentMapper.deleteByCommentId(commentId);
+		commentMapper.deleteByPrimaryKey(commentId);
 		JedisUtils.decreaseKey("comment_count:"+comment.getArticleId());
 	}
 
 	@Override
-	public int getCommnetCount(String articleId) {
+	public int getCommnetCount(Long articleId) {
 		QueryComment queryComment=new QueryComment();
 		queryComment.setArticleId(articleId);
 		int total=commentMapper.countByParams(queryComment);
@@ -147,7 +145,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	}
 
 	@Override
-	public List<Comment> loadUserComments(String userId) {
+	public List<Comment> loadUserComments(Long userId) {
 		return commentMapper.findVOByUserId(userId);
 	}
 

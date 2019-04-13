@@ -17,9 +17,9 @@ public interface PermissionService extends BaseService<Permission>{
 	void addPermission(Permission permission);
 	/**
 	 * 根据权限id删除权限
-	 * @param id
+	 * @param permissionId
 	 */
-	int deleteByPermissionId(String permissionId);
+	int deleteByPermissionId(Long permissionId);
 	/**
 	 * 获取所有权限
 	 * @return
@@ -29,19 +29,13 @@ public interface PermissionService extends BaseService<Permission>{
 	 * 根据角色id获取权限层级树数据
 	 * @return
 	 */
-	List<Tree> getPermissionTreeData(String roleId);
+	List<Tree> getPermissionTreeData(Long roleId);
 	/**
 	 * 查找角色所有权限
 	 * @param roleId
 	 * @return
 	 */
-	List<Permission> getPermissionByRoleId(String roleId);
-	/**
-	 * 根据permissionId查找唯一数据
-	 * @param permissionId
-	 * @return
-	 */
-	Permission getByPermissionId(String permissionId);
+	List<Permission> getPermissionByRoleId(Long roleId);
 	/**
 	 * 更新权限
 	 */
@@ -56,6 +50,6 @@ public interface PermissionService extends BaseService<Permission>{
 	 * @param userId
 	 * @return
 	 */
-	List<Permission> findPermissionsByUserId(String userId);
+	List<Permission> findPermissionsByUserId(Long userId);
 	
 }

@@ -16,17 +16,13 @@ public class Message extends BaseEntity {
 
 	private static final long serialVersionUID = -8041567985696094383L;
 	/**
-	 * 消息id
-	 */
-	private String messageId;
-	/**
 	 * 消息状态 0-未读 1-已读
 	 */
 	private Integer status;
 	/**
 	 * 消息接收者id
 	 */
-	private String receiverUserId;
+	private Long receiverUserId;
 	/**
 	 * 发送消息用户名
 	 */
@@ -34,7 +30,7 @@ public class Message extends BaseEntity {
 	/**
 	 * 发送者用户id
 	 */
-	private String senderUserId;
+	private Long senderUserId;
 	/**
 	 * 消息类别 1-评论 2-点赞 3-系统消息
 	 */
@@ -42,11 +38,11 @@ public class Message extends BaseEntity {
 	/**
 	 * 文章id
 	 */
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 评论id
 	 */
-	private String commentId;
+	private Long commentId;
 	/**
 	 * 内容名称
 	 */

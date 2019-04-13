@@ -13,7 +13,7 @@ public class QueryPicture extends QueryBase{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 图片id
 	 */

@@ -29,7 +29,7 @@ public class CheckInController {
 	@RequestMapping(method=RequestMethod.POST,value="/api/user/checkIn")
 	@ResponseBody
 	public ResultMsg checkIn(){
-		String loingUserId = TokenUtils.getLoginUserId();
+		Long loingUserId = TokenUtils.getLoginUserId();
 		ScoreHistory scoreHistory = userService.checkIn(loingUserId);
 		return ResultMsg.ok("签到成功",scoreHistory);
 	}

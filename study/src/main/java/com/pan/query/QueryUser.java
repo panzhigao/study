@@ -12,9 +12,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class QueryUser extends QueryBase{
 	/**
-	 * 用户性别
+	 * 用户性别 0-未知，1-男，2-女
 	 */
-	private String sex;
+	private Integer sex;
 	/**
 	 * 用户昵称
 	 */

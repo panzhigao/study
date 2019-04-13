@@ -19,13 +19,13 @@ public interface UserRoleService extends BaseService<UserRole>{
      * @param userId
      * @return
      */
-    int deleteUserRoleByUserId(String userId);
+    int deleteUserRoleByUserId(Long userId);
     /**
      * 通过角色id查找使用该角色的用户数
      * @param roleId 角色id
      * @return
      */
-    int findUserCountByRoleId(String roleId);
+    int findUserCountByRoleId(Long roleId);
     /**
      * 新增用户角色
      * @param userRole

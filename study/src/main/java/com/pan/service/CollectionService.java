@@ -15,15 +15,15 @@ public interface CollectionService extends BaseService<Collection>{
 	void addCollection(Collection collection);
 	/**
 	 * 取消收藏
-	 * @param userId
-	 * @param articleId
+	 * @param userId 用户id
+	 * @param id 收藏id
 	 */
-	void removeCollection(String userId,String articleId);
+	void removeCollection(Long userId,Long id);
 	/**
 	 * 查看文章是否收藏
 	 * @param userId
-	 * @param articleId
+	 * @param articleId 文章id
 	 * @return
 	 */
-	Collection findUserCollection(String userId,String articleId);
+	boolean checkArticleCollected(Long userId,Long articleId);
 }

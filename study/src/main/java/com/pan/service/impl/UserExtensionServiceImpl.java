@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
-import com.pan.query.QueryUserExtension;
 import com.pan.service.UserExtensionService;
 
 /**
@@ -29,28 +28,15 @@ public class UserExtensionServiceImpl extends AbstractBaseService<UserExtension,
 		return userExtensionMapper;
 	}
 
-	@Override
-	public void updateByUserId(UserExtension userExtension) {
-		userExtensionMapper.updateUserExtensionByUserId(userExtension);
-	}
 
-	@Override
-	public UserExtension findByUserId(String userId) {
-		return userExtensionMapper.findByUserId(userId);
-	}
 
-	@Override
-	public int countByParams(QueryUserExtension extensionVO) {
-		return userExtensionMapper.countByParams(extensionVO);
-	}
-	
 	/**
 	 * 用户评论数，连续登录天数，连续签到天数，文章数变更
 	 * @return
 	 */
 	@Override
 	public int increaseCounts(UserExtension userExtension) {
-		logger.debug("------增加用户拓展信息数据，用户id：{},新增积分：{}------",userExtension.getUserId(),userExtension.getScore());
+		logger.debug("------增加用户拓展信息数据，用户id：{},新增积分：{}------",userExtension.getId(),userExtension.getScore());
 		if(userExtension.getArticleCounts()!=null){
 			logger.debug("新增文章数：{}",userExtension.getArticleCounts());
 		}

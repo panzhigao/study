@@ -210,12 +210,13 @@ layui.use(['table','jquery'], function(){
 	    	$('#completeCount').html(count);
 	    },
 	    cols: [[ //表头
-	      {field: 'id', title: 'ID', width:80,fixed: 'left'},
+	      {field: 'id', title: 'ID', width:40,fixed: 'left'},
 	      {field: 'username', title: '用户名', width:100, fixed: 'left',templet:function(d){
 	    	  return '<a target="_blank" href="/u/'+d.userId+'">'+d.username+'</a>';
 	      }},
 	      {field: 'articleId', title: '文章ID', width:100},
 	      {field: 'title', title: '文章标题', width:200},
+          {field: 'categoryName', title: '文章分类', width:90},
 	      {field: 'checkType', title: '审核类型', width:100,sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.checkType){

@@ -4,14 +4,13 @@
 
   <resultMap id="BaseResultMap" type="com.pan.entity.User">
     <id     column="id"             	property="id"              jdbcType="BIGINT" />
-    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
-    <result column="sex"        	    property="sex"             jdbcType="VARCHAR" />
+    <result column="sex"        	    property="sex"             jdbcType="INTEGER" />
     <result column="username"       	property="username"        jdbcType="VARCHAR" />
     <result column="nickname"       	property="nickname"        jdbcType="VARCHAR" />
     <result column="password"           property="password"        jdbcType="VARCHAR" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
     <result column="last_login_time"    property="lastLoginTime"   jdbcType="TIMESTAMP" />
-    <result column="status"    			property="status"          jdbcType="VARCHAR" />
+    <result column="status"    			property="status"          jdbcType="INTEGER" />
     <result column="telephone"    		property="telephone"       jdbcType="VARCHAR" />
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
@@ -24,21 +23,23 @@
   </resultMap> 
   
   <resultMap id="UserRoleResultMap" type="com.pan.entity.UserRole">
-    <id     column="id"             	property="id"              jdbcType="INTEGER" />
-    <result column="user_id"        	property="userId"          jdbcType="VARCHAR" />
-    <result column="role_id"        	property="roleId"          jdbcType="VARCHAR" />
+    <id     column="id"             	property="id"              jdbcType="BIGINT" />
+    <result column="role_id"        	property="roleId"          jdbcType="BIGINT" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,sex,username,nickname,password,create_time,last_login_time,status,telephone,
+    id,sex,username,nickname,password,create_time,last_login_time,status,telephone,
     update_time,user_portrait,admin_flag,address
   </sql>
   
-  <select id="findByUserId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from t_user where user_id=#{userId}
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  
+	
   <select id="findByTelephone" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from t_user where telephone=#{telephone}
   </select>
@@ -52,9 +53,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="userId != null">
-        user_id,
       </if>
       <if test="sex != null">
         sex,
@@ -86,8 +84,8 @@
       <if test="userPortrait != null">
         user_portrait,
       </if>
-      <if test="updateUser != null">
-        update_user,
+      <if test="updateUserId != null">
+        update_user_id,
       </if>
       <if test="adminFlag != null">
         admin_flag,
@@ -100,11 +98,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
-      </if>
       <if test="sex != null">
-        #{sex,jdbcType=CHAR},
+        #{sex,jdbcType=INTEGER},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
@@ -133,8 +128,8 @@
       <if test="userPortrait != null">
         #{userPortrait,jdbcType=VARCHAR},
       </if>
-      <if test="updateUser != null">
-        #{updateUser,jdbcType=VARCHAR},
+      <if test="updateUserId != null">
+        #{updateUserId,jdbcType=BIGINT},
       </if>
       <if test="adminFlag != null">
         #{adminFlag,jdbcType=CHAR},
@@ -145,7 +140,7 @@
     </trim>
   </insert>
   
-  <update id="updateUserByUserId" parameterType="com.pan.entity.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.User">
   	update t_user 
   	<set>
   		<if test="username !=null and username !='' ">
@@ -161,7 +156,7 @@
   			last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},
   		</if>
   		<if test="status != null">
-  			status=#{status,jdbcType=VARCHAR},
+  			status=#{status,jdbcType=INTEGER},
   		</if>
   		<if test="telephone != null and telephone !=''">
   			telephone=#{telephone,jdbcType=VARCHAR},
@@ -170,13 +165,13 @@
   			user_portrait=#{userPortrait,jdbcType=VARCHAR},
   		</if>
   		<if test="sex !=null and sex !='' ">
-  			sex=#{sex,jdbcType=VARCHAR},
+  			sex=#{sex,jdbcType=INTEGER},
   		</if>
   		<if test="updateTime != null">
   			update_time=#{updateTime,jdbcType=TIMESTAMP},
   		</if>
-  		<if test="updateUser !=null and updateUser !=''">
-  			update_user=#{updateUser,jdbcType=VARCHAR},
+  		<if test="updateUserId !=null and updateUserId !=''">
+  			update_user_id=#{updateUserId,jdbcType=BIGINT},
   		</if>
   		<if test="adminFlag !=null">
   			admin_flag=#{adminFlag,jdbcType=VARCHAR},
@@ -185,7 +180,7 @@
   			address=#{address,jdbcType=VARCHAR},
   		</if>
   	</set>
-  	where user_id=#{userId}
+  	where id=#{id}
   </update>
   
   <select id="countByParams" resultType="int">
@@ -194,11 +189,11 @@
   </select>
   
   <sql id="whereSql">
-  	<where> 
-  		<if test="sex !=null and sex !='' ">
+  	<where>
+  		<if test="sex !=null">
   			and tu.sex=#{sex}
   		</if>
-  		<if test="status !=null and status !=''">
+  		<if test="status !=null">
   			and tu.status=#{status}
   		</if>
   		<if test="telephone !=null and telephone!=''">
@@ -214,10 +209,10 @@
   </sql>
   	
   <select id="findByParams" resultMap="MoreResultMap">
-  	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names 
-  	from t_user tu left join t_user_role tur on tu.user_id=tur.user_id left join t_role tr on tr.role_id= tur.role_id
+  	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names
+  	from t_user tu left join t_user_role tur on tu.id=tur.user_id left join t_role tr on tr.id= tur.role_id
   	<include refid="whereSql"/>
-  	group by tu.user_id
+  	group by tu.id
   	<choose>
   		<when test="orderCondition !=null and orderCondition !=''">
   			order by ${orderCondition}
@@ -234,8 +229,8 @@
 
   <!-- 根据角色查找使用该角色的用户数 -->
   <select id="findUserByRoleId" resultMap="BaseResultMap">
-  	select tu.id,tu.user_id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait
-  	from t_user tu join t_user_role tur on tu.user_id=tur.user_id
+  	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait
+  	from t_user tu join t_user_role tur on tu.id=tur.user_id
   	where role_id=#{roleId}
   </select>
 

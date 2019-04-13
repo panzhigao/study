@@ -3,6 +3,9 @@ package com.pan.query;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * @author panzhigao
+ */
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class QueryMessage extends QueryBase{
@@ -13,5 +16,5 @@ public class QueryMessage extends QueryBase{
 	/**
 	 * 消息接收者id
 	 */
-	private String receiverUserId;
+	private Long receiverUserId;
 }

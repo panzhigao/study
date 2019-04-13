@@ -17,7 +17,7 @@ public class QueryScoreHistory extends QueryBase{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 积分类型，1-登陆，2-发表文章成功，3-回帖
 	 */

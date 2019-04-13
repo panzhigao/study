@@ -25,11 +25,6 @@ public class User extends BaseEntity {
      *
      */
     private static final long serialVersionUID = -2820248584713373399L;
-
-    /**
-     * 用户id
-     */
-    private String userId;
     /**
      * 用户性别
      */
@@ -90,9 +85,4 @@ public class User extends BaseEntity {
         super();
     }
 
-    public User(String userId, Integer status) {
-        super();
-        this.userId = userId;
-        this.status = status;
-    }
 }

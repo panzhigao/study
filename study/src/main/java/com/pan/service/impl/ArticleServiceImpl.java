@@ -1,10 +1,7 @@
 package com.pan.service.impl;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
+import java.util.*;
+import com.pan.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +21,6 @@ import com.pan.entity.Message;
 import com.pan.entity.User;
 import com.pan.mapper.ArticleMapper;
 import com.pan.query.QueryArticle;
-import com.pan.service.AbstractBaseService;
-import com.pan.service.ArticleCheckService;
-import com.pan.service.ArticleService;
-import com.pan.service.EsClientService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
@@ -57,7 +50,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 	@Autowired
 	private ArticleCheckService articleCheckService;
-	
+
 	@Override
 	protected ArticleMapper getBaseMapper() {
 		return articleMapper;
@@ -96,7 +89,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public void saveArticle(Article article) {
 		User loginUser = TokenUtils.getLoginUser();
-		article.setUserId(loginUser.getUserId());
+		article.setUserId(loginUser.getId());
 		article.setUsername(loginUser.getUsername());
 		checkArticle(article);
 		// 默认草稿状态
@@ -106,15 +99,15 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		}
 		article.setCreateTime(new Date());
 		article.setUpdateTime(new Date());
-		article.setArticleId(IdUtils.generateArticleId());
+		article.setId(IdUtils.generateId());
 		article.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		articleMapper.insertSelective(article);
 		//发布文章,新增审核记录
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(loginUser.getUserId());
+			articleCheck.setUserId(loginUser.getId());
 			articleCheck.setUsername(loginUser.getUsername());
-			articleCheck.setArticleId(article.getArticleId());
+			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
 			articleCheck.setCheckType(CheckTypeEnum.CREATE.getCode());
@@ -123,7 +116,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	@Override
-	public List<Article> findListByUserId(String userId) {
+	public List<Article> findListByUserId(Long userId) {
 		logger.info("用户id为:{}", userId);
 		return articleMapper.findListByUserId(userId);
 	}
@@ -134,14 +127,13 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * @param articleId 
 	 */
 	@Override
-	public Article getAndCheckByUserId(String userId, String articleId) {
-		// TODO 修改判断
+	public Article getAndCheckByUserId(Long userId, Long articleId) {
 		logger.info("查询文章信息,用户id为:{},文章id为:{}", userId, articleId);
-		if (StringUtils.isBlank(userId) || StringUtils.isBlank(articleId)) {
+		if (userId==null || articleId==null) {
 			logger.info("查询文章详细信息参数有误,用户id为:{},文章id为:{}", userId, articleId);
 		}
 		Article article = getAndCheckByArticleId(articleId);
-		if(!StringUtils.equals(userId, article.getUserId())){
+		if(!userId.equals(article.getUserId())){
 			throw new BusinessException("您无权查看该文章信息");
 		}
 		return article;
@@ -155,12 +147,12 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public void updateArticle(Article article) {
 		logger.info("前台传来的文章信息,{}", article);
 		User loginUser = TokenUtils.getLoginUser();
-		article.setUserId(loginUser.getUserId());
+		article.setUserId(loginUser.getId());
 		article.setUsername(loginUser.getUsername());
 		// 校验前台传来的数据
 		checkArticle(article);
-		String articleId = article.getArticleId();
-		Article articleInDb = getAndCheckByUserId(loginUser.getUserId(),articleId);
+		Long articleId = article.getId();
+		Article articleInDb = getAndCheckByUserId(loginUser.getId(),articleId);
 		if (ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode().equals(articleInDb.getType())) {
 			logger.error("系统公告不可修改", articleInDb);
 			throw new BusinessException("系统公告不可修改");
@@ -170,14 +162,14 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			throw new BusinessException("当前文章处于审核中,不可修改");
 		}
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 		//文章处于审核状态，新增审核记录
 		if(ArticleStatusEnum.IN_CHECK.getCode().equals(article.getStatus())){
 			//新增审核记录
 			ArticleCheck articleCheck = new ArticleCheck();
-			articleCheck.setUserId(loginUser.getUserId());
+			articleCheck.setUserId(loginUser.getId());
 			articleCheck.setUsername(loginUser.getUsername());
-			articleCheck.setArticleId(article.getArticleId());
+			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
 			articleCheck.setCheckType(CheckTypeEnum.UPDATE.getCode());
@@ -185,18 +177,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		}
 	}
 
+
 	@Override
-	public Article getByArticleId(String articleId) {
-		logger.info("查询文章信息,文章id为:{}", articleId);
-		if (StringUtils.isBlank(articleId)) {
-			throw new BusinessException("文章id不能为空");
-		}
-		return articleMapper.findByArticleId(articleId);
-	}
-	
-	@Override
-	public Article getAndCheckByArticleId(String articleId) {
-		Article article = getByArticleId(articleId);
+	public Article getAndCheckByArticleId(Long articleId) {
+		Article article = selectByPrimaryKey(articleId);
 		if(article==null){
 			logger.info("根据文章id{}未查询到文章信息", articleId);
 			throw new BusinessException("文章不存在");
@@ -205,8 +189,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 
 	@Override
-	public void deleteArticle(String articleId, String userId) {
-		if (StringUtils.isBlank(articleId)) {
+	public void deleteArticle(Long articleId, Long userId) {
+		if (articleId==null) {
 			throw new BusinessException("文章id不能为空");
 		}
 		Article article = getAndCheckByUserId(userId, articleId);
@@ -235,32 +219,21 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return articleMapper.countByParams(queryArticle);
 	}
 
-	@Override
-	public Article findByArticleIdAndStatus(String articleId, Integer status) {
-		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setArticleId(articleId);
-		queryArticle.setStatus(status);
-		List<Article> list = articleMapper.findPageable(queryArticle);
-		if (list.size() == 1) {
-			return list.get(0);
-		}
-		return null;
-	}
 
 	@Override
-	public int updateArticleCommentCount(String articleId, Integer commentCount) {
+	public int updateArticleCommentCount(Long articleId, Integer commentCount) {
 		Article article = new Article();
-		article.setArticleId(articleId);
+		article.setId(articleId);
 		article.setCommentCount(commentCount);
-		return articleMapper.updateArticleByArticleId(article);
+		return articleMapper.updateByPrimaryKeySelective(article);
 	}
 
 	@Override
-	public int updateArticleViewCount(String articleId, Integer viewCount) {
+	public int updateArticleViewCount(Long articleId, Integer viewCount) {
 		Article article = new Article();
-		article.setArticleId(articleId);
+		article.setId(articleId);
 		article.setViewCount(viewCount);
-		return articleMapper.updateArticleByArticleId(article);
+		return articleMapper.updateByPrimaryKeySelective(article);
 	}
 	
 	/**
@@ -273,15 +246,15 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		article.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		article.setCreateTime(new Date());
 		article.setPublishTime(new Date());
-		article.setArticleId(IdUtils.generateArticleId());
+		article.setId(IdUtils.generateId());
 		//系统消息文章
 		article.setType(ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode());
 		Message message = new Message();
 		message.setMessageType(MessageTypeEnum.NOTICE.getCode());
 		message.setContentName(article.getTitle());
 		message.setCommentContent(article.getContent());
-		String loginUserId = TokenUtils.getLoginUserId();
-		Set<String> set = new HashSet<String>();
+		Long loginUserId = TokenUtils.getLoginUserId();
+		Set<Long> set = new HashSet<Long>();
 		set.add(loginUserId);
 		MessageUtils.sendMessageToAllExceptionUser(JsonUtils.toJson(message), set);
 		articleMapper.insertSelective(article);
@@ -306,11 +279,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return queryFromEsByCondition(queryArticleVO);
 	}
 
-//	@Override
-//	public List<Article> findByCondition(QueryArticle queryArticle) {
-//		return articleMapper.findPageable(queryArticle);
-//	}
-
+	/**
+	 * 获取文章最大置顶值
+	 * @return
+	 */
 	@Override
 	public int getMaxStick() {
 		return articleMapper.getMaxStick();
@@ -320,14 +292,14 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * 文章置顶/加精
 	 */
 	@Override
-	public void setArticle(String articleId, Integer stick, Integer highQuality) {
-		Article articleInDb = getByArticleId(articleId);
+	public void setArticle(Long articleId, Integer stick, Integer highQuality) {
+		Article articleInDb = selectByPrimaryKey(articleId);
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
 		}
 		boolean flag=false;
 		Article article=new Article();
-		article.setArticleId(articleInDb.getArticleId());
+		article.setId(articleInDb.getId());
 		//取消置顶
 		if(ArticleOperateEnum.CANCEL_STICK.getCode().equals(stick)){
 			article.setStick(0);
@@ -349,7 +321,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			throw new BusinessException("参数有误");
 		}
 		article.setUpdateTime(new Date());
-		articleMapper.updateArticleByArticleId(article);
+		articleMapper.updateByPrimaryKeySelective(article);
 	}
 	
 	/**
@@ -361,7 +333,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public Article checkAndGetArticle(QueryArticle queryArticleVO) {
 		Jedis jedis =null;
-		Article article=null;
+		Article article;
 		try {
 			jedis= JedisUtils.getJedis();
 			//存在缓存
@@ -373,19 +345,19 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 				}else{
 					article=(Article) JsonUtils.fromJson(string, Article.class);
 					//如果文章不为发布状态，且不属于当前用户的文章，不能浏览
-					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&& !queryArticleVO.getUserId().equals(article.getUserId())){
 						logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 						throw new BusinessException("文章不存在");
 					}
 				}
 			}else{//不存在缓存
-				article=articleMapper.findByArticleId(queryArticleVO.getArticleId());
+				article=articleMapper.selectByPrimaryKey(queryArticleVO.getArticleId());
 				logger.debug("从数据库读取文章数据,{}",article);
 				if(article==null){
 					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
 					throw new BusinessException("文章不存在");
 				}
-				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!StringUtils.equals(queryArticleVO.getUserId(),article.getUserId())){
+				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!queryArticleVO.getUserId().equals(article.getUserId())){
 					logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
 					throw new BusinessException("文章不存在");
 				}
@@ -406,4 +378,27 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return article;
 	}
 
+	/**
+	 * 分页查询
+	 * @param queryArticle
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> findDTOPageableMap(QueryArticle queryArticle) {
+		Map<String, Object> pageData = new HashMap<>(4);
+		List<ArticleDTO> list = new ArrayList<>();
+		int total=countByParams(queryArticle);
+		if(total>0){
+			list=articleMapper.findDTOPageable(queryArticle);
+			for(ArticleDTO articleDTO:list){
+				String name = ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(articleDTO.getCategoryId());
+				articleDTO.setCategoryName(name);
+			}
+		}
+		pageData.put("data", list);
+		pageData.put("total", total);
+		pageData.put("code", "200");
+		pageData.put("msg", "");
+		return pageData;
+	}
 }

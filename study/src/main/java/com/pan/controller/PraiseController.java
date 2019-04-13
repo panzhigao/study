@@ -23,10 +23,10 @@ public class PraiseController {
 	 */
 	@RequestMapping(value="/user/praise",method=RequestMethod.POST)
 	@ResponseBody
-	public ResultMsg praise(String commentId){
-		String loingUserId = TokenUtils.getLoginUserId();
+	public ResultMsg praise(Long commentId){
+		Long loginUserId = TokenUtils.getLoginUserId();
 		Praise praise=new Praise();
-		praise.setUserId(loingUserId);
+		praise.setUserId(loginUserId);
 		praise.setCommentId(commentId);
 		praiseService.addCommentPraise(praise);
 		return ResultMsg.ok("点赞成功");

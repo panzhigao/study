@@ -82,5 +82,4 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
 	
-	<bean class="com.pan.init.InitTheContext"/>
 </beans>

@@ -42,7 +42,7 @@
             <div class="layui-form-item">
               	<label for="L_telephone" class="layui-form-label">用户名</label>
               	<div class="layui-input-inline">
-                	<input type="text" id="L_address" name="address" value="$!{user.username}" disabled autocomplete="off" value="" class="layui-input">
+                	<input type="text"  name="address" value="$!{user.username}" disabled autocomplete="off" value="" class="layui-input">
               	</div>
             </div>
             <div class="layui-form-item" style="float: left">
@@ -60,7 +60,7 @@
             <div class="layui-form-item">
               	<label for="L_telephone" class="layui-form-label">地址</label>
               	<div class="layui-input-inline">
-                	<input type="text" id="L_address" name="address" value="$!{user.address}" placeholder="请输入地址" autocomplete="off" value="" class="layui-input">
+                	<input type="text"  name="address" value="$!{user.address}" placeholder="请输入地址" autocomplete="off" value="" class="layui-input">
               	</div>
             </div>
             <div class="layui-form-item layui-form-text">
@@ -247,7 +247,7 @@ layui.use(['jquery', 'form'], function(){
 	  			if(!value){
 	  				return '请输入新密码';
 	  			}
-	  			if(!verificat.checkPwd(value)){
+	  			if(!verifyRegUtil.checkPwd(value)){
 	  				return '新密码只能包含字母，数字，点和下划线，6到12位';
 	  			}
 	  	  },
@@ -297,6 +297,7 @@ function getKey(){
 		url:'/api/publicKey',
 		type:'post',
 		async:false,
+        dataType:'text',
 		success:function(res){
 			key=res;
 		}

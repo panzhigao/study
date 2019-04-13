@@ -2,8 +2,6 @@ package com.pan.controller;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,9 +49,6 @@ public class UserManageController {
 	@ResponseBody
 	@RequiresPermissions(value="/user/manage")
 	public Map<String,Object> getUserList(QueryUser queryUser){
-		if(StringUtils.isNotBlank(queryUser.getOrderCondition())){
-			queryUser.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryUser.getOrderCondition()));
-		}
 		Map<String,Object> pageData=userService.findPageData(queryUser);
 		return pageData;
 	}
@@ -65,7 +60,7 @@ public class UserManageController {
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/getRoleTree")
 	@ResponseBody
 	@RequiresPermissions(value="/user/manage")
-	public List<Tree> loadRoleTree(String userId){
+	public List<Tree> loadRoleTree(Long userId){
 		return roleService.getRoleTreeData(userId);
 	}
 	
@@ -76,7 +71,7 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocateRole")
 	@ResponseBody
 	@RequiresPermissions("/user/role/allocateRole")
-	public ResultMsg allocatePermission(String userId,@RequestParam(value = "roles[]",required=false)String[] roleIds){
+	public ResultMsg allocatePermission(Long userId,@RequestParam(value = "roles[]",required=false)Long[] roleIds){
 		userService.allocateRoleToUser(userId, roleIds);
 		return ResultMsg.ok("分配用户角色成功");
 	}
@@ -89,7 +84,7 @@ public class UserManageController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/manage/changeStatus")
 	@ResponseBody
 	@RequiresPermissions("/user/manage/changeStatus")
-	public ResultMsg changeUserStatus(String userId,Integer status){
+	public ResultMsg changeUserStatus(Long userId,Integer status){
 		String message = userService.changeUserStatus(userId, status);
 		return ResultMsg.ok(message);
 	}

@@ -18,7 +18,9 @@
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
 		    <div class="layui-btn-group">
+		     	#hasPermission('/user/permission/doAdd')
 		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
+		     	#end
 	  		</div>
 	  		
 	  		<div class="layui-inline">
@@ -73,11 +75,11 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
           method: 'post',
           cols: [[
 			  {type: 'numbers',title:'序号'},
+			  {field:'id',width:'60', title: 'ID'},
 			  {field:'icon',width:'80', title: '图标',templet:function(row){
 				var temp=row.level*10;
 				return '<i class="layui-icon '+row.icon+'" style="padding:0 20px;"></i>';
 			  }},
-              {field:'id', width:'100', title: 'id'},
               {field:'name',width:'160', title: '权限名'},
               {field:'url',width:'220', title: '权限url'},
               {field:'type', width:'80', title: '类型',templet:function(row){
@@ -91,7 +93,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
             	  return show;
     	      }},
               {field:'sort', width:'80', title: '排序'},
-              {field:'pId', width:'100', title: 'pId'},
+              {field:'pId', width:'100', title: 'PID'},
               {field:'ids',width:'250', title: '编辑',templet:function(row){
             	  var p_edit='#hasPermission("/user/permission/doEdit") 1 #end';
             	  var p_add='#hasPermission("/user/permission/doAdd") 1 #end';
@@ -161,7 +163,7 @@ function showAddTab(title,pId,level){
 			area: ['800px', '400px'],
 		yes: function(index) {
 			//触发表单的提交事件
-			$('form.layui-form').find('button[lay-filter=edit]').click();
+			$('form.layui-form').find('button[lay-filter=add]').click();
 		},
 		full: function(elem) {
 			var win = window.top === window.self ? window : parent.window;
@@ -244,7 +246,7 @@ function addSub(pId){
 
 function edit(id){
 	layer.closeAll();
-	$.get('$!{rc.contextPath}/user/permissionEdit', null, function(form) {
+	$.get('$!{rc.contextPath}/user/permission/editPage', null, function(form) {
 		var index=layer.open({
 				type: 1,
 				title: '修改权限',
@@ -283,7 +285,7 @@ function edit(id){
 			    			$('#permissionName').val(res.data.permissionName);
 				    		$('#url').val(res.data.url);
 				    		$('#sort').val(res.data.sort);
-				    		$('#permissionId').val(res.data.permissionId);
+				    		$('#permissionId').val(res.data.id);
 				    		layui.use(['iconPicker'], function () {
 				    		    var iconPicker = layui.iconPicker;
 				    		        iconPicker.render({

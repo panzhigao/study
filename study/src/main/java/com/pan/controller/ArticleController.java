@@ -1,8 +1,9 @@
 package com.pan.controller;
 
+import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
+import com.pan.entity.ArticleCategory;
+import com.pan.service.impl.ArticleCategoryServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class ArticleController {
 	
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * 跳转发文页面
 	 * @return
@@ -49,7 +50,9 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
 	@RequiresPermissions("/user/article/doSave")
 	public ModelAndView toAddPage(){
-		ModelAndView mav=new ModelAndView("html/article/add");
+		ModelAndView mav=new ModelAndView("html/article/articleAdd");
+		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
+		mav.addObject("categoryList",allThroughCache);
 		return mav;
 	}
 	
@@ -57,7 +60,7 @@ public class ArticleController {
 	 * 保存文章，文章为草稿状态或者待审核状态
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doSave"})
+	@RequestMapping(value={"/user/article/doSave"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doSave")
 	public ResultMsg saveArticle(Article article){
@@ -88,19 +91,19 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/user/article/getPageData")
+	@RequestMapping(value="/user/article/getPageData")
 	@ResponseBody
 	@RequiresPermissions("/user/article/mine")
 	public Map<String,Object> getUserArticleList(QueryArticle queryArticle){
-		String loingUserId = TokenUtils.getLoginUserId();
-		queryArticle.setUserId(loingUserId);
+		Long loginUserId = TokenUtils.getLoginUserId();
+		queryArticle.setUserId(loginUserId);
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		if(StringUtils.isNotBlank(queryArticle.getOrderCondition())){
 			queryArticle.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticle.getOrderCondition()));
 		}else{			
 			queryArticle.setOrderCondition("create_time desc");
 		}
-		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
+		Map<String,Object> pageData=articleService.findDTOPageableMap(queryArticle);
 		return pageData;
 	}
 	
@@ -108,12 +111,12 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^a\\d+}")
+	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^\\d+}")
 	@ResponseBody
-	public ModelAndView toArticleDetailPage(@PathVariable("articleId")String articleId){
+	public ModelAndView toArticleDetailPage(@PathVariable("articleId")Long articleId){
 		//不存在抛出异常
-		ModelAndView mav=new ModelAndView("html/article/detail");
-		String loginUserId=null;
+		ModelAndView mav=new ModelAndView("html/article/articleDetail");
+		Long loginUserId=null;
 		if(TokenUtils.isAuthenticated()){
 			loginUserId = TokenUtils.getLoginUserId();
 		}
@@ -130,7 +133,7 @@ public class ArticleController {
 		}else{
 			mav.addObject("viewCount",article.getViewCount());
 		}
-		User articleUser=userService.findByUserId(article.getUserId());
+		User articleUser=userService.selectByPrimaryKey(article.getUserId());
 		mav.addObject("articleUser", articleUser);
 		return mav;
 	}
@@ -139,14 +142,16 @@ public class ArticleController {
 	 * 跳转文章列详情页或者编辑页面
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId}")
+	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId:^\\d+}")
 	@ResponseBody
 	@RequiresPermissions("/user/article/doEdit")
-	public ModelAndView toArticlePage(@PathVariable("articleId")String articleId){
-		ModelAndView mav=new ModelAndView("html/article/edit");
-		String loingUserId = TokenUtils.getLoginUserId();
-		Article article=articleService.getAndCheckByUserId(loingUserId, articleId);
+	public ModelAndView toArticlePage(@PathVariable("articleId")Long articleId){
+		ModelAndView mav=new ModelAndView("html/article/articleEdit");
+		Long loginUserId = TokenUtils.getLoginUserId();
+		Article article=articleService.getAndCheckByUserId(loginUserId, articleId);
 		mav.addObject("article", article);
+		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
+		mav.addObject("categoryList",allThroughCache);
 		return mav;
 	}
 	
@@ -177,9 +182,9 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
 	@RequiresPermissions("/user/article/doDelete")
-	public ResultMsg deleteArticle(String articleId,HttpServletRequest request){
+	public ResultMsg deleteArticle(Long articleId){
 		logger.info("删除的文章id:{}",articleId);
-		String userId=TokenUtils.getLoginUserId();
+		Long userId=TokenUtils.getLoginUserId();
 		articleService.deleteArticle(articleId, userId);
 		return ResultMsg.ok("删除文章成功");
 	}
@@ -188,9 +193,20 @@ public class ArticleController {
 	 * 跳转文章主页
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.GET,value="/article/index")
+	@RequestMapping(method=RequestMethod.GET,value={"/article/index"})
 	public ModelAndView toArticleIndex(){
-		ModelAndView mav=new ModelAndView("html/article/index");
+		ModelAndView mav=new ModelAndView("html/article/articleIndex");
+		return mav;
+	}
+	
+	/**
+	 * 跳转文章主页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value={"/article/category/{categoryId:^\\d+}"})
+	public ModelAndView toArticleIndex(@PathVariable("categoryId")Long categoryId){
+		ModelAndView mav=new ModelAndView("html/article/articleIndex");
+		mav.addObject("categoryId",categoryId);
 		return mav;
 	}
 	
@@ -198,7 +214,7 @@ public class ArticleController {
 	 * 加载文章列数据，分页查询，该接口不用用户登陆，查询的是用户发表成功的文章
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/article/getPageData")
+	@RequestMapping(value="/article/getPageData")
 	@ResponseBody
 	public Map<String,Object> getArticleList(QueryArticle queryArticle){
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
@@ -206,7 +222,7 @@ public class ArticleController {
 		if(queryArticle.getType()==null){
 			queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
-		Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
+		Map<String,Object> pageData=articleService.findDTOPageableMap(queryArticle);
 		return pageData;
 	}
 	
@@ -214,7 +230,7 @@ public class ArticleController {
 	 * 获取文章条数
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/article/getCount")
+	@RequestMapping(value="/article/getCount")
 	@ResponseBody
 	public int getCount(Integer status,Integer type){
 		QueryArticle articleVO=new QueryArticle();
@@ -232,7 +248,7 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
 	@RequiresPermissions("/user/article/set")
-	public ResultMsg set(String articleId,Integer stick,Integer highQuality){
+	public ResultMsg set(Long articleId,Integer stick,Integer highQuality){
 		articleService.setArticle(articleId, stick, highQuality);
 		return ResultMsg.ok();
 	}

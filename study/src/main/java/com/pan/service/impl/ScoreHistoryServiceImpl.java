@@ -45,7 +45,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	 * 签到，可得5分
 	 */
 	@Override
-	public void checkIn(String userId) {
+	public void checkIn(Long userId) {
 		QueryScoreHistory query=new QueryScoreHistory();
 		query.setUserId(userId);
 		query.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
@@ -64,7 +64,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	}
 
 	@Override
-	public void addLoginScore(String userId) {
+	public void addLoginScore(Long userId) {
 		QueryScoreHistory vo=new QueryScoreHistory();
 		vo.setUserId(userId);
 		vo.setType(ScoreTypeEnum.LOGIN.getCode());
@@ -81,10 +81,10 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 		scoreHistoryMapper.insertSelective(history);
 		//登录加5分
 		UserExtension userExtension=new UserExtension();
-		userExtension.setUserId(userId);
+		userExtension.setId(userId);
 		userExtension.setUpdateTime(new Date());
 		userExtension.setScore(ScoreTypeEnum.LOGIN.getScore());
-		userExtensionMapper.updateUserExtensionByUserId(userExtension);
+		userExtensionMapper.updateByPrimaryKeySelective(userExtension);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	 * @param scoreType 积分类型
 	 */
 	@Override
-	public ScoreHistory addScoreHistory(String userId, ScoreTypeEnum scoreType) {
+	public ScoreHistory addScoreHistory(Long userId, ScoreTypeEnum scoreType) {
 		//签到积分
 		Integer score=scoreType.getScore();
 		//签到积分
@@ -113,7 +113,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 			int lastDayCount = scoreHistoryMapper.countByParams(vo);
 			//昨日没有签到过，按5积分算,用户连续签到天数置为0
 			if(lastDayCount>0){
-				UserExtension userExtension = userExtensionMapper.findByUserId(userId);
+				UserExtension userExtension = userExtensionMapper.selectByPrimaryKey(userId);
 				Integer continuousCheckInDays = userExtension.getContinuousCheckInDays();
 				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
 				score=getTodayCheckInScore(continuousCheckInDays);	

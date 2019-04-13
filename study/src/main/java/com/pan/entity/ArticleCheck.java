@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import com.pan.common.annotation.UnescapeHtml;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 文章审核
@@ -20,7 +21,7 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 用户名
 	 */
@@ -29,11 +30,11 @@ public class ArticleCheck extends BaseEntity{
 	 * 文章id
 	 */
 	@NotNull(message="文章id不能为空")
-	private String articleId;
+	private Long articleId;
 	/**
 	 * 文章标题
 	 */
-	@NotNull(message="文章标题不能为空")
+	@NotEmpty(message="文章标题不能为空")
 	private String title;
 	/**
 	 * 是否审核完成，0-否，1-是
@@ -46,7 +47,7 @@ public class ArticleCheck extends BaseEntity{
 	/**
 	 * 审核人id
 	 */
-	private String checkUserId;
+	private Long checkUserId;
 	/**
 	 * 审核人姓名
 	 */
@@ -68,5 +69,8 @@ public class ArticleCheck extends BaseEntity{
 	 * 审核备注
 	 */
 	private String remark;
-
+	/**
+	 * 分类id
+	 */
+	private Long categoryId;
 }

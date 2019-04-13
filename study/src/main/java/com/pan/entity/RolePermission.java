@@ -17,20 +17,20 @@ public class RolePermission extends BaseEntity {
     private static final long serialVersionUID = 8947795048710408903L;
     /**
      * 角色id
-     * {@link Role.roleId}
+     * {@link Role.id}
      */
-    private String roleId;
+    private Long roleId;
     /**
      * 权限id
-     * {@link Permission.permissionId}
+     * {@link Permission.id}
      */
-    private String permissionId;
+    private Long permissionId;
 
     public RolePermission() {
         super();
     }
 
-    public RolePermission(String roleId, String permissionId) {
+    public RolePermission(Long roleId, Long permissionId) {
         super();
         this.roleId = roleId;
         this.permissionId = permissionId;

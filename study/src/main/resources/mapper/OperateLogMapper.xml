@@ -3,7 +3,7 @@
 <mapper namespace="com.pan.mapper.OperateLogMapper">
     <resultMap id="BaseResultMap" type="com.pan.entity.OperateLog">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
         <result column="operate_type" jdbcType="INTEGER" property="operateType"/>
@@ -57,7 +57,7 @@
                 #{id,jdbcType=BIGINT},
             </if>
             <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
+                #{userId,jdbcType=BIGINT},
             </if>
             <if test="username != null">
                 #{username,jdbcType=VARCHAR},
@@ -81,7 +81,7 @@
         update t_operate_log
         <set>
             <if test="userId != null">
-                user_id = #{userId,jdbcType=VARCHAR},
+                user_id = #{userId,jdbcType=BIGINT},
             </if>
             <if test="username != null">
                 username = #{username,jdbcType=VARCHAR},

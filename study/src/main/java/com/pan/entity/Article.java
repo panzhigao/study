@@ -1,6 +1,7 @@
 package com.pan.entity;
 
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +21,9 @@ public class Article extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -4357328851427096260L;
 	/**
-	 * 文章id
-	 */
-	private String articleId;
-	/**
 	 * 用户id
 	 */
-	private String userId;
+	private Long userId;
 	/**
 	 * 用户名
 	 */
@@ -80,4 +77,9 @@ public class Article extends BaseEntity{
 	 * 是否是精品贴,0-否，1-是
 	 */
 	private Integer highQuality;
+	/**
+	 * 分类id
+	 */
+	@NotNull(message="文章分类不能为空")
+	private Long categoryId;
 }

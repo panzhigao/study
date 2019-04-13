@@ -16,11 +16,11 @@ public class QueryArticle extends QueryBase {
     /**
      * 文章id
      */
-    private String articleId;
+    private Long articleId;
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
     /**
      * 用户名
      */
@@ -51,4 +51,8 @@ public class QueryArticle extends QueryBase {
      * 是否是精品贴
      */
     private Integer highQuality;
+    /**
+     * 文章分类
+     */
+    private Long categoryId;
 }

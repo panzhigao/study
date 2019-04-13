@@ -12,7 +12,7 @@ public class QueryPermission extends QueryBase{
     /**
      * 权限id
      */
-    private String permissionId;
+    private Long permissionId;
     
     private String permissionName;
 }

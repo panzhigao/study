@@ -4,35 +4,37 @@
 
 	<resultMap id="BaseResultMap" type="com.pan.entity.Comment">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="comment_id" property="commentId" jdbcType="VARCHAR" />
-		<result column="article_id" property="articleId" jdbcType="VARCHAR" />
-		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="article_id" property="articleId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
 		<result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
-		<result column="reply_to_user_id" property="replyToUserId" jdbcType="VARCHAR" />
+		<result column="reply_to_user_id" property="replyToUserId" jdbcType="BIGINT" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="praise_counts" property="praiseCounts" jdbcType="INTEGER" />
 	</resultMap>
 
 	<resultMap type="com.pan.vo.CommentVO" id="VOMap" extends="BaseResultMap">
-		<result column="user_portrait" property="userPortrait"
-			jdbcType="VARCHAR" />
+		<result column="user_portrait" property="userPortrait" jdbcType="VARCHAR" />
 		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
 		<result column="isChecked" property="isChecked" jdbcType="VARCHAR" />
 		<result column="title" property="title" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id,comment_id,article_id,user_id,comment_content,reply_to_user_id,create_time,praise_counts
+		id,article_id,user_id,comment_content,reply_to_user_id,create_time,praise_counts
 	</sql>
-
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	   select
+	   <include refid="Base_Column_List" />
+	   from t_comment
+	   where id = #{id,jdbcType=BIGINT}
+    </select>
+	
 	<insert id="insertSelective" parameterType="com.pan.entity.Comment">
 		insert into t_comment
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
-			</if>
-			<if test="commentId != null">
-				comment_id,
 			</if>
 			<if test="userId != null">
 				user_id,
@@ -57,11 +59,8 @@
 			<if test="id != null">
 				#{id,jdbcType=BIGINT},
 			</if>
-			<if test="commentId != null">
-				#{commentId,jdbcType=VARCHAR},
-			</if>
 			<if test="userId != null">
-				#{userId,jdbcType=VARCHAR},
+				#{userId,jdbcType=BIGINT},
 			</if>
 			<if test="articleId != null">
 				#{articleId,jdbcType=VARCHAR},
@@ -70,7 +69,7 @@
 				#{commentContent,jdbcType=VARCHAR},
 			</if>
 			<if test="replyToUserId != null">
-				#{replyToUserId,jdbcType=VARCHAR},
+				#{replyToUserId,jdbcType=BIGINT},
 			</if>
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
@@ -82,14 +81,8 @@
 	</insert>
 
 	<select id="findVOByParams" resultMap="VOMap" parameterType="com.pan.query.QueryComment">
-		<!-- select c.id,comment_id,c.article_id,c.user_id,comment_content,reply_to_user_id,c.create_time,u.user_portrait,u.nickname 
-			from t_comment c join t_user u on c.user_id=u.user_id where article_id=#{articleId} -->
-		<!-- select a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,a.create_time,a.praise_counts,c.user_portrait,c.nickname,case 
-			when b.user_id=#{userId} then 1 else null end isChecked -->
-		<!-- from t_comment a left join t_praise b on a.comment_id=b.comment_id -->
-		<!-- join t_user c on c.user_id=a.user_id where article_id=#{articleId} -->
 		select
-		tc.id,tc.comment_id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
+		tc.id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
 		tc.create_time,tc.praise_counts,tu.user_portrait,tu.nickname
 		<if test="userId != null and userId !=''">
 			,
@@ -98,20 +91,15 @@
 		from t_comment tc
 		<if test="userId != null and userId !=''">
 			left join (select comment_id,user_id from t_praise where
-			user_id=#{userId}) tp on tc.comment_id=tp.comment_id
+			user_id=#{userId} and article_id=#{articleId}) tp on tc.id=tp.comment_id
 		</if>
-		join t_user tu on tu.user_id=tc.user_id where tc.article_id=#{articleId}
+		join t_user tu on tu.id=tc.user_id where tc.article_id=#{articleId}
 		order by tc.create_time desc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
 	</select>
 
-	<select id="findByCommentId" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from t_comment where comment_id=#{commentId}
-	</select>
 
 	<select id="findPageable" resultMap="BaseResultMap">
 		select
@@ -128,43 +116,32 @@
 	<sql id="whereSql">
 		<where>
 			<if test="articleId != null">
-				and article_id=#{articleId,jdbcType=VARCHAR}
-			</if>
-			<if test="commentId != null">
-				and comment_id=#{commentId,,jdbcType=VARCHAR}
+				and article_id=#{articleId,jdbcType=BIGINT}
 			</if>
 			<if test="userId != null">
-				and user_id=#{userId,,jdbcType=VARCHAR}
+				and user_id=#{userId,,jdbcType=BIGINT}
 			</if>
 		</where>
 	</sql>
 	
-	<delete id="deleteByCommentId">
-		delete from t_comment where comment_id=#{commentId}
+	<delete id="deleteByPrimaryKey">
+		delete from t_comment
+		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-	<update id="updatePraiseCounts">
+	<update id="updatePraiseCountsByPrimaryKey">
 		update t_comment set praise_counts=praise_counts+1
-		where
-		comment_id=#{commentId}
+		where id = #{id,jdbcType=BIGINT}
 	</update>
-	
-	<!-- 根据cid数组，删除多条数据 -->
-	<delete id="deleteByIdArray">
-		delete from t_comment where id in
-		<foreach collection="array" item="id" open="(" separator=","
-			close=")">
-			#{id}
-		</foreach>
-	</delete>
 
 	<select id="findVOByUserId" resultMap="VOMap">
 		select
-		a.id,a.comment_id,a.article_id,a.user_id,a.comment_content,a.reply_to_user_id,
-		a.create_time,a.praise_counts,c.user_portrait,c.nickname,d.title
+		tc.id,tc.id,tc.article_id,tc.user_id,tc.comment_content,tc.reply_to_user_id,
+		tc.create_time,tc.praise_counts,tu.user_portrait,tu.nickname,ta.title
 		from
-		t_comment a left join t_user c on a.user_id=c.user_id join t_article d
-		on d.article_id=a.article_id
-		where a.user_id=#{userId}
+		t_comment tc left 
+		join t_user tu on tu.id=tc.user_id
+		join t_article ta on ta.id=tc.article_id
+		where tc.user_id=#{userId}
 	</select>
 </mapper>

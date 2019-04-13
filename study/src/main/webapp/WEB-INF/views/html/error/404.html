@@ -49,7 +49,7 @@
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/admin?div=set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin?div=message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/u/${user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/${user.id}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe66f;</i>用户中心</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
@@ -64,12 +64,9 @@
   <div class="layui-container">
     <ul class="layui-clear">
       <li class="layui-hide-xs layui-this"><a href="/">首页</a></li> 
-      <li><a href="/">提问</a></li> 
-      <li><a href="/">分享<span class="layui-badge-dot"></span></a></li> 
-      <li><a href="/">讨论</a></li> 
-      <li><a href="/">建议</a></li> 
-      <li><a href="/">公告</a></li> 
-      <li><a href="/">动态</a></li> 
+      #foreach($item in $onlineArticleCategoryList)
+      <li #if($item.id==$categoryId) class="layui-this" #end ><a href="$!{rc.contextPath}/article/category/$item.id">$!{item.categoryName}</a></li>
+      #end
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       
       <!-- 用户登入后显示 -->

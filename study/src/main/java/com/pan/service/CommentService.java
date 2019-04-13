@@ -25,17 +25,17 @@ public interface CommentService extends BaseService<Comment>{
 	 * 删除评论
 	 * @param commentId
 	 */
-	void deleteByCommentId(String commentId,String userId);
+	void deleteByCommentId(Long commentId,Long userId);
 	/**
 	 * 统计文章评论数
 	 * @param articleId
 	 * @return
 	 */
-	int getCommnetCount(String articleId);
+	int getCommnetCount(Long articleId);
 	/**
 	 * 根据用户评论
 	 * @param userId
 	 * @return
 	 */
-	List<Comment> loadUserComments(String userId);
+	List<Comment> loadUserComments(Long userId);
 }

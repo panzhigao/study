@@ -16,13 +16,13 @@ public interface RolePermissionMapper {
 	 * @param permissionId
 	 * @return  删除条数
 	 */
-	int deleteRolePermissionByPermissionId(String permissionId);
+	int deleteRolePermissionByPermissionId(Long permissionId);
 	/**
 	 * 根据角色id,删除权限关联角色信息
 	 * @param roleId
 	 * @return  删除条数
 	 */
-	int deleteRolePermissionByRoleId(String roleId);
+	int deleteRolePermissionByRoleId(Long roleId);
 	/**
 	 * 批量新增角色权限
 	 * @param list

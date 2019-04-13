@@ -115,9 +115,9 @@ layui.use(['table','jquery', 'form','layedit'], function(){
 	    url: '$!{rc.contextPath}/user/systemNotice/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'articleId', title: '消息ID', width:100, sort: true, fixed: 'left'},
+	      {field: 'id', title: '消息ID', width:100, sort: true, fixed: 'left'},
 	      {field: 'title', title: '消息标题', width:600,templet:function(d){
-	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
+	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.id+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'createTime', title: '发送时间', width:250, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));

@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) //在编译以后仍然起作用 
 @Inherited
 @Documented
+@Deprecated
 public @interface HasPermission {
 	String value() default "";
 }

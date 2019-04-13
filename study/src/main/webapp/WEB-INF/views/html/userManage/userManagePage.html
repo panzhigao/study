@@ -102,9 +102,9 @@ layui.use(['table','jquery','form'], function(){
 	  table.on('tool(myTable)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'allocate'){
-	    	$('#selectedUserId').val(data.userId);
+	    	$('#selectedUserId').val(data.id);
 	    	$('#myTree').modal('show');
-	    	xtree3._options.params={userId:data.userId};
+	    	xtree3._options.params={userId:data.id};
 	    	xtree3.render();
 	    }  
 	  });
@@ -125,7 +125,7 @@ layui.use(['table','jquery','form'], function(){
 	  
 	  
 	  form.on('switch(userStatus)', function(data){
-		  var userId=$(data.elem).attr('userid');
+		  var userId=$(data.elem).attr('id');
 		  var new_status =this.checked ? '1' : '0';
 		  var tipText = '确定封禁该用户？';
           if(data.elem.checked){
@@ -183,13 +183,14 @@ layui.use(['table','jquery','form'], function(){
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {fixed: 'left',title: '序号', width:50,type:'numbers'},
+	      {field:'id',fixed: 'left',title: '用户ID', width:100},
 	      {field: 'username', title: '用户账号', width:100, fixed: 'left',templet:function(d){
-	    	  return '<a href="/u/'+d.userId+'" target="_blank">'+d.username+'</a>';
+	    	  return '<a href="/u/'+d.id+'" target="_blank">'+d.username+'</a>';
 	      }},
-	      {field: 'nickname', title: '用户昵称', width:100, fixed: 'left',templet:function(d){
+	      {field: 'nickname', title: '用户昵称', width:100,templet:function(d){
 	    	  return d.nickname;
 	      }},
-	      {field: 'sex', title: '性别', width:60, fixed: 'left',templet:function(d){
+	      {field: 'sex', title: '性别', width:60,templet:function(d){
 	    	  var sex='未知';
 	    	  if(d.sex==1){
 	    		  sex='男';
@@ -211,16 +212,16 @@ layui.use(['table','jquery','form'], function(){
 		    	  if(d.status=='1'){
 		    		  checked='checked';
 		    	  }
-		    	  var s='<input value="1" userid="'+d.userId+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" '+statusAuth+' '+checked+'>';
+		    	  var s='<input value="1" userid="'+d.id+'" lay-filter="userStatus" type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" '+statusAuth+' '+checked+'>';
 		    	  return s;
 	      	  }
 	       },
-            {field: 'isOnline', title: '是否在线', width:80,templet:function(d){
+          {field: 'isOnline', title: '是否在线', width:80,templet:function(d){
                 if(d.isOnline==true){
                     return '在线';
                 }
                 return '离线';
-            }},
+          }},
 	      {field: 'createTime', title: '创建时间', width:160, sort: true,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
 	      }},

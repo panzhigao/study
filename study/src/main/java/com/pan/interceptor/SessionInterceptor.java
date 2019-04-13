@@ -2,14 +2,12 @@ package com.pan.interceptor;
 
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.pan.common.constant.MyConstant;
+import com.pan.service.impl.ArticleCategoryServiceImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.entity.Link;
 import com.pan.entity.User;
 import com.pan.service.LinkService;
@@ -58,9 +56,10 @@ public class SessionInterceptor implements HandlerInterceptor{
 				modelAndView.addObject(MyConstant.USER,loginUser);
 			}
 			modelAndView.addObject(MyConstant.SYSTEM_CONFIG,SystemConfigUtils.getSystemConfig());
-			LinkService bean = SpringContextUtils.getBean(LinkService.class);
-			List<Link> onlieLinkList = bean.getOnlieLinkList();
-			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlieLinkList);
+			LinkService linkService = SpringContextUtils.getBean(LinkService.class);
+			List<Link> onlineLinkList = linkService.getOnlineLinkList();
+			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlineLinkList);
+			modelAndView.addObject(MyConstant.ONLINE_ARTICLE_CATEGORY_LIST, ArticleCategoryServiceImpl.getOnlineCategoryThroughCache());
 		}
 	}
 	

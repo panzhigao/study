@@ -45,7 +45,7 @@
     	<a href="$!{rc.contextPath}/user/admin?div=message"><i>消息<span class="layui-badge" id="messageCount">0</span></i></a>
   	  </li>
       <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="$!{rc.contextPath}/u/$!{user.userId}">
+        <a class="fly-nav-avatar" href="$!{rc.contextPath}/u/$!{user.id}">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
           <i class="iconfont icon-renzheng layui-hide-xs"></i>
           #if($user.adminFlag=='1')<i class="layui-badge fly-badge-vip layui-bg-green">管理员</i>#end
@@ -54,7 +54,7 @@
         <dl class="layui-nav-child">
           <dd><a href="$!{rc.contextPath}/user/admin?div=set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin?div=message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="$!{rc.contextPath}/u/$!{user.userId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="$!{rc.contextPath}/u/$!{user.id}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <dd><a href="$!{rc.contextPath}/user/admin"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe66f;</i>用户中心</a></dd>
           <hr style="margin: 5px 0;">
           <dd><a href="$!{rc.contextPath}/user/quit" style="text-align: center;">退出</a></dd>
@@ -68,13 +68,10 @@
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a href="$!{rc.contextPath}">首页</a></li> 
-      <li><a href="/">提问</a></li> 
-      <li><a href="/">分享<span class="layui-badge-dot"></span></a></li> 
-      <li><a href="/">讨论</a></li> 
-      <li><a href="/">建议</a></li> 
-      <li><a href="/">公告</a></li> 
-      <li><a href="/">动态</a></li> 
+      <li class="layui-hide-xs layui-this"><a href="$!{rc.contextPath}">首页</a></li>
+      #foreach($item in $onlineArticleCategoryList)
+      <li><a href="$!{rc.contextPath}/article/category/$item.id">$!{item.categoryName}</a></li>
+      #end
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       <!-- 用户登入后显示 -->
       #if($user)
@@ -251,7 +248,7 @@ function loadSystemMessage(){
 				for(var i=0;i<length;i++){
 					var article=articles[i];
 	 				var one='<li>'+
-	 		        '<a href="$!{rc.contextPath}/article/'+article.articleId+'" target="_blank">'+article.title+'</a>'+
+	 		        '<a href="$!{rc.contextPath}/article/'+article.id+'" target="_blank">'+article.title+'</a>'+
 	 		        '</li>';
 					$('#sysMessage').append(one);
 				}
@@ -272,7 +269,7 @@ function loadActiveUsers(){
 				for(var i=0;i<length;i++){
 					var user=users[i];
 					var item='<dd>'+
-					    '<a href="/u/'+user.userId+'">'+
+					    '<a target="_blank" href="/u/'+user.id+'">'+
 					    '<img src="'+user.userPortrait+'">'+
 					    '<cite>'+user.nickname+'</cite>'+
 					    '<i>'+user.commentCounts+'次回答</i>'+
@@ -311,15 +308,14 @@ function getStickData(){
 	 	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
 	 	            '</a>'+
 	 	            '<h2>'+
-	 	              '<a class="layui-badge">分享</a>'+
-	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'">'+article.title+'</a>'+
+	 	              '<a class="layui-badge">'+article.categoryName+'</a>'+
+	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 	 	            '</h2>'+
 	 	            '<div class="fly-list-info">'+
 	 	              '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" link>'+
 	 	                '<cite>'+article.nickname+'</cite>'+
 	 	              '</a>'+
 	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
 	 	              '<span class="fly-list-nums">'+
 	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
 	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
@@ -359,17 +355,16 @@ function getArticleList(){
 	 	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
 	 	            '</a>'+
 	 	            '<h2>'+
-	 	              '<a class="layui-badge">分享</a>'+
-	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'">'+article.title+'</a>'+
+	 	              '<a class="layui-badge">'+article.categoryName+'</a>'+
+	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 	 	            '</h2>'+
 	 	            '<div class="fly-list-info">'+
 	 	              '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" link>'+
 	 	                '<cite>'+article.nickname+'</cite>'+
 	 	              '</a>'+
 	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
 	 	              '<span class="fly-list-nums">'+
-	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
+	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
 	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
 	 	              '</span>'+
 	 	            '</div>'+

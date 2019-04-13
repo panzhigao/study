@@ -25,7 +25,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
     /**
      * 在线用户列表
      */
-    private static final Map<String, WebSocketSession> USERS;
+    private static final Map<Long, WebSocketSession> USERS;
 
     static {
         USERS = new ConcurrentHashMap<>();
@@ -33,7 +33,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String userId = getClientId(session);
+        Long userId = getClientId(session);
         logger.info(">>>>>>>>>>>>websocket成功建立连接,userId={}",userId);
         if (userId != null) {
             USERS.put(userId, session);
@@ -51,7 +51,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
      * @param message
      * @return
      */
-    public boolean sendMessageToUser(String clientId, TextMessage message) {
+    public boolean sendMessageToUser(Long clientId, TextMessage message) {
         if (USERS.get(clientId) == null) {
         	return false;
         }
@@ -77,9 +77,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
      */
     public boolean sendMessageToAllUsers(TextMessage message) {
         boolean allSendSuccess = true;
-        Set<String> userIds = USERS.keySet();
+        Set<Long> userIds = USERS.keySet();
         WebSocketSession session = null;
-        for (String userId : userIds) {
+        for (Long userId : userIds) {
             try {
                 session = USERS.get(userId);
                 if (session.isOpen()) {
@@ -98,11 +98,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
      * @param message
      * @return
      */
-    public boolean sendMessageToAllUsersWithException(TextMessage message,Set<String> userIdSet) {
+    public boolean sendMessageToAllUsersWithException(TextMessage message,Set<Long> userIdSet) {
         boolean allSendSuccess = true;
-        Set<String> userIds = USERS.keySet();
-        WebSocketSession session = null;
-        for (String userId : userIds) {
+        Set<Long> userIds = USERS.keySet();
+        WebSocketSession session;
+        for (Long userId : userIds) {
         	if(userIdSet.contains(userId)){
         		continue;
         	}
@@ -125,7 +125,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
             session.close();
         }
         logger.error(">>>>>>>>>>>>websocket连接出错,移除该连接",exception.getMessage());
-        String clientId = getClientId(session);
+        Long clientId = getClientId(session);
         if(clientId!=null){        	
         	USERS.remove(clientId);
         }
@@ -133,7 +133,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-    	String clientId = getClientId(session);
+        Long clientId = getClientId(session);
     	if(clientId!=null){
     		logger.info(">>>>>>>>>>>>关闭websocket连接：userId={}",clientId);
             USERS.remove(clientId);
@@ -150,9 +150,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler{
      * @param session
      * @return
      */
-    private String getClientId(WebSocketSession session) {
+    private Long getClientId(WebSocketSession session) {
         try {
-            String userId =(String) session.getAttributes().get(MyConstant.USER_ID);
+            Long userId =(Long) session.getAttributes().get(MyConstant.USER_ID);
             logger.info(">>>>>>>>>>>>websocket获取用户标识:{}",userId);
             return userId;
         } catch (Exception e) {

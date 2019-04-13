@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>角色管理</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="$!{systemConfig.keywords}">
   <meta name="description" content="$!{systemConfig.description}">
@@ -28,7 +28,7 @@
 	    
 	    <div class="layui-btn-group">
 	    	#hasPermission("/user/role/doAdd")
-	     	<button class="layui-btn" id="add" data-toggle="modal" data-target="#myModal">新增角色</button>
+	     	<button class="layui-btn" id="btnAdd">新增角色</button>
 	     	#end
   		</div>
   		
@@ -38,60 +38,6 @@
       </div>
     </div>
   </div>
-
-<!-- 模态框新增 -->
-<div  class="modal fade" style="margin-top:30px" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加角色</h4>
-            </div>
-                                    
-            <div class="modal-body">
-            	<div class="layui-form-item">
-    				<div class="">
-    				    <h4> 角色名称:</h4>
-      					<input type="text" id="roleName" name="roleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
-    				</div>		
-  				</div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="addRole">新增</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<input type="hidden" id="selectedRoleId"/>
-
-<!-- 模态框修改 -->
-<div  class="modal fade" style="margin-top:30px" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改角色</h4>
-            </div>
-                                    
-            <div class="modal-body">
-            	<div class="layui-form-item">
-    				<div class="">
-    				    <h4> 角色名称:</h4>
-      					<input type="text" id="newRoleName" name="newRoleName"  placeholder="请输入权限名称" autocomplete="off" class="layui-input">
-    				</div>		
-  				</div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="btnEdit">修改</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- 模态框-权限树 -->
 <div  class="modal fade" style="margin-top:10px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -108,7 +54,7 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+                <button type="button" class="btn btn-primary" id="btnAllocate">保存</button>
             </div>
             
         </div>
@@ -153,27 +99,8 @@ layui.use(['table','jquery','form'], function(){
 	      }
 	    };
 	  
-	  $('#addRole').click(function(){
-		 var roleName=$('#roleName').val();
-		 if(!roleName){
-			 layer.msg('权限名称不能为空');
-			 return;
-		 }
-		 $.ajax({
-			 url:'$!{rc.contextPath}/user/role/doAdd',
-			 type:'post',
-			 data:{roleName:roleName},
-			 success:function(res){
-				 if(res.code=='200'){
-					 layer.msg('新增角色成功');
-					 $('#roleName').val("");
-					 $('#myModal').modal('hide');
-					 table.reload('tab');
-				 }else{
-					 layer.msg(res.msg);
-				 }
-			 }
-		 }); 
+	  $('#btnAdd').on('click', function() {
+		  showTab('添加角色','');
 	  });
 	  
 	  //监听工具条
@@ -185,7 +112,7 @@ layui.use(['table','jquery','form'], function(){
 	    	$.ajax({
 	    		url:"$!{rc.contextPath}/user/role/doDelete",
 	    		type:"post",
-	    		data:{roleId:data.roleId},
+	    		data:{roleId:data.id},
 	    		success:function(data){
 	    			if(data.code=='200'){
 	    				layer.alert(data.msg);
@@ -198,13 +125,11 @@ layui.use(['table','jquery','form'], function(){
 	      });
 	    }else if(obj.event==='allocate'){
 	    	$('#myTree').modal('show');
-	    	xtree3._options.params={roleId:data.roleId};
+	    	xtree3._options.params={roleId:data.id};
 	    	xtree3.render();
-	    	$('#selectedRoleId').val(data.roleId);
+	    	$('#selectedRoleId').val(data.id);
 	    }else if(obj.event==='edit'){
-	    	$('#selectedRoleId').val(data.roleId);
-	    	$('#newRoleName').val(data.roleName);
-	    	$('#editModal').modal('show');
+	    	showTab('新增角色',data.id);
 	    }
 	  });
 	  
@@ -226,11 +151,12 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/role/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'roleId', title: '角色ID', width:100, fixed: 'left'},
-	      {field: 'roleName', title: '角色名称', width:450},
+	      {field: 'id', title: '角色ID', width:100, fixed: 'left'},
+	      {field: 'roleName', title: '角色名称', width:200},
 	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
+	      {field: 'remark', title: '备注', width:500},
 	      {title:'操作',width:200,templet:function(row){
 	    	  var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
         	  var p_allocate='#hasPermission("/user/role/allocatePermission") 1 #end';
@@ -240,6 +166,7 @@ layui.use(['table','jquery','form'], function(){
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
 	    	  var show='';
+	    	  
 	    	  if(p_edit){
 	    		  show+=edit;
 	    	  }
@@ -259,7 +186,6 @@ layui.use(['table','jquery','form'], function(){
 		   active[type] ? active[type].call(this) : '';
 	  });
 	  
-  
 	  var form = layui.form;
       xtree3= new layuiXtree({
           elem: 'xtree3'                  
@@ -284,7 +210,7 @@ layui.use(['table','jquery','form'], function(){
           }
       });
 	  
-	  $('#btnSave').click(function(){
+	  $('#btnAllocate').click(function(){
 		  var selectedRoleId=$('#selectedRoleId').val();
 		  if(!selectedRoleId){
 			  layer.alert('未选择角色');
@@ -315,36 +241,75 @@ layui.use(['table','jquery','form'], function(){
         	  }
           });
 	  });
-	  
-	  $('#btnEdit').click(function(){
-		  var selectedRoleId=$('#selectedRoleId').val();
-		  if(!selectedRoleId){
-			  layer.alert('未选择角色');
-			  return;
-		  }
-		  var newRoleName=$('#newRoleName').val();
-		  if(!newRoleName){
-			 layer.msg('权限名称不能为空');
-			 return;
-	  	  }
-          $.ajax({
-        	  url:'$!{rc.contextPath}/user/role/doEdit',
-        	  data:{roleId:selectedRoleId,roleName:newRoleName},
-        	  dataType:'json',
-        	  type:'post',
-        	  success:function(res){
-        		  if(res.code=='200'){
-	    				layer.alert(res.msg);
-	    				$('#editModal').modal('hide');
-	    				table.reload('tab');
-	    			}else{	    				
-	    				layer.alert(res.msg);
-	    			}
-        	  }
-          });
-	  });
-	  
+	    
+	  function showTab(title,roleId){
+			layer.closeAll();
+			$.get('$!{rc.contextPath}/user/role/tab?roleId='+roleId, null, function(form) {
+			if(form.code=='400'){
+				layer.msg(form.msg);
+				return;
+			}	
+			var index=layer.open({
+					type: 1,
+					title: title,
+					content: form,
+					btn: ['保存', '取消'],
+					shade: false,
+					maxmin: true,
+					offset: ['50px', '20%'],
+					area: ['800px', '300px'],
+				yes: function(index) {
+					//触发表单的提交事件
+					$('form.layui-form').find('button[lay-filter=save]').click();
+				},
+				full: function(elem) {
+					var win = window.top === window.self ? window : parent.window;
+					$(win).on('resize', function() {
+						var $this = $(this);
+						elem.width($this.width()).height($this.height()).css({
+							top: 0,
+							left: 0
+						});
+						elem.children('div.layui-layer-content').height($this.height() - 95);
+					});
+				},
+				success: function(layero, index) {
+					//弹出窗口成功后渲染表单
+					var form = layui.form;
+					form.render();
+					var url='';
+					if(roleId){
+						url='$!{rc.contextPath}/user/role/doEdit';
+					}else{
+						url='$!{rc.contextPath}/user/role/doAdd';
+					}
+					form.on('submit(save)', function(data) {
+						 $.ajax({
+							 url:url,
+							 type:'post',
+							 data:data.field,
+							 success:function(res){
+								 if(res.code=='200'){
+									 layer.msg(res.msg);
+									 layer.close(index);
+									 table.reload('tab');
+								 }else{
+									 layer.msg(res.msg);
+								 }
+							 }
+						 });
+						//这里可以写ajax方法提交表单
+						return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。									
+					});
+				},
+				end: function() {
+					addBoxIndex = -1;
+				}
+				});
+			});
+		}
 });
+
 </script>
 #parse("./html/common/common.html")
 </body>
