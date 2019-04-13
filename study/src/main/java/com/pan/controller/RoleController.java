@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
 import com.pan.query.QueryRole;
@@ -33,6 +35,21 @@ public class RoleController {
 	@RequiresPermissions("/user/role")
 	public String toRolePage(){
 		return "html/role/rolePage";
+	}
+	
+	/**
+	 * 获取角色新增或者编辑页
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.GET,value="/user/role/tab")
+	@RequiresPermissions({"/user/role/doAdd","/user/role/doEdit"})
+	public ModelAndView getRoleTab(Long roleId){
+		ModelAndView mav=new ModelAndView("html/role/roleTab");
+		if(roleId!=null){
+			Role role = roleService.selectByPrimaryKey(roleId);
+			mav.addObject("role",role);
+		}
+		return mav;
 	}
 	
 	/**

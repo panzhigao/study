@@ -269,7 +269,7 @@ function loadActiveUsers(){
 				for(var i=0;i<length;i++){
 					var user=users[i];
 					var item='<dd>'+
-					    '<a href="/u/'+user.userId+'">'+
+					    '<a target="_blank" href="/u/'+user.id+'">'+
 					    '<img src="'+user.userPortrait+'">'+
 					    '<cite>'+user.nickname+'</cite>'+
 					    '<i>'+user.commentCounts+'次回答</i>'+
@@ -316,7 +316,6 @@ function getStickData(){
 	 	                '<cite>'+article.nickname+'</cite>'+
 	 	              '</a>'+
 	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
 	 	              '<span class="fly-list-nums">'+
 	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
 	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
@@ -364,7 +363,6 @@ function getArticleList(){
 	 	                '<cite>'+article.nickname+'</cite>'+
 	 	              '</a>'+
 	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
 	 	              '<span class="fly-list-nums">'+
 	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
 	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+

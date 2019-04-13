@@ -50,11 +50,14 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 	/**
 	 * 消息置为已读
 	 * @param userId 用户id
-	 * @param messageId 消息id
+	 * @param messageId 消息id，当消息id没有传入时，所有消息标记为已读
 	 * @return
 	 */
 	@Override
 	public int updateMessageReaded(Long userId, Long messageId) {
+		if(messageId==null){
+			return messageMapper.updateStatusByReceiverUserId(MessageStatusEnum.MESSAGE_READED.getCode(), userId);
+		}
 		Message selectByPrimaryKey = messageMapper.selectByPrimaryKey(messageId);
 		if(selectByPrimaryKey==null){
 			logger.error("根据消息id={}未查询到消息信息",messageId);

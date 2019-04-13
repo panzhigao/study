@@ -10,11 +10,12 @@
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 		<result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 		<result column="super_admin_flag" jdbcType="INTEGER" property="superAdminFlag" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id,role_name, create_time, create_user_id, update_time,
-		update_user_id, super_admin_flag
+		update_user_id, super_admin_flag,remark
 	</sql>
 	
    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -75,6 +76,9 @@
 			<if test="superAdminFlag != null">
 				super_admin_flag,
 			</if>
+			<if test="remark != null">
+				remark,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -97,6 +101,9 @@
 			</if>
 			<if test="superAdminFlag != null">
 				#{superAdminFlag,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -137,6 +144,9 @@
 			</if>
 			<if test="superAdminFlag != null">
 				super_admin_flag = #{superAdminFlag,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}

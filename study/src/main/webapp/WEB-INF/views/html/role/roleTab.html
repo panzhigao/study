@@ -1,0 +1,18 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<input type="hidden" id="roleId" name="id" value="$!{role.id}">
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色名</label>
+			<div class="layui-input-block">
+				<input value="$!{role.roleName}" lay-verify="required" type="text" name="roleName" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" id="urlDiv">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea name="remark" class="layui-textarea" maxlength="100" placeholder="最多输入100个字">$!{role.remark}</textarea>
+			</div>
+		</div>
+		<button lay-filter="save" lay-submit style="display: none;"></button>
+	</form>
+</div>

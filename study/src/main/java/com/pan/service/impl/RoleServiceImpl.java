@@ -198,12 +198,14 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		ValidationUtils.validateEntity(role);
 		Role roleInDb = getAndCheck(role.getId());
 		Role updateRole=new Role();
-		String different=role.getId()+","+ roleInDb.getRoleName()+"-->"+role.getRoleName();
 		updateRole.setId(roleInDb.getId());
 		updateRole.setRoleName(role.getRoleName());
+		updateRole.setRemark(role.getRemark());
 		updateRole.setUpdateTime(new Date());
 		updateRole.setUpdateUserId(TokenUtils.getLoginUserId());
 		roleMapper.updateByPrimaryKeySelective(updateRole);
+		String changedFields = ValidationUtils.getChangedFields(roleInDb, updateRole);
+		String different=String.format("角色id：%s，编辑内容：%s",role.getId(),changedFields);
 		operateLogService.addOperateLog(different,OperateLogTypeEnum.ROLE_EDIT);
 	}
 
