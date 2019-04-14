@@ -158,13 +158,20 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
                 elem: '#uploadImg'
                 ,url: '/api/user/upload/'
                 ,size: 1000
+                ,multiple: true
+                ,acceptMime: 'image/*'
                 ,done: function(res){
                   if(res.code == 0){
-                    image.val(res.data.src);
+                    //image.val(res.data.src);
+                    layui.focusInsert(editor[0], 'img['+ res.data.src + '] ');
+                    layer.close(index);
                   } else {
                     layer.msg(res.msg, {icon: 5});
                   }
                 }
+              	,allDone: function(obj){
+              		
+              	}
               });
               
               form.on('submit(uploadImages)', function(data){

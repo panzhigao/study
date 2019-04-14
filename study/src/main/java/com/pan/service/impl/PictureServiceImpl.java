@@ -44,7 +44,6 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 		int deleteCount = pictureMapper.deleteByPictureIds(list,userId);
 		if(deleteCount!=length){
 			logger.error("用户删除图片数：{}，实际删除图片数：{}",length,deleteCount);
-			throw new BusinessException("删除图片信息失败，请重试");
 		}
 	}
 

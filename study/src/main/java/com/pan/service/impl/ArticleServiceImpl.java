@@ -110,6 +110,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
+			articleCheck.setCategoryId(article.getCategoryId());
 			articleCheck.setCheckType(CheckTypeEnum.CREATE.getCode());
 			articleCheckService.addArticleCheck(articleCheck);
 		}

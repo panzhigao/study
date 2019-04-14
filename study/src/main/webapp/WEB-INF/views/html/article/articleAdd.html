@@ -82,7 +82,8 @@ layui.use(['jquery', 'form','layedit'], function(){
 	  layedit.set({
 		  uploadImage: {
 		    url: '$!{rc.contextPath}/api/user/upload', //接口url
-		    type: 'post' //默认post
+		    type: 'post', //默认post
+		    multiple: true
 		  }
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器

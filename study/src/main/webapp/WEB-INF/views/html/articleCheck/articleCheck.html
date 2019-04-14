@@ -99,14 +99,16 @@ layui.use(['table','jquery'], function(){
 	    }
 	  });
 	  
+	  //待审核列表
 	  table.on('sort(tab1)', function(obj){
 		  var orderCondition=null;
 		  if(obj){
 			  orderCondition=obj.field+" "+obj.type;
 		  }
 		  table.reload('notCompleteTab', {
-			    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
-			    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+			    initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+			    page: {curr: 1},
+			    where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
 			      orderCondition:orderCondition
 			    }
 			});
@@ -142,6 +144,7 @@ layui.use(['table','jquery'], function(){
 	      {field: 'title', title: '文章标题', width:400,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
+	      {field: 'categoryName', title: '文章分类', width:90},
 	      {field: 'checkType', title: '审核类型', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.checkType){
@@ -175,14 +178,16 @@ layui.use(['table','jquery'], function(){
 		  }
 	  });
 	  
+	  //审核通过列表
 	  table.on('sort(tab2)', function(obj){
 		  var orderCondition=null;
 		  if(obj){
 			  orderCondition=obj.field+" "+obj.type;
 		  }
 		  table.reload('completeTab', {
-			    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
-			    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+			    initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。
+			    page: {curr: 1},
+			    where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
 			      orderCondition:orderCondition
 			    }
 			});
@@ -227,15 +232,9 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
-	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
-	      }},
-	      {field: 'checkTime', title: '审核时间', width:150, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.checkTime));
-	      }},
-	      {field: 'checkUsername', title: '审核人', width:100,templet:function(d){
-	    	  return d.checkUsername;
-	      }},
+	      {field: 'createTime', title: '创建时间', width:170, sort: true},
+	      {field: 'checkTime', title: '审核时间', width:170, sort: true},
+	      {field: 'checkUsername', title: '审核人', width:100},
 	      {field: 'approveFlag', title: '是否通过', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.approveFlag){

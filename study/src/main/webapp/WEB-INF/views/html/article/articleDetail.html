@@ -368,7 +368,7 @@ function createComment(comment){
 function getHotArticleList(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
-		type:'pst',
+		type:'post',
 		data:{pageNo:1,pageSize:10,isHot:"1"},
 		success:function(res){
 			if(res.code=='200'){

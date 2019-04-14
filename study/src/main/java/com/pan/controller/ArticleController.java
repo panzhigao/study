@@ -112,7 +112,6 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/article/{articleId:^\\d+}")
-	@ResponseBody
 	public ModelAndView toArticleDetailPage(@PathVariable("articleId")Long articleId){
 		//不存在抛出异常
 		ModelAndView mav=new ModelAndView("html/article/articleDetail");

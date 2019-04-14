@@ -154,16 +154,14 @@ layui.use(['table','jquery'], function(){
 	    	  	return temp;
 	      	  }
 	       },
-		  {field: 'commentCount', title: '评论数', width:90, sort: true,align:'right'},
-		  {field: 'viewCount', title: '阅读数', width:90, sort: true,align:'right'},
-	      {field: 'createTime', title: '创建时间', width:150, sort: true,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.createTime));
-	      }},
-          {field: 'publishTime', title: '发布时间', width:150, sort: true,templet:function(d){
+		  {field: 'commentCount', title: '评论数', width:90, sort: true},
+		  {field: 'viewCount', title: '阅读数', width:90, sort: true},
+	      {field: 'createTime', title: '创建时间', width:180, sort: true},
+          {field: 'publishTime', title: '发布时间', width:180, sort: true,templet:function(d){
 			  if(!d.publishTime){
 			      return '暂无';
 			  }
-			  return dateFormat('yyyy-MM-dd hh:mm',new Date(d.publishTime));
+			  return d.publishTime;
 		  }},
 	      {title:'操作',width:160,templet:function(row){
 	    	  var p_edit='#hasPermission("/user/article/doEdit") 1 #end';
@@ -270,9 +268,7 @@ layui.use(['table','jquery'], function(){
 	      {field: 'title', title: '文章标题', width:500,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
-	      {field: 'createTime', title: '收藏时间', width:200,templet:function(d){
-	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
-	      }},
+	      {field: 'createTime', title: '收藏时间', width:200},
 	      {title:'操作',width:160,templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';

@@ -43,9 +43,9 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/role/tab")
 	@RequiresPermissions({"/user/role/doAdd","/user/role/doEdit"})
-	public ModelAndView getRoleTab(Long roleId){
+	public ModelAndView getRoleTab(@RequestParam(name="roleId",defaultValue="0") Long roleId){
 		ModelAndView mav=new ModelAndView("html/role/roleTab");
-		if(roleId!=null){
+		if(roleId>0){
 			Role role = roleService.selectByPrimaryKey(roleId);
 			mav.addObject("role",role);
 		}

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,53 +55,55 @@ public class FileUploadController {
 	
     @RequestMapping(value="/upload",headers=("content-type=multipart/*"),method=RequestMethod.POST)
     @ResponseBody
-    public ResultMsg fildUpload(@RequestParam(value="file",required=false) MultipartFile file,HttpServletRequest request)throws Exception{ 
+    public ResultMsg fildUpload(@RequestParam(value="file",required=false) MultipartFile[] files,HttpServletRequest request)throws Exception{ 
     	logger.info("上传文件开始");
         //获得物理路径webapp所在路径  
     	ResultMsg resultMsg=null;
         String fileName=""; 
         String pictureDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
-        if(!file.isEmpty()){  
-            //生成时间戳作为文件名称  
-            String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
-            //获得文件类型（可以判断如果不是图片，禁止上传）  
-            String contentType=file.getContentType();  
-            //获得文件后缀名称  
-            String imageType=contentType.substring(contentType.indexOf("/")+1);  
-            fileName=dateStr+"."+imageType;  
-            String imgFilePath = pictureDir+fileName;
-            File destFile=new File(imgFilePath); 
-            destFile.setReadable(true);
-			destFile.setExecutable(true);
-			destFile.setWritable(true);
-			if(!SystemUtils.isWindows()){				
-				Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
-			}
-            file.transferTo(destFile);  
-            Picture picture=new Picture();
-			Long userId=TokenUtils.getLoginUserId();
-            try {
-            	 picture.setUserId(userId);
-                 picture.setPictureUrl(pictureUrl+fileName);
-                 picture.setPicturePath(imgFilePath);
-                 picture.setCreateTime(new Date());
-                 pictureService.insertSelective(picture);
-                 logger.info("图片输出路径:{}",pictureUrl+fileName); 
-                 Map<String,Object> data=new HashMap<String, Object>(5);
-                 data.put("src", pictureUrl+fileName);
-                 resultMsg=ResultMsg.build(ResultCodeEnum.UPLOAD_SUCCESS, ResultCodeEnum.UPLOAD_SUCCESS.getMsg(),data);
-			} catch (Exception e) {
-				logger.error("保存图片信息失败",e);
-				resultMsg=ResultMsg.fail("保存图片信息失败");
-				if(destFile.exists()){
-					boolean deleted=destFile.delete();
-					if(deleted){
-						logger.info("删除图片成功"); 
-					}else{						
-						logger.info("删除图片失败"); 
-					}
-				}
-			}
+        if(ArrayUtils.isNotEmpty(files)){  
+        	for(MultipartFile file:files){
+        		//生成时间戳作为文件名称  
+                String dateStr=DateUtils.getNowDateStr(DateUtils.FORMAT_TIME_MILLS);
+                //获得文件类型（可以判断如果不是图片，禁止上传）  
+                String contentType=file.getContentType();  
+                //获得文件后缀名称  
+                String imageType=contentType.substring(contentType.indexOf("/")+1);  
+                fileName=dateStr+"."+imageType;  
+                String imgFilePath = pictureDir+fileName;
+                File destFile=new File(imgFilePath); 
+                destFile.setReadable(true);
+    			destFile.setExecutable(true);
+    			destFile.setWritable(true);
+    			if(!SystemUtils.isWindows()){				
+    				Runtime.getRuntime().exec("chmod 777 -R " + imgFilePath); 
+    			}
+    			file.transferTo(destFile);  
+                Picture picture=new Picture();
+    			Long userId=TokenUtils.getLoginUserId();
+                try {
+                	 picture.setUserId(userId);
+                     picture.setPictureUrl(pictureUrl+fileName);
+                     picture.setPicturePath(imgFilePath);
+                     picture.setCreateTime(new Date());
+                     pictureService.insertSelective(picture);
+                     logger.info("图片输出路径:{}",pictureUrl+fileName); 
+                     Map<String,Object> data=new HashMap<String, Object>(5);
+                     data.put("src", pictureUrl+fileName);
+                     resultMsg=ResultMsg.build(ResultCodeEnum.UPLOAD_SUCCESS, ResultCodeEnum.UPLOAD_SUCCESS.getMsg(),data);
+    			} catch (Exception e) {
+    				logger.error("保存图片信息失败",e);
+    				resultMsg=ResultMsg.fail("保存图片信息失败");
+    				if(destFile.exists()){
+    					boolean deleted=destFile.delete();
+    					if(deleted){
+    						logger.info("删除图片成功"); 
+    					}else{						
+    						logger.info("删除图片失败"); 
+    					}
+    				}
+    			}
+        	}
         }else{
         	resultMsg=ResultMsg.fail("文件格式有误");
         }
