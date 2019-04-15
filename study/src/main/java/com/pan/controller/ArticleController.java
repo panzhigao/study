@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
@@ -81,7 +78,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/mine")
 	@RequiresPermissions("/user/article/mine")
-	public ModelAndView toArticleList(String status){
+	public ModelAndView toArticleList(@RequestParam(defaultValue = "") String status){
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
 		mav.addObject("status", status);
 		return mav;

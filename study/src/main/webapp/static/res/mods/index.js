@@ -283,7 +283,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       return content;
     }
 
-    //TODO 消息通知修改
     //新消息通知
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');
