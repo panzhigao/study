@@ -5,11 +5,19 @@ package com.pan.common.constant;
  * @author panzhigao
  */
 public class PageConstant {
-	public static final int DEFAULT_PAGE_NO=1;
     /**
-     * 最大分页条数
+     * 第一页
      */
-    public static final int MAX_PAGE_SIZE=100;
+	public static final int DEFAULT_PAGE_NO=1;
+
+    /**
+     * 分页0
+     */
+    public static final int PAGE_SIZE_0=0;
+    /**
+     * 分页0
+     */
+    public static final int PAGE_SIZE_1=1;
     /**
      * 分页5
      */
@@ -18,5 +26,9 @@ public class PageConstant {
      * 分页20
      */
     public static final int PAGE_SIZE_20=20;
+    /**
+     * 最大分页条数
+     */
+    public static final int MAX_PAGE_SIZE=100;
 
 }

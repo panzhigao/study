@@ -78,4 +78,8 @@ public class MyConstant {
      * 默认key
      */
     public static final Long DEFAULT_KEY=0L;
+    /**
+     * 默认用户名
+     */
+    public static final String USERNAME_SYSTEM="system";
 }

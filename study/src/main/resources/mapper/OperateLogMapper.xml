@@ -121,7 +121,7 @@
 	<sql id="whereSql">
 		<where>
 			<if test="username != null and username !='' ">
-                and username = #{username,jdbcType=VARCHAR}
+                and username like CONCAT('%',#{username},'%')
             </if>
 			<if test="operateType != null">
                 and operate_type = #{operateType,jdbcType=INTEGER}

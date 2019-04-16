@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>用户中心</title>
+  <title>操作日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="$!{systemConfig.keywords}">
   <meta name="description" content="$!{systemConfig.description}">
@@ -46,7 +46,7 @@
       			
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-	    	<table id="roleTable" lay-filter="roleTab"></table>
+	    	<table id="logTable" lay-filter="logTab"></table>
 	    </div>
       </div>
     </div>
@@ -83,7 +83,7 @@ layui.use(['table','jquery','form'], function(){
 	  table.render({
 		id: 'tab',  
 	    method: 'post',  
-	    elem: '#roleTable',
+	    elem: '#logTable',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -102,9 +102,7 @@ layui.use(['table','jquery','form'], function(){
 	      {field: 'operateTypeName', title: '操作类型', width:120},
 	      {field: 'content', title: '操作内容', width:800},
 	      {field: 'ipStr', title: 'ip地址', width:100},
-	      {field: 'createTime', title: '操作时间', width:160,templet:function(d){
-	    	 return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
-	      }}
+	      {field: 'createTime', title: '操作时间', width:160}
 	    ]]
 	  });
 });

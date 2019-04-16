@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pan.mapper.ExceptionLogMapper">
+  <resultMap id="BaseResultMap" type="com.pan.entity.ExceptionLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="ip" jdbcType="INTEGER" property="ip" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="exception_type" jdbcType="VARCHAR" property="exceptionType" />
+    <result column="is_view" jdbcType="INTEGER" property="isView" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pan.entity.ExceptionLog">
+    <result column="exception_msg" jdbcType="LONGVARCHAR" property="exceptionMsg" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, username, ip, class_name, method_name, exception_type, is_view, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    exception_msg
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_exception_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_exception_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.pan.entity.ExceptionLog">
+    insert into t_exception_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="className != null">
+        class_name,
+      </if>
+      <if test="methodName != null">
+        method_name,
+      </if>
+      <if test="exceptionType != null">
+        exception_type,
+      </if>
+      <if test="isView != null">
+        is_view,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="exceptionMsg != null">
+        exception_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=INTEGER},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null">
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionType != null">
+        #{exceptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="isView != null">
+        #{isView,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionMsg != null">
+        #{exceptionMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.ExceptionLog">
+    update t_exception_log
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=INTEGER},
+      </if>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null">
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionType != null">
+        exception_type = #{exceptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="isView != null">
+        is_view = #{isView,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionMsg != null">
+        exception_msg = #{exceptionMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryExceptionLog">
+    select <include refid="Base_Column_List"/> from t_exception_log
+    <include refid="whereSql"/> order by create_time desc
+    <if test="offset!=null and row !=null">
+      limit #{offset},#{row}
+    </if>
+  </select>
+
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QueryExceptionLog">
+    select count(0) from t_exception_log
+    <include refid="whereSql"/>
+  </select>
+
+  <sql id="whereSql">
+    <where>
+      <if test="username != null and username !=''">
+        AND username like CONCAT('%',#{username},'%')
+      </if>
+      <if test="beginDateTime !=null">
+        AND create_time>=#{beginDateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endDateTime !=null">
+        AND create_time &lt;#{endDateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+</mapper>

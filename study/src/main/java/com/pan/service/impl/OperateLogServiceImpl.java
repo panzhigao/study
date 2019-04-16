@@ -60,8 +60,8 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
 
 	@Override
 	public Map<String, Object> findByParams(QueryOperateLog queryOperateLog) {
-		Map<String, Object> pageData = new HashMap<String, Object>(2);
-		List<OperateLogVO> list = new ArrayList<OperateLogVO>();
+		Map<String, Object> pageData = new HashMap<>(4);
+		List<OperateLogVO> list = new ArrayList<>();
 		try {
 			logger.info("分页查询操作日志参数为:{}", JsonUtils.toJson(queryOperateLog));
 			int total = operateLogMapper.countByParams(queryOperateLog);
