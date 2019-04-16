@@ -323,6 +323,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		}
 		article.setUpdateTime(new Date());
 		articleMapper.updateByPrimaryKeySelective(article);
+		//清除文章缓存
+		JedisUtils.delete(MyConstant.ARTICLE_PREFIX+article.getId());
 	}
 	
 	/**

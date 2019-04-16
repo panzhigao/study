@@ -126,6 +126,12 @@
 			<if test="operateType != null">
                 and operate_type = #{operateType,jdbcType=INTEGER}
             </if>
+            <if test="beginDateTime !=null">
+                AND create_time>=#{beginDateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDateTime !=null">
+                AND create_time &lt;#{endDateTime,jdbcType=TIMESTAMP}
+            </if>
 		</where>
 	</sql>
 </mapper>
