@@ -3,31 +3,26 @@
 <mapper namespace="com.pan.mapper.SystemConfigMapper">
   <resultMap id="BaseResultMap" type="com.pan.entity.SystemConfig">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="web_name" jdbcType="VARCHAR" property="webName" />
-    <result column="web_title" jdbcType="VARCHAR" property="webTitle" />
-    <result column="keywords" jdbcType="VARCHAR" property="keywords" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="image_upload_dir" jdbcType="VARCHAR" property="imageUploadDir" />
-    <result column="record_info" jdbcType="VARCHAR" property="recordInfo" />
-    <result column="web_code" jdbcType="VARCHAR" property="webCode" />
-    <result column="burying_point_code" jdbcType="VARCHAR" property="buryingPointCode" />
+    <result column="param_name" jdbcType="VARCHAR" property="paramName" />
+    <result column="param_value" jdbcType="VARCHAR" property="paramValue" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
   </resultMap>
+
   <sql id="Base_Column_List">
-    id, web_name, web_title, keywords, description, image_upload_dir, record_info, web_code, 
-    burying_point_code, create_time, create_user_id, update_time, update_user_id
+    id, param_name, param_value, remark, create_time, create_user_id, update_time, update_user_id
   </sql>
-  
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_system_config
     where id = #{id,jdbcType=BIGINT}
   </select>
-  
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_system_config
     where id = #{id,jdbcType=BIGINT}
@@ -39,29 +34,14 @@
       <if test="id != null">
         id,
       </if>
-      <if test="webName != null">
-        web_name,
+      <if test="paramName != null">
+        param_name,
       </if>
-      <if test="webTitle != null">
-        web_title,
+      <if test="paramValue != null">
+        param_value,
       </if>
-      <if test="keywords != null">
-        keywords,
-      </if>
-      <if test="description != null">
-        description,
-      </if>
-      <if test="imageUploadDir != null">
-        image_upload_dir,
-      </if>
-      <if test="recordInfo != null">
-        record_info,
-      </if>
-      <if test="webCode != null">
-        web_code,
-      </if>
-      <if test="buryingPointCode != null">
-        burying_point_code,
+      <if test="remark != null">
+        remark,
       </if>
       <if test="createTime != null">
         create_time,
@@ -80,29 +60,14 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="webName != null">
-        #{webName,jdbcType=VARCHAR},
+      <if test="paramName != null">
+        #{paramName,jdbcType=VARCHAR},
       </if>
-      <if test="webTitle != null">
-        #{webTitle,jdbcType=VARCHAR},
+      <if test="paramValue != null">
+        #{paramValue,jdbcType=VARCHAR},
       </if>
-      <if test="keywords != null">
-        #{keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="imageUploadDir != null">
-        #{imageUploadDir,jdbcType=VARCHAR},
-      </if>
-      <if test="recordInfo != null">
-        #{recordInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="webCode != null">
-        #{webCode,jdbcType=VARCHAR},
-      </if>
-      <if test="buryingPointCode != null">
-        #{buryingPointCode,jdbcType=VARCHAR},
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -118,33 +83,18 @@
       </if>
     </trim>
   </insert>
-  
+
   <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.SystemConfig">
     update t_system_config
     <set>
-      <if test="webName != null">
-        web_name = #{webName,jdbcType=VARCHAR},
+      <if test="paramName != null">
+        param_name = #{paramName,jdbcType=VARCHAR},
       </if>
-      <if test="webTitle != null">
-        web_title = #{webTitle,jdbcType=VARCHAR},
+      <if test="paramValue != null">
+        param_value = #{paramValue,jdbcType=VARCHAR},
       </if>
-      <if test="keywords != null">
-        keywords = #{keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="imageUploadDir != null">
-        image_upload_dir = #{imageUploadDir,jdbcType=VARCHAR},
-      </if>
-      <if test="recordInfo != null">
-        record_info = #{recordInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="webCode != null">
-        web_code = #{webCode,jdbcType=VARCHAR},
-      </if>
-      <if test="buryingPointCode != null">
-        burying_point_code = #{buryingPointCode,jdbcType=VARCHAR},
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -161,5 +111,25 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  
+
+  <select id="countByParams" resultType="int" parameterType="com.pan.query.QuerySystemConfig">
+    select count(0) from t_system_config
+    <include refid="whereSql"/>
+  </select>
+
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QuerySystemConfig">
+    select <include refid="Base_Column_List"/> from t_system_config
+    <include refid="whereSql"/>
+    <if test="offset!=null and row !=null">
+      limit #{offset},#{row}
+    </if>
+  </select>
+
+  <sql id="whereSql">
+    <where>
+      <if test="paramName != null">
+        param_name = #{paramName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
 </mapper>

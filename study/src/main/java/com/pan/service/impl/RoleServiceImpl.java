@@ -93,9 +93,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		//删除角色下关联的权限
 		rolePermissionService.deleteRolePermissionByRoleId(roleId);
 		operateLogService.addOperateLog(roleInDb.toString(),OperateLogTypeEnum.ROLE_ADD);
-		//清除缓存中角色的权限信息
-		//TokenUtils.clearAuth();
-		//JedisUtils.delete("role_permissions:"+roleId);
 	}
 
 	/**

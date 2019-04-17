@@ -2,63 +2,39 @@ package com.pan.entity;
 
 import com.pan.common.annotation.LogMeta;
 import com.pan.common.annotation.UnescapeHtml;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 
 /**
- * 系统配置
- * @author Administrator
- *
+ * @author panzhigao
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class SystemConfig extends BaseEntity{
+
+    private static final long serialVersionUID = -6991864577573601166L;
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 3773213796788663104L;
-	/**
-	 * 网站名
-	 */
-	@LogMeta(fieldDesc="网站名")
-	private String webName;
-	/**
-	 * 网站标题
-	 */
-	@LogMeta(fieldDesc="网站标题")
-    private String webTitle;
-	/**
-	 * 网站关键字
-	 */
-	@LogMeta(fieldDesc="网站关键字")
-    private String keywords;
-	/**
-	 * 网站描述
-	 */
-	@LogMeta(fieldDesc="网站描述")
-    private String description;
-	/**
-	 * 图片上传路径
-	 */
-	@LogMeta(fieldDesc="图片上传路径")
-    private String imageUploadDir;
-	/**
-	 * 备案信息
-	 */
-	@LogMeta(fieldDesc="备案信息")
-	@UnescapeHtml
-    private String recordInfo;
-	/**
-	 * 网站公共代码
-	 */
-	@LogMeta(fieldDesc="网站公共代码")
-	@UnescapeHtml
-    private String webCode;
-	/**
-	 * 网站埋点代码
-	 */
-	@LogMeta(fieldDesc="网站埋点代码")
-	@UnescapeHtml
-    private String buryingPointCode;
+     * 变量名
+     */
+    @NotEmpty(message="变量名不能为空")
+    @Size(max = 100,message = "变量名不能超过100的字符")
+    @LogMeta(fieldDesc="变量名")
+    private String paramName;
+    /**
+     * 变量值
+     */
+    @NotEmpty(message="变量值不能为空")
+    @Size(max = 2000,message = "变量值不能超过2000的字符")
+    @LogMeta(fieldDesc="变量值")
+    @UnescapeHtml
+    private String paramValue;
+    /**
+     * 变量备注
+     */
+    @Size(max = 100,message = "变量备注不能超过100的字符")
+    @LogMeta(fieldDesc="变量备注")
+    private String remark;
 }

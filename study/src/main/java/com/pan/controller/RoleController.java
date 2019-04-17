@@ -86,7 +86,7 @@ public class RoleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/role/doDelete")
-	public ResultMsg deleteRole(Long roleId){
+	public ResultMsg deleteRole(@RequestParam(defaultValue = "0")Long roleId){
 		roleService.deleteRole(roleId);
 		return ResultMsg.ok("删除角色成功");
 	}

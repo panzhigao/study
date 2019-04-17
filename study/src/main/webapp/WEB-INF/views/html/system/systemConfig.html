@@ -1,89 +1,222 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>系统配置</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="$!{systemConfig.keywords}">
-  <meta name="description" content="$!{systemConfig.description}">
-  <link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+	<meta charset="utf-8">
+	<title>配置管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="keywords" content="#config('keywords')#end">
+	<meta name="description" content="#config('description')#end">
+	<link rel="icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
+	<link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+	<link rel="stylesheet" href="$!{rc.contextPath}/static/css/bootstrap.css" >
+	<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
+	<script type="text/javascript" src="$!{rc.contextPath}/static/js/bootstrap.min.js"></script>
 </head>
 <body class="childrenBody">
-  <div class="fly-panel fly-panel-user" pad20>
-    <div class="layui-tab layui-tab-brief" lay-filter="user"> 
-	           
-	  <form class="layui-form">              
-	      <table class="layui-table">
-				<colgroup>
-					<col width="200">
-					<col width="200">
-					<col width="200">
-				</colgroup>
-				<thead>
-					<tr>
-						<th>网站参数</th>
-						<th>参数值</th>
-						<th>变量名</th>
-					</tr>
-				</thead>
-				<tbody>
-				    #foreach($item in $params)
-					<tr>
-						<td>$!{item.paramDesc}</td>
-						<td>
-						#if($!{item.paramDesc}=='备案信息'||$!{item.paramDesc}=='网站公共代码'||$!{item.paramDesc}=='网站埋点代码')
-							<textarea name="$!{item.paramName}" required lay-verify="required" placeholder="请输入" class="layui-textarea">$!{item.paramValue}</textarea>
-						#else
-							<input type="text" name="$!{item.paramName}" value="$!{item.paramValue}" class="layui-input" lay-verify="required" placeholder="请输入$!{item.paramDesc}"/>
-						#end
-						</td>
-						<td>$!{item.paramName}</td>
-					</tr>
-					#end
-				</tbody>
-			</table>
-		
-		<div class="layui-btn-group">
-	     	<button class="layui-btn" lay-filter="save" lay-submit>保存</button>
-  		</div>
-  		
-  		</form>
-    </div>
-  </div>
+<div class="fly-panel fly-panel-user" pad20>
+	<div class="layui-tab layui-tab-brief" lay-filter="user">
+		<div class="layui-tab-content" style="padding:0;">
+			<div class="layui-tab-item layui-show">
+				变量名：
+				<div class="layui-inline">
+					<input placeholder="请输入变量名" class="layui-input" name="paramName" id="paramNameInput" autocomplete="off">
+				</div>
+
+				<button class="layui-btn" data-type="reload" id="search">搜索</button>
+
+				<div class="layui-btn-group">
+					<button class="layui-btn" id="btnAdd">新增变量</button>
+				</div>
+
+				<table id="configTable" lay-filter="configTab"></table>
+
+			</div>
+		</div>
+	</div>
+</div>
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
-<script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.min.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
-<script type="text/javascript">
+<script src="$!{rc.contextPath}/static/res/layui-xtree/layui-xtree.js"></script>
+<script>
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        ,uid: -1
+        ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
+        ,experience: 83
+        ,sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        ,base: '$!{rc.contextPath}/static/res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
 
-layui.use(['form'], function(){
-	var form = layui.form;
-	form.on('submit(save)', function(data){
-		params = data.field;
-		console.log(params);
-		save(params);
-		return false;
-	});
-})
+    //table
+    layui.use(['table','jquery','form'], function(){
+        var table = layui.table;
+        var $ = layui.$ , active = {
+            reload: function(){
+                var paramNameInput = $('#paramNameInput');
+                //执行重载
+                table.reload('tab', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        paramName: paramNameInput.val()
+                    }
+                });
+            }
+        };
 
-function save(params){
-	$.ajax({
-		type:'post',
-		url:'$!{rc.contextPath}/user/systemConfig/edit',
-		data:params,
-		dataType:'json',
-		success:function(res){
-			if(res.code==200){
-				layer.msg('编辑系统配置成功');
-			}else{
-				layer.msg(res.msg);
-			}
-		}
-		
-	})
-}
+        $('#btnAdd').on('click', function() {
+            showTab('添加变量','');
+        });
+
+        //监听工具条
+        table.on('tool(configTab)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('确定删除该变量么', function(index){
+                    layer.close(index);
+                    $.ajax({
+                        url:"$!{rc.contextPath}/user/systemConfig/doDelete",
+                        type:"post",
+                        data:{configId:data.id},
+                        success:function(data){
+                            if(data.code=='200'){
+                                layer.alert(data.msg);
+                                table.reload('tab');
+                            }else{
+                                layer.alert(data.msg);
+                            }
+                        }
+                    });
+                });
+            }else if(obj.event==='edit'){
+                showTab('新增变量',data.id);
+            }
+        });
+
+        //第一个实例
+        table.render({
+            id: 'tab',
+            method: 'post',
+            elem: '#configTable',
+            height: 500,
+            request: {
+                pageName: 'pageNo', //页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusCode: 200, //成功的状态码，默认：0
+                countName: 'total', //数据总数的字段名称，默认：count
+                dataName: 'data' //数据列表的字段名称，默认：data
+            },
+            url: '$!{rc.contextPath}/user/systemConfig/getPageData', //数据接口
+            page: true ,//开启分页
+            cols: [[ //表头
+                {field: 'id', title: '变量ID', width:100, fixed: 'left'},
+                {field: 'paramName', title: '变量名称', width:180},
+                {field: 'paramValue', title: '变量值', width:280},
+                {field: 'createTime', title: '创建时间', width:200},
+                {field: 'remark', title: '变量备注', width:200},
+                {title:'操作',width:120,templet:function(row){
+                    var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
+                    var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
+
+                    var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+                    var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+                    var show='';
+
+                    if(p_edit){
+                        show+=edit;
+                    }
+                    if(p_delete){
+                        show+=t_delete;
+                    }
+                    return show;
+                }}
+            ]]
+        });
+
+        $('#search').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        function showTab(title,roleId){
+            layer.closeAll();
+            $.get('$!{rc.contextPath}/user/systemConfig/tab?configId='+roleId, null, function(form) {
+                if(form.code=='400'){
+                    layer.msg(form.msg);
+                    return;
+                }
+                var index=layer.open({
+                    type: 1,
+                    title: title,
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    maxmin: true,
+                    offset: ['50px', '20%'],
+                    area: ['800px', '400px'],
+                    yes: function(index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=save]').click();
+                    },
+                    full: function(elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function() {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function(layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form;
+                        form.render();
+                        var url='';
+                        if(roleId){
+                            url='$!{rc.contextPath}/user/systemConfig/doEdit';
+                        }else{
+                            url='$!{rc.contextPath}/user/systemConfig/doAdd';
+                        }
+                        form.on('submit(save)', function(data) {
+                            $.ajax({
+                                url:url,
+                                type:'post',
+                                data:data.field,
+                                success:function(res){
+                                    if(res.code=='200'){
+                                        layer.msg(res.msg);
+                                        layer.close(index);
+                                        table.reload('tab');
+                                    }else{
+                                        layer.msg(res.msg);
+                                    }
+                                }
+                            });
+                            //这里可以写ajax方法提交表单
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    end: function() {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        }
+    });
 
 </script>
 #parse("./html/common/common.html")

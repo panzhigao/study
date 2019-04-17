@@ -78,7 +78,7 @@
 
 
         <!-- 表生成映射 -->
-		<table tableName="t_exception_log"  domainObjectName="ExceptionLog"
+		<table tableName="t_system_config"  domainObjectName="SystemConfig"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

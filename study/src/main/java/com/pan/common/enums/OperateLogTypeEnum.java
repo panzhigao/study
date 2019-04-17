@@ -46,6 +46,14 @@ public enum OperateLogTypeEnum {
 	 */
 	SYSTEM_CONFIG_EDIT(401,"编辑系统配置"),
 	/**
+	 * 新增系统配置
+	 */
+	SYSTEM_CONFIG_ADD(402,"新增系统配置"),
+	/**
+	 * 删除系统配置
+	 */
+	SYSTEM_CONFIG_DELETE(403,"删除系统配置"),
+	/**
 	 * 链接新增
 	 */
 	LINK_ADD(501,"链接新增"),

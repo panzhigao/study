@@ -248,7 +248,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
-    	String pictureSaveDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
+    	String pictureSaveDir=SystemConfigUtils.getParamValue("image_upload_dir");
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
         User updateUser=new User();
         BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});

@@ -1,0 +1,24 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<input type="hidden" name="id" value="$!{config.id}">
+		<div class="layui-form-item">
+			<label class="layui-form-label">变量名</label>
+			<div class="layui-input-block">
+				<input value="$!{config.paramName}" lay-verify="required" type="text" name="paramName" placeholder="请输入变量名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">变量值</label>
+			<div class="layui-input-block">
+				<textarea name="paramValue" class="layui-textarea" maxlength="1000" placeholder="请输入变量值,最多1000个字">$!{config.paramValue}</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item" id="urlDiv">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea name="remark" class="layui-textarea" maxlength="100" placeholder="最多输入100个字">$!{config.remark}</textarea>
+			</div>
+		</div>
+		<button lay-filter="save" lay-submit style="display: none;"></button>
+	</form>
+</div>

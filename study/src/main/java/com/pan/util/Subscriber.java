@@ -39,8 +39,10 @@ public class Subscriber extends JedisPubSub{
                     ArticleCategoryServiceImpl.refreshCache(Long.valueOf(id));
                 //系统配置
                 }else if(CacheSyncEnum.SYSTEM_CONFIG.getName().equals(type)){
-                    logger.info("同步文章系统配置缓存");
-                    SystemConfigUtils.refreshSystemConfig();
+                    logger.info("同步系统配置缓存");
+                    String paramName=split[1];
+                    SystemConfigUtils.refreshSystemConfig(paramName);
+                //链接
                 }else if(CacheSyncEnum.LINK.getName().equals(type)){
                 	logger.info("同步链接缓存");
                     LinkServiceImpl.onlineLinkCache.refresh(MyConstant.DEFAULT_KEY);

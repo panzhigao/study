@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用户中心</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  	<meta name="keywords" content="$!{systemConfig.keywords}">
-  	<meta name="description" content="$!{systemConfig.description}">
+  	<meta name="keywords" content="#config('keywords')#end">
+  	<meta name="description" content="#config('description')#end">
   	<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
   	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
@@ -18,7 +18,7 @@
 		<!-- 顶部 -->
 		<div class="layui-header header">
 			<div class="layui-main">
-				<a target="_blank" href="$!{rc.contextPath}/u/$!{user.id}" class="logo">$!{systemConfig.webName}</a>
+				<a target="_blank" href="$!{rc.contextPath}/u/$!{user.id}" class="logo">#config('web_name')#end</a>
 				<!-- 搜索 -->
 				<div class="layui-form component">
 			        <select name="modules" lay-verify="required" lay-search="">

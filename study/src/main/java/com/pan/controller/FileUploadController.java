@@ -60,7 +60,7 @@ public class FileUploadController {
         //获得物理路径webapp所在路径  
     	ResultMsg resultMsg=null;
         String fileName=""; 
-        String pictureDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
+        String pictureDir=SystemConfigUtils.getParamValue("image_upload_dir");
         if(ArrayUtils.isNotEmpty(files)){  
         	for(MultipartFile file:files){
         		//生成时间戳作为文件名称  
@@ -116,7 +116,7 @@ public class FileUploadController {
 		//创建一个通用的多部分解析器
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		Map<String,Object> map = new HashMap<String,Object>(5);
-		String pictureDir=SystemConfigUtils.getSystemConfig().getImageUploadDir();
+		String pictureDir=SystemConfigUtils.getParamValue("image_upload_dir");
 		//判断 request 是否有文件上传,即多部分请求
 		if(multipartResolver.isMultipart(request)){
 			//转换成多部分request
