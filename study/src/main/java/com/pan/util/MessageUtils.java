@@ -1,8 +1,16 @@
 package com.pan.util;
 
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Set;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.socket.TextMessage;
 import com.pan.websocket.MyWebSocketHandler;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 
 /**

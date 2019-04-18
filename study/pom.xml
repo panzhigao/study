@@ -29,6 +29,8 @@
         <!--jstl-->
         <jstl.version>1.2</jstl.version>
         <jsp.api.version>2.0</jsp.api.version>
+        <!--mail-->
+        <mail.version>1.4.7</mail.version>
     </properties>
 
 
@@ -142,6 +144,13 @@
                 <version>${jsp.api.version}</version>
             </dependency>
 
+            <!--邮件-->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>${mail.version}</version>
+            </dependency>
+            <!--邮件-->
         </dependencies>
     </dependencyManagement>
 
@@ -414,6 +423,12 @@
             <version>27.0.1-jre</version>
         </dependency>
 
+        <!--邮件-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+        <!--邮件-->
     </dependencies>
 
     <build>

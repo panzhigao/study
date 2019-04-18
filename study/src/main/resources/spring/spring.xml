@@ -17,6 +17,7 @@
 				<value>classpath:config/jdbc.properties</value>
 				<value>classpath:config/jedis.properties</value>
 				<value>classpath:config/system.properties</value>
+				<value>classpath:config/mail.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -35,7 +36,24 @@
 	<bean id="esClientBuilder" class="com.pan.common.client.EsClientBuilder"></bean>
 	
 	<bean class="com.pan.common.handler.BusinessExceptionResolver"></bean>
-	
+
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.smtp.host}" />
+		<property name="username" value="${mail.smtp.username}" />
+		<property name="password" value="${mail.smtp.password}" />
+		<property name="defaultEncoding" value="${mail.smtp.defaultEncoding}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean class="com.pan.util.EmailUtils">
+		<property name="javaMailSender" ref="javaMailSender"/>
+	</bean>
+
 	<import resource="classpath:spring/spring-mybatis.xml"/>
 	<import resource="classpath:spring/spring-redis.xml"/>
 	<import resource="classpath:spring/spring-task.xml"/>
