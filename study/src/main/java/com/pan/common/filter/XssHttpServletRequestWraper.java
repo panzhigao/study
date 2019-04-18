@@ -1,11 +1,14 @@
 package com.pan.common.filter;
 
-import java.util.regex.Pattern;
-
+import com.pan.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+/**
+ * @author panzhigao
+ */
 public class XssHttpServletRequestWraper extends HttpServletRequestWrapper{
+
 
 	public XssHttpServletRequestWraper(HttpServletRequest request) {
 		super(request);
@@ -20,74 +23,18 @@ public class XssHttpServletRequestWraper extends HttpServletRequestWrapper{
         int count = values.length;
         String[] encodedValues = new String[count];
         for (int i = 0; i < count; i++) {
-            encodedValues[i] = clearXss(values[i]);
+            encodedValues[i] = StringUtils.clearXss(values[i]);
         }
         return encodedValues;
     }
     @Override
     public String getParameter(String parameter) {
         String value = super.getParameter(parameter);
-        return clearXss(value);
+        return StringUtils.clearXss(value);
     }
     @Override
     public String getHeader(String name) {
         String value = super.getHeader(name);
-        return clearXss(value);
-    }
-    
-    // 清除路径中的转义字符
-    private String clearXss(String value) {
-        if (value == null || "".equals(value)) {
-            return value;
-        }
-        value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-        value = value.replaceAll("\\(", "&#40;").replace("\\)", "&#41;");
-        value = value.replaceAll("'", "&#39;");
-        value = value.replaceAll("eval\\((.*)\\)", "");
-        value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']",
-                "\"\"");
-        value = value.replace("script", "");
-        return value;
-    }
-    
-    @SuppressWarnings("unused")
-	private String stripXSS(String value) {
-        if (value != null) {
-            // NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
-            // avoid encoded attacks.
-            // value = ESAPI.encoder().canonicalize(value);
-            // Avoid null characters
-            value = value.replaceAll("", "");
-            // Avoid anything between script tags
-            Pattern scriptPattern = Pattern.compile("(.*?)", Pattern.CASE_INSENSITIVE);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid anything in a src="http://www.yihaomen.com/article/java/..." type of e­xpression
-            scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-            scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Remove any lonesome  tag
-            scriptPattern = Pattern.compile("", Pattern.CASE_INSENSITIVE);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Remove any lonesome  tag
-            scriptPattern = Pattern.compile("", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid eval(...) e­xpressions
-            scriptPattern = Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid e­xpression(...) e­xpressions
-            scriptPattern = Pattern.compile("e­xpression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid javascript:... e­xpressions
-            scriptPattern = Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid vbscript:... e­xpressions
-            scriptPattern = Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE);
-            value = scriptPattern.matcher(value).replaceAll("");
-            // Avoid onload= e­xpressions
-            scriptPattern = Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-            value = scriptPattern.matcher(value).replaceAll("");
-        }
-        return value;
+        return StringUtils.clearXss(value);
     }
 }
