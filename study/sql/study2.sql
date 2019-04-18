@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-04-16 19:07:30
+Date: 2019-04-18 13:54:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -215,7 +215,7 @@ CREATE TABLE `t_login_history` (
   `user_agent` varchar(2048) NOT NULL DEFAULT '' COMMENT '用户代理',
   PRIMARY KEY (`id`),
   KEY `idx_user_id_username` (`user_id`,`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=211 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_login_history
@@ -253,6 +253,8 @@ INSERT INTO `t_login_history` VALUES ('207', '1523899', 'admin', '2019-04-15 18:
 INSERT INTO `t_login_history` VALUES ('208', '1523899', 'admin', '2019-04-16 16:35:51', '2130706433', 'Mozilla/5.0 &#40;Windows NT 6.1; WOW64) AppleWebKit/537.36 &#40;KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
 INSERT INTO `t_login_history` VALUES ('209', '1523899', 'admin', '2019-04-16 17:11:44', '2130706433', 'Mozilla/5.0 &#40;Windows NT 6.1; WOW64) AppleWebKit/537.36 &#40;KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
 INSERT INTO `t_login_history` VALUES ('210', '1523899', 'admin', '2019-04-16 18:18:13', '2130706433', 'Mozilla/5.0 &#40;Windows NT 6.1; WOW64) AppleWebKit/537.36 &#40;KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
+INSERT INTO `t_login_history` VALUES ('211', '1523899', 'admin', '2019-04-17 18:10:50', '2130706433', 'Mozilla/5.0 &#40;Windows NT 6.1; WOW64) AppleWebKit/537.36 &#40;KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
+INSERT INTO `t_login_history` VALUES ('212', '1523899', 'admin', '2019-04-18 13:52:51', '2130706433', 'Mozilla/5.0 &#40;Windows NT 6.1; WOW64) AppleWebKit/537.36 &#40;KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
 
 -- ----------------------------
 -- Table structure for t_message
@@ -296,7 +298,7 @@ CREATE TABLE `t_operate_log` (
   `ip` int(11) NOT NULL DEFAULT '0' COMMENT 'ip',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=utf8 COMMENT='操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8 COMMENT='操作日志表';
 
 -- ----------------------------
 -- Records of t_operate_log
@@ -415,6 +417,57 @@ INSERT INTO `t_operate_log` VALUES ('195', '1523899', 'admin', 'admin(admin)新�
 INSERT INTO `t_operate_log` VALUES ('196', '1523899', 'admin', 'admin(admin)删除权限：Permission(permissionName=33, url=3333, pid=0, marker=null, level=1, sort=100, icon=layui-icon-star-fill, type=1)', '103', '2130706433', '2019-04-16 16:39:24');
 INSERT INTO `t_operate_log` VALUES ('197', '1523899', 'admin', 'admin(admin)新增权限：Permission(permissionName=异常日志, url=/user/exceptionLog, pid=22, marker=null, level=2, sort=100, icon=layui-icon-fonts-del, type=1)', '101', '2130706433', '2019-04-16 16:44:40');
 INSERT INTO `t_operate_log` VALUES ('198', '1523899', 'admin', 'admin(admin)文章分类上线：上线文章分类游戏', '605', '2130706433', '2019-04-16 19:06:58');
+INSERT INTO `t_operate_log` VALUES ('199', '1523899', 'admin', 'admin(admin)编辑系统配置：SystemConfig(paramName=web_name, paramValue=好好学习-你好, remark=)', '402', '2130706433', '2019-04-17 18:12:48');
+INSERT INTO `t_operate_log` VALUES ('200', '1523899', 'admin', 'admin(admin)编辑系统配置：SystemConfig(paramName=web_name, paramValue=好好学习-你好, remark=)', '402', '2130706433', '2019-04-17 18:13:55');
+INSERT INTO `t_operate_log` VALUES ('201', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=web_name, paramValue=好好学习, remark=)', '402', '2130706433', '2019-04-17 18:16:57');
+INSERT INTO `t_operate_log` VALUES ('202', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：好好学习-->好好学习666；', '401', '2130706433', '2019-04-17 18:22:31');
+INSERT INTO `t_operate_log` VALUES ('203', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=444, paramValue=333, remark=)', '402', '2130706433', '2019-04-17 18:22:49');
+INSERT INTO `t_operate_log` VALUES ('204', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：-->5555；', '401', '2130706433', '2019-04-17 18:22:53');
+INSERT INTO `t_operate_log` VALUES ('205', '1523899', 'admin', 'admin(admin)编辑系统配置：SystemConfig(paramName=444, paramValue=333, remark=5555)', '401', '2130706433', '2019-04-17 18:22:55');
+INSERT INTO `t_operate_log` VALUES ('206', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=web_title, paramValue=好好学习社区-7788, remark=)', '402', '2130706433', '2019-04-17 18:23:20');
+INSERT INTO `t_operate_log` VALUES ('207', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=keywords, paramValue=好好学习社区, remark=)', '402', '2130706433', '2019-04-17 18:23:37');
+INSERT INTO `t_operate_log` VALUES ('208', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=deion, paramValue=好好学习社区，致力于为web学习交流, remark=)', '402', '2130706433', '2019-04-17 18:23:56');
+INSERT INTO `t_operate_log` VALUES ('209', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 18:24:08');
+INSERT INTO `t_operate_log` VALUES ('210', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->deion3333；', '401', '2130706433', '2019-04-17 18:24:26');
+INSERT INTO `t_operate_log` VALUES ('211', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion3333-->deion；', '401', '2130706433', '2019-04-17 18:24:34');
+INSERT INTO `t_operate_log` VALUES ('212', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 18:25:30');
+INSERT INTO `t_operate_log` VALUES ('213', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 18:26:29');
+INSERT INTO `t_operate_log` VALUES ('214', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->0000000000000000；', '401', '2130706433', '2019-04-17 18:26:59');
+INSERT INTO `t_operate_log` VALUES ('215', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：0000000000000000-->deion；', '401', '2130706433', '2019-04-17 18:27:15');
+INSERT INTO `t_operate_log` VALUES ('216', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->panzhigao；', '401', '2130706433', '2019-04-17 18:27:36');
+INSERT INTO `t_operate_log` VALUES ('217', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：panzhigao-->deion；', '401', '2130706433', '2019-04-17 18:28:17');
+INSERT INTO `t_operate_log` VALUES ('218', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->d333eion；', '401', '2130706433', '2019-04-17 18:28:26');
+INSERT INTO `t_operate_log` VALUES ('219', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=image_upload_dir, paramValue=C:\\Users\\panzhigao\\Desktop\\myimage\\, remark=)', '402', '2130706433', '2019-04-17 18:29:02');
+INSERT INTO `t_operate_log` VALUES ('220', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=record_info, paramValue=2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&&lt;/a&gt;京ICP备18031226号, remark=)', '402', '2130706433', '2019-04-17 18:30:39');
+INSERT INTO `t_operate_log` VALUES ('221', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=web_code, paramValue=body {}, remark=)', '402', '2130706433', '2019-04-17 18:31:03');
+INSERT INTO `t_operate_log` VALUES ('222', '1523899', 'admin', 'admin(admin)新增系统配置：SystemConfig(paramName=burying_point_code, paramValue=https://s22.cnzz.com/z_stat.php?id=1274156186&web_id=1274156186, remark=)', '402', '2130706433', '2019-04-17 18:31:24');
+INSERT INTO `t_operate_log` VALUES ('223', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：-->埋点代码；', '401', '2130706433', '2019-04-17 18:31:39');
+INSERT INTO `t_operate_log` VALUES ('224', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：d333eion-->deion；', '401', '2130706433', '2019-04-17 18:31:57');
+INSERT INTO `t_operate_log` VALUES ('225', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 18:35:04');
+INSERT INTO `t_operate_log` VALUES ('226', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：好好学习666-->好好学习777；', '401', '2130706433', '2019-04-17 18:47:33');
+INSERT INTO `t_operate_log` VALUES ('227', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&&lt;/a&gt;京ICP备18031226号-->&lt;a href=\"/\" target=\"_blank\"&gt;好好学习777&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号&lt;/p&gt;；', '401', '2130706433', '2019-04-17 18:48:58');
+INSERT INTO `t_operate_log` VALUES ('228', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：&lt;a href=\"/\" target=\"_blank\"&gt;好好学习777&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号&lt;/p&gt;-->&lt;a href=\"/\" target=\"_blank\"&gt;好好学习777&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号；', '401', '2130706433', '2019-04-17 18:54:46');
+INSERT INTO `t_operate_log` VALUES ('229', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：&lt;a href=\"/\" target=\"_blank\"&gt;好好学习777&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号-->&lt;a href=\"/\" target=\"_blank\"&gt;好好学习888&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号；', '401', '2130706433', '2019-04-17 18:55:08');
+INSERT INTO `t_operate_log` VALUES ('230', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：&lt;a href=\"/\" target=\"_blank\"&gt;好好学习888&lt;/a&gt; 2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号-->2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号；', '401', '2130706433', '2019-04-17 18:58:41');
+INSERT INTO `t_operate_log` VALUES ('231', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号-->2019 © &lt;a href=\"/\"  target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号；', '401', '2130706433', '2019-04-17 18:59:55');
+INSERT INTO `t_operate_log` VALUES ('232', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->deion999；', '401', '2130706433', '2019-04-17 19:00:24');
+INSERT INTO `t_operate_log` VALUES ('233', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion999-->deio；', '401', '2130706433', '2019-04-17 19:00:32');
+INSERT INTO `t_operate_log` VALUES ('234', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deio-->dcription；', '401', '2130706433', '2019-04-17 19:00:46');
+INSERT INTO `t_operate_log` VALUES ('235', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：dcription-->deion；', '401', '2130706433', '2019-04-17 19:00:51');
+INSERT INTO `t_operate_log` VALUES ('236', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：-->网站名称；', '401', '2130706433', '2019-04-17 19:01:03');
+INSERT INTO `t_operate_log` VALUES ('237', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：-->网站标题；', '401', '2130706433', '2019-04-17 19:01:19');
+INSERT INTO `t_operate_log` VALUES ('238', '1523899', 'admin', 'admin(admin)编辑系统配置：变量值：-->deion；', '401', '2130706433', '2019-04-17 19:03:19');
+INSERT INTO `t_operate_log` VALUES ('239', '1523899', 'admin', 'admin(admin)编辑系统配置：变量备注：deion-->desciption；', '401', '2130706433', '2019-04-17 19:07:11');
+INSERT INTO `t_operate_log` VALUES ('240', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->desciption；', '401', '2130706433', '2019-04-17 19:08:03');
+INSERT INTO `t_operate_log` VALUES ('241', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 19:09:16');
+INSERT INTO `t_operate_log` VALUES ('242', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 19:10:34');
+INSERT INTO `t_operate_log` VALUES ('243', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 19:12:38');
+INSERT INTO `t_operate_log` VALUES ('244', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：desciption-->deion；变量备注：desciption-->deion；', '401', '2130706433', '2019-04-17 19:13:55');
+INSERT INTO `t_operate_log` VALUES ('245', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：deion-->desciption；', '401', '2130706433', '2019-04-17 19:14:35');
+INSERT INTO `t_operate_log` VALUES ('246', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：desciption-->deion；', '401', '2130706433', '2019-04-17 19:16:48');
+INSERT INTO `t_operate_log` VALUES ('247', '1523899', 'admin', 'admin(admin)编辑系统配置：变量名：description-->deion；', '401', '2130706433', '2019-04-17 19:18:54');
+INSERT INTO `t_operate_log` VALUES ('248', '1523899', 'admin', 'admin(admin)编辑系统配置：', '401', '2130706433', '2019-04-17 19:19:39');
+INSERT INTO `t_operate_log` VALUES ('249', '1523899', 'admin', 'admin(admin)编辑系统配置：变量备注：deion-->description；', '401', '2130706433', '2019-04-18 13:53:22');
 
 -- ----------------------------
 -- Table structure for t_permission
@@ -621,7 +674,7 @@ CREATE TABLE `t_score_history` (
   PRIMARY KEY (`id`),
   KEY `idex_user_id_type_score_date` (`user_id`,`type`,`score_date`) USING BTREE,
   KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=277 DEFAULT CHARSET=utf8 COMMENT='积分历史表';
+) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=utf8 COMMENT='积分历史表';
 
 -- ----------------------------
 -- Records of t_score_history
@@ -656,32 +709,37 @@ INSERT INTO `t_score_history` VALUES ('273', '1523899', '1', '登陆', '5', '201
 INSERT INTO `t_score_history` VALUES ('274', '1523899', '4', '签到', '5', '2019-04-15', '2019-04-15 18:34:27');
 INSERT INTO `t_score_history` VALUES ('275', '1523899', '1', '登陆', '5', '2019-04-16', '2019-04-16 16:35:51');
 INSERT INTO `t_score_history` VALUES ('276', '1523899', '4', '签到', '10', '2019-04-16', '2019-04-16 19:04:18');
+INSERT INTO `t_score_history` VALUES ('277', '1523899', '1', '登陆', '5', '2019-04-17', '2019-04-17 18:10:50');
+INSERT INTO `t_score_history` VALUES ('278', '1523899', '1', '登陆', '5', '2019-04-18', '2019-04-18 13:52:51');
 
 -- ----------------------------
 -- Table structure for t_system_config
 -- ----------------------------
 DROP TABLE IF EXISTS `t_system_config`;
 CREATE TABLE `t_system_config` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '网站标题',
-  `web_name` varchar(128) NOT NULL DEFAULT '' COMMENT '网站名称',
-  `web_title` varchar(128) NOT NULL DEFAULT '' COMMENT '网站标题',
-  `keywords` varchar(512) NOT NULL DEFAULT '' COMMENT '网站关键字',
-  `description` varchar(512) NOT NULL DEFAULT '' COMMENT '网站描述',
-  `image_upload_dir` varchar(512) NOT NULL DEFAULT '' COMMENT '图片上传路径',
-  `record_info` varchar(128) NOT NULL DEFAULT '' COMMENT '备案信息',
-  `web_code` varchar(2048) NOT NULL DEFAULT '' COMMENT '网站公共代码',
-  `burying_point_code` varchar(2048) NOT NULL DEFAULT '' COMMENT '网站埋点代码',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `param_name` varchar(128) NOT NULL DEFAULT '' COMMENT '变量名',
+  `param_value` varchar(2048) NOT NULL DEFAULT '' COMMENT '变量值',
+  `remark` varchar(128) NOT NULL DEFAULT '' COMMENT '变量备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建人id',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新人',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统配置表';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `param_name_unique` (`param_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='系统配置表';
 
 -- ----------------------------
 -- Records of t_system_config
 -- ----------------------------
-INSERT INTO `t_system_config` VALUES ('1', '好好学习-你好', '好好学习社区-7788', '好好学习社区', '好好学习社区，致力于为web学习交流', 'C:\\Users\\panzhigao\\Desktop\\myimage\\', '2019 © &lt;a href=\"/\" target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号', 'body {\n\n}', 'https://s22.cnzz.com/z_stat.php?id=1274156186&web_id=1274156186', '2019-03-16 12:31:50', '1523899', '2019-04-15 17:16:29', '1523899');
+INSERT INTO `t_system_config` VALUES ('1', 'web_name', '好好学习777', '网站名称', '2019-04-17 18:16:57', '1523899', '2019-04-17 19:01:03', '1523899');
+INSERT INTO `t_system_config` VALUES ('3', 'web_title', '好好学习社区-7788', '网站标题', '2019-04-17 18:23:19', '1523899', '2019-04-17 19:01:19', '1523899');
+INSERT INTO `t_system_config` VALUES ('4', 'keywords', '好好学习社区', '', '2019-04-17 18:23:37', '1523899', null, '0');
+INSERT INTO `t_system_config` VALUES ('5', 'description', '好好学习社区，致力于为web学习交流', 'description', '2019-04-17 18:23:56', '1523899', '2019-04-18 13:53:22', '1523899');
+INSERT INTO `t_system_config` VALUES ('6', 'image_upload_dir', 'C:\\Users\\panzhigao\\Desktop\\myimage\\', '', '2019-04-17 18:29:02', '1523899', null, '0');
+INSERT INTO `t_system_config` VALUES ('7', 'record_info', '2019 © &lt;a href=\"/\"  target=\"_blank\"&gt;panzhigao.vip 出品&lt;/a&gt;京ICP备18031226号', '', '2019-04-17 18:30:39', '1523899', '2019-04-17 18:59:55', '1523899');
+INSERT INTO `t_system_config` VALUES ('8', 'web_code', 'body {}', '', '2019-04-17 18:31:03', '1523899', null, '0');
+INSERT INTO `t_system_config` VALUES ('9', 'burying_point_code', 'https://s22.cnzz.com/z_stat.php?id=1274156186&web_id=1274156186', '埋点代码', '2019-04-17 18:31:24', '1523899', '2019-04-17 18:31:39', '1523899');
 
 -- ----------------------------
 -- Table structure for t_test
@@ -729,7 +787,7 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1523899', '1', 'admin', 'admin', '6FA456619C9CD1E640134D615945CBA05D5F26DC32003EF3E59DA2A5', '2019-03-30 18:41:28', '2019-04-16 18:18:13', '1', '18911536627', '2019-04-15 17:16:43', 'http://www.panzhigao.vip/myimage/20190415171643128.jpg', '0', '1', '北京');
+INSERT INTO `t_user` VALUES ('1523899', '1', 'admin', 'admin', '6FA456619C9CD1E640134D615945CBA05D5F26DC32003EF3E59DA2A5', '2019-03-30 18:41:28', '2019-04-18 13:52:51', '1', '18911536627', '2019-04-15 17:16:43', 'http://www.panzhigao.vip/myimage/20190415171643128.jpg', '0', '1', '北京');
 INSERT INTO `t_user` VALUES ('1524965', '1', 'gangtiexia', '钢铁侠', 'D2D5F45EA8D6F5D54EDE7A768BF1A3625F93B61F428B71539F7D9B7A', '2019-03-31 12:16:08', '2019-03-31 13:10:48', '1', '', '2019-03-31 14:18:13', 'http://www.panzhigao.vip/myimage/20190331141813320.jpg', '0', '0', '');
 INSERT INTO `t_user` VALUES ('1525055', '0', 'lvdengxia', '绿灯侠', '0701BC65DCF322E5A6304ED34D683AEE3F80DD262C26C8043BCB14B9', '2019-03-31 13:38:25', '2019-03-31 13:38:25', '1', '', '2019-03-31 13:38:25', '/static/images/default_portrait.jpg', '0', '0', '');
 
@@ -757,7 +815,7 @@ CREATE TABLE `t_user_extension` (
 -- ----------------------------
 -- Records of t_user_extension
 -- ----------------------------
-INSERT INTO `t_user_extension` VALUES ('1523899', 'admin', 'http://www.panzhigao.vip/myimage/20190415171643128.jpg', '哈哈', '2019-03-30 18:41:28', '2019-04-16 19:04:18', '4', '1', '127', '10', '6', '10', '6');
+INSERT INTO `t_user_extension` VALUES ('1523899', 'admin', 'http://www.panzhigao.vip/myimage/20190415171643128.jpg', '哈哈', '2019-03-30 18:41:28', '2019-04-18 13:52:51', '4', '1', '137', '12', '6', '12', '6');
 INSERT INTO `t_user_extension` VALUES ('1524965', '钢铁侠', 'http://www.panzhigao.vip/myimage/20190331141813320.jpg', '', '2019-03-31 12:16:08', '2019-03-31 14:18:13', '0', '2', '29', '0', '1', '0', '1');
 INSERT INTO `t_user_extension` VALUES ('1525055', '绿灯侠', '/static/images/default_portrait.jpg', '', '2019-03-31 13:38:25', '2019-03-31 13:38:36', '0', '0', '30', '1', '1', '1', '1');
 
