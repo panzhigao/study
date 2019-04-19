@@ -52,6 +52,7 @@
 
 	<bean class="com.pan.util.EmailUtils">
 		<property name="javaMailSender" ref="javaMailSender"/>
+		<property name="formUser" value="${mail.smtp.username}"/>
 	</bean>
 
 	<import resource="classpath:spring/spring-mybatis.xml"/>

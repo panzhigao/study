@@ -11,7 +11,7 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.entity.ExceptionLog;
 import com.pan.service.ExceptionLogService;
-import com.pan.util.IPUtils;
+import com.pan.util.*;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -22,8 +22,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
-import com.pan.util.JsonUtils;
-import com.pan.util.TokenUtils;
 
 /**
  * 异常类处理
@@ -86,7 +84,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 					exceptionLog.setUsername(MyConstant.USERNAME_SYSTEM);
 				}
 				exceptionLogService.insertSelective(exceptionLog);
-				//TODO 发送邮件
+				EmailUtils.sendMail("网站发生问题，请尽快处理",sw.toString(), SystemConfigUtils.getParamValue("email_receviers"),true);
 			}
 			businessException = new BusinessException(DEFAULT_MESSAGE);
 		}
