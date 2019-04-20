@@ -245,7 +245,7 @@ layui.use(['table','jquery'], function(){
 	      	  }
 	       },
 	      {field: 'remark', title: '审核备注', width:100},
-	      {title:'操作',width:100,templet:function(row){
+	      {title:'操作',width:80,fixed:'right',templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  if(row.completeFlag=='1'){
 	    		  return detail;

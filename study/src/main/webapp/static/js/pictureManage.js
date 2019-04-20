@@ -6,7 +6,7 @@ layui.config({
 }).use(['flow','form','layer','jquery'],function(){
     //流加载图片
     var pageSize = 10;  //单页显示图片数量
-    var flow = layui.flow,form = layui.form;
+    var flow = layui.flow,form = layui.form,$=layui.jquery;
     flow.load({
         elem: '#Images', //流加载容器
         done: function(pageNo, next){ //加载下一页
@@ -19,15 +19,27 @@ layui.config({
         			if(res.code=='200'){
         				var data=res.data.list;
         				var total=res.data.total;
-                        //模拟插入
                         var imgList = [];
                         var hasData = pageSize*pageNo<total;
                         setTimeout(function(){
                             for(var i=0; i<data.length; i++){
-                                imgList.push('<li><img src="'+ data[i].pictureUrl +'"><div class="operate"><div class="check"><input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary"  pictureid="'+data[i].id+'"></div><i class="layui-icon img_del">&#xe640;</i></div></li>')
+                            	var img='<li>'+
+                            			  '<div style="height:242px;overflow:hidden;">'+
+                            			    '<img src="'+ data[i].pictureUrl +'">'+
+                            			  '</div>'+
+                            			  '<div class="operate">'+
+                            			    '<div class="check">'+
+                            			      '<input type="checkbox" name="belle" lay-filter="choose" lay-skin="primary"  pictureid="'+data[i].id+'">'+
+                            			      '<span>图片'+data[i].id+'</span>'+
+                            			    '</div>'+
+                            			    '<i class="layui-icon img_del">&#xe640;</i>'+
+                            			  '</div>'+
+                            			'</li>';
+                                imgList.push(img);
                             }
                             next(imgList.join(''), hasData);
                             form.render();
+                            layui.use(['fly'],function(){})
                         }, 500);
         			}
         		}	

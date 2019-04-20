@@ -137,7 +137,7 @@ layui.use(['table','jquery'], function(){
 	    where:{status:'$!{status}'},
 	    cols: [[ //表头
 	      {field: 'id', title: '文章ID', width:100,fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:200,templet:function(d){
+	      {field: 'title', title: '文章标题', width:240,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.id+"'>"+d.title+"</a>";
 	      }},
           {field: 'categoryName', title: '文章分类', width:90},
@@ -265,11 +265,11 @@ layui.use(['table','jquery'], function(){
 	    cols: [[ //表头
           {field: 'id', title: 'ID', width:100, fixed: 'left'},
 	      {field: 'articleId', title: '文章ID', width:100, fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:500,templet:function(d){
+	      {field: 'title', title: '文章标题', width:700,templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.articleId+"'>"+d.title+"</a>";
 	      }},
 	      {field: 'createTime', title: '收藏时间', width:200},
-	      {title:'操作',width:160,templet:function(row){
+	      {title:'操作',width:160,fixed: 'right',templet:function(row){
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
 	    	  return detail+t_delete;

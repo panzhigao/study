@@ -3,7 +3,7 @@ package com.pan.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.query.QueryPicture;
@@ -37,6 +36,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/myPicturePage")
+	@RequiresPermissions("/user/myPicturePage")
 	public ModelAndView toMyPictures(){
 		logger.info("进入我的相册页...");
 		ModelAndView mav=new ModelAndView("html/picture/pictureManage");
@@ -49,6 +49,7 @@ public class PictureController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/getPictures")
 	@ResponseBody
+	@RequiresPermissions("/user/myPicturePage")
 	public ResultMsg getPictureList(Integer pageSize,Integer pageNo){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		QueryPicture queryPicture=new QueryPicture();
@@ -69,6 +70,7 @@ public class PictureController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/deletePicture")
 	@ResponseBody
+	@RequiresPermissions("/user/myPicturePage")
 	public ResultMsg deletePicture(String pictureIds){
 		logger.info("删除图片开始");
 		Long loginUserId = TokenUtils.getLoginUserId();

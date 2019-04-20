@@ -90,6 +90,7 @@ public class FileUploadController {
                      logger.info("图片输出路径:{}",pictureUrl+fileName); 
                      Map<String,Object> data=new HashMap<String, Object>(5);
                      data.put("src", pictureUrl+fileName);
+                     data.put("title", "图片");
                      resultMsg=ResultMsg.build(ResultCodeEnum.UPLOAD_SUCCESS, ResultCodeEnum.UPLOAD_SUCCESS.getMsg(),data);
     			} catch (Exception e) {
     				logger.error("保存图片信息失败",e);
@@ -163,6 +164,7 @@ public class FileUploadController {
 						}
 					}
 				}
+				map.put("title", "图片");
 				map.put("data", data);
 				map.put("errno", 0);
 			}

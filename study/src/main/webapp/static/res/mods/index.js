@@ -637,7 +637,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
   //新消息通知
-  fly.newmsg();
+  //fly.newmsg();
 
   //发送激活邮件
   fly.activate = function(email){
