@@ -57,11 +57,13 @@ public class ExceptionLogController {
         ModelAndView mav=new ModelAndView();
         mav.setViewName("html/system/exceptionLogDetail");
         ExceptionLog exceptionLog = exceptionLogService.selectByPrimaryKey(id);
-        //日志标记为已读
-        ExceptionLog update=new ExceptionLog();
-        update.setId(id);
-        update.setIsView(MessageStatusEnum.MESSAGE_READED.getCode());
-        exceptionLogService.updateByPrimaryKeySelective(update);
+        //日志如果未读，则标记为已读
+        if(exceptionLog!=null&&MessageStatusEnum.MESSAGE_NOT_READED.equals(exceptionLog.getIsView())){
+        	ExceptionLog update=new ExceptionLog();
+            update.setId(id);
+            update.setIsView(MessageStatusEnum.MESSAGE_READED.getCode());
+            exceptionLogService.updateByPrimaryKeySelective(update);
+        }
         mav.addObject("exceptionLog", exceptionLog);
         return mav;
     }

@@ -19,16 +19,17 @@
 	<div class="layui-tab layui-tab-brief" lay-filter="user">
 		<div class="layui-tab-content" style="padding:0;">
 			<div class="layui-tab-item layui-show">
-				变量名：
 				<div class="layui-inline">
 					<input placeholder="请输入变量名" class="layui-input" name="paramName" id="paramNameInput" autocomplete="off">
 				</div>
 
 				<button class="layui-btn" data-type="reload" id="search">搜索</button>
-
+				
+				#hasPermission('/user/systemConfig/doAdd')
 				<div class="layui-btn-group">
-					<button class="layui-btn" id="btnAdd">新增变量</button>
+					<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i>新增变量</button>
 				</div>
+				#end
 
 				<table id="configTable" lay-filter="configTab"></table>
 
@@ -75,7 +76,7 @@
         };
 
         $('#btnAdd').on('click', function() {
-            showTab('添加变量','');
+            showTab('新增变量','');
         });
 
         //监听工具条
@@ -121,14 +122,28 @@
             url: '$!{rc.contextPath}/user/systemConfig/getPageData', //数据接口
             page: true ,//开启分页
             cols: [[ //表头
-                {field: 'id', title: '变量ID', width:100, fixed: 'left'},
+                {field: 'id', title: 'ID', width:60, fixed: 'left'},
+                {title: '变量类型', width:100,templet:function(d){
+                  if(d.type==0){
+                	  return '值';
+                  }else{
+                	  return '开关';
+                  }
+      	      	}},
                 {field: 'paramName', title: '变量名称', width:180},
-                {field: 'paramValue', title: '变量值', width:280},
+                {field: 'paramValue', title: '变量值', width:280,templet:function(d){
+                    if(d.type==1){
+                      var checked=d.paramValue==1?'checked':'';
+                      var s='<input type="checkbox" lay-skin="switch" lay-text="开启|关闭" disabled '+checked+'>';	
+                  	  return s;
+                    }
+                    return d.paramValue;
+        	    }},
                 {field: 'createTime', title: '创建时间', width:200},
-                {field: 'remark', title: '变量备注', width:200},
+                {field: 'remark', title: '变量备注', width:290},
                 {title:'操作',width:120,templet:function(row){
-                    var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
-                    var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
+                    var p_edit='#hasPermission("/user/systemConfig/doEdit") 1 #end';
+                    var p_delete='#hasPermission("/user/systemConfig/doDelete") 1 #end';
 
                     var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
                     var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
@@ -165,7 +180,7 @@
                     shade: false,
                     maxmin: true,
                     offset: ['50px', '20%'],
-                    area: ['800px', '400px'],
+                    area: ['800px', '440px'],
                     yes: function(index) {
                         //触发表单的提交事件
                         $('form.layui-form').find('button[lay-filter=save]').click();
@@ -191,7 +206,19 @@
                         }else{
                             url='$!{rc.contextPath}/user/systemConfig/doAdd';
                         }
+                        form.on('radio(type)', function(data){
+                       	 if(data.value=='0'){
+                       		 $('#valueDiv').show();
+                       		 $('#switchDiv').hide();
+                       	 }else{
+                       		 $('#valueDiv').hide();
+                       		 $('#switchDiv').show();
+                       	 } 
+                        });
                         form.on('submit(save)', function(data) {
+                        	if(data.field.type==1){
+                        		data.field.paramValue=data.field.switchValue=='on'?'1':'0';
+                        	}
                             $.ajax({
                                 url:url,
                                 type:'post',

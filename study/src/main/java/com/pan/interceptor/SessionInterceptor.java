@@ -14,7 +14,6 @@ import com.pan.entity.User;
 import com.pan.service.LinkService;
 import com.pan.util.IPUtils;
 import com.pan.util.SpringContextUtils;
-import com.pan.util.SystemConfigUtils;
 import com.pan.util.TokenUtils;
 
 

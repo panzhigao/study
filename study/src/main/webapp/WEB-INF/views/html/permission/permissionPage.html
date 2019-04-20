@@ -17,17 +17,18 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		    <div class="layui-btn-group">
-		     	#hasPermission('/user/permission/doAdd')
-		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
-		     	#end
-	  		</div>
-	  		
-	  		<div class="layui-inline">
+	    	<div class="layui-inline">
 	    		<input placeholder="权限名" class="layui-input" id="searchKey" autocomplete="off">
 	    	</div>
 	    
 	    	<button class="layui-btn" data-type="reload" id="btn-search">搜索</button>
+	    
+	    	#hasPermission('/user/permission/doAdd')
+		    <div class="layui-btn-group">
+		     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i> 新增权限</button>
+	  		</div>
+	  		#end
+	  		
 	    </div>
       	<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
       </div>
@@ -100,7 +101,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
             	  var p_delete='#hasPermission("/user/permission/doDelete") 1 #end';
             	  
             	  var edit='<a class="layui-btn layui-btn-xs" onclick="edit(\''+row.id+'\')">编辑</a>';
-            	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub(\''+row.id+'\')">新增子权限</a>';
+            	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub('+row.id+',\''+row.name+'\')">新增子权限</a>';
     	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteNode(\''+row.id+'\')">删除</a>';
     	    	  var show='';
     	    	  if(p_edit){
@@ -145,7 +146,7 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
 	  
 });
 
-function showAddTab(title,pId,level){
+function showAddTab(title,pId,level,parentName){
 	layer.closeAll();
 	$.get('$!{rc.contextPath}/user/permission/addPage', null, function(form) {
 	if(form.code=='400'){
@@ -190,6 +191,12 @@ function showAddTab(title,pId,level){
 					 $('#url').attr('lay-verify','required');
 				 } 
 			});
+			if(parentName){
+				$('#parentDiv').show();
+				$('#parentDiv input').val(parentName);
+			}else{
+				$('#parentDiv').hide();
+			}
 			form.on('submit(add)', function(data) {
 				console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
 				console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
@@ -239,9 +246,12 @@ function deleteNode(id){
 	});
 }
 
-function addSub(pId){
+/**
+ * 新增子权限
+ */
+function addSub(pId,parentName){
 	$('#selectPId').val(pId);
-	showAddTab('添加子权限',pId,2);
+	showAddTab('添加子权限',pId,2,parentName);
 }
 
 function edit(id){

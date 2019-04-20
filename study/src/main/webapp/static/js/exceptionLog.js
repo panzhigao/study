@@ -77,9 +77,9 @@ layui.use(['table','jquery','form','laydate'], function(){
                 }
                 return '已读';
             }},
-            {field: 'ipStr', title: 'ip地址', width:100},
+            {field: 'ipStr', title: 'ip地址', width:160},
             {field: 'createTime', title: '创建时间', width:160},
-            {title:'操作',width:80,templet:function(row){
+            {title:'操作',width:100,templet:function(row){
                 return'<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
             }}
         ]]
@@ -94,7 +94,7 @@ function view(id){
         btn: ['关闭'],
         maxmin: true,
         shade: false,
-        offset: ['50px', '20%'],
-        area: ['800px', '400px']
+        offset: ['50px', '10%'],
+        area: ['1000px', '600px']
     })
 }

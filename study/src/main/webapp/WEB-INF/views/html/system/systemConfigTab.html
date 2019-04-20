@@ -2,12 +2,26 @@
 	<form class="layui-form">
 		<input type="hidden" name="id" value="$!{config.id}">
 		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-block">
+				<input #if(${config.type}==0) checked #end type="radio" name="type" value="0" title="值" lay-filter="type">
+				<input #if(${config.type}==1) checked #end type="radio" name="type" value="1" title="开关" lay-filter="type">
+			</div>
+		</div>
+		<div class="layui-form-item">
 			<label class="layui-form-label">变量名</label>
 			<div class="layui-input-block">
 				<input value="$!{config.paramName}" lay-verify="required" type="text" name="paramName" placeholder="请输入变量名" autocomplete="off" class="layui-input">
 			</div>
 		</div>
-		<div class="layui-form-item">
+		
+		<div class="layui-form-item" id="switchDiv" #if(${config.type}!=1) style="display:none" #end>
+			<label class="layui-form-label">开关</label>
+        	<div class="layui-input-block">
+            	<input type="checkbox" #if(${config.paramValue}==1) checked #end name="switchValue" lay-skin="switch" lay-filter="switchTest" lay-text="开启|关闭">
+        	</div>
+		</div>
+		<div class="layui-form-item" id="valueDiv" #if( ${config.type} && ${config.type}!=2) style="display:none" #end>
 			<label class="layui-form-label">变量值</label>
 			<div class="layui-input-block">
 				<textarea name="paramValue" class="layui-textarea" maxlength="1000" placeholder="请输入变量值,最多1000个字">$!{config.paramValue}</textarea>

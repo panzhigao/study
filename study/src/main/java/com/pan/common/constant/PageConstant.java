@@ -27,6 +27,10 @@ public class PageConstant {
      */
     public static final int PAGE_SIZE_20=20;
     /**
+     * 分页20
+     */
+    public static final int PAGE_SIZE_100=100;
+    /**
      * 最大分页条数
      */
     public static final int MAX_PAGE_SIZE=100;

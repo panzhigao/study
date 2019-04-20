@@ -1,7 +1,6 @@
 package com.pan.vo;
 
 import com.pan.entity.ExceptionLog;
-import com.pan.entity.OperateLog;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

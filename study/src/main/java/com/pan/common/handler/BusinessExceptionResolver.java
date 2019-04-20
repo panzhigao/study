@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.MessageStatusEnum;
+import com.pan.common.enums.SwitchEnum;
 import com.pan.entity.ExceptionLog;
 import com.pan.service.ExceptionLogService;
 import com.pan.util.*;
@@ -84,7 +85,9 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 					exceptionLog.setUsername(MyConstant.USERNAME_SYSTEM);
 				}
 				exceptionLogService.insertSelective(exceptionLog);
-				EmailUtils.sendMail("网站发生问题，请尽快处理",sw.toString(), SystemConfigUtils.getParamValue("email_receviers"),true);
+				if(SwitchEnum.ENABLED.getValue().equals(SystemConfigUtils.getParamValue("mail_enabled"))){					
+					EmailUtils.sendMail("网站发生问题，请尽快处理",sw.toString(), SystemConfigUtils.getParamValue("email_receviers"),true);
+				}
 			}
 			businessException = new BusinessException(DEFAULT_MESSAGE);
 		}

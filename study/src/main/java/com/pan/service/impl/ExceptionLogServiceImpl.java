@@ -1,8 +1,6 @@
 package com.pan.service.impl;
 
-import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.ExceptionLog;
-import com.pan.entity.OperateLog;
 import com.pan.mapper.ExceptionLogMapper;
 import com.pan.query.QueryExceptionLog;
 import com.pan.service.AbstractBaseService;
@@ -11,12 +9,10 @@ import com.pan.util.BeanUtils;
 import com.pan.util.IPUtils;
 import com.pan.util.JsonUtils;
 import com.pan.vo.ExceptionLogVO;
-import com.pan.vo.OperateLogVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

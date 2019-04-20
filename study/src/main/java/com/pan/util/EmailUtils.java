@@ -1,5 +1,6 @@
 package com.pan.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -36,7 +37,11 @@ public class EmailUtils {
      * @param type    是否是html
      * @return
      */
-    public static String sendMail(String subject,String text,String toUser, Boolean type) {
+    public static boolean sendMail(String subject,String text,String toUser, Boolean type) {
+    	if(StringUtils.isBlank(toUser)){
+    		logger.error("接收邮件人不能为空");
+    		return false;
+    	}
         // 创建邮件对象
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mMessageHelper;
@@ -57,10 +62,12 @@ public class EmailUtils {
             }
             // 发送邮件
             javaMailSender.send(mimeMessage);
+            logger.info("发送邮件成功");
+            return true;
         } catch (MessagingException e) {
             logger.error("发送邮件失败",e);
         }
-        return "发送成功";
+        return false;
     }
 
 }

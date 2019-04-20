@@ -1,9 +1,7 @@
 package com.pan.query;
 
 import com.pan.common.constant.PageConstant;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -119,10 +117,10 @@ public class QueryBase {
 
     public Integer getPageSize() {
         if (pageSize == null) {
-            return PageConstant.PAGE_SIZE_1;
+            return PageConstant.MAX_PAGE_SIZE;
         }
         if(pageSize<PageConstant.PAGE_SIZE_0){
-            return PageConstant.PAGE_SIZE_1;
+            return PageConstant.MAX_PAGE_SIZE;
         }
         if(limitPage && pageSize>PageConstant.MAX_PAGE_SIZE){
             return PageConstant.MAX_PAGE_SIZE;
