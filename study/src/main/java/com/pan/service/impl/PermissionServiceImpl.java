@@ -6,6 +6,8 @@ import java.util.List;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.PermissionTypeEnum;
 import com.pan.service.*;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,25 +108,44 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		return permission;
 	}
 	
+	private int deleteAll(Long permissionId){
+		Permission permission = getAndCheck(permissionId);
+		//删除权限信息
+	    int count = permissionMapper.deleteByPrimaryKey(permission.getId());
+		//删除角色权限关联信息
+		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getId());
+		logger.info("删除权限点{}，删除角色权限关联信息条数：{}",permission.getPermissionName(),rp);
+		//记录日志
+		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_DELETE);
+		List<Permission> children = permissionMapper.findByParentId(permissionId);
+		if(CollectionUtils.isEmpty(children)){
+			return count;
+		}
+		for(Permission item:children){
+			count=count+deleteAll(item.getId());
+		}
+		return count;
+	}
+	
 	/**
 	 * 删除权限点，同时删除角色权限标里关联该权限点的数据
 	 * 同时删除缓存中角色的权限信息，记录操作日志
 	 *
 	 * //TODO 父级节点删除
+	 * //权限点 修改 r:add
 	 */
 	@Override
 	public int deleteByPermissionId(Long permissionId) {
-		Permission permission = getAndCheck(permissionId);
-		//删除权限信息
-		int p = permissionMapper.deleteByPrimaryKey(permission.getId());
-		//删除角色权限管联信息
-		int rp = rolePermissionService.deleteRolePermissionByPermissionId(permission.getId());
-		logger.info("删除权限点，删除权限点条数：{}，删除角色权限关联信息条数：{}",p,rp);
-		//记录日志
-		operateLogService.addOperateLog(permission.toString(),OperateLogTypeEnum.PERMISSION_DELETE);
+		//查询当前节点的子节点个数
+		int countByParentId = permissionMapper.countByParentId(permissionId);
+		if(countByParentId>0){
+			logger.info("当前权限点含有子权限");	
+		}
+		int count = deleteAll(permissionId);
+		logger.info("共删除权限{}条",count);
 		//删除缓存数据
 		TokenUtils.clearAllUserAuth();
-		return p;
+		return count;
 	}
 
 	@Override

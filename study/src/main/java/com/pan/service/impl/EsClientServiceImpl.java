@@ -11,8 +11,11 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
@@ -275,6 +278,22 @@ public class EsClientServiceImpl implements EsClientService {
 				}
 			}	
 		}
+	}
+
+	@Override
+	public boolean update(String index, String type, String id,Object obj) {
+		UpdateRequest updateRequest=new UpdateRequest(index, type, id);
+		try {
+			//updateRequest.doc(XContentFactory.jsonBuilder().startObject().field("title", "wwwwwooo").endObject());
+			IndexRequest indexRequest = new IndexRequest();
+			indexRequest.source(obj, XContentType.JSON);
+			updateRequest.doc(indexRequest);
+			client.update(updateRequest);
+			return true;
+		} catch (Exception e) {
+			logger.error("更新es失败");
+		}
+		return false;
 	}
 	
 }

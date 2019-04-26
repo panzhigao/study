@@ -238,7 +238,7 @@ layui.use(['table','jquery'], function(){
 	      {field: 'approveFlag', title: '是否通过', width:100, sort: true,templet:
 	    	  function(d){
 	    	  	switch(d.approveFlag){
-		    	  	case 0:temp='未通过';break;
+		    	  	case 0:temp='<span style="color:red">未通过</span>';break;
 		    	  	case 1:temp='通过';break;
 	    	  	}
 	    	  	return temp;

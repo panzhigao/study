@@ -145,7 +145,7 @@ layui.use(['table','jquery'], function(){
 	    	  function(d){
 	            var temp;
 	    	  	switch(d.status){
-		    	  	case 0:temp='审核未通过';break;
+		    	  	case 0:temp='<span style="color:red">审核未通过</span>';break;
 		    	  	case 1:temp='草稿';break;
 		    	  	case 2:temp='审核中';break;
 		    	  	case 3:temp='发布成功';break;

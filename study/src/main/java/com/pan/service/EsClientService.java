@@ -29,4 +29,12 @@ public interface EsClientService {
 	 * @return
 	 */
 	long queryCountByParams(String index,String type,QueryBase queryVO);
+	/**
+	 * 更新
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	boolean update(String index, String type, String id,Object obj);
 }

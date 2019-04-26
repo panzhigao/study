@@ -208,4 +208,15 @@
 		on tp.id=trp.permission_id where
 		tu.id=#{userId}
 	</select>
+	
+	<select id="findByParentId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission where pid=#{parentId}
+	</select>
+	
+	<select id="countByParentId" resultType="int">
+		select count(0) from t_permission
+		where pid=#{parentId}
+	</select>
 </mapper>

@@ -32,4 +32,16 @@ public interface PermissionMapper extends BaseMapper<Permission>{
 	 * @return
 	 */
 	List<Permission> findPermissionsByUserId(Long userId);
+	/**
+	 * 根据父节点查询子权限
+	 * @param userId
+	 * @return
+	 */
+	List<Permission> findByParentId(Long parentId);
+    /**
+     * 根据父节点查询子节点个数
+     * @param parentId
+     * @return
+     */
+    int countByParentId(Long parentId);
 }

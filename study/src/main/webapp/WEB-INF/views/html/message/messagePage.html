@@ -95,7 +95,7 @@ layui.config({
                             }else if(message.messageType=='3'){
                                 one='<li data-messageid="'+message.id+'">'+
                                 '<blockquote class="layui-elem-quote">'+
-                                '您发表的文章<cite>'+message.contentName+'</cite>'+
+                                '您发表的文章<a target="_blank" href="$!{rc.contextPath}/article/'+message.articleId+'"><cite>'+message.contentName+'</cite></a>'+
                                 '通过审核</blockquote>'+
                                 '<p><span>'+tranTime(message.createTime)+'</span>'+tag+'</p>'+
                                 '</li>';
