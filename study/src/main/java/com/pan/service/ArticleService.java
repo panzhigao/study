@@ -109,4 +109,22 @@ public interface ArticleService extends BaseService<Article>{
 	 * @return
 	 */
 	Map<String, Object> findDTOPageableMap(QueryArticle queryArticle);
+	/**
+	 * 更新文章es数据
+	 * @param articleId
+	 * @return
+	 */
+	boolean updateArticleInEs(Long articleId);
+	/**
+	 * 创建文章es索引
+	 * @param articleId
+	 * @return
+	 */
+	boolean createArticleEs(Long articleId);
+	/**
+	 * 
+	 * @param articleId
+	 * @return
+	 */
+	List<ArticleDTO> findByArticleId(Long articleId);
 }

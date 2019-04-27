@@ -578,4 +578,43 @@ public class JedisUtils {
 		}
 		return result;
 	}
+	
+	public static Long rpush(String key, String value) {
+		Jedis jedis = null;
+		Long length=0L;
+		try {
+			jedis = jedisPool.getResource();
+			length = jedis.rpush(key, value);
+		} catch (Exception e) {
+			jedis.close();
+			logger.error("rpush key={},value={}失败",key,value,e);
+		} finally {
+			jedis.close();
+		}
+		return length;
+	}
+	
+	/**
+	 * 阻塞获取list中的值，如果超时(3秒)，返回null
+	 * @param key
+	 * @return
+	 */
+	public static List<String> blpop(String key) {
+		return blpop(key,3);
+	}
+	
+	public static List<String> blpop(String key,int timeOut) {
+		Jedis jedis = null;
+		List<String> list=new ArrayList<String>();
+		try {
+			jedis = jedisPool.getResource();
+			list = jedis.blpop(new String[]{key,String.valueOf(timeOut)});
+		} catch (Exception e) {
+			jedis.close();
+			logger.error("rpush key={}",key,e);
+		} finally {
+			jedis.close();
+		}
+		return list;
+	}
 }

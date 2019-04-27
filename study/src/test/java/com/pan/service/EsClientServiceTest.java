@@ -28,11 +28,4 @@ public class EsClientServiceTest extends BaseTest{
 	public void testQueryCountByParams() {
 	}
 	
-	@Test
-	public void update(){
-		Article selectByPrimaryKey = articleService.selectByPrimaryKey(1524252L);
-		selectByPrimaryKey.setTitle("我我我2222");
-		esClientService.update("article", "test", "tuphWmoBZPR1_iOI3JCS", selectByPrimaryKey);
-	}
-	
 }

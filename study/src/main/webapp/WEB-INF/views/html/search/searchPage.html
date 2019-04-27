@@ -45,8 +45,8 @@
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="$!{rc.contextPath}/u/$!{user.id}">
           <cite class="layui-hide-xs">$!{user.nickname}</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <i class="iconfont icon-renzheng layui-hide-xs"></i>
+          #if($user.adminFlag=='1')<i class="layui-badge fly-badge-vip layui-bg-green">管理员</i>#end
           <img src="#if(!$user.userPortrait) $!{rc.contextPath}/static/images/default_portrait.jpg #else ${user.userPortrait} #end">
         </a>
         <dl class="layui-nav-child">
@@ -66,13 +66,10 @@
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">提问</a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">分享<span class="layui-badge-dot"></span></a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">讨论</a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">建议</a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">公告</a></li> 
-      <li><a href="$!{rc.contextPath}/article/index">动态</a></li> 
+      <li class="layui-hide-xs layui-this"><a href="$!{rc.contextPath}">首页</a></li>
+      #foreach($item in $onlineArticleCategoryList)
+      <li><a href="$!{rc.contextPath}/article/category/$item.id">$!{item.categoryName}</a></li>
+      #end
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       
       <!-- 用户登入后显示 -->
@@ -155,6 +152,7 @@ layui.use(['layer','util'], function(){
 		var q=$('#q').val();
 		if(!q){
 			layer.alert('请输入搜索内容');
+			return;
 		}
 		window.location.href='$!{rc.contextPath}/search?q='+q;
 	});
@@ -185,14 +183,13 @@ function doSearch(){
 	 	            '</a>'+
 	 	            '<h2>'+
 	 	              '<a class="layui-badge">分享</a>'+
-	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'">'+article.title+'</a>'+
+	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 	 	            '</h2>'+
 	 	            '<div class="fly-list-info">'+
 	 	              '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" link>'+
 	 	                '<cite>'+article.nickname+'</cite>'+
 	 	              '</a>'+
 	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>'+
 	 	              '<span class="fly-list-nums">'+
 	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
 	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+

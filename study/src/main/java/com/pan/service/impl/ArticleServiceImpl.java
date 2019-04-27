@@ -2,11 +2,15 @@ package com.pan.service.impl;
 
 import java.util.*;
 import com.pan.service.*;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+
+import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.ArticleOperateEnum;
 import com.pan.common.enums.ArticleStatusEnum;
@@ -41,6 +45,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * 缓存时间,单位秒
 	 */
 	private static final int CACHE_SECONDS=1800;
+	/**
+	 * typename
+	 */
+	public static final String TYPE_NAME="article";
 	
 	@Autowired
 	private EsClientService esClientService;
@@ -173,6 +181,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			articleCheck.setArticleId(article.getId());
 			articleCheck.setTitle(article.getTitle());
 			articleCheck.setContent(article.getContent());
+			articleCheck.setCategoryId(article.getCategoryId());
 			articleCheck.setCheckType(CheckTypeEnum.UPDATE.getCode());
 			articleCheckService.addArticleCheck(articleCheck);
 		}
@@ -266,7 +275,13 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 */
 	@Override
 	public List<ArticleDTO> queryFromEsByCondition(QueryArticle queryArticle) {
-		return esClientService.queryByParamsWithHightLight("article", "doc", queryArticle, true, ArticleDTO.class);
+		List<ArticleDTO> list=new ArrayList<>();
+		try {
+			list=esClientService.queryByParamsWithHightLight(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+		} catch (Exception e) {
+			logger.error("查询文章es信息出错,查询条件{}",queryArticle);
+		}
+		return list;
 	}
 
 	/**
@@ -403,5 +418,50 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		pageData.put("code", "200");
 		pageData.put("msg", "");
 		return pageData;
+	}
+	
+	
+	@Override
+	public boolean updateArticleInEs(Long articleId) {
+		List<ArticleDTO> DTOList = findByArticleId(articleId);
+		if(CollectionUtils.isEmpty(DTOList)){
+			logger.info("文章数据不存在，id={}",articleId);
+			return false;
+		}
+		ArticleDTO article = DTOList.get(0);
+		Map<String, Object> newContent = JsonUtils.objectToMap(article);
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setArticleId(articleId);
+		List<ArticleDTO> list = queryFromEsByCondition(queryArticle);
+		if(CollectionUtils.isNotEmpty(list)){
+			String id=list.get(0).getId().toString();
+			esClientService.updateRecord(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, id, newContent);
+		}else{
+			createArticleEs(articleId);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean createArticleEs(Long articleId) {
+		List<ArticleDTO> list = findByArticleId(articleId);
+		if(CollectionUtils.isEmpty(list)){
+			logger.info("文章数据不存在，id={}",articleId);
+			return false;
+		}
+		try {
+			esClientService.createIndex(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, list.get(0));
+			return true;
+		} catch (Exception e) {
+			logger.error("创建文章索引失败，id={}",articleId,e);
+		}
+		return false;
+	}
+
+	@Override
+	public List<ArticleDTO> findByArticleId(Long articleId) {
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setArticleId(articleId);
+		return articleMapper.findDTOPageable(queryArticle);
 	}
 }

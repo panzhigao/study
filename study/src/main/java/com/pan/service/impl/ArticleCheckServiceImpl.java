@@ -1,14 +1,20 @@
 package com.pan.service.impl;
 
 import java.util.*;
+
+import com.pan.common.constant.MyConstant;
+import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
 import com.pan.query.QueryArticleCheck;
 import com.pan.service.*;
 import com.pan.util.BeanUtils;
+import com.pan.util.JedisUtils;
+import com.pan.util.Publisher;
 import com.pan.vo.ArticleCheckVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -97,6 +103,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	 * 3.增加一条积分历史
 	 * 4.修改用户文章数和积分数
 	 * 5.发送消息
+	 * 6.发送消息，更新es
 	 * @param id 文章审核记录id
 	 */
 	@Override
@@ -141,6 +148,11 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		message.setContentName(article.getTitle());
 		message.setReceiverUserId(article.getUserId());
 		messageService.sendMessageToUser(message,MessageTypeEnum.ARTICLE_CHECK_PASS);
+		//将文章id写入redis队列
+		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
+		//通知redis消费
+		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE.getName()+":all";
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 
 	/**

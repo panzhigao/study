@@ -100,7 +100,7 @@
                     });
                 });
             }else if(obj.event==='edit'){
-                showTab('新增变量',data.id);
+                showTab('编辑变量',data.id);
             }
         });
 
@@ -123,6 +123,7 @@
             page: true ,//开启分页
             cols: [[ //表头
                 {field: 'id', title: 'ID', width:60, fixed: 'left'},
+                {type: 'numbers',title:'序号'},
                 {title: '变量类型', width:100,templet:function(d){
                   if(d.type==0){
                 	  return '值';

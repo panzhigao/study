@@ -226,7 +226,7 @@ layui.use(['table','jquery','form'], function(){
 	    url: '$!{rc.contextPath}/user/articleCategory/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
-	      {field: 'id', title: '角色ID', width:100, fixed: 'left'},
+	      {type: 'numbers',title:'序号', width:100},
 	      {field: 'categoryName', title: '分类名称', width:200},
 	      {field: 'sort', title: '排序', width:100,sort:true},
 	      {field: 'status', title: '是否启用', width:100,templet:function(d){

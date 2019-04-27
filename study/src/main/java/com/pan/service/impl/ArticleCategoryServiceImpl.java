@@ -10,7 +10,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleCategoryStatusEnum;
-import com.pan.common.enums.CacheSyncEnum;
+import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.query.QueryArticleCategory;
 import com.pan.util.Publisher;
@@ -74,7 +74,9 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			@Override
 			public List<ArticleCategory> load(Long key) throws Exception {
 				logger.info("从数据库加载所有文章分类，key={}",key);
-				List<ArticleCategory> all = articleCategoryMapper.findAll();
+				QueryArticleCategory queryArticleCategory=new QueryArticleCategory();
+				queryArticleCategory.setOrderCondition("sort asc");
+				List<ArticleCategory> all = articleCategoryMapper.findPageable(queryArticleCategory);
 				return all;
 			}
 		});
@@ -104,7 +106,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.insertSelective(articleCategory);
 		operateLogService.addOperateLog("分类名称（"+articleCategory.getCategoryName()+")", OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
 		//refreshCache(ALL_KEY);
-		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+ALL_KEY;
+		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+ALL_KEY;
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 	
@@ -123,7 +125,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
-		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return deleteByPrimaryKey;
 	}
@@ -159,7 +161,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
-		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 
@@ -196,7 +198,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
-		String channelMessage=CacheSyncEnum.ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
+		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 		return message;
 	}

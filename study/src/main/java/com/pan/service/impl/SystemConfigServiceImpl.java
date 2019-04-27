@@ -4,7 +4,7 @@ package com.pan.service.impl;
 import java.util.Date;
 import java.util.List;
 import com.pan.common.constant.RedisChannelConstant;
-import com.pan.common.enums.CacheSyncEnum;
+import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.query.QuerySystemConfig;
 import com.pan.util.Publisher;
@@ -74,7 +74,7 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		logger.info("更新系统配置，更新条数：{}",count);
 		String changedFields = ValidationUtils.getChangedFields(systemConfigInDb, systemConfig);
 		operateLogService.addOperateLog(changedFields,OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, CacheSyncEnum.SYSTEM_CONFIG.getName()+":"+systemConfig.getParamName());
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, RedisChannelOperateEnum.RECACHE_SYSTEM_CONFIG.getName()+":"+systemConfig.getParamName());
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		}
 		deleteByPrimaryKey(configId);
 		operateLogService.addOperateLog(systemConfig.toString(),OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, CacheSyncEnum.SYSTEM_CONFIG.getName()+":"+systemConfig.getParamName());
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, RedisChannelOperateEnum.RECACHE_SYSTEM_CONFIG.getName()+":"+systemConfig.getParamName());
 	}
 
 	/**

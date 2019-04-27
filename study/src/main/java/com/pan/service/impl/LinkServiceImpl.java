@@ -18,7 +18,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.constant.RedisChannelConstant;
-import com.pan.common.enums.CacheSyncEnum;
+import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.enums.LinkStatusEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.UserStatusEnum;
@@ -165,7 +165,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	 * 发送消息通知
 	 */
 	private void sendChannelMessage(){
-		String channelMessage=CacheSyncEnum.LINK.getName()+":"+MyConstant.DEFAULT_KEY;
+		String channelMessage=RedisChannelOperateEnum.RECACHE_LINK.getName()+":"+MyConstant.DEFAULT_KEY;
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 	

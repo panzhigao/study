@@ -1,6 +1,8 @@
 package com.pan.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.pan.query.QueryBase;
 
 /**
@@ -9,7 +11,13 @@ import com.pan.query.QueryBase;
  * 类说明
  */
 public interface EsClientService {
-	
+	/**
+	 * 创建索引
+	 * @param index
+	 * @param type
+	 * @param obj
+	 * @return
+	 */
 	boolean createIndex(String index,String type,Object obj);
 	/**
 	 * 查询并高亮字段，支持分页
@@ -36,5 +44,5 @@ public interface EsClientService {
 	 * @param id
 	 * @return
 	 */
-	boolean update(String index, String type, String id,Object obj);
+	boolean updateRecord(String index, String type, String id,Map<String, Object> newContent);
 }

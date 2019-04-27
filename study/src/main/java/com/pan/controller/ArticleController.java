@@ -125,6 +125,12 @@ public class ArticleController {
 		if(ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())){			
 			long viewCount=JedisUtils.increaseKey("article_view_count:"+articleId);
 			mav.addObject("viewCount",viewCount+article.getViewCount());
+			String string = JedisUtils.getString("comment_count:"+articleId);
+			long commentCount=article.getCommentCount();
+			if(StringUtils.isNumeric(string)){
+				commentCount=commentCount+Long.parseLong(string);
+			}
+			mav.addObject("commentCount",commentCount);
 		}else{
 			mav.addObject("viewCount",article.getViewCount());
 		}

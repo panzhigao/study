@@ -119,8 +119,8 @@ public class JsonUtils {
 	 * @return
 	 * @throws IllegalAccessException
 	 */
-	public static Map<String, String> objectToMap(Object obj){
-		Map<String, String> map = new HashMap<>(10);
+	public static Map<String, Object> objectToMap(Object obj){
+		Map<String, Object> map = new HashMap<>(10);
 		Class<?> clazz = obj.getClass();
 		for (Field field : clazz.getDeclaredFields()) {
 			field.setAccessible(true);
@@ -135,7 +135,7 @@ public class JsonUtils {
 				e.printStackTrace();
 				continue;
 			}
-			map.put(fieldName, String.valueOf(value));
+			map.put(fieldName, value);
 		}
 		return map;
 	}

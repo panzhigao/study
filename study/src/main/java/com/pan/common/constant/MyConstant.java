@@ -82,4 +82,6 @@ public class MyConstant {
      * 默认用户名
      */
     public static final String USERNAME_SYSTEM="system";
+    
+    public static final String ARTICLE_ES_REDIS_LIST="article_es_list";
 }

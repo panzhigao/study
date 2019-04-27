@@ -1,5 +1,6 @@
 package com.pan.util;
 
+import com.pan.common.constant.MyConstant;
 import com.pan.test.base.BaseTest;
 import org.junit.Test;
 
@@ -22,4 +23,11 @@ public class JedisUtilsTest extends BaseTest{
             System.out.println(new String(aa));
         }
     }
+    
+    @Test
+    public void blpop() throws Exception {
+        List<String> blpop = JedisUtils.blpop(MyConstant.ARTICLE_ES_REDIS_LIST);
+        System.out.println(blpop);
+    }
+    
 }

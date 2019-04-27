@@ -21,7 +21,7 @@
             	<input type="checkbox" #if(${config.paramValue}==1) checked #end name="switchValue" lay-skin="switch" lay-filter="switchTest" lay-text="开启|关闭">
         	</div>
 		</div>
-		<div class="layui-form-item" id="valueDiv" #if( ${config.type} && ${config.type}!=2) style="display:none" #end>
+		<div class="layui-form-item" id="valueDiv" #if(${config.type}!=0) style="display:none" #end>
 			<label class="layui-form-label">变量值</label>
 			<div class="layui-input-block">
 				<textarea name="paramValue" class="layui-textarea" maxlength="1000" placeholder="请输入变量值,最多1000个字">$!{config.paramValue}</textarea>
