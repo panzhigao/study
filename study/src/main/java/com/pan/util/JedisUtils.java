@@ -617,4 +617,24 @@ public class JedisUtils {
 		}
 		return list;
 	}
+	
+	public static String brpoplpush(String srckey,String dstkey){
+		return brpoplpush(srckey, dstkey,3);
+	}
+	
+	public static String brpoplpush(String srckey,String dstkey,int timeout){
+		Jedis jedis = null;
+		String res=null;
+		try {
+			jedis = jedisPool.getResource();
+			res=jedis.brpoplpush(srckey, dstkey,timeout);
+		} catch (Exception e) {
+			jedis.close();
+			logger.error("rpoplpush srckey={},dstkey={} error",srckey,dstkey,e);
+		} finally {
+			jedis.close();
+		}
+		return res;
+	}
+	
 }

@@ -84,4 +84,6 @@ public class MyConstant {
     public static final String USERNAME_SYSTEM="system";
     
     public static final String ARTICLE_ES_REDIS_LIST="article_es_list";
+    
+    public static final String ARTICLE_ES_REDIS_LIST_BAK="article_es_list_bak";
 }

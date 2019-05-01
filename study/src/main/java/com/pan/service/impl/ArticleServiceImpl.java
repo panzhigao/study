@@ -278,6 +278,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		List<ArticleDTO> list=new ArrayList<>();
 		try {
 			list=esClientService.queryByParamsWithHightLight(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+			list.forEach(item->{
+				item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
+			});
 		} catch (Exception e) {
 			logger.error("查询文章es信息出错,查询条件{}",queryArticle);
 		}

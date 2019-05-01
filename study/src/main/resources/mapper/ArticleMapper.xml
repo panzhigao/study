@@ -263,16 +263,16 @@
   		<if test="image != null and image !=''">
   			image=#{image,jdbcType=VARCHAR},
   		</if>
-  		<if test="commentCount != null and commentCount !=''">
+  		<if test="commentCount != null">
   			comment_count=comment_count+#{commentCount},
   		</if>
-  		<if test="viewCount != null and viewCount !=''">
+  		<if test="viewCount != null">
   			view_count=view_count+#{viewCount,jdbcType=INTEGER},
   		</if>
   		<if test="stick != null">
   			stick=#{stick,jdbcType=INTEGER},
   		</if>
-  		<if test="highQuality != null and highQuality !=''">
+  		<if test="highQuality != null">
   			high_quality=#{highQuality,jdbcType=INTEGER},
   		</if>
         <if test="categoryId != null">
