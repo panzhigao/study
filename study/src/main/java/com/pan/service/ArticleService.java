@@ -114,7 +114,7 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param articleId
 	 * @return
 	 */
-	boolean updateArticleInEs(Long articleId);
+	boolean updateArticleEs(Long articleId);
 	/**
 	 * 创建文章es索引
 	 * @param articleId
@@ -127,4 +127,10 @@ public interface ArticleService extends BaseService<Article>{
 	 * @return
 	 */
 	List<ArticleDTO> findByArticleId(Long articleId);
+	/**
+	 * 下线文章
+	 * @param articleId
+	 * @param userId
+	 */
+	void offlineArticle(Long articleId,Long userId);
 }

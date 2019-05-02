@@ -20,7 +20,11 @@ public enum ArticleStatusEnum {
 	/**
 	 * 发布成功
 	 */
-	PUBLIC_SUCCESS(3,"发布成功");
+	PUBLIC_SUCCESS(3,"发布成功"),
+	/**
+	 * 下线
+	 */
+	OFFLINE(4,"下线");
 	
 	private Integer code;
 

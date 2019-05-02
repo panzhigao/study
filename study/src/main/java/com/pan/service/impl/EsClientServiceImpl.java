@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -157,7 +159,7 @@ public class EsClientServiceImpl implements EsClientService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	private HighlightBuilder highParams(QueryBase queryBase,List<String> fieldList) {
+	private HighlightBuilder highlightParams(QueryBase queryBase,List<String> fieldList) {
 		HighlightBuilder highlightBuilder = null;
 		Class clazz = queryBase.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -223,10 +225,10 @@ public class EsClientServiceImpl implements EsClientService {
 		}
 		BoolQueryBuilder boolQueryBuilder = generate(queryBase);
 		searchSourceBuilder.query(boolQueryBuilder);
-		
-		List<String> fieldList=new ArrayList<String>();
+		//高亮字段
+		List<String> highlightFieldList=new ArrayList<String>();
 		if (highLightFlag) {
-			HighlightBuilder hiBuilder = highParams(queryBase,fieldList);
+			HighlightBuilder hiBuilder = highlightParams(queryBase,highlightFieldList);
 			if (hiBuilder != null) {
 				searchSourceBuilder.highlighter(hiBuilder);
 			}
@@ -248,17 +250,18 @@ public class EsClientServiceImpl implements EsClientService {
 		for (SearchHit searchHit : hits) {
 			String res = searchHit.getSourceAsString();
 			Object obj = JsonUtils.fromJson(res,T);
+			setValue(obj, "esId", searchHit.getId());
 			if(highLightFlag){
-				for(String filedStr:fieldList){
+				for(String filedStr:highlightFieldList){
 					Text[] texts = searchHit.getHighlightFields().get(filedStr).getFragments();
 					String highText="";
 					for(Text t:texts){
 						highText+=t.toString();
 					}
 				    setValue(obj,filedStr,highText);
-				    list.add(((T) obj));
 				}
 			}
+			list.add(((T) obj));
 		}
 		return list;
 	}
@@ -296,6 +299,25 @@ public class EsClientServiceImpl implements EsClientService {
 			int successful = update.getShardInfo().getSuccessful();
 			return successful>0;
 		} catch (Exception e) {
+			logger.error("更新或创建es失败，index={},type={},id={}",index,type,id);
+		}
+		return false;
+	}
+	
+	/**
+	 * 删除索引记录
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public boolean deleteRecord(String index, String type, String id) {
+		DeleteRequest deleteRequest=new DeleteRequest(index,type,id);
+		try {
+			DeleteResponse delete = client.delete(deleteRequest);
+			return delete.getShardInfo().getSuccessful()>0;
+		} catch (IOException e) {
 			logger.error("更新es失败");
 		}
 		return false;

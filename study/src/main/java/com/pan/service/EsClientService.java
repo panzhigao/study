@@ -45,4 +45,9 @@ public interface EsClientService {
 	 * @return
 	 */
 	boolean updateRecord(String index, String type, String id,Map<String, Object> newContent);
+	/**
+	 * 删除记录
+	 * @return
+	 */
+	boolean deleteRecord(String index, String type, String id);
 }

@@ -1,10 +1,13 @@
 package com.pan.service;
 
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.pan.common.constant.EsConstant;
 import com.pan.entity.Article;
+import com.pan.service.impl.ArticleServiceImpl;
 import com.pan.test.base.BaseTest;
 
 public class EsClientServiceTest extends BaseTest{
@@ -26,6 +29,12 @@ public class EsClientServiceTest extends BaseTest{
 
 	@Test
 	public void testQueryCountByParams() {
+	}
+	
+	@Test
+	public void testDeleteRecord(){
+		boolean deleteRecord = esClientService.deleteRecord(EsConstant.DEFAULT_INDEX_NAME,ArticleServiceImpl.TYPE_NAME, "nctAeWoBC-3gjC8hyB8Y");
+		Assert.assertTrue(deleteRecord);
 	}
 	
 }

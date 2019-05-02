@@ -71,6 +71,7 @@
 			<tx:method name="allocate*" />
 			<tx:method name="change*" />
 			<tx:method name="set*" />
+			<tx:method name="offline*" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>

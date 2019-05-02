@@ -29,7 +29,7 @@
                     <select lay-verify="required" name="categoryId" lay-filter="column"> 
                     	<option></option>
                       	#foreach($item in $categoryList)
-                        <option #if($item.id==$article.categoryId) class="layui-this" #end  value="$item.id">$item.categoryName</option>
+                        <option value="$item.id">$item.categoryName</option>
                       	#end
                     </select>
                   </div>

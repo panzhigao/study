@@ -47,14 +47,14 @@ public class Subscriber extends JedisPubSub{
                 }else if(RedisChannelOperateEnum.RECACHE_LINK.getName().equals(type)){
                 	logger.info("同步链接缓存...");
                     LinkServiceImpl.onlineLinkCache.refresh(MyConstant.DEFAULT_KEY);
-                //文章es新增
-                }else if(RedisChannelOperateEnum.ARTICLE_ES_CREATE.getName().equals(type)){
-                	logger.info("文章es新增... ");
+                //文章es更新	
+                }else if(RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName().equals(type)){
+                	logger.info("文章es更新... ");
                 	ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
                 	String id = JedisUtils.brpoplpush(MyConstant.ARTICLE_ES_REDIS_LIST, MyConstant.ARTICLE_ES_REDIS_LIST_BAK);
                 	if(StringUtils.isNumeric(id)){
-                		logger.info("修改文章es数据,id={}",id);
-                		articleService.createArticleEs(Long.parseLong(id));
+                		logger.info("更新文章es数据,id={}",id);
+                		articleService.updateArticleEs(Long.parseLong(id));
                 	}
                 }
             }

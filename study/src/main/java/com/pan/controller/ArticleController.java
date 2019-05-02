@@ -117,7 +117,7 @@ public class ArticleController {
 		}
 		//查询文章信息
 		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setArticleId(articleId);
+		queryArticle.setId(articleId);
 		queryArticle.setUserId(loginUserId);
 		Article article=articleService.checkAndGetArticle(queryArticle);
 		TransFieldUtils.transEntity(article);
@@ -252,5 +252,19 @@ public class ArticleController {
 	public ResultMsg set(Long articleId,Integer stick,Integer highQuality){
 		articleService.setArticle(articleId, stick, highQuality);
 		return ResultMsg.ok();
+	}
+	
+	/**
+	 * 下线文章
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/article/offline"})
+	@ResponseBody
+	@RequiresPermissions("/user/article/doDelete")
+	public ResultMsg offlineArticle(Long articleId){
+		logger.info("下线的文章id:{}",articleId);
+		Long userId=TokenUtils.getLoginUserId();
+		articleService.offlineArticle(articleId, userId);
+		return ResultMsg.ok("下线文章成功");
 	}
 }

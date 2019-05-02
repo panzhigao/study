@@ -95,8 +95,8 @@
   <sql id="whereSql">
   	<where> 
   		    1=1
-  		<if test="articleId !=null">
-  			and a.id=#{articleId,jdbcType=BIGINT}
+  		<if test="id !=null">
+  			and a.id=#{id,jdbcType=BIGINT}
   		</if>    
   		<if test="status !=null">
   			and a.status=#{status,jdbcType=INTEGER}

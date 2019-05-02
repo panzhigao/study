@@ -18,13 +18,9 @@ public enum RedisChannelOperateEnum {
      */
     RECACHE_LINK(2,"recache_link"),
     /**
-     * 文章es更新
+     * 文章es更新或创建
      */
-    ARTICLE_ES_UPDATE(3,"article_es_update"),
-    /**
-     * 文章es创建
-     */
-    ARTICLE_ES_CREATE(4,"article_es_create");
+    ARTICLE_ES_CREATE_OR_UPDATE(3,"article_es_create_or_update");
 
     private Integer code;
 

@@ -151,7 +151,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		//将文章id写入redis队列
 		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
 		//通知redis消费
-		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE.getName()+":all";
+		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName()+":all";
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 

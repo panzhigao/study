@@ -104,4 +104,8 @@ public class ArticleDTO implements Serializable{
 	 * 修改人
 	 */
 	private Long updateUserId;
+	/**
+	 * esId
+	 */
+	private String esId;
 }

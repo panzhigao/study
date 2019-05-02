@@ -12,11 +12,13 @@ import redis.clients.jedis.Jedis;
 
 import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleOperateEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.enums.CheckTypeEnum;
 import com.pan.common.enums.MessageTypeEnum;
+import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
@@ -29,6 +31,7 @@ import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
+import com.pan.util.Publisher;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -358,8 +361,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		try {
 			jedis= JedisUtils.getJedis();
 			//存在缓存
-			if(jedis.exists(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId())){
-				String string = jedis.get(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId());
+			if(jedis.exists(MyConstant.ARTICLE_PREFIX+queryArticleVO.getId())){
+				String string = jedis.get(MyConstant.ARTICLE_PREFIX+queryArticleVO.getId());
 				logger.debug("从缓存读取数据,{}",string);
 				if(MyConstant.REDIS_NULL.equals(string)){
 					throw new BusinessException("文章不存在");
@@ -367,23 +370,23 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 					article=(Article) JsonUtils.fromJson(string, Article.class);
 					//如果文章不为发布状态，且不属于当前用户的文章，不能浏览
 					if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&& !queryArticleVO.getUserId().equals(article.getUserId())){
-						logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
+						logger.error("文章不属于当前用户",queryArticleVO.getId());
 						throw new BusinessException("文章不存在");
 					}
 				}
 			}else{//不存在缓存
-				article=articleMapper.selectByPrimaryKey(queryArticleVO.getArticleId());
+				article=articleMapper.selectByPrimaryKey(queryArticleVO.getId());
 				logger.debug("从数据库读取文章数据,{}",article);
 				if(article==null){
-					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
+					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getId(),CACHE_SECONDS,MyConstant.REDIS_NULL);
 					throw new BusinessException("文章不存在");
 				}
 				if(!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())&&!queryArticleVO.getUserId().equals(article.getUserId())){
-					logger.error("文章不属于当前用户",queryArticleVO.getArticleId());
+					logger.error("文章不属于当前用户",queryArticleVO.getId());
 					throw new BusinessException("文章不存在");
 				}
 				if(ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())){					
-					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getArticleId(),CACHE_SECONDS,JsonUtils.toJson(article));
+					jedis.setex(MyConstant.ARTICLE_PREFIX+queryArticleVO.getId(),CACHE_SECONDS,JsonUtils.toJson(article));
 				}
 			}	
 		}catch(BusinessException ex){
@@ -425,7 +428,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	
 	
 	@Override
-	public boolean updateArticleInEs(Long articleId) {
+	public boolean updateArticleEs(Long articleId) {
 		List<ArticleDTO> DTOList = findByArticleId(articleId);
 		if(CollectionUtils.isEmpty(DTOList)){
 			logger.info("文章数据不存在，id={}",articleId);
@@ -434,10 +437,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		ArticleDTO article = DTOList.get(0);
 		Map<String, Object> newContent = JsonUtils.objectToMap(article);
 		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setArticleId(articleId);
+		queryArticle.setId(articleId);
 		List<ArticleDTO> list = queryFromEsByCondition(queryArticle);
 		if(CollectionUtils.isNotEmpty(list)){
-			String id=list.get(0).getId().toString();
+			String id=list.get(0).getEsId();
 			esClientService.updateRecord(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, id, newContent);
 		}else{
 			createArticleEs(articleId);
@@ -464,7 +467,40 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	@Override
 	public List<ArticleDTO> findByArticleId(Long articleId) {
 		QueryArticle queryArticle=new QueryArticle();
-		queryArticle.setArticleId(articleId);
+		queryArticle.setId(articleId);
 		return articleMapper.findDTOPageable(queryArticle);
+	}
+	
+	/**
+	 * 下线文章
+	 */
+	@Override
+	public void offlineArticle(Long articleId, Long userId) {
+		logger.info("下线文章id={}",articleId);
+		if (articleId==null) {
+			throw new BusinessException("文章id不能为空");
+		}
+		Article article = getAndCheckByUserId(userId, articleId);
+		if (article == null) {
+			logger.info("根据文章id{}未查询到文章信息", articleId);
+			throw new BusinessException("文章不存在");
+		}
+		if (!ArticleStatusEnum.PUBLIC_SUCCESS.getCode().equals(article.getStatus())) {
+			logger.info("发布成功的文章才能下线，文章状态有误，status={}",article.getStatus());
+			throw new BusinessException("发布成功的文章才能下线");
+		}
+		Article update=new Article();
+		update.setId(articleId);
+		//下线状态
+		update.setStatus(ArticleStatusEnum.OFFLINE.getCode());
+		update.setUpdateTime(new Date());
+		update.setUpdateUserId(userId);
+		updateByPrimaryKeySelective(update);
+		//将文章id写入redis队列
+		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
+		//发送通知，修改es状态
+		//通知redis消费
+		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName()+":all";
+		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
 	}
 }

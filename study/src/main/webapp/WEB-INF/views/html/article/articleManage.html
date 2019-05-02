@@ -34,6 +34,7 @@
 			  		<a href="javascript:;" class="#if($status==0) selected #end" status="0">未通过</a>
 			  		<a href="javascript:;" class="#if($status==1) selected #end" status="1">草稿</a>
 			  		<a href="javascript:;" class="#if($status==2) selected #end" status="2">审核中</a>
+			  		<a href="javascript:;" class="#if($status==4) selected #end" status="4">下线</a>
 				</span>
 		    </div>
 	    	<table id="myArticles" lay-filter="myTable"></table>
@@ -106,6 +107,27 @@ layui.use(['table','jquery'], function(){
 	    		 return;
 	    	 }
 	    	 location.href="$!{rc.contextPath}/user/article/edit/"+data.id;	
+	    }else if(obj.event === 'offline'){
+	    	if(data.status!=3){
+	    		layer.alert('发布中文章才能下线');
+	    		return;
+	    	}
+	    	layer.confirm('确定下线该文章么', function(index){
+		        layer.close(index);
+		    	$.ajax({
+		    		url:"$!{rc.contextPath}/user/article/offline",
+		    		type:"post",
+		    		data:{articleId:data.id},
+		    		success:function(data){
+		    			if(data.code=='200'){
+		    				layer.alert(data.msg);
+		    				reload('articlesTab');
+		    			}else{	    				
+		    				layer.alert(data.msg);
+		    			}
+		    		}
+		    	});  
+		      });
 	    }
 	  });
 	  
@@ -147,8 +169,9 @@ layui.use(['table','jquery'], function(){
 	    	  	switch(d.status){
 		    	  	case 0:temp='<span style="color:red">审核未通过</span>';break;
 		    	  	case 1:temp='草稿';break;
-		    	  	case 2:temp='审核中';break;
+		    	  	case 2:temp='<span style="color:orange">审核中</span>';break;
 		    	  	case 3:temp='发布成功';break;
+		    	  	case 4:temp='下线';break;
 		    	  	default:temp="无状态";
 	    	  	}
 	    	  	return temp;
@@ -168,14 +191,23 @@ layui.use(['table','jquery'], function(){
         	  var p_delete='#hasPermission("/user/article/doDelete") 1 #end';
 	    	  
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
-	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
-	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
 	    	  var show='';
-	    	  if(p_edit){
-	    		  show+=edit;
+	    	  if(row.status<=1 || row.status>=4){
+	    		  if(p_edit){
+	    			  var t_edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+		    		  show+=t_edit;
+		    	  }
+		    	  if(p_delete){
+		    		  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+		    		  show+=t_delete;
+		    	  }
 	    	  }
-	    	  if(p_delete){
-	    		  show+=t_delete;
+	    	  if(row.status==3){
+	    		  var p_offline='#hasPermission("/user/article/offline") 1 #end';
+	    		  if(p_offline){
+	    			  var t_offline='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="offline">下线</a>';
+		    		  show+=t_offline;
+	    		  }
 	    	  }
 	    	  return detail+show;
 	      }}

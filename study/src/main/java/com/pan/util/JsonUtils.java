@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang3.ArrayUtils;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
@@ -111,6 +111,37 @@ public class JsonUtils {
 			list.add((T) fromJson(entry.getValue(), clazz));
 		}
 		return list;
+	}
+	
+	/**
+	 * object to map
+	 * @param obj
+	 * @param includes 包含的字段
+	 * @return
+	 * @throws IllegalAccessException
+	 */
+	public static Map<String, Object> objectToMap(Object obj,String[] includes){
+		Map<String, Object> map = new HashMap<>(10);
+		Class<?> clazz = obj.getClass();
+		for (Field field : clazz.getDeclaredFields()) {
+			field.setAccessible(true);
+			String fieldName = field.getName();
+			if(ArrayUtils.indexOf(includes,fieldName)==-1){
+				continue;
+			}
+			Object value;
+			try {
+				value = field.get(obj);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+				continue;
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				continue;
+			}
+			map.put(fieldName, value);
+		}
+		return map;
 	}
 	
 	/**

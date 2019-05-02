@@ -76,7 +76,8 @@ public class ArticleServiceTest extends BaseTest {
 	}
 
 	@Test
-	public void test() {
+	public void testupdateArticleEs() {
+		articleService.updateArticleEs(1571809L);
 	}
 
 }
