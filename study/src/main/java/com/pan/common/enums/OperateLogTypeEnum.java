@@ -92,7 +92,11 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 文章分类删除
 	 */
-	ARTICLE_CATEGORY_ENABLE(605,"文章分类上线");
+	ARTICLE_CATEGORY_ENABLE(605,"文章分类上线"),
+	/**
+	 * 文章es同步
+	 */
+	ARTICLE_ES_SYNC(606,"文章es同步");
 	
     private Integer code;
 

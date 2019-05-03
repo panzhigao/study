@@ -24,7 +24,11 @@
 	    <div class="layui-tab-item layui-show">
 	    	<table id="table1" lay-filter="tab1"></table>
 	    </div>
-	    <div class="layui-tab-item">
+	    <div class="layui-tab-item" style="margin-top:10px;">
+	    	<div class="layui-inline">
+				<input placeholder="请输入用户名" class="layui-input" name="title" id="usernameInput" autocomplete="off">
+			</div>
+			<button class="layui-btn" data-type="reload" id="search">搜索</button>
           <table id="table2" lay-filter="tab2"></table>
         </div>
       </div>
@@ -53,6 +57,20 @@ layui.config({
 layui.use(['table','jquery'], function(){
 	  var table = layui.table;
 	  var $ = layui.$ ;
+	  var active = {
+          reload: function(){
+               var usernameInput = $('#usernameInput');
+               //执行重载
+               table.reload('completeTab', {
+                   page: {
+                       curr: 1 //重新从第 1 页开始
+                   }
+                   ,where: {
+                       username: usernameInput.val()
+                   }
+               });
+          }
+	   };
 	  //监听工具条
 	  table.on('tool(tab1)', function(obj){
 	    var data = obj.data;
@@ -192,6 +210,11 @@ layui.use(['table','jquery'], function(){
 			    }
 			});
 	  });
+	  
+      $('#search').on('click', function(){
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+      });
 	  
 	  //第二个实例
 	  table.render({

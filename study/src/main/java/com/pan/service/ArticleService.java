@@ -133,4 +133,9 @@ public interface ArticleService extends BaseService<Article>{
 	 * @param userId
 	 */
 	void offlineArticle(Long articleId,Long userId);
+	/**
+	 * 同步文章es数据
+	 * @return
+	 */
+	int syncArticleEsData();
 }

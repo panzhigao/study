@@ -103,6 +103,7 @@
           #if($!article.status==1)<span class="layui-badge" style="background-color: #999;">草稿</span> #end
           #if($!article.status==0)<span class="layui-badge" style="background-color: #999;">审核未通过</span>#end
           #if($!article.status==2)<span class="layui-badge layui-bg-black">审核中</span>#end
+          #if($!article.status==4)<span class="layui-badge layui-bg-black">下线</span>#end
           #if($article.type==2)<span class="layui-badge layui-bg-red">系统通知</span>#end
           #if($article.stick>0)<span class="layui-badge layui-bg-black">置顶</span>#end
           #if($article.highQuality==1)<span class="layui-badge layui-bg-red">精帖</span>#end

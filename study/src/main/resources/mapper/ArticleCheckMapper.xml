@@ -72,7 +72,10 @@
   	<where> 
   		<if test="userId !=null and userId !='' ">
   			and user_id=#{userId}
-  		</if>    
+  		</if>  
+  		<if test="username !=null and username !='' ">
+  			and username like concat ('%',#{username},'%')
+  		</if>      
   		<if test="articleId !=null and articleId !='' ">
   			and article_id=#{articleId}
   		</if>

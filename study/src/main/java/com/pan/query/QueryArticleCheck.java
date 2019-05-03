@@ -27,5 +27,8 @@ public class QueryArticleCheck extends QueryBase{
 	 * 文章标题
 	 */
 	private String title;
-
+	/**
+	 * 用户名
+	 */
+	private String username;
 }

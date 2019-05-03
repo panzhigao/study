@@ -46,7 +46,7 @@ public class TransFieldUtils {
 					field.setAccessible(true);
 					content = field.get(obj);
 					String clean = Jsoup.clean(StringEscapeUtils.unescapeHtml((String) content),
-							Whitelist.basicWithImages());
+							Whitelist.relaxed().addTags("video","source").addAttributes("video", "controls").addAttributes("source", "src","type"));
 					field.set(obj, clean);
 				} catch (IllegalArgumentException e) {
 					logger.error("转义字段{}失败", field.getName(), e);
@@ -61,5 +61,14 @@ public class TransFieldUtils {
 		for (Object object : collection) {
 			transEntity(object);
 		}
+	}
+	
+	public static void main(String[] args) {
+		String str="&lt;pre lay-lang=\"HTML\"&gt;	&lt;video controls=\"controls\"&gt;"+
+     	"&lt;source src=\"http://www.panzhigao.vip/scl34.mp4\" type=\"video/mp4\"&gt;"+
+	"&lt;/video&gt;&lt;/pre&gt;\";";
+		String clean = Jsoup.clean(StringEscapeUtils.unescapeHtml((String) str),
+				Whitelist.relaxed().addTags("video","source").addAttributes("source", "src","type"));
+		System.out.println(clean);
 	}
 }

@@ -94,10 +94,10 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.pan.entity.SystemConfig">
     update t_system_config
     <set>
-      <if test="paramName != null">
+      <if test="paramName != null and paramName!=''">
         param_name = #{paramName,jdbcType=VARCHAR},
       </if>
-      <if test="paramValue != null">
+      <if test="paramValue != null and paramValue !=''">
         param_value = #{paramValue,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
@@ -137,8 +137,8 @@
 
   <sql id="whereSql">
     <where>
-      <if test="paramName != null">
-        param_name = #{paramName,jdbcType=VARCHAR}
+      <if test="paramName != null and paramName!=''">
+        param_name like CONCAT('%',#{paramName},'%')
       </if>
     </where>
   </sql>

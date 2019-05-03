@@ -9,15 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
-
 import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.constant.PageConstant;
 import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleOperateEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.enums.CheckTypeEnum;
 import com.pan.common.enums.MessageTypeEnum;
+import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.RedisChannelOperateEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
@@ -61,7 +62,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 	@Autowired
 	private ArticleCheckService articleCheckService;
-
+	
+	@Autowired
+	private OperateLogService operateLogService;
+	
 	@Override
 	protected ArticleMapper getBaseMapper() {
 		return articleMapper;
@@ -441,11 +445,10 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		List<ArticleDTO> list = queryFromEsByCondition(queryArticle);
 		if(CollectionUtils.isNotEmpty(list)){
 			String id=list.get(0).getEsId();
-			esClientService.updateRecord(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, id, newContent);
+			return esClientService.updateRecord(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, id, newContent);
 		}else{
-			createArticleEs(articleId);
+			return createArticleEs(articleId);
 		}
-		return false;
 	}
 
 	@Override
@@ -502,5 +505,37 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		//通知redis消费
 		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName()+":all";
 		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+	}
+	
+	/**
+	 * 同步文章es数据
+	 * @return
+	 */
+	@Override
+	public int syncArticleEsData() {
+		logger.info("同步文章es数据开始....");
+		long start=System.currentTimeMillis();
+		int success=0;
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
+		int total = countByParams(queryArticle);
+		//计算要循环的次数
+		int circleNum= total/PageConstant.MAX_PAGE_SIZE;
+		queryArticle.setPageSize(PageConstant.MAX_PAGE_SIZE);
+		for(int i=0;i<=circleNum;i++){
+			queryArticle.setPageNo(i+1);
+			List<ArticleDTO> findPageable = articleMapper.findDTOPageable(queryArticle);
+			for(ArticleDTO a:findPageable){
+				boolean updateArticleEs = updateArticleEs(a.getId());
+				if(updateArticleEs){
+					success++;
+				}
+			}
+		}
+		long end=System.currentTimeMillis();
+		String message=String.format("同步文章es数据结束，成功同步数据%s条，耗时%s", success,(end-start));
+		operateLogService.addOperateLog(message, OperateLogTypeEnum.ARTICLE_ES_SYNC);
+		logger.info(message);
+		return success;
 	}
 }

@@ -267,4 +267,16 @@ public class ArticleController {
 		articleService.offlineArticle(articleId, userId);
 		return ResultMsg.ok("下线文章成功");
 	}
+	
+	/**
+	 * 同步文章es数据
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/article/syncEs"})
+	@ResponseBody
+	@RequiresPermissions("/user/article/syncEs")
+	public ResultMsg syncArticleEs(){
+		int syncArticleEsData = articleService.syncArticleEsData();
+		return ResultMsg.ok("同步文章es数据成功"+syncArticleEsData+"条数据");
+	}
 }

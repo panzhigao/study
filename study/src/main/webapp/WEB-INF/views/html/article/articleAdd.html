@@ -60,6 +60,7 @@
     </div>
   </div>
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/ace/ace.js"></script>
 <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'jie';
@@ -84,7 +85,11 @@ layui.use(['jquery', 'form','layedit'], function(){
 		    url: '$!{rc.contextPath}/api/user/upload', //接口url
 		    type: 'post', //默认post
 		    multiple: true
-		  }
+		  },tool: [
+                  'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
+                  , '|', 'left', 'center', 'right', '|', 'link', 'unlink','images', 'image_alt', 'video', 'anchors'
+                  , '|','table', 'fullScreen'
+              ]
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器
 	  var form = layui.form;

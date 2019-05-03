@@ -15,7 +15,7 @@ public class PageConstant {
      */
     public static final int PAGE_SIZE_0=0;
     /**
-     * 分页0
+     * 分页1
      */
     public static final int PAGE_SIZE_1=1;
     /**
@@ -27,12 +27,11 @@ public class PageConstant {
      */
     public static final int PAGE_SIZE_20=20;
     /**
-     * 分页20
+     * 分页100
      */
     public static final int PAGE_SIZE_100=100;
     /**
      * 最大分页条数
      */
-    public static final int MAX_PAGE_SIZE=100;
-
+    public static final int MAX_PAGE_SIZE=10000;
 }

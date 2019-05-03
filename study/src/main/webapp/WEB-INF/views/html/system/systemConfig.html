@@ -22,12 +22,17 @@
 				<div class="layui-inline">
 					<input placeholder="请输入变量名" class="layui-input" name="paramName" id="paramNameInput" autocomplete="off">
 				</div>
-
 				<button class="layui-btn" data-type="reload" id="search">搜索</button>
 				
 				#hasPermission('/user/systemConfig/doAdd')
 				<div class="layui-btn-group">
 					<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i>新增变量</button>
+				</div>
+				#end
+				
+				#hasPermission('/user/article/syncEs')
+				<div class="layui-btn-group">
+					<button class="layui-btn" id="btnSync">同步文章ES数据</button>
 				</div>
 				#end
 
@@ -58,7 +63,7 @@
     }).use('fly');
 
     //table
-    layui.use(['table','jquery','form'], function(){
+    layui.use(['table','jquery','form','layer'], function(){
         var table = layui.table;
         var $ = layui.$ , active = {
             reload: function(){
@@ -78,6 +83,28 @@
         $('#btnAdd').on('click', function() {
             showTab('新增变量','');
         });
+        
+        $('#btnSync').on('click', function() {
+            $.ajax({
+            	url:'/user/article/syncEs',
+            	type:'post',
+            	dataType:'json',
+            	beforeSend:function(){
+            		var index = layer.load(1, {
+            			  shade: [0.1,'#fff'] //0.1透明度的白色背景
+            		});
+            	},
+            	success:function(res){
+            		layer.closeAll('loading');
+            		if(res.code==200){
+            			layer.alert(res.msg);
+            		}else{
+            			layer.alert(res.msg);
+            		}
+            	}
+            	
+            })
+        });
 
         //监听工具条
         table.on('tool(configTab)', function(obj){
@@ -89,12 +116,12 @@
                         url:"$!{rc.contextPath}/user/systemConfig/doDelete",
                         type:"post",
                         data:{configId:data.id},
-                        success:function(data){
+                        success:function(res){
                             if(data.code=='200'){
-                                layer.alert(data.msg);
+                                layer.alert(res.msg);
                                 table.reload('tab');
                             }else{
-                                layer.alert(data.msg);
+                                layer.alert(res.msg);
                             }
                         }
                     });
