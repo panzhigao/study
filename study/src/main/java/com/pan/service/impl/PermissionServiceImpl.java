@@ -131,7 +131,6 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	 * 删除权限点，同时删除角色权限标里关联该权限点的数据
 	 * 同时删除缓存中角色的权限信息，记录操作日志
 	 *
-	 * //TODO 父级节点删除
 	 * //权限点 修改 r:add
 	 */
 	@Override
