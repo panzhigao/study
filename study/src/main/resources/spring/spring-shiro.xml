@@ -39,6 +39,8 @@
 				/404=anon
 				/500=anon
 				/unauth=anon
+				/search=anon
+				/doSearch=anon
 				/user/**=myauth,authc
 				/**=authc
 			</value>
