@@ -447,8 +447,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
 	 var res='';
 	 for(var i=0;i<length;i++){
 		 var item=items[i];
+		 var userId=index<2?item.userId:item.id;
 		 var one='<li>'+
-		  '<a href="/u/'+item.userId+'" target="_blank">'+
+		  '<a href="/u/'+userId+'" target="_blank">'+
 		  '<img src="'+item.userPortrait+'">'+
 		  '<cite class="fly-link">'+item.nickname+'</cite>'+
 		  '</a>';

@@ -1,12 +1,10 @@
 package com.pan.service.impl;
 
 import java.util.*;
-
 import com.pan.common.constant.MyConstant;
-import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ApproveFlagEnum;
 import com.pan.common.enums.ArticleStatusEnum;
-import com.pan.common.enums.RedisChannelOperateEnum;
+import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.ScoreTypeEnum;
@@ -151,8 +149,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		//将文章id写入redis队列
 		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
 		//通知redis消费
-		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName()+":all";
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName(),"");
 	}
 
 	/**

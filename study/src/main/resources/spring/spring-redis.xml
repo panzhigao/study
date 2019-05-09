@@ -4,7 +4,7 @@
        xsi:schemaLocation="
     		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
        default-lazy-init="false">
-
+	
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${jedis.maxIdle}"/><!-- 最大闲置 -->
         <property name="minIdle" value="${jedis.minIdle}"/><!-- 最小闲置 -->
@@ -21,7 +21,7 @@
         <constructor-arg index="4" value="${jedis.password}" name="password" type="java.lang.String"/>
         <constructor-arg index="5" value="${jedis.database}" name="database" type="int"/>
     </bean>
-
+	
     <!--redis连接工厂 -->
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           destroy-method="destroy">
@@ -62,5 +62,16 @@
 
     <bean id="redisUtil" class="com.pan.util.RedisUtils">
         <property name="redisTemplate" ref="redisTemplate"/>
+    </bean>
+    
+    <bean id="redisSubscriber" class="com.pan.redissub.RedisSubscriber">
+    	<property name="processorList">
+    		<list>
+    			<ref bean="articleCategoryProcessor"/> 
+    			<ref bean="articleEsProcessor"/>
+    			<ref bean="linkProcessor"/>
+    			<ref bean="systemConfigProcessor"/> 
+    		</list>
+    	</property>
     </bean>
 </beans>

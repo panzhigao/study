@@ -1,8 +1,8 @@
 package com.pan.init;
 
-import com.pan.common.constant.RedisChannelConstant;
+import com.pan.common.enums.RedisChannelEnum;
+import com.pan.redissub.RedisSubscriber;
 import com.pan.util.JedisUtils;
-import com.pan.util.Subscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -21,20 +21,24 @@ public class InitTheContext implements ApplicationListener<ContextRefreshedEvent
 
 	private static final Logger logger = LoggerFactory.getLogger(InitTheContext.class);
 
-	ExecutorService threadPool=new ThreadPoolExecutor(0, 10,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+	ExecutorService threadPool=new ThreadPoolExecutor(0, 10,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
+	
+	private RedisSubscriber redisSubscriber;
+	
+	public void setRedisSubscriber(RedisSubscriber redisSubscriber) {
+		this.redisSubscriber = redisSubscriber;
+	}
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		logger.info("spring容器onApplicationEvent。。。。");
-		cacheSync();
+		startRedisSub();
 	}
 
 	/**
-	 * 缓存同步
+	 * 启动redis订阅
 	 */
-	private void cacheSync(){
+	private void startRedisSub(){
 		threadPool.execute(()->{
 			Jedis jedis=null;
 			boolean redisState=true;
@@ -48,7 +52,7 @@ public class InitTheContext implements ApplicationListener<ContextRefreshedEvent
 						logger.info("----->>>redis 重连成功。。。");
 						redisState=true;
 					}
-					jedis.subscribe(new Subscriber(), RedisChannelConstant.CHANNEL_CACHE_SYNC);
+					jedis.subscribe(redisSubscriber, RedisChannelEnum.getAllChannel());
 				}catch (Exception e){
 					redisState=false;
 					logger.error("----->>>redis subscribe 发生异常",e);

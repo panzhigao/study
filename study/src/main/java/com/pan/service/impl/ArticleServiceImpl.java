@@ -2,7 +2,6 @@ package com.pan.service.impl;
 
 import java.util.*;
 import com.pan.service.*;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +11,13 @@ import redis.clients.jedis.Jedis;
 import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.constant.PageConstant;
-import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleOperateEnum;
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.enums.CheckTypeEnum;
 import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
-import com.pan.common.enums.RedisChannelOperateEnum;
+import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
@@ -284,7 +282,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public List<ArticleDTO> queryFromEsByCondition(QueryArticle queryArticle) {
 		List<ArticleDTO> list=new ArrayList<>();
 		try {
-			list=esClientService.queryByParamsWithHightLight(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+			list=esClientService.queryByParamsWithHightLight(EsConstant.ES_ARTICLE, TYPE_NAME, queryArticle, true, ArticleDTO.class);
 			list.forEach(item->{
 				item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
 			});
@@ -445,7 +443,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		List<ArticleDTO> list = queryFromEsByCondition(queryArticle);
 		if(CollectionUtils.isNotEmpty(list)){
 			String id=list.get(0).getEsId();
-			return esClientService.updateRecord(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, id, newContent);
+			return esClientService.updateRecord(EsConstant.ES_ARTICLE, TYPE_NAME, id, newContent);
 		}else{
 			return createArticleEs(articleId);
 		}
@@ -459,7 +457,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			return false;
 		}
 		try {
-			esClientService.createIndex(EsConstant.DEFAULT_INDEX_NAME, TYPE_NAME, list.get(0));
+			esClientService.createIndex(EsConstant.ES_ARTICLE, TYPE_NAME, list.get(0));
 			return true;
 		} catch (Exception e) {
 			logger.error("创建文章索引失败，id={}",articleId,e);
@@ -503,8 +501,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
 		//发送通知，修改es状态
 		//通知redis消费
-		String channelMessage=RedisChannelOperateEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName()+":all";
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName(), "");
 	}
 	
 	/**

@@ -4,21 +4,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-
 import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.pan.common.constant.MyConstant;
-import com.pan.common.constant.RedisChannelConstant;
-import com.pan.common.enums.RedisChannelOperateEnum;
+import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.enums.LinkStatusEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.UserStatusEnum;
@@ -165,8 +161,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	 * 发送消息通知
 	 */
 	private void sendChannelMessage(){
-		String channelMessage=RedisChannelOperateEnum.RECACHE_LINK.getName()+":"+MyConstant.DEFAULT_KEY;
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.RECACHE_LINK.getName(), MyConstant.DEFAULT_KEY+"");
 	}
 	
 	@Override

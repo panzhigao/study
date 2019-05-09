@@ -1,10 +1,10 @@
 package com.pan.common.enums;
 
 /**
- * redis订阅操作枚举
+ * redis订阅频道枚举
  * @author panzhigao
  */
-public enum RedisChannelOperateEnum {
+public enum RedisChannelEnum {
     /**
      * 文章分类缓存重载
      */
@@ -26,7 +26,7 @@ public enum RedisChannelOperateEnum {
 
     private String name;
 
-    RedisChannelOperateEnum(Integer code, String name) {
+    RedisChannelEnum(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -38,4 +38,25 @@ public enum RedisChannelOperateEnum {
     public String getName() {
         return name;
     }
+    
+    /**
+     * 获取所有频道
+     * @return
+     */
+    public static String[] getAllChannel(){
+    	RedisChannelEnum[] values = RedisChannelEnum.values();
+    	String[] arr=new String[values.length];
+    	for(int i=0;i<values.length;i++){
+    		arr[i]=values[i].name;
+    	}
+    	return arr;
+    }
+    
+    public static void main(String[] args) {
+		String[] channelArr = getAllChannel();
+		for(String str:channelArr){
+			System.out.println(str);
+		}
+	}
+    
 }

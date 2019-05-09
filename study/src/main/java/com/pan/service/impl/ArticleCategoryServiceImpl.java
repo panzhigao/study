@@ -3,14 +3,12 @@ package com.pan.service.impl;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
-import com.pan.common.constant.RedisChannelConstant;
 import com.pan.common.enums.ArticleCategoryStatusEnum;
-import com.pan.common.enums.RedisChannelOperateEnum;
+import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.query.QueryArticleCategory;
 import com.pan.util.Publisher;
@@ -105,9 +103,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategory.setCreateUserId(TokenUtils.getLoginUserId());
 		articleCategoryMapper.insertSelective(articleCategory);
 		operateLogService.addOperateLog("分类名称（"+articleCategory.getCategoryName()+")", OperateLogTypeEnum.ARTICLE_CATEGORY_ADD);
-		//refreshCache(ALL_KEY);
-		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+ALL_KEY;
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.RECACHE_ARTICLE_CATEGORY.getName(), ALL_KEY+"");
 	}
 	
 	/**
@@ -125,8 +121,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			throw new BusinessException("删除文章分类信息失败");
 		}
 		operateLogService.addOperateLog(articleCategory.toString(), OperateLogTypeEnum.ARTICLE_CATEGORY_DELETE);
-		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.RECACHE_ARTICLE_CATEGORY.getName(), articleCategory.getId()+"");
 		return deleteByPrimaryKey;
 	}
 
@@ -161,8 +156,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		articleCategoryMapper.updateByPrimaryKeySelective(articleCategory);
 		String changedFields = ValidationUtils.getChangedFields(articleCategoryInDb, articleCategory);
 		operateLogService.addOperateLog(changedFields, OperateLogTypeEnum.ARTICLE_CATEGORY_EDIT);
-		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.RECACHE_ARTICLE_CATEGORY.getName(), articleCategory.getId()+"");
 	}
 
 	/**
@@ -198,8 +192,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		} else {
 			message = "操作错误，请稍后重试";
 		}
-		String channelMessage=RedisChannelOperateEnum.RECACHE_ARTICLE_CATEGORY.getName()+":"+articleCategory.getId();
-		Publisher.sendMessage(RedisChannelConstant.CHANNEL_CACHE_SYNC, channelMessage);
+		Publisher.sendMessage(RedisChannelEnum.RECACHE_ARTICLE_CATEGORY.getName(), articleCategory.getId()+"");
 		return message;
 	}
 
