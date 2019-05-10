@@ -28,7 +28,7 @@ public interface UserMapper extends BaseMapper<User>{
 	 * @param queryUserVO
 	 * @return
 	 */
-	List<UserDTO> findByParams(QueryUser queryUserVO);
+	List<UserDTO> findDTOPageable(QueryUser queryUserVO);
 	/**
 	 * 查找使用角色的用户数据
 	 * @param roleId

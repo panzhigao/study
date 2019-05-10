@@ -1,8 +1,10 @@
 package com.pan.service;
 
 import java.util.List;
-import java.util.Map;
-
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.update.UpdateRequest;
 import com.pan.query.QueryBase;
 
 /**
@@ -11,6 +13,14 @@ import com.pan.query.QueryBase;
  * 类说明
  */
 public interface EsClientService {
+	/**
+	 * 创建索引
+	 * @param index
+	 * @param type
+	 * @param obj
+	 * @return
+	 */
+	IndexRequest buildIndexRequest(String index,String type,Object obj);
 	/**
 	 * 创建索引
 	 * @param index
@@ -38,16 +48,38 @@ public interface EsClientService {
 	 */
 	long queryCountByParams(String index,String type,QueryBase queryVO);
 	/**
+	 * 创建更新索引
+	 * @param index
+	 * @param type
+	 * @param obj
+	 * @return
+	 */
+	UpdateRequest buildUpdateRequest(String index,String type,String id,Object obj);
+	/**
 	 * 更新
 	 * @param index
 	 * @param type
 	 * @param id
 	 * @return
 	 */
-	boolean updateRecord(String index, String type, String id,Map<String, Object> newContent);
+	boolean updateRecord(String index, String type, String id,Object obj);
 	/**
 	 * 删除记录
 	 * @return
 	 */
 	boolean deleteRecord(String index, String type, String id);
+	/**
+	 * 批量执行
+	 * @param bulkRequest
+	 * @return
+	 */
+	BulkResponse bulk(BulkRequest bulkRequest);
+	/**
+	 * 根据id查询唯一数据
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	<T> T getById(String index,String type,String id,Class<?> T);
 }

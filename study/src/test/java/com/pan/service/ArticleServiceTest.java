@@ -79,5 +79,10 @@ public class ArticleServiceTest extends BaseTest {
 	public void testupdateArticleEs() {
 		articleService.updateArticleEs(1571809L);
 	}
+	
+	@Test
+	public void testSyncArticleEsData(){
+		articleService.syncArticleEsData();
+	}
 
 }

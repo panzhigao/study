@@ -95,5 +95,10 @@ public class UserServiceTest extends BaseTest {
         User user=userService.findByUsername("chenhe");
         userService.checkIn(user.getId());
     }
-
+    
+    @Test
+    public void syncUserEsData(){
+    	userService.syncUserEsData();
+    }
+    
 }

@@ -5,12 +5,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -36,6 +40,7 @@ import com.pan.common.annotation.QueryParam;
 import com.pan.common.enums.QueryTypeEnum;
 import com.pan.query.QueryBase;
 import com.pan.service.EsClientService;
+import com.pan.util.ClassUtils;
 import com.pan.util.JsonUtils;
 
 /**
@@ -49,19 +54,28 @@ public class EsClientServiceImpl implements EsClientService {
 
 	@Autowired
 	private RestHighLevelClient client;
+	
+	@Override
+	public IndexRequest buildIndexRequest(String index, String type, Object obj) {
+		IndexRequest indexRequest = new IndexRequest(index, type);
+		Object field = ClassUtils.getField(obj, "id");
+		if(field!=null){
+			indexRequest.id(String.valueOf(field));
+		}
+		String source = JsonUtils.toJson(obj);
+		return indexRequest.source(source, XContentType.JSON);
+	}
 
 	@Override
 	public boolean createIndex(String index, String type, Object obj) {
-		IndexRequest indexRequest = new IndexRequest(index, type);
-		String source = JsonUtils.toJson(obj);
-		indexRequest.source(source, XContentType.JSON);
+		IndexRequest indexRequest = buildIndexRequest(index, type, obj);
 		try {
-			client.index(indexRequest);
+			IndexResponse response = client.index(indexRequest);
+			return response.getShardInfo().getSuccessful()>0;
 		} catch (IOException e) {
 			logger.error("创建索引失败,index:{},type:{}", index, type);
 			return false;
 		}
-		return true;
 	}
 
 	/**
@@ -233,7 +247,6 @@ public class EsClientServiceImpl implements EsClientService {
 				searchSourceBuilder.highlighter(hiBuilder);
 			}
 		}
-
 		SearchRequest request = new SearchRequest(index);
 		request.types(type);
 		request.source(searchSourceBuilder);
@@ -284,22 +297,34 @@ public class EsClientServiceImpl implements EsClientService {
 			}	
 		}
 	}
-
+	
 	@Override
-	public boolean updateRecord(String index, String type, String id,Map<String,Object> newContent) {
+	public UpdateRequest buildUpdateRequest(String index, String type, String id,Object obj) {
 		UpdateRequest updateRequest=new UpdateRequest(index, type, id);
+		Map<String, Object> mapContent = JsonUtils.objectToMap(obj);
 		try {
 			XContentBuilder xBuild=XContentFactory.jsonBuilder().startObject();
-			for (String key : newContent.keySet()) {
-                xBuild.field(key, newContent.get(key));
+			for (String key : mapContent.keySet()) {
+                xBuild.field(key, mapContent.get(key));
             }
 			xBuild.endObject();
-			updateRequest.doc(xBuild);
-			UpdateResponse update = client.update(updateRequest);
+			UpdateRequest doc = updateRequest.doc(xBuild);
+			return doc;
+		} catch (Exception e) {
+			logger.error("创建更新es索引失败，index={},type={},id={}",index,type,id);
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean updateRecord(String index, String type, String id,Object obj) {
+		try {
+			UpdateRequest buildUpdateRequest = buildUpdateRequest(index, type, id, obj);
+			UpdateResponse update = client.update(buildUpdateRequest);
 			int successful = update.getShardInfo().getSuccessful();
 			return successful>0;
-		} catch (Exception e) {
-			logger.error("更新或创建es失败，index={},type={},id={}",index,type,id);
+		} catch (IOException e) {
+			logger.error("更新es失败，index={},type={},id={}",index,type,id);
 		}
 		return false;
 	}
@@ -315,12 +340,46 @@ public class EsClientServiceImpl implements EsClientService {
 	public boolean deleteRecord(String index, String type, String id) {
 		DeleteRequest deleteRequest=new DeleteRequest(index,type,id);
 		try {
-			DeleteResponse delete = client.delete(deleteRequest);
+			DeleteResponse delete = client.delete(deleteRequest);			
 			return delete.getShardInfo().getSuccessful()>0;
 		} catch (IOException e) {
 			logger.error("更新es失败");
 		}
 		return false;
 	}
+
+	@Override
+	public BulkResponse bulk(BulkRequest bulkRequest) {
+		try {
+			BulkResponse bulk = client.bulk(bulkRequest);
+			if(bulk.hasFailures()){
+				logger.error("批量执行es操作存在失败操作");
+				logger.error(bulk.buildFailureMessage());
+			}
+		} catch (IOException e) {
+			logger.error("批量执行es操作失败",e);
+		}
+		return null;
+	}
 	
+	/**
+	 * 根据id查询唯一数据
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getById(String index, String type, String id, Class<?> T) {
+		GetRequest getRequest=new GetRequest(index, type, id);
+		try {
+			GetResponse getResponse = client.get(getRequest);
+			String sourceAsString = getResponse.getSourceAsString();
+			return (T) JsonUtils.fromJson(sourceAsString,T);
+		} catch (Exception e) {
+			logger.error("根据id查询es索引失败,index={},type={},id={}",index,type,id);
+		}
+		return null;
+	}
 }

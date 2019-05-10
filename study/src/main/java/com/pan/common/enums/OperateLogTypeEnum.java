@@ -96,7 +96,11 @@ public enum OperateLogTypeEnum {
 	/**
 	 * 文章es同步
 	 */
-	ARTICLE_ES_SYNC(606,"文章es同步");
+	ARTICLE_ES_SYNC(701,"文章es同步"),
+	/**
+	 * 用户es同步
+	 */
+	USER_ES_SYNC(702,"用户es同步");
 	
     private Integer code;
 

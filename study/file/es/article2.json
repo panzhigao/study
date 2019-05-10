@@ -1,0 +1,129 @@
+{
+	"settings": {
+		"analysis": {
+			"analyzer": {
+				"ik": {
+					"tokenizer": "ik_max_word"
+				}
+			}
+		}
+	},
+
+	"mappings": {
+		"article": {
+			"properties": {
+				"categoryId": {
+					"type": "long"
+				},
+				"commentCount": {
+					"type": "long"
+				},
+				"createTime": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"highQuality": {
+					"type": "long"
+				},
+				"id": {
+					"type": "long"
+				},
+				"image": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"nickname": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"outline": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"publishTime": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"status": {
+					"type": "long"
+				},
+				"stick": {
+					"type": "long"
+				},
+				"title": {
+					"type": "text",
+					"analyzer": "ik_max_word",
+					"search_analyzer": "ik_smart"
+				},
+				"type": {
+					"type": "long"
+				},
+				"updateTime": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"userId": {
+					"type": "long"
+				},
+				"userPortrait": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"username": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"viewCount": {
+					"type": "long"
+				},
+				"join_field": {
+						"type": "join",
+						"eager_global_ordinals": true,
+						"relations": {
+							"user": "article"
+						}
+				},
+			}
+		}
+	}
+}

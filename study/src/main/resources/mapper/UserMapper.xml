@@ -207,8 +207,25 @@
   		</if>
   	</where>
   </sql>
+  
+  <select id="findPageable" resultMap="BaseResultMap">
+  	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait
+  	from t_user tu  
+  	<include refid="whereSql"/>
+  	<choose>
+  		<when test="orderCondition !=null and orderCondition !=''">
+  			order by ${orderCondition}
+  		</when>
+  		<otherwise>
+  			order by id asc
+  		</otherwise>
+  	</choose>
+  	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+  </select>
   	
-  <select id="findByParams" resultMap="MoreResultMap">
+  <select id="findDTOPageable" resultMap="MoreResultMap">
   	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait,group_concat(tr.role_name) as role_names
   	from t_user tu left join t_user_role tur on tu.id=tur.user_id left join t_role tr on tr.id= tur.role_id
   	<include refid="whereSql"/>

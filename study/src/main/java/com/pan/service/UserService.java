@@ -97,4 +97,9 @@ public interface UserService extends BaseService<User>{
 	 * @return
 	 */
 	ScoreHistory checkIn(Long userId);
+	/**
+	 * 同步用户es数据
+	 * @return
+	 */
+	int syncUserEsData();
 }

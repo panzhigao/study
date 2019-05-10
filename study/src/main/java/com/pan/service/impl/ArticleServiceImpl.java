@@ -3,6 +3,8 @@ package com.pan.service.impl;
 import java.util.*;
 import com.pan.service.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.elasticsearch.action.DocWriteRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -428,6 +430,14 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return pageData;
 	}
 	
+	private DocWriteRequest<?> buildRequest(ArticleDTO article){
+		ArticleDTO articleEs = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"",ArticleDTO.class);
+		if(articleEs!=null){
+			return esClientService.buildUpdateRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"", article);
+		}else{
+			return esClientService.buildIndexRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article);
+		}
+	}
 	
 	@Override
 	public boolean updateArticleEs(Long articleId) {
@@ -512,27 +522,26 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public int syncArticleEsData() {
 		logger.info("同步文章es数据开始....");
 		long start=System.currentTimeMillis();
-		int success=0;
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		int total = countByParams(queryArticle);
 		//计算要循环的次数
 		int circleNum= total/PageConstant.MAX_PAGE_SIZE;
 		queryArticle.setPageSize(PageConstant.MAX_PAGE_SIZE);
+		BulkRequest bulkRequest=new BulkRequest();
 		for(int i=0;i<=circleNum;i++){
 			queryArticle.setPageNo(i+1);
 			List<ArticleDTO> findPageable = articleMapper.findDTOPageable(queryArticle);
 			for(ArticleDTO a:findPageable){
-				boolean updateArticleEs = updateArticleEs(a.getId());
-				if(updateArticleEs){
-					success++;
-				}
+				DocWriteRequest<?> request = buildRequest(a);
+				bulkRequest.add(request);
 			}
+			esClientService.bulk(bulkRequest);
 		}
 		long end=System.currentTimeMillis();
-		String message=String.format("同步文章es数据结束，成功同步数据%s条，耗时%s", success,(end-start));
+		String message=String.format("同步文章es数据结束，耗时%s",(end-start));
 		operateLogService.addOperateLog(message, OperateLogTypeEnum.ARTICLE_ES_SYNC);
 		logger.info(message);
-		return success;
+		return total;
 	}
 }

@@ -20,6 +20,8 @@ import com.pan.util.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
+import org.elasticsearch.action.DocWriteRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,9 @@ import com.pan.common.annotation.LoginGroup;
 import com.pan.common.annotation.RegisterGroup;
 import com.pan.common.annotation.TelephoneBindGroup;
 import com.pan.common.annotation.UserEditGroup;
+import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
+import com.pan.common.constant.PageConstant;
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.UserStatusEnum;
@@ -46,7 +50,9 @@ import com.pan.query.QueryUser;
 public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
+    
+	public static final String TYPE_NAME="user";
+    
     /**
      * 默认角色id,新注册用户默认角色
      */
@@ -97,6 +103,9 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     
     @Autowired
     private PictureService pictureService;
+    
+	@Autowired
+	private EsClientService esClientService;
     
     /**
      * 用户注册,默认新增用户拥有普通用户权限
@@ -352,7 +361,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             if (total > 0) {
                 RedisSessionDAO redisSessionDAO = SpringContextUtils.getBean(RedisSessionDAO.class);
                 Collection<Session> activeSessions = redisSessionDAO.getActiveSessions();
-                list = userMapper.findByParams(queryUser);
+                list = userMapper.findDTOPageable(queryUser);
                 list.forEach(s->{
                     boolean online = TokenUtils.isOnline(s.getId(),activeSessions);
                     s.setIsOnline(online);
@@ -506,4 +515,41 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     protected UserMapper getBaseMapper() {
         return userMapper;
     }
+    
+	private DocWriteRequest<?> buildRequest(User user){
+		User userEs = esClientService.getById(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", User.class);
+		if(userEs!=null){
+			return esClientService.buildUpdateRequest(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", user);
+		}else{
+			return esClientService.buildIndexRequest(EsConstant.ES_USER, TYPE_NAME, user);
+		}
+	}
+    
+	/**
+	 * 同步用户es数据
+	 */
+	@Override
+	public int syncUserEsData() {
+		logger.info("同步用户es数据开始....");
+		long start=System.currentTimeMillis();
+		QueryUser queryUser=new QueryUser();
+		int userTotal = countByParams(queryUser);
+		int circleNum=userTotal/PageConstant.MAX_PAGE_SIZE;
+		queryUser.setPageSize(PageConstant.MAX_PAGE_SIZE);
+		BulkRequest bulkRequest=new BulkRequest();
+		for(int i=0;i<=circleNum;i++){
+			queryUser.setPageNo(i+1);
+			List<User> findPageable = findPageable(queryUser);
+			for(User u:findPageable){
+				DocWriteRequest<?> request = buildRequest(u);
+				bulkRequest.add(request);
+			}	
+			esClientService.bulk(bulkRequest);
+		}
+		long end=System.currentTimeMillis();
+		String message=String.format("同步用户es数据结束，耗时%s",(end-start));
+		operateLogService.addOperateLog(message, OperateLogTypeEnum.USER_ES_SYNC);
+		logger.info(message);
+		return userTotal;
+	}
 }
