@@ -101,7 +101,7 @@
   		<if test="userPortrait !=null">
   			user_portrait=#{userPortrait,jdbcType=VARCHAR},
   		</if>
-  		<if test="userBrief !=null">
+  		<if test="userBrief !=null and userBrief !='' ">
   			user_brief=#{userBrief,jdbcType=VARCHAR},
   		</if>
   		<if test="updateTime !=null ">

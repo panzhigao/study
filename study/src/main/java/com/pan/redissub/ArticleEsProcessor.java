@@ -12,7 +12,7 @@ import com.pan.util.JedisUtils;
 import com.pan.util.SpringContextUtils;
 
 /**
- * 文章分类缓存
+ * 文章es更新
  * @author Administrator
  *
  */

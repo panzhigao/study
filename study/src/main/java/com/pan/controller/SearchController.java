@@ -1,17 +1,20 @@
 package com.pan.controller;
 
-import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.enums.ArticleStatusEnum;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
-import com.pan.dto.ArticleDTO;
 import com.pan.query.QueryArticle;
+import com.pan.query.QueryUser;
 import com.pan.service.ArticleService;
+import com.pan.service.UserService;
 
 /**
  * @author 作者
@@ -24,10 +27,17 @@ public class SearchController {
 	@Autowired
 	private ArticleService articleService;
 	
+	@Autowired
+	private UserService userService;
+		
 	@RequestMapping(method=RequestMethod.GET,value="/search")
-	public ModelAndView getSearchContent(String q){
+	public ModelAndView getSearchContent(String q,String type){
 		ModelAndView mav=new ModelAndView("html/search/searchPage");
+		if(!"u".equals(type)){
+			type="a";
+		}
 		mav.addObject("q", q);
+		mav.addObject("type", type);
 		return mav;
 	}
 	
@@ -37,15 +47,23 @@ public class SearchController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doSearch")
 	@ResponseBody
-	public ResultMsg doSearch(String q,String type){
-		QueryArticle queryArticleVO=new QueryArticle();
-		queryArticleVO.setTitle(q);
-		queryArticleVO.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-		List<ArticleDTO> searchContent = articleService.queryFromEsByCondition(queryArticleVO);
-		
-		
-		
-		return ResultMsg.ok("返回搜索查询结果成功", searchContent);
+	public ResultMsg doSearch(String q,String type,@RequestParam(defaultValue="10")Integer pageSize,@RequestParam(defaultValue="1")Integer pageNo){
+		if("u".equals(type)){
+			QueryUser queryUser=new QueryUser();
+			queryUser.setNickname(q);
+			queryUser.setPageSize(pageSize);
+			queryUser.setPageNo(pageNo);
+			PageDataMsg data = userService.queryUserFromEs(queryUser);
+			return ResultMsg.ok("返回搜索用户结果成功", data);
+		}else{
+			QueryArticle queryArticle=new QueryArticle();
+			queryArticle.setPageSize(pageSize);
+			queryArticle.setPageNo(pageNo);
+			queryArticle.setTitle(q);
+			queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
+			PageDataMsg data = articleService.queryArticleFromEs(queryArticle);
+			return ResultMsg.ok("返回搜索文章结果成功", data);
+		}
 	}
 	
 }

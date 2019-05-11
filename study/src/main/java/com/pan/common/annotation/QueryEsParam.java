@@ -18,7 +18,7 @@ import com.pan.common.enums.QueryTypeEnum;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface QueryParam {
+public @interface QueryEsParam {
 	/**
 	 * 标注字段采用什么匹配类型
 	 * @return

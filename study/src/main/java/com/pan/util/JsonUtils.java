@@ -146,15 +146,9 @@ public class JsonUtils {
 		return map;
 	}
 	
-	/**
-	 * object to map
-	 * @param obj
-	 * @return
-	 * @throws IllegalAccessException
-	 */
-	public static Map<String, Object> objectToMap(Object obj){
-		Map<String, Object> map = new HashMap<>(10);
+	public static Map<String, Object> objectToMap(Object obj,boolean includeNullValue){
 		Field[] allFields = ClassUtils.getAllFields(obj);
+		Map<String, Object> map = new HashMap<>(allFields.length);
 		for (Field field :allFields) {
 			field.setAccessible(true);
 			String fieldName = field.getName();
@@ -168,9 +162,23 @@ public class JsonUtils {
 				e.printStackTrace();
 				continue;
 			}
+			if(value==null && !includeNullValue){
+				continue;
+			}
 			map.put(fieldName, value);
 		}
 		return map;
+	}
+	
+	
+	/**
+	 * object to map
+	 * @param obj
+	 * @return
+	 * @throws IllegalAccessException
+	 */
+	public static Map<String, Object> objectToMap(Object obj){
+		return objectToMap(obj,false);
 	}
 	
     public static Object mapToObject(Map<String,Object> map, Class<?> beanClass) throws Exception {      

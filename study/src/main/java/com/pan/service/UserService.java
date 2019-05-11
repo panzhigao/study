@@ -2,10 +2,12 @@ package com.pan.service;
 
 import java.util.List;
 import java.util.Map;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.entity.ScoreHistory;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryUser;
+import com.pan.vo.UserVO;
 
 /**
  * 
@@ -106,5 +108,23 @@ public interface UserService extends BaseService<User>{
 	 * @param queryArticleVO
 	 * @return
 	 */
-	List<User> queryFromEsByCondition(QueryUser queryUser);
+	List<UserVO> queryFromEsByCondition(QueryUser queryUser);
+	/**
+	 * 从es查询用户信息
+	 * @param queryUser
+	 * @return
+	 */
+	PageDataMsg queryUserFromEs(QueryUser queryUser);
+	/**
+	 * 更新用户es数据
+	 * @param userId
+	 * @return
+	 */
+	boolean updateUserEs(Long userId);
+	/**
+	 * 创建用户es数据
+	 * @param userId
+	 * @return
+	 */
+	boolean createUserEs(Long userId);
 }

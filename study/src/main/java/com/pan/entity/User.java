@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     /**
      * 用户性别
      */
-    private String sex;
+    private Integer sex;
     /**
      * 用户名
      */
@@ -80,7 +80,12 @@ public class User extends BaseEntity {
      */
     @Size(message = "地址不能超过100个字", max = 100, groups = {UserEditGroup.class})
     private String address;
-
+	/**
+	 * 用户简介
+	 */
+    @Size(message = "用户简介不能超过1000个字", max = 1000, groups = {UserEditGroup.class})
+	private String userBrief;
+    
     public User() {
         super();
     }

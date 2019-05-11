@@ -7,7 +7,7 @@ package com.pan.common.constant;
  */
 public class EsConstant {
 
-    public static final String ES_ARTICLE="es_data";
+    public static final String ES_INDEX_NAME="es_data";
     
-    public static final String ES_USER="es_data";
+    public static final String ES_TYPE_NAME="data";
 }

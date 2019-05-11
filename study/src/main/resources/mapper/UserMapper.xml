@@ -16,6 +16,7 @@
     <result column="user_portrait"      property="userPortrait"    jdbcType="VARCHAR" />
     <result column="admin_flag"         property="adminFlag"       jdbcType="VARCHAR" />
     <result column="address"            property="address"         jdbcType="VARCHAR" />
+    <result column="user_brief"       	property="userBrief"       jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="MoreResultMap" type="com.pan.dto.UserDTO" extends="BaseResultMap">  
@@ -30,7 +31,7 @@
   
   <sql id="Base_Column_List" >
     id,sex,username,nickname,password,create_time,last_login_time,status,telephone,
-    update_time,user_portrait,admin_flag,address
+    update_time,user_portrait,admin_flag,address,user_brief
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -93,6 +94,9 @@
       <if test="address != null">
         address,
       </if>
+      <if test="userBrief !=null and userBrief !='' ">
+  		user_brief,
+  	  </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -137,6 +141,9 @@
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
       </if>
+      <if test="userBrief !=null and userBrief !='' ">
+  		#{userBrief,jdbcType=VARCHAR},
+  	  </if>
     </trim>
   </insert>
   
@@ -179,6 +186,9 @@
   		<if test="address !=null and address !=''">
   			address=#{address,jdbcType=VARCHAR},
   		</if>
+  		<if test="userBrief !=null and userBrief !=''">
+  			user_brief=#{userBrief,jdbcType=VARCHAR},
+  		</if>
   	</set>
   	where id=#{id}
   </update>
@@ -209,7 +219,8 @@
   </sql>
   
   <select id="findPageable" resultMap="BaseResultMap">
-  	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,tu.update_time,tu.user_portrait
+  	select tu.id,tu.sex,tu.username,tu.nickname,tu.create_time,tu.last_login_time,tu.status,tu.telephone,
+  	tu.update_time,tu.user_portrait,tu.user_brief
   	from t_user tu  
   	<include refid="whereSql"/>
   	<choose>

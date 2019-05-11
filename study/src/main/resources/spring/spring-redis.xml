@@ -71,6 +71,7 @@
     			<ref bean="articleEsProcessor"/>
     			<ref bean="linkProcessor"/>
     			<ref bean="systemConfigProcessor"/> 
+    			<ref bean="userEsProcessor"/> 
     		</list>
     	</property>
     </bean>

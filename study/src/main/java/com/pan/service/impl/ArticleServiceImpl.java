@@ -2,19 +2,25 @@ package com.pan.service.impl;
 
 import java.util.*;
 import com.pan.service.*;
-import org.apache.commons.collections.CollectionUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.InnerHitBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.join.query.HasChildQueryBuilder;
+import org.elasticsearch.join.query.HasParentQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+
+import com.google.common.collect.Lists;
 import com.pan.common.constant.EsConstant;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.constant.PageConstant;
@@ -26,6 +32,7 @@ import com.pan.common.enums.MessageTypeEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.exception.BusinessException;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
 import com.pan.entity.ArticleCheck;
@@ -293,7 +300,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			builder.innerHit(new InnerHitBuilder());
 			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 			searchSourceBuilder.query(builder);
-			list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_ARTICLE, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+			list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
 			list.forEach(item->{
 				item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
 			});
@@ -440,17 +447,17 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 	
 	private DocWriteRequest<?> buildRequest(Article article){
-		Article articleEs = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"",Article.class);
+		Article articleEs = esClientService.getById(EsConstant.ES_INDEX_NAME, TYPE_NAME, article.getId()+"",Article.class);
 		if(articleEs!=null){
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
-			return esClientService.buildUpdateRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"", objectToMap);
+			return esClientService.buildUpdateRequest(EsConstant.ES_INDEX_NAME, TYPE_NAME, article.getId()+"", objectToMap);
 		}else{
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
 			Map<String,Object> joinMap=new HashMap<>();
 			joinMap.put("name", "article");
 			joinMap.put("parent", article.getUserId());
 			objectToMap.put("join_field", joinMap);
-			return esClientService.buildIndexRequest(EsConstant.ES_ARTICLE, TYPE_NAME, objectToMap);
+			return esClientService.buildIndexRequest(EsConstant.ES_INDEX_NAME, TYPE_NAME, objectToMap);
 		}
 	}
 	
@@ -467,9 +474,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Map<String, Object> newContent = JsonUtils.objectToMap(selectByPrimaryKey);
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setId(articleId);
-		Object es = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, articleId+"", Article.class);
-		if(es==null){
-			return esClientService.updateRecord(EsConstant.ES_ARTICLE, TYPE_NAME, articleId+"", newContent);
+		Object es = esClientService.getById(EsConstant.ES_INDEX_NAME, TYPE_NAME, articleId+"", Article.class);
+		if(es!=null){
+			return esClientService.updateRecord(EsConstant.ES_INDEX_NAME, TYPE_NAME, articleId+"", newContent);
 		}else{
 			return createArticleEs(articleId);
 		}
@@ -477,13 +484,13 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 
 	@Override
 	public boolean createArticleEs(Long articleId) {
-		List<ArticleDTO> list = findByArticleId(articleId);
-		if(CollectionUtils.isEmpty(list)){
+		Article article = selectByPrimaryKey(articleId);
+		if(article==null){
 			logger.info("文章数据不存在，id={}",articleId);
 			return false;
 		}
 		try {
-			esClientService.createIndex(EsConstant.ES_ARTICLE, TYPE_NAME, list.get(0));
+			esClientService.createIndex(EsConstant.ES_INDEX_NAME, TYPE_NAME, article);
 			return true;
 		} catch (Exception e) {
 			logger.error("创建文章索引失败，id={}",articleId,e);
@@ -559,5 +566,41 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		operateLogService.addOperateLog(message, OperateLogTypeEnum.ARTICLE_ES_SYNC);
 		logger.info(message);
 		return total;
+	}
+
+	@Override
+	public List<ArticleDTO> queryFromEsByTitle(QueryArticle queryArticle) {
+		if(queryArticle==null||StringUtils.isBlank(queryArticle.getTitle())){
+			return Lists.newArrayList();
+		}		
+		BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+		
+		HasParentQueryBuilder parentQuery=new HasParentQueryBuilder("user", QueryBuilders.matchAllQuery(), true);
+		parentQuery.innerHit(new InnerHitBuilder());
+		
+		boolBuilder.must(QueryBuilders.matchQuery("title", queryArticle.getTitle()));
+		boolBuilder.must(parentQuery);
+		
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(boolBuilder);
+		
+		List<ArticleDTO> list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+		list.forEach(item->{
+			item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
+		});
+		return list;
+	}
+
+	@Override
+	public PageDataMsg queryArticleFromEs(QueryArticle queryArticle) {
+		if(queryArticle==null||StringUtils.isBlank(queryArticle.getTitle())){
+			return new PageDataMsg();
+		}
+		long total = esClientService.queryCountByParams(EsConstant.ES_INDEX_NAME,EsConstant.ES_TYPE_NAME,queryArticle);
+		if(total==0){
+			return new PageDataMsg();
+		}
+		List<ArticleDTO> list = queryFromEsByTitle(queryArticle);
+		return new PageDataMsg(total,list);
 	}
 }

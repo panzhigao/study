@@ -1,17 +1,13 @@
 package com.pan.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-
 import com.pan.query.QueryBase;
 
 /**
@@ -37,7 +33,6 @@ public interface EsClientService {
 	 */
 	boolean createIndex(String index,String type,Object obj);
 	
-	SearchResponse getByParamsWithHightLight(SearchSourceBuilder searchSourceBuilder,String index,String type,QueryBase queryBase,boolean highLightFlag) throws IOException;
 	/**
 	 * 查询并高亮字段，支持分页
 	 * 在需要高亮的字段上加上注解

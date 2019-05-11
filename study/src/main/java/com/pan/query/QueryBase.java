@@ -117,13 +117,13 @@ public class QueryBase {
 
     public Integer getPageSize() {
         if (pageSize == null) {
-            return PageConstant.MAX_PAGE_SIZE;
+            return PageConstant.PAGE_SIZE_100;
         }
         if(pageSize<PageConstant.PAGE_SIZE_0){
-            return PageConstant.MAX_PAGE_SIZE;
+            return PageConstant.PAGE_SIZE_100;
         }
-        if(limitPage && pageSize>PageConstant.MAX_PAGE_SIZE){
-            return PageConstant.MAX_PAGE_SIZE;
+        if(limitPage && pageSize>PageConstant.PAGE_SIZE_100){
+            return PageConstant.PAGE_SIZE_100;
         }
         return pageSize;
     }

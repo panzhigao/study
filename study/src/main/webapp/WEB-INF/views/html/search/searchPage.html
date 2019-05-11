@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>好好学习社区</title>
+  <title>$!{article.title}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="#config('keywords')#end">
   <meta name="description" content="#config('description')#end">
@@ -86,7 +86,8 @@
   <div class="layui-row layui-col-space15">
     <div class="layui-col-md8" style="margin:0 100px;">
     	<div class="fly-panel-title fly-filter" >
-             <input type="text" id="q" name="q" value="${q}" style="display:inline;width:80%;" required lay-verify="required" autocomplete="off" class="layui-input">
+    		 <input id="type" value="$!{type}" type="hidden">
+             <input type="text" id="q" name="q" value="$!{q}" style="display:inline;width:80%;" required lay-verify="required" autocomplete="off" class="layui-input">
              <span class="fly-search" id="searchBtn"><i class="layui-icon"></i></span>
         </div>
     </div>
@@ -95,14 +96,13 @@
       <div class="fly-panel" style="margin-bottom: 0;min-height:400px;">
         
         <div class="fly-panel-title fly-filter">
-          <a href="" class="selected">帖子</a>
+          <a href="javascript:void(0);" type="a" #if($type=='a') class="selected" #end>帖子</a>
+          <a href="javascript:void(0);" type="u" #if($type=='u') class="selected" #end>用户</a>
         </div>
 
-        <ul class="fly-list">          
-          
-        </ul>
+        <ul class="fly-list" id="content-list"></ul>
 
-       	<div id="onResult" style="width:167px;height:74px;margin:40px auto 0;display:none;">
+       	<div id="noResult" style="width:167px;height:74px;margin:40px auto 0;display:none;">
          	<img style="width:100%;height:100%;" alt="" src="$!{rc.contextPath}/static/images/empty_result.png">
          	<p class="fly-none">没有搜索结果</p>
         </div>
@@ -121,7 +121,7 @@
 <script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
 <script>
-layui.cache.page = 'jie';
+layui.cache.page = '';
 layui.cache.user = {
   username: '游客'
   ,uid: -1
@@ -130,23 +130,58 @@ layui.cache.user = {
   ,sex: '男'
 };
 layui.config({
-	version: "3.0.0"
-	,base: '$!{rc.contextPath}/static/res/mods/'
+  version: "3.0.0"
+  ,base: '$!{rc.contextPath}/static/res/mods/' //这里实际使用时，建议改成绝对路径
 }).extend({
-   
-})
-
-layui.use(['layer','util'], function(){
-	var util=layui.util;
-	  util.fixbar({
-		    bgcolor: '#009688'
-		    ,click: function(type){
-		      if(type === 'bar1'){
-		        //layer.msg('打开 index.js，开启发表新帖的路径');
-		        location.href = '/user/articleAdd';
-		      }
-		    }
-		  });
+  fly: 'index'
+}).use(['layer','flow','form','jie'], function(){
+	var flow = layui.flow,form=layui.form;
+	var q=$('#q').val();
+	var type=$('#type').val();
+	var pageSize=5;
+	
+	flow.load({
+		elem: '#content-list', //流加载容器
+		done: function(pageNo, next){
+			$.ajax({
+				url:"$!{rc.contextPath}/doSearch",
+		        type:"post",
+		        data:{pageSize:pageSize,pageNo:pageNo,q:q,type:type},
+			    success:function(result){
+			    	if(result.code=='200'){
+			    		var map=result.data;
+                        var total=map.total;
+                        if(total==0){
+			       	 		$('#noResult').show();
+			       	 		next('', false);
+                        	form.render();
+                        	$('.layui-flow-more').hide();
+			       	 		return;
+			       	 	}
+                        var data=map.data;
+                        var hasData = pageSize*pageNo<total;
+                        var listArr;
+                        if(type=='u'){
+                        	listArr=getUser(data);
+                        }else{
+                        	listArr=getArticle(data);
+                        }
+        	 			next(listArr.join(''), hasData);
+                        form.render();
+			    	}
+			    }
+			}); 
+		}
+	});
+	
+	
+	$('.fly-panel-title a').click(function(){
+		$(this).addClass('selected').siblings('.selected').removeClass('selected');
+		var type=$(this).attr('type');
+		$('#type').val(type);
+		$('#searchBtn').click();
+	});
+	  
 	$('#searchBtn').unbind("click");  
 	$('#searchBtn').click(function(){
 		var q=$('#q').val();
@@ -154,57 +189,68 @@ layui.use(['layer','util'], function(){
 			layer.alert('请输入搜索内容');
 			return;
 		}
-		window.location.href='$!{rc.contextPath}/search?q='+q;
-	});
-})
-
-doSearch();
-
-function doSearch(){
-	var q=$('#q').val();
-	$.ajax({
-		url:'$!{rc.contextPath}/doSearch',
-		data:{q:q},
-		dataType:'json',
-		type:'post',
-		success:function(res){
-			if(res.code=='200'){
-	 			var articles=res.data;
-	 			var length=articles.length;
-	 			if(length==0){
-	 				$('#onResult').show();
-	 				return;
-	 			}
-	 			for(var i=0;i<length;i++){
-	 				var article=articles[i];
-	 				var one='<li>'+
-	 	            '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" class="fly-avatar">'+
-	 	              '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
-	 	            '</a>'+
-	 	            '<h2>'+
-	 	              '<a class="layui-badge">'+article.categoryName+'</a>'+
-	 	              '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
-	 	            '</h2>'+
-	 	            '<div class="fly-list-info">'+
-	 	              '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" link>'+
-	 	                '<cite>'+article.nickname+'</cite>'+
-	 	              '</a>'+
-	 	              '<span>'+tranTime(article.publishTime)+'</span>'+
-	 	              '<span class="fly-list-nums">'+
-	 	                '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
-	 	               '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
-	 	              '</span>'+
-	 	            '</div>'+
-	 	          '</li>';	
-	 			$('.fly-list').append(one);
-	 			}
-			}else{
-				layer.msg(res.msg);
-			}
-		}
+		var type=$('#type').val();
+		window.location.href='$!{rc.contextPath}/search?q='+q+'&type='+type;
 	});
 	
-}
+	document.onkeyup=function(e){
+		if(e.keyCode===13){
+			$('#searchBtn').click();	
+		}
+	}
+})
+
+function getArticle(articles){
+	var length=articles.length;
+	var listArr = [];
+		for(var i=0;i<length;i++){
+			var article=articles[i];
+			var one='<li>'+
+         '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" class="fly-avatar">'+
+           '<img style="border-radius:50%;" src="'+article.userPortrait+'" alt="'+article.nickname+'">'+
+         '</a>'+
+         '<h2>'+
+           '<a class="layui-badge">'+article.categoryName+'</a>'+
+           '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
+         '</h2>'+
+         '<div class="fly-list-info">'+
+           '<a target="_blank" href="$!{rc.contextPath}/u/'+article.userId+'" link>'+
+             '<cite>'+article.nickname+'</cite>'+
+           '</a>'+
+           '<span>'+tranTime(article.publishTime)+'</span>'+
+           '<span class="fly-list-nums">'+
+             '<a target="_blank" href="$!{rc.contextPath}/article/'+article.articleId+'#comment"><i class="iconfont icon-pinglun1" title="回答"></i>'+article.commentCount+'</a>'+
+            '<i class="iconfont" title="阅读次数">&#xe60b;</i> <span id="viewCount">'+article.viewCount+'</span>'+
+           '</span>'+
+         '</div>'+
+       '</li>';
+		listArr.push(one);
+	}
+	return listArr;
+}  
+
+
+function getUser(users){
+	var length=users.length;
+	var listArr = [];
+		for(var i=0;i<length;i++){
+			var user=users[i];
+			var one='<li>'+
+         '<a target="_blank" href="$!{rc.contextPath}/u/'+user.id+'" class="fly-avatar">'+
+           '<img style="border-radius:50%;width:60px;height:60px;position: relative;top: -7px;" src="'+user.userPortrait+'" alt="'+user.nickname+'">'+
+         '</a>'+
+         '<div style="margin-left:30px;" class="fly-list-info">'+
+           '<a target="_blank" href="$!{rc.contextPath}/u/'+user.id+'" link>'+
+             '<h3 style="color:#000;font-size:20px;font-weight:700;margin-top:-15px;">'+user.nickname+'</h3>'+
+             '<p style="margin-top:8px;text-overflow: ellipsis;overflow: hidden;">'+user.userBrief+'</p>'+
+           '</a>'+
+           '<span>'+''+'</span>'+
+         '</div>'+
+       '</li>';
+		listArr.push(one);
+	}
+	return listArr;
+} 
 </script>
 #parse("./html/common/common.html")
 </body>

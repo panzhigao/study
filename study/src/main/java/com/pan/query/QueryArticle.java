@@ -1,6 +1,8 @@
 package com.pan.query;
 
-import com.pan.common.annotation.QueryParam;
+import com.pan.common.annotation.QueryEsParam;
+import com.pan.common.enums.QueryTypeEnum;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,11 +30,12 @@ public class QueryArticle extends QueryBase {
     /**
      * 文章状态 0-审核未通过,1-草稿,2-发布中,3-发布成功
      */
+    @QueryEsParam(queryType=QueryTypeEnum.TERM)
     private Integer status;
     /**
      * 文章标题
      */
-    @QueryParam(highLightFlag = true)
+    @QueryEsParam(highLightFlag = true)
     private String title;
     /**
      * 文章类型

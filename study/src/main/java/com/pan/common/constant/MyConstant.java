@@ -86,4 +86,8 @@ public class MyConstant {
     public static final String ARTICLE_ES_REDIS_LIST="article_es_list";
     
     public static final String ARTICLE_ES_REDIS_LIST_BAK="article_es_list_bak";
+    
+    public static final String USER_ES_REDIS_LIST="user_es_list";
+    
+    public static final String USER_ES_REDIS_LIST_BAK="user_es_list_bak";
 }

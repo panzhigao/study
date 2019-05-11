@@ -16,3 +16,38 @@
     }
   }
 }
+
+POST _search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "title": "林"
+          }
+        },
+        {
+          "has_parent": {
+            "parent_type": "user",
+            "query": {
+              "match_all": {}
+            },"inner_hits":{}
+          }
+        }
+      ]
+    }
+  },
+  "highlight": {
+    "pre_tags": [
+      "<strong style='color:red;'>"
+    ],
+    "post_tags": [
+      "</strong>"
+    ],
+    "fields": {
+      "title": {},
+      "username": {}
+    }
+  }
+}

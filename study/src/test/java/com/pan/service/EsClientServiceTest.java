@@ -49,7 +49,7 @@ public class EsClientServiceTest extends BaseTest{
 	
 	@Test
 	public void testDeleteRecord(){
-		boolean deleteRecord = esClientService.deleteRecord(EsConstant.ES_ARTICLE,ArticleServiceImpl.TYPE_NAME, "nctAeWoBC-3gjC8hyB8Y");
+		boolean deleteRecord = esClientService.deleteRecord(EsConstant.ES_INDEX_NAME,ArticleServiceImpl.TYPE_NAME, "nctAeWoBC-3gjC8hyB8Y");
 		Assert.assertTrue(deleteRecord);
 	}
 	

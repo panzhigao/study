@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.pan.common.vo.PageDataMsg;
 import com.pan.dto.ArticleDTO;
 import com.pan.entity.Article;
 import com.pan.query.QueryArticle;
@@ -138,4 +140,16 @@ public interface ArticleService extends BaseService<Article>{
 	 * @return
 	 */
 	int syncArticleEsData();
+	/**
+	 * 根据文章标题查询文章es信息
+	 * @param queryArticle
+	 * @return
+	 */
+	List<ArticleDTO> queryFromEsByTitle(QueryArticle queryArticle);
+	/**
+	 * 
+	 * @param queryArticle
+	 * @return
+	 */
+	PageDataMsg queryArticleFromEs(QueryArticle queryArticle);
 }

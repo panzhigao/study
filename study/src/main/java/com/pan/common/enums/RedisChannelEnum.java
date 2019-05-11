@@ -20,7 +20,11 @@ public enum RedisChannelEnum {
     /**
      * 文章es更新或创建
      */
-    ARTICLE_ES_CREATE_OR_UPDATE(3,"article_es_create_or_update");
+    ARTICLE_ES_CREATE_OR_UPDATE(3,"article_es_create_or_update"),
+    /**
+     * 用户es更新或创建
+     */
+    USER_ES_CREATE_OR_UPDATE(4,"user_es_create_or_update");
 
     private Integer code;
 

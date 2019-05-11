@@ -17,6 +17,8 @@ import com.pan.entity.*;
 import com.pan.service.*;
 import com.pan.shiro.RedisSessionDAO;
 import com.pan.util.*;
+import com.pan.vo.UserVO;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
@@ -36,8 +38,10 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.constant.PageConstant;
 import com.pan.common.enums.AdminFlagEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
+import com.pan.common.enums.RedisChannelEnum;
 import com.pan.common.enums.UserStatusEnum;
 import com.pan.common.exception.BusinessException;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.mapper.RoleMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.mapper.UserMapper;
@@ -50,9 +54,7 @@ import com.pan.query.QueryUser;
 public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    
-	public static final String TYPE_NAME="data";
-    
+        
     /**
      * 默认角色id,新注册用户默认角色
      */
@@ -164,6 +166,9 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             //用户验证,用明文密码验证
             user.setPassword(password);
             TokenUtils.userAutoLogin(user);
+            //通知redis消费
+            JedisUtils.rpush(MyConstant.USER_ES_REDIS_LIST, user.getId().toString());
+    		Publisher.sendMessage(RedisChannelEnum.USER_ES_CREATE_OR_UPDATE.getName(), "");
             return user;
         } catch (NoSuchAlgorithmException e) {
             logger.error("加密用户密码错误", e);
@@ -253,14 +258,14 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
     /**
      * 更新当前登录人用户信息,只更新性别，昵称，用户头像，地址，同时更新用户缓存信息
-     * 更新用户表，用户拓展表
+     * 更新用户表，用户拓展表,发送消息更新es数据
      */
     @Override
     public void updateUserInfo(User user, UserExtension userExtension) {
     	String pictureSaveDir=SystemConfigUtils.getParamValue("image_upload_dir");
         ValidationUtils.validateEntityWithGroups(user, new Class[]{UserEditGroup.class});
         User updateUser=new User();
-        BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address"});
+        BeanUtils.copyPropertiesInclude(user,updateUser,new String[]{"sex","nickname","userPortrait","address","userBrief"});
         Long userId = TokenUtils.getLoginUserId();
         updateUser.setId(userId);
         updateUser.setUpdateTime(new Date());
@@ -293,6 +298,9 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         userExtension.setUserPortrait(newPortraitUrl);
         userExtension.setUpdateTime(now);
         userExtensionMapper.updateByPrimaryKeySelective(userExtension);
+		//通知redis消费
+        JedisUtils.rpush(MyConstant.USER_ES_REDIS_LIST, userId+"");
+		Publisher.sendMessage(RedisChannelEnum.USER_ES_CREATE_OR_UPDATE.getName(), "");
     }
 
     @Override
@@ -517,19 +525,19 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     }
     
 	private DocWriteRequest<?> buildRequest(User user){
-		User userEs = esClientService.getById(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", User.class);
+		User userEs = esClientService.getById(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, user.getId()+"", User.class);
 		if(userEs!=null){
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(user);
 			Map<String,Object> joinMap=new HashMap<>();
 			joinMap.put("name", "user");
 			objectToMap.put("join_field", joinMap);
-			return esClientService.buildUpdateRequest(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", objectToMap);
+			return esClientService.buildUpdateRequest(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, user.getId()+"", objectToMap);
 		}else{
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(user);
 			Map<String,Object> joinMap=new HashMap<>();
 			joinMap.put("name", "user");
 			objectToMap.put("join_field", joinMap);
-			return esClientService.buildIndexRequest(EsConstant.ES_USER, TYPE_NAME, objectToMap);
+			return esClientService.buildIndexRequest(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, objectToMap);
 		}
 	}
     
@@ -562,13 +570,58 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	}
 
 	@Override
-	public List<User> queryFromEsByCondition(QueryUser queryUser) {
-		List<User> list=new ArrayList<>();
+	public List<UserVO> queryFromEsByCondition(QueryUser queryUser) {
+		List<UserVO> list=new ArrayList<>();
 		try {
-			list=esClientService.queryByParamsWithHightLight(EsConstant.ES_ARTICLE, TYPE_NAME, queryUser, true, User.class);
+			list=esClientService.queryByParamsWithHightLight(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, queryUser, true, UserVO.class);
 		} catch (Exception e) {
 			logger.error("查询用户es信息出错,查询条件{}",queryUser);
 		}
 		return list;
+	}
+
+	@Override
+	public boolean updateUserEs(Long userId) {
+		User user = selectByPrimaryKey(userId);
+		if(user==null){
+			logger.info("用户数据不存在，id={}",userId);
+			return false;
+		}
+		user.setPassword(null);
+		Object es = esClientService.getById(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, userId+"", Article.class);
+		if(es!=null){
+			return esClientService.updateRecord(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, userId+"", JsonUtils.objectToMap(user));
+		}else{
+			return createUserEs(userId);
+		}
+	}
+
+	@Override
+	public boolean createUserEs(Long userId) {
+		User user = selectByPrimaryKey(userId);
+		if(user==null){
+			logger.info("用户数据不存在，id={}",userId);
+			return false;
+		}
+		try {
+			esClientService.createIndex(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, user);
+			return true;
+		} catch (Exception e) {
+			logger.error("创建用户索引失败，id={}",userId,e);
+		}
+		return false;
+	}
+
+	@Override
+	public PageDataMsg queryUserFromEs(QueryUser queryUser) {
+		if(queryUser==null||StringUtils.isBlank(queryUser.getNickname())){
+			return new PageDataMsg();
+		}
+		long total = esClientService.queryCountByParams(EsConstant.ES_INDEX_NAME,EsConstant.ES_TYPE_NAME,queryUser);
+		if(total==0){
+			return new PageDataMsg();
+		}
+		List<UserVO> list = queryFromEsByCondition(queryUser);
+		return new PageDataMsg(total,list);
 	}
 }

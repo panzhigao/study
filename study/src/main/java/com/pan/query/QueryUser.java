@@ -1,5 +1,7 @@
 package com.pan.query;
 
+import com.pan.common.annotation.QueryEsParam;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,6 +24,7 @@ public class QueryUser extends QueryBase{
 	/**
 	 * 用户昵称
 	 */
+	@QueryEsParam(highLightFlag = true)
 	private String nickname;
 	/**
 	 * 用户名

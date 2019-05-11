@@ -77,7 +77,7 @@ public class RegisterController {
 	}
 	
 	/**
-	 * 用户注册
+	 * 校验用户名是否已被注册
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/checkUnique")
