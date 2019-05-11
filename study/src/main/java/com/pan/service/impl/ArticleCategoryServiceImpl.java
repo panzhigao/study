@@ -198,11 +198,14 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 
 	public static String getCategoryNameByIdThroughCache(Long articleCategoryId) {
 		try {
+			if(articleCategoryId==null){
+				return "";
+			}
 			ArticleCategory articleCategory = categoryCache.get(articleCategoryId);
 			return articleCategory.getCategoryName();
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			logger.error("通过loadingCache获取分类名称失败，id={}",articleCategoryId);
-		}
+		} 
 		return "";
 	}
 

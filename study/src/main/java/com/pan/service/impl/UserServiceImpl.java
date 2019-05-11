@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.index.IndexRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -604,7 +605,8 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 			return false;
 		}
 		try {
-			esClientService.createIndex(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, user);
+			IndexRequest buildRequest = (IndexRequest) buildRequest(user);
+			esClientService.createIndex(buildRequest);
 			return true;
 		} catch (Exception e) {
 			logger.error("创建用户索引失败，id={}",userId,e);

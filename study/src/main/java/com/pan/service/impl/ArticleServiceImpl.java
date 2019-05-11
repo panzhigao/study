@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.InnerHitBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
@@ -49,7 +50,7 @@ import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
 /**
- * 
+ * 文章service
  * @author Administrator
  * 
  */
@@ -61,10 +62,6 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 * 缓存时间,单位秒
 	 */
 	private static final int CACHE_SECONDS=1800;
-	/**
-	 * typename
-	 */
-	public static final String TYPE_NAME="data";
 	
 	@Autowired
 	private EsClientService esClientService;
@@ -300,7 +297,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			builder.innerHit(new InnerHitBuilder());
 			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 			searchSourceBuilder.query(builder);
-			list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+			list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, queryArticle, true, ArticleDTO.class);
 			list.forEach(item->{
 				item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
 			});
@@ -447,17 +444,17 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	}
 	
 	private DocWriteRequest<?> buildRequest(Article article){
-		Article articleEs = esClientService.getById(EsConstant.ES_INDEX_NAME, TYPE_NAME, article.getId()+"",Article.class);
+		Article articleEs = esClientService.getById(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, article.getId()+"",Article.class);
 		if(articleEs!=null){
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
-			return esClientService.buildUpdateRequest(EsConstant.ES_INDEX_NAME, TYPE_NAME, article.getId()+"", objectToMap);
+			return esClientService.buildUpdateRequest(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, article.getId()+"", objectToMap);
 		}else{
 			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
 			Map<String,Object> joinMap=new HashMap<>();
 			joinMap.put("name", "article");
 			joinMap.put("parent", article.getUserId());
 			objectToMap.put("join_field", joinMap);
-			return esClientService.buildIndexRequest(EsConstant.ES_INDEX_NAME, TYPE_NAME, objectToMap);
+			return esClientService.buildIndexRequest(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, objectToMap);
 		}
 	}
 	
@@ -466,17 +463,18 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 */
 	@Override
 	public boolean updateArticleEs(Long articleId) {
-		Article selectByPrimaryKey = selectByPrimaryKey(articleId);
-		if(selectByPrimaryKey==null){
+		Article article = selectByPrimaryKey(articleId);
+		if(article==null){
 			logger.info("文章数据不存在，id={}",articleId);
 			return false;
 		}
-		Map<String, Object> newContent = JsonUtils.objectToMap(selectByPrimaryKey);
+		article.setContent(null);
+		Map<String, Object> newContent = JsonUtils.objectToMap(article);
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setId(articleId);
-		Object es = esClientService.getById(EsConstant.ES_INDEX_NAME, TYPE_NAME, articleId+"", Article.class);
+		Object es = esClientService.getById(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, articleId+"", Article.class);
 		if(es!=null){
-			return esClientService.updateRecord(EsConstant.ES_INDEX_NAME, TYPE_NAME, articleId+"", newContent);
+			return esClientService.updateRecord(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, articleId+"", newContent);
 		}else{
 			return createArticleEs(articleId);
 		}
@@ -490,7 +488,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			return false;
 		}
 		try {
-			esClientService.createIndex(EsConstant.ES_INDEX_NAME, TYPE_NAME, article);
+			IndexRequest buildRequest = (IndexRequest) buildRequest(article);
+			esClientService.createIndex(buildRequest);
 			return true;
 		} catch (Exception e) {
 			logger.error("创建文章索引失败，id={}",articleId,e);
@@ -584,7 +583,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		searchSourceBuilder.query(boolBuilder);
 		
-		List<ArticleDTO> list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+		List<ArticleDTO> list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, queryArticle, true, ArticleDTO.class);
 		list.forEach(item->{
 			item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
 		});

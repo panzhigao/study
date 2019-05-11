@@ -233,11 +233,12 @@ public class ArticleController {
 	 */
 	@RequestMapping(value="/article/getCount")
 	@ResponseBody
-	public int getCount(Integer status,Integer type){
-		QueryArticle articleVO=new QueryArticle();
-		articleVO.setStatus(status);
-		articleVO.setType(type);
-		return articleService.getCount(articleVO);
+	public int getCount(Integer status,Integer type,Long categoryId){
+		QueryArticle queryArticle=new QueryArticle();
+		queryArticle.setStatus(status);
+		queryArticle.setType(type);
+		queryArticle.setCategoryId(categoryId);
+		return articleService.getCount(queryArticle);
 	}
 	
 	/**

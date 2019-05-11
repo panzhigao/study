@@ -26,13 +26,17 @@ public interface EsClientService {
 	IndexRequest buildIndexRequest(String index,String type,Object obj);
 	/**
 	 * 创建索引
+	 * @return
+	 */
+	boolean createIndex(IndexRequest indexRequest);
+	/**
+	 * 创建索引
 	 * @param index
 	 * @param type
 	 * @param obj
 	 * @return
 	 */
-	boolean createIndex(String index,String type,Object obj);
-	
+	boolean createIndex(String index, String type, Object obj);
 	/**
 	 * 查询并高亮字段，支持分页
 	 * 在需要高亮的字段上加上注解

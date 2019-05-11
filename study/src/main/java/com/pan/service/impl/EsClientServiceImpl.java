@@ -98,7 +98,17 @@ public class EsClientServiceImpl implements EsClientService {
 			return false;
 		}
 	}
-
+	
+	@Override
+	public boolean createIndex(IndexRequest indexRequest) {
+		try {
+			IndexResponse response = client.index(indexRequest);
+			return response.getShardInfo().getSuccessful() > 0;
+		} catch (IOException e) {
+			logger.error("创建索引失败",e);
+			return false;
+		}
+	}
 
 	/**
 	 * 构建查询条件 遍历字段，获取字段上的注解，当查询类型为MATCH时，分词匹配 当查询类型为TERM时，不分词匹配
@@ -277,7 +287,7 @@ public class EsClientServiceImpl implements EsClientService {
 					for (SearchHit ss : searchHits) {
 						String innerRes = ss.getSourceAsString();
 						T source2 = (T) JsonUtils.fromJson(innerRes, T);
-						BeanUtils.copyPropertiesIgnoreNull(source2, sourceAll);
+						BeanUtils.copyPropertiesIgnoreNull(source2, sourceAll,"id");
 					}
 				}
 			}

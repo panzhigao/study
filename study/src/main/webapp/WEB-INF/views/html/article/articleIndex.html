@@ -222,7 +222,7 @@ function getCount(){
 		url:"$!{rc.contextPath}/article/getCount",
 		type:"post",
 		async:false,
-		data:{status:3,type:1},
+		data:{status:3,type:1,categoryId:'$!{categoryId}'},
 		success:function(data){
 			$('#count').val(data);
 		}

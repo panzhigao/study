@@ -12,7 +12,7 @@ import org.springframework.beans.BeanWrapperImpl;
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils{
 	
-	public static String[] getNullPropertyNames (Object source) {
+	public static String[] getNullPropertyNames (Object source,String... ignoreProperties) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         PropertyDescriptor[] pds = src.getPropertyDescriptors();
         Set<String> emptyNames = new HashSet<String>();
@@ -22,6 +22,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils{
             	 emptyNames.add(pd.getName());
             }
         }
+        emptyNames.addAll(Arrays.asList(ignoreProperties));
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
     }
@@ -48,4 +49,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils{
     public static void copyPropertiesIgnoreNull(Object src, Object target){
        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }
+    
+    public static void copyPropertiesIgnoreNull(Object src, Object target,String... ignoreProperties){
+        BeanUtils.copyProperties(src, target, getNullPropertyNames(src,ignoreProperties));
+     }
+    
+    
 }
