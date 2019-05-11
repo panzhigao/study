@@ -282,16 +282,17 @@ layui.use(['table','jquery'], function(){
 });
 
 function view(id){
-var index=layer.open({
-	type: 2,
-	title: '查看',
-	content: '/user/articleCheck/detail?id='+id,
-	btn: ['关闭'],
-	maxmin: true,
-	shade: false,
-	offset: ['50px', '20%'],
-	area: ['800px', '400px']
-})		
+	var index=layer.open({
+		type: 2,
+		title: '查看',
+		content: '/user/articleCheck/detail?id='+id,
+		btn: ['关闭'],
+		maxmin: true,
+		shade: false,
+		offset: ['50px', '20%'],
+		area: ['800px', '400px']
+	});
+	layer.full(index);
 }
 </script>
 #parse("./html/common/common.html")
