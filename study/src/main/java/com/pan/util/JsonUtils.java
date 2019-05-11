@@ -14,6 +14,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * @author Administrator
@@ -122,8 +124,8 @@ public class JsonUtils {
 	 */
 	public static Map<String, Object> objectToMap(Object obj,String[] includes){
 		Map<String, Object> map = new HashMap<>(10);
-		Class<?> clazz = obj.getClass();
-		for (Field field : clazz.getDeclaredFields()) {
+		Field[] allFields = ClassUtils.getAllFields(obj);
+		for (Field field : allFields) {
 			field.setAccessible(true);
 			String fieldName = field.getName();
 			if(ArrayUtils.indexOf(includes,fieldName)==-1){
@@ -152,8 +154,8 @@ public class JsonUtils {
 	 */
 	public static Map<String, Object> objectToMap(Object obj){
 		Map<String, Object> map = new HashMap<>(10);
-		Class<?> clazz = obj.getClass();
-		for (Field field : clazz.getDeclaredFields()) {
+		Field[] allFields = ClassUtils.getAllFields(obj);
+		for (Field field :allFields) {
 			field.setAccessible(true);
 			String fieldName = field.getName();
 			Object value;
@@ -171,7 +173,7 @@ public class JsonUtils {
 		return map;
 	}
 	
-    public static Object mapToObject(Map<String,String> map, Class<?> beanClass) throws Exception {      
+    public static Object mapToObject(Map<String,Object> map, Class<?> beanClass) throws Exception {      
         if (map == null){        	
         	return null;      
         }     
@@ -186,4 +188,15 @@ public class JsonUtils {
         }    
         return obj;    
     } 
+    
+    public static Map<String, Object> json2map(String str_json) {
+        Map<String, Object> res = null;
+        try {
+            Gson gson = new Gson();
+            res = gson.fromJson(str_json, new TypeToken<Map<String, Object>>() {
+            }.getType());
+        } catch (JsonSyntaxException e) {
+        }
+        return res;
+    }
 }

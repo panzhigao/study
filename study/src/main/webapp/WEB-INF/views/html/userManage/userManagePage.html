@@ -31,6 +31,12 @@
 	    
 	    	<button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    	
+	    	#hasPermission('/user/data/syncEs')
+			<div class="layui-btn-group">
+				<button class="layui-btn" id="btnSync">同步用户ES数据</button>
+			</div>
+			#end
+	    	
 	    	<table id="userListTab" lay-filter="myTable"></table>
 	     </div>
       </div>
@@ -123,6 +129,27 @@ layui.use(['table','jquery','form'], function(){
 			});
 	  });
 	  
+      $('#btnSync').on('click', function() {
+          $.ajax({
+          	url:'/user/data/syncEs',
+          	type:'post',
+          	dataType:'json',
+          	beforeSend:function(){
+          		var index = layer.load(1, {
+          			  shade: [0.1,'#fff'] //0.1透明度的白色背景
+          		});
+          	},
+          	success:function(res){
+          		layer.closeAll('loading');
+          		if(res.code==200){
+          			layer.alert(res.msg);
+          		}else{
+          			layer.alert(res.msg);
+          		}
+          	}
+          	
+          })
+      });
 	  
 	  form.on('switch(userStatus)', function(data){
 		  var userId=$(data.elem).attr('id');

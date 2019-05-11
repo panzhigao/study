@@ -1,0 +1,18 @@
+{
+  "query": {
+    "match": {
+      "title": "破解"
+    }
+  },
+  "highlight": {
+    "pre_tags": [
+      "<strong style='color:red;'>"
+    ],
+    "post_tags": [
+      "</strong>"
+    ],
+    "fields": {
+      "title": {}
+    }
+  }
+}

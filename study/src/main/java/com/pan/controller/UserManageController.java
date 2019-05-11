@@ -88,4 +88,16 @@ public class UserManageController {
 		String message = userService.changeUserStatus(userId, status);
 		return ResultMsg.ok(message);
 	}
+	
+	/**
+	 * 同步用户es数据
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.POST,value={"/user/data/syncEs"})
+	@ResponseBody
+	@RequiresPermissions("/user/data/syncEs")
+	public ResultMsg syncArticleEs(){
+		int syncArticleEsData = userService.syncUserEsData();
+		return ResultMsg.ok("同步用户es数据成功"+syncArticleEsData+"条数据");
+	}
 }

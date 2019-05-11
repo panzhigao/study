@@ -3,8 +3,13 @@ package com.pan.service.impl;
 import java.util.*;
 import com.pan.service.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.index.query.InnerHitBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.join.query.HasChildQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +57,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	/**
 	 * typename
 	 */
-	public static final String TYPE_NAME="article";
+	public static final String TYPE_NAME="data";
 	
 	@Autowired
 	private EsClientService esClientService;
@@ -284,7 +289,11 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	public List<ArticleDTO> queryFromEsByCondition(QueryArticle queryArticle) {
 		List<ArticleDTO> list=new ArrayList<>();
 		try {
-			list=esClientService.queryByParamsWithHightLight(EsConstant.ES_ARTICLE, TYPE_NAME, queryArticle, true, ArticleDTO.class);
+			HasChildQueryBuilder builder=new HasChildQueryBuilder("article",new MatchQueryBuilder("title",queryArticle.getTitle()),ScoreMode.Avg);
+			builder.innerHit(new InnerHitBuilder());
+			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+			searchSourceBuilder.query(builder);
+			list=esClientService.queryByParamsWithHightLight(searchSourceBuilder,EsConstant.ES_ARTICLE, TYPE_NAME, queryArticle, true, ArticleDTO.class);
 			list.forEach(item->{
 				item.setCategoryName(ArticleCategoryServiceImpl.getCategoryNameByIdThroughCache(item.getCategoryId()));
 			});
@@ -430,30 +439,37 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return pageData;
 	}
 	
-	private DocWriteRequest<?> buildRequest(ArticleDTO article){
-		ArticleDTO articleEs = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"",ArticleDTO.class);
+	private DocWriteRequest<?> buildRequest(Article article){
+		Article articleEs = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"",Article.class);
 		if(articleEs!=null){
-			return esClientService.buildUpdateRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"", article);
+			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
+			return esClientService.buildUpdateRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article.getId()+"", objectToMap);
 		}else{
-			return esClientService.buildIndexRequest(EsConstant.ES_ARTICLE, TYPE_NAME, article);
+			Map<String, Object> objectToMap = JsonUtils.objectToMap(article);
+			Map<String,Object> joinMap=new HashMap<>();
+			joinMap.put("name", "article");
+			joinMap.put("parent", article.getUserId());
+			objectToMap.put("join_field", joinMap);
+			return esClientService.buildIndexRequest(EsConstant.ES_ARTICLE, TYPE_NAME, objectToMap);
 		}
 	}
 	
+	/**
+	 * 更新文章es
+	 */
 	@Override
 	public boolean updateArticleEs(Long articleId) {
-		List<ArticleDTO> DTOList = findByArticleId(articleId);
-		if(CollectionUtils.isEmpty(DTOList)){
+		Article selectByPrimaryKey = selectByPrimaryKey(articleId);
+		if(selectByPrimaryKey==null){
 			logger.info("文章数据不存在，id={}",articleId);
 			return false;
 		}
-		ArticleDTO article = DTOList.get(0);
-		Map<String, Object> newContent = JsonUtils.objectToMap(article);
+		Map<String, Object> newContent = JsonUtils.objectToMap(selectByPrimaryKey);
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setId(articleId);
-		List<ArticleDTO> list = queryFromEsByCondition(queryArticle);
-		if(CollectionUtils.isNotEmpty(list)){
-			String id=list.get(0).getEsId();
-			return esClientService.updateRecord(EsConstant.ES_ARTICLE, TYPE_NAME, id, newContent);
+		Object es = esClientService.getById(EsConstant.ES_ARTICLE, TYPE_NAME, articleId+"", Article.class);
+		if(es==null){
+			return esClientService.updateRecord(EsConstant.ES_ARTICLE, TYPE_NAME, articleId+"", newContent);
 		}else{
 			return createArticleEs(articleId);
 		}
@@ -531,8 +547,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		BulkRequest bulkRequest=new BulkRequest();
 		for(int i=0;i<=circleNum;i++){
 			queryArticle.setPageNo(i+1);
-			List<ArticleDTO> findPageable = articleMapper.findDTOPageable(queryArticle);
-			for(ArticleDTO a:findPageable){
+			List<Article> findPageable = findPageable(queryArticle);
+			for(Article a:findPageable){
 				DocWriteRequest<?> request = buildRequest(a);
 				bulkRequest.add(request);
 			}

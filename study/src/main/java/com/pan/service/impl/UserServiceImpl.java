@@ -51,7 +51,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     
-	public static final String TYPE_NAME="user";
+	public static final String TYPE_NAME="data";
     
     /**
      * 默认角色id,新注册用户默认角色
@@ -519,9 +519,17 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 	private DocWriteRequest<?> buildRequest(User user){
 		User userEs = esClientService.getById(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", User.class);
 		if(userEs!=null){
-			return esClientService.buildUpdateRequest(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", user);
+			Map<String, Object> objectToMap = JsonUtils.objectToMap(user);
+			Map<String,Object> joinMap=new HashMap<>();
+			joinMap.put("name", "user");
+			objectToMap.put("join_field", joinMap);
+			return esClientService.buildUpdateRequest(EsConstant.ES_USER, TYPE_NAME, user.getId()+"", objectToMap);
 		}else{
-			return esClientService.buildIndexRequest(EsConstant.ES_USER, TYPE_NAME, user);
+			Map<String, Object> objectToMap = JsonUtils.objectToMap(user);
+			Map<String,Object> joinMap=new HashMap<>();
+			joinMap.put("name", "user");
+			objectToMap.put("join_field", joinMap);
+			return esClientService.buildIndexRequest(EsConstant.ES_USER, TYPE_NAME, objectToMap);
 		}
 	}
     
@@ -551,5 +559,16 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 		operateLogService.addOperateLog(message, OperateLogTypeEnum.USER_ES_SYNC);
 		logger.info(message);
 		return userTotal;
+	}
+
+	@Override
+	public List<User> queryFromEsByCondition(QueryUser queryUser) {
+		List<User> list=new ArrayList<>();
+		try {
+			list=esClientService.queryByParamsWithHightLight(EsConstant.ES_ARTICLE, TYPE_NAME, queryUser, true, User.class);
+		} catch (Exception e) {
+			logger.error("查询用户es信息出错,查询条件{}",queryUser);
+		}
+		return list;
 	}
 }

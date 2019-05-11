@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -30,8 +32,10 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,7 @@ import com.pan.common.annotation.QueryParam;
 import com.pan.common.enums.QueryTypeEnum;
 import com.pan.query.QueryBase;
 import com.pan.service.EsClientService;
+import com.pan.util.BeanUtils;
 import com.pan.util.ClassUtils;
 import com.pan.util.JsonUtils;
 
@@ -58,9 +63,18 @@ public class EsClientServiceImpl implements EsClientService {
 	@Override
 	public IndexRequest buildIndexRequest(String index, String type, Object obj) {
 		IndexRequest indexRequest = new IndexRequest(index, type);
-		Object field = ClassUtils.getField(obj, "id");
-		if(field!=null){
-			indexRequest.id(String.valueOf(field));
+		if(obj instanceof Map){
+			Object id=((Map<?, ?>)obj).get("id");
+			if(id!=null){
+				indexRequest.id(String.valueOf(id));
+				indexRequest.routing("1");
+			}
+		}else{
+			Object field = ClassUtils.getField(obj, "id");
+			if(field!=null && String.valueOf(field) !=null){
+				indexRequest.id(String.valueOf(field));
+				indexRequest.routing("1");
+			}
 		}
 		String source = JsonUtils.toJson(obj);
 		return indexRequest.source(source, XContentType.JSON);
@@ -173,7 +187,8 @@ public class EsClientServiceImpl implements EsClientService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	private HighlightBuilder highlightParams(QueryBase queryBase,List<String> fieldList) {
+	@Override
+	public HighlightBuilder highlightParams(QueryBase queryBase,List<String> fieldList) {
 		HighlightBuilder highlightBuilder = null;
 		Class clazz = queryBase.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -226,19 +241,33 @@ public class EsClientServiceImpl implements EsClientService {
 		long totalHits = response.getHits().getTotalHits();
 		return totalHits;
 	}
-
+	
+	@Override
+	public SearchResponse getByParamsWithHightLight(SearchSourceBuilder searchSourceBuilder,String index,String type,QueryBase queryBase,boolean highLightFlag) throws IOException{
+			// 查询条件
+			if (queryBase.getOffset() != null && queryBase.getRow() != null) {
+				searchSourceBuilder.from(queryBase.getOffset());
+				searchSourceBuilder.size(queryBase.getRow());
+			}
+			BoolQueryBuilder boolQueryBuilder = generate(queryBase);
+			searchSourceBuilder.query(boolQueryBuilder);
+			//高亮字段
+			List<String> highlightFieldList=new ArrayList<String>();
+			if (highLightFlag) {
+				HighlightBuilder hiBuilder = highlightParams(queryBase,highlightFieldList);
+				if (hiBuilder != null) {
+					searchSourceBuilder.highlighter(hiBuilder);
+				}
+			}
+			SearchRequest request = new SearchRequest(index);
+			request.types(type);
+			request.source(searchSourceBuilder);
+			return client.search(request);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> queryByParamsWithHightLight(String index, String type, QueryBase queryBase, boolean highLightFlag,
-			Class<?> T) {
-		// 查询条件
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		if (queryBase.getOffset() != null && queryBase.getRow() != null) {
-			searchSourceBuilder.from(queryBase.getOffset());
-			searchSourceBuilder.size(queryBase.getRow());
-		}
-		BoolQueryBuilder boolQueryBuilder = generate(queryBase);
-		searchSourceBuilder.query(boolQueryBuilder);
+	public <T> List<T> queryByParamsWithHightLight(SearchSourceBuilder searchSourceBuilder,String index, String type, QueryBase queryBase, boolean highLightFlag,Class<?> T) {
 		//高亮字段
 		List<String> highlightFieldList=new ArrayList<String>();
 		if (highLightFlag) {
@@ -250,11 +279,12 @@ public class EsClientServiceImpl implements EsClientService {
 		SearchRequest request = new SearchRequest(index);
 		request.types(type);
 		request.source(searchSourceBuilder);
-
 		SearchResponse response = null;
 		List<T> list = new ArrayList<T>();
 		try {
-			response = client.search(request);
+			request.types(type);
+			request.source(searchSourceBuilder);
+			response=client.search(request);
 		} catch (IOException e) {
 			logger.error("查询索引失败,index:{},type:{},params:{}", index, type, JsonUtils.toJson(queryBase), e);
 			return list;
@@ -262,21 +292,40 @@ public class EsClientServiceImpl implements EsClientService {
 		SearchHit[] hits = response.getHits().getHits();
 		for (SearchHit searchHit : hits) {
 			String res = searchHit.getSourceAsString();
-			Object obj = JsonUtils.fromJson(res,T);
-			setValue(obj, "esId", searchHit.getId());
-			if(highLightFlag){
+			T source1 = (T)JsonUtils.fromJson(res, T);
+		
+			Map<String, SearchHits> innerHits = searchHit.getInnerHits();
+			if(MapUtils.isNotEmpty(innerHits)){
+				SearchHits searchHits = innerHits.get("article");
+				for(SearchHit ss : searchHits){
+					String innerRes = ss.getSourceAsString();
+					T source2 = (T)JsonUtils.fromJson(innerRes, T);
+					BeanUtils.copyPropertiesIgnoreNull(source2, source1);
+				}
+			}
+			setValue(source1, "esId", searchHit.getId());
+			
+			Map<String, HighlightField> highlightFields = searchHit.getHighlightFields();
+			if(MapUtils.isNotEmpty(highlightFields) && highLightFlag){
 				for(String filedStr:highlightFieldList){
-					Text[] texts = searchHit.getHighlightFields().get(filedStr).getFragments();
+					Text[] texts = highlightFields.get(filedStr).getFragments();
 					String highText="";
 					for(Text t:texts){
 						highText+=t.toString();
 					}
-				    setValue(obj,filedStr,highText);
+				    setValue(source1,filedStr,highText);
 				}
 			}
-			list.add(((T) obj));
+			list.add(((T) source1));
 		}
 		return list;
+	}
+	
+		
+	@Override
+	public <T> List<T> queryByParamsWithHightLight(String index, String type, QueryBase queryBase, boolean highLightFlag,
+			Class<?> T) {
+		return queryByParamsWithHightLight(new SearchSourceBuilder(),index, type, queryBase, highLightFlag, T);
 	}
 	
 	
@@ -299,9 +348,8 @@ public class EsClientServiceImpl implements EsClientService {
 	}
 	
 	@Override
-	public UpdateRequest buildUpdateRequest(String index, String type, String id,Object obj) {
+	public UpdateRequest buildUpdateRequest(String index, String type, String id,Map<String, Object> mapContent) {
 		UpdateRequest updateRequest=new UpdateRequest(index, type, id);
-		Map<String, Object> mapContent = JsonUtils.objectToMap(obj);
 		try {
 			XContentBuilder xBuild=XContentFactory.jsonBuilder().startObject();
 			for (String key : mapContent.keySet()) {
@@ -317,9 +365,9 @@ public class EsClientServiceImpl implements EsClientService {
 	}
 	
 	@Override
-	public boolean updateRecord(String index, String type, String id,Object obj) {
+	public boolean updateRecord(String index, String type, String id,Map<String, Object> mapContent) {
 		try {
-			UpdateRequest buildUpdateRequest = buildUpdateRequest(index, type, id, obj);
+			UpdateRequest buildUpdateRequest = buildUpdateRequest(index, type, id, mapContent);
 			UpdateResponse update = client.update(buildUpdateRequest);
 			int successful = update.getShardInfo().getSuccessful();
 			return successful>0;
@@ -347,7 +395,10 @@ public class EsClientServiceImpl implements EsClientService {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * 批量处理
+	 */
 	@Override
 	public BulkResponse bulk(BulkRequest bulkRequest) {
 		try {

@@ -10,7 +10,7 @@
 	},
 
 	"mappings": {
-		"article": {
+		"data": {
 			"properties": {
 				"categoryId": {
 					"type": "long"
@@ -42,15 +42,6 @@
 						}
 					}
 				},
-				"nickname": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"type": "keyword",
-							"ignore_above": 256
-						}
-					}
-				},
 				"outline": {
 					"type": "text",
 					"fields": {
@@ -68,9 +59,6 @@
 							"ignore_above": 256
 						}
 					}
-				},
-				"status": {
-					"type": "long"
 				},
 				"stick": {
 					"type": "long"
@@ -95,6 +83,44 @@
 				"userId": {
 					"type": "long"
 				},
+				"viewCount": {
+					"type": "long"
+				},
+				"lastLoginTime": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"nickname": {
+					"type": "text",
+					"analyzer": "ik_max_word",
+					"search_analyzer": "ik_smart"
+				},
+				"sex": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"status": {
+					"type": "long"
+				},
+				"telephone": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
 				"userPortrait": {
 					"type": "text",
 					"fields": {
@@ -113,16 +139,13 @@
 						}
 					}
 				},
-				"viewCount": {
-					"type": "long"
-				},
 				"join_field": {
-						"type": "join",
-						"eager_global_ordinals": true,
-						"relations": {
-							"user": "article"
-						}
-				},
+					"type": "join",
+					"eager_global_ordinals": true,
+					"relations": {
+						"user": "article"
+					}
+				}
 			}
 		}
 	}

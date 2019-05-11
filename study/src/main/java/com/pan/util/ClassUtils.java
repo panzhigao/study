@@ -1,6 +1,9 @@
 package com.pan.util;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ClassUtils {
 	
@@ -25,4 +28,22 @@ public class ClassUtils {
 		}
 		return null;
 	}
+	
+	/**
+	 * 获取类所有属性
+	 * @param o
+	 * @return
+	 */
+	public static Field[] getAllFields(Object o){
+	    Class<?> c= o.getClass();
+	    List<Field> fieldList = new ArrayList<>();
+	    while (c!= null && c!=Object.class){
+	        fieldList.addAll(new ArrayList<>(Arrays.asList(c.getDeclaredFields())));
+	        c= c.getSuperclass();
+	    }
+	    Field[] fields = new Field[fieldList.size()];
+	    fieldList.toArray(fields);
+	    return fields;
+	}
+
 }

@@ -16,7 +16,7 @@ import com.pan.service.ArticleService;
 /**
  * @author 作者
  * @version 创建时间：2018年4月4日 下午6:21:30
- * 类说明
+ * 搜索类
  */
 @Controller
 public class SearchController {
@@ -37,11 +37,14 @@ public class SearchController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/doSearch")
 	@ResponseBody
-	public ResultMsg returnSearchContent(String q){
+	public ResultMsg doSearch(String q,String type){
 		QueryArticle queryArticleVO=new QueryArticle();
 		queryArticleVO.setTitle(q);
 		queryArticleVO.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		List<ArticleDTO> searchContent = articleService.queryFromEsByCondition(queryArticleVO);
+		
+		
+		
 		return ResultMsg.ok("返回搜索查询结果成功", searchContent);
 	}
 	

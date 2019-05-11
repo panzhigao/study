@@ -53,11 +53,14 @@ public class EsClientServiceTest extends BaseTest{
 		Assert.assertTrue(deleteRecord);
 	}
 	
+	/**
+	 * 搜索文章
+	 */
 	@Test
 	public void testHasParent(){
-		SearchRequest request = new SearchRequest("article_index");
+		SearchRequest request = new SearchRequest("es_data");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		MatchQueryBuilder mat=new MatchQueryBuilder("user_id","123");
+		MatchQueryBuilder mat=new MatchQueryBuilder("title","林萌萌");
 		HasParentQueryBuilder builder=new HasParentQueryBuilder("user",mat,true);
 		searchSourceBuilder.query(builder);
 		request.source(searchSourceBuilder);
@@ -73,7 +76,9 @@ public class EsClientServiceTest extends BaseTest{
 		}
 	}
 	
-	
+	/**
+	 * 搜索用户
+	 */
 	@Test
 	public void testHasChild(){
 		MatchQueryBuilder mat=new MatchQueryBuilder("user_id","123");
@@ -89,6 +94,7 @@ public class EsClientServiceTest extends BaseTest{
 			SearchHit[] hits2 = hits.getHits();
 			for(SearchHit s:hits2){
 				System.out.println(s.getInnerHits());
+				System.out.println(s.getSourceAsString());
 				Map<String, SearchHits> innerHits = s.getInnerHits();
 				for(Map.Entry<String, SearchHits> entry : innerHits.entrySet()){
 					SearchHits value = entry.getValue();

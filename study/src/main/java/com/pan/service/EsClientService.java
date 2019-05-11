@@ -1,10 +1,17 @@
 package com.pan.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+
 import com.pan.query.QueryBase;
 
 /**
@@ -29,6 +36,8 @@ public interface EsClientService {
 	 * @return
 	 */
 	boolean createIndex(String index,String type,Object obj);
+	
+	SearchResponse getByParamsWithHightLight(SearchSourceBuilder searchSourceBuilder,String index,String type,QueryBase queryBase,boolean highLightFlag) throws IOException;
 	/**
 	 * 查询并高亮字段，支持分页
 	 * 在需要高亮的字段上加上注解
@@ -39,6 +48,7 @@ public interface EsClientService {
 	 * @return
 	 */
 	<T>List<T> queryByParamsWithHightLight(String index,String type,QueryBase queryBase,boolean highLightFlag,Class<?> T);
+	<T>List<T> queryByParamsWithHightLight(SearchSourceBuilder searchSourceBuilder,String index,String type,QueryBase queryBase,boolean highLightFlag,Class<?> T);
 	/**
 	 * 
 	 * @param index
@@ -54,7 +64,7 @@ public interface EsClientService {
 	 * @param obj
 	 * @return
 	 */
-	UpdateRequest buildUpdateRequest(String index,String type,String id,Object obj);
+	UpdateRequest buildUpdateRequest(String index,String type,String id,Map<String, Object> mapContent);
 	/**
 	 * 更新
 	 * @param index
@@ -62,7 +72,7 @@ public interface EsClientService {
 	 * @param id
 	 * @return
 	 */
-	boolean updateRecord(String index, String type, String id,Object obj);
+	boolean updateRecord(String index, String type, String id,Map<String, Object> mapContent);
 	/**
 	 * 删除记录
 	 * @return
@@ -82,4 +92,11 @@ public interface EsClientService {
 	 * @return
 	 */
 	<T> T getById(String index,String type,String id,Class<?> T);
+	/**
+	 * 生成高亮查询参数
+	 * @param queryBase
+	 * @param fieldList
+	 * @return
+	 */
+	HighlightBuilder highlightParams(QueryBase queryBase, List<String> fieldList);
 }

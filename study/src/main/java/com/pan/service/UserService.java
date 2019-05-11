@@ -102,4 +102,9 @@ public interface UserService extends BaseService<User>{
 	 * @return
 	 */
 	int syncUserEsData();
+	/**
+	 * @param queryArticleVO
+	 * @return
+	 */
+	List<User> queryFromEsByCondition(QueryUser queryUser);
 }

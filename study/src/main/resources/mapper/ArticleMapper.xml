@@ -53,7 +53,7 @@
    where id = #{id,jdbcType=BIGINT}
   </select>
 
-  <select id="findPageable" resultMap="MoreResultMap" parameterType="com.pan.query.QueryArticle">
+  <select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryArticle">
         select <include refid="Simple_Column_List"/> from t_article a
         <include refid="whereSql"/>
         <choose>
