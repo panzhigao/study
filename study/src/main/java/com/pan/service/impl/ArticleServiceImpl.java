@@ -364,8 +364,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		}
 		article.setUpdateTime(new Date());
 		articleMapper.updateByPrimaryKeySelective(article);
-		//清除文章缓存
-		JedisUtils.delete(MyConstant.ARTICLE_PREFIX+article.getId());
+		//文章缓存过期
+		JedisUtils.expire(MyConstant.ARTICLE_PREFIX+article.getId(), 10);
 	}
 	
 	/**
@@ -532,6 +532,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		update.setUpdateTime(new Date());
 		update.setUpdateUserId(userId);
 		updateByPrimaryKeySelective(update);
+		//文章缓存过期
+		JedisUtils.expire(MyConstant.ARTICLE_PREFIX+article.getId(), 10);
 		//将文章id写入redis队列
 		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
 		//发送通知，修改es状态
@@ -581,6 +583,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		parentQuery.innerHit(new InnerHitBuilder());
 		
 		boolBuilder.must(QueryBuilders.matchQuery("title", queryArticle.getTitle()));
+		//查询文章的文章已发布
+		boolBuilder.must(QueryBuilders.termQuery("status", ArticleStatusEnum.PUBLIC_SUCCESS.getCode()));
 		boolBuilder.must(parentQuery);
 		
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

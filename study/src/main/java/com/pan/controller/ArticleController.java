@@ -261,7 +261,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/offline"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/doDelete")
+	@RequiresPermissions("/user/article/offline")
 	public ResultMsg offlineArticle(Long articleId){
 		logger.info("下线的文章id:{}",articleId);
 		Long userId=TokenUtils.getLoginUserId();
