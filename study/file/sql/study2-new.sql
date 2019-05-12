@@ -59,7 +59,7 @@ CREATE TABLE `t_article_category` (
   `id` bigint(32) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `category_name` varchar(32) NOT NULL DEFAULT '' COMMENT '分类名称',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
-  `status` tinyint(11) NOT NULL DEFAULT '0' COMMENT '状态，0-未启用，1-启用',
+  `status` tinyint(11) NOT NULL DEFAULT '0' COMMENT '状态，0-首页不展示，1-首页展示',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `create_user_id` bigint(32) NOT NULL COMMENT '创建人id',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
@@ -1048,6 +1048,7 @@ CREATE TABLE `t_user` (
   `update_user` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新人id',
   `admin_flag` int(1) NOT NULL DEFAULT '0' COMMENT '管理员标志，0-否，1-是',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '地址',
+  `user_brief` varchar(1024) NOT NULL DEFAULT '' COMMENT '用户简介',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';

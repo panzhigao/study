@@ -564,7 +564,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
 			esClientService.bulk(bulkRequest);
 		}
 		long end=System.currentTimeMillis();
-		String message=String.format("同步用户es数据结束，耗时%s",(end-start));
+		String message=String.format("同步用户es数据结束，耗时%s毫秒",(end-start));
 		operateLogService.addOperateLog(message, OperateLogTypeEnum.USER_ES_SYNC);
 		logger.info(message);
 		return userTotal;

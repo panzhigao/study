@@ -37,7 +37,7 @@ public class SystemConfigController {
 	}
 
 	/**
-	 * 获取分页角色信息
+	 * 获取分页系统配置数据
 	 * @param querySystemConfig
 	 * @return
 	 */
@@ -58,7 +58,7 @@ public class SystemConfigController {
 	}
 
 	/**
-	 * 获取角色新增或者编辑页
+	 * 跳转系统配置tab页，新增或编辑
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemConfig/tab")
@@ -71,7 +71,13 @@ public class SystemConfigController {
 		}
 		return mav;
 	}
-
+	
+	/**
+	 * 编辑系统配置
+	 * @param systemConfig
+	 * @param paramName
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/doEdit")
 	@ResponseBody
 	@RequiresPermissions("/user/systemConfig/doEdit")
@@ -79,7 +85,12 @@ public class SystemConfigController {
 		systemConfigService.updateSystemConfig(systemConfig);
 		return ResultMsg.ok("编辑系统配置成功");	
 	}
-
+	
+	/**
+	 * 删除系统配置变量
+	 * @param configId
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/doDelete")
 	@ResponseBody
 	@RequiresPermissions("/user/systemConfig/doDelete")

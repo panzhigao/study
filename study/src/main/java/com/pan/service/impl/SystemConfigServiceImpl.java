@@ -71,8 +71,9 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 		systemConfig.setUpdateUserId(TokenUtils.getLoginUserId());
 		int count = updateByPrimaryKeySelective(systemConfig);
 		logger.info("更新系统配置，更新条数：{}",count);
+		String format = String.format("变量原信息，id=%s,变量名=%s,",systemConfig.getId(),systemConfig.getParamName());
 		String changedFields = ValidationUtils.getChangedFields(systemConfigInDb, systemConfig);
-		operateLogService.addOperateLog(changedFields,OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
+		operateLogService.addOperateLog(format+"："+changedFields,OperateLogTypeEnum.SYSTEM_CONFIG_EDIT);
 		Publisher.sendMessage(RedisChannelEnum.RECACHE_SYSTEM_CONFIG.getName(),systemConfig.getParamName());
 	}
 

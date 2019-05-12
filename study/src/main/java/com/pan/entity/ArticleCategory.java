@@ -38,7 +38,7 @@ public class ArticleCategory extends BaseEntity{
 	@LogMeta(fieldDesc = "排序")
     private Integer sort;
     /**
-     * 状态，0-未启用，1-启用
+     * 状态，0-首页不展示，1-首页展示
      */
     private Integer status;
 }

@@ -86,13 +86,13 @@ public enum OperateLogTypeEnum {
 	 */
 	ARTICLE_CATEGORY_DELETE(603,"文章分类删除"),
 	/**
-	 * 文章分类删除
+	 * 文章分类首页不展示
 	 */
-	ARTICLE_CATEGORY_DISABLE(604,"文章分类下线"),
+	ARTICLE_CATEGORY_DISABLE(604,"文章分类首页不展示"),
 	/**
-	 * 文章分类删除
+	 * 文章分类首页展示
 	 */
-	ARTICLE_CATEGORY_ENABLE(605,"文章分类上线"),
+	ARTICLE_CATEGORY_ENABLE(605,"文章分类首页展示"),
 	/**
 	 * 文章es同步
 	 */

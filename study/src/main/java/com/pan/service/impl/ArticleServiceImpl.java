@@ -100,6 +100,9 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	 */
 	private void checkArticle(Article article) {
 		ValidationUtils.validateEntity(article);
+		if(article.getCategoryId()==null){
+			throw new BusinessException("文章分类不能为空");
+		}
 		if (!checkOpearteStatus(article.getStatus())) {
 			logger.error("html页面被修改,方法参数错误");
 			throw new BusinessException("文章状态有误,请刷新页面");
@@ -561,7 +564,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 			esClientService.bulk(bulkRequest);
 		}
 		long end=System.currentTimeMillis();
-		String message=String.format("同步文章es数据结束，耗时%s",(end-start));
+		String message=String.format("同步文章es数据结束，耗时%s毫秒",(end-start));
 		operateLogService.addOperateLog(message, OperateLogTypeEnum.ARTICLE_ES_SYNC);
 		logger.info(message);
 		return total;

@@ -96,5 +96,6 @@ function view(id){
         shade: false,
         offset: ['50px', '10%'],
         area: ['1000px', '600px']
-    })
+    });
+    layer.full(index);
 }
