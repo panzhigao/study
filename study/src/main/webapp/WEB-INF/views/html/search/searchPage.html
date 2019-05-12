@@ -10,6 +10,48 @@
   <link rel="shortcut icon" href="$!{rc.contextPath}/static/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
+  <style type="text/css">
+  	.search-layer{
+  		display:none;
+  		position: absolute;
+    	width: 596px;
+    	left: 23px;
+    	top: 50px;
+    	box-shadow: 0 2px 4px 0 rgba(0,0,0,.12);
+    	background: #fff;
+    	z-index: 2;
+    	border-radius: 4px;
+  	}
+  	
+  	.search-layer .suggest-item {
+	    padding: 0 16px;
+	    line-height: 34px;
+	    font-size: 16px;
+	    cursor: pointer;
+	    text-overflow: ellipsis;
+	    overflow: hidden;
+	}
+	
+	.search-layer .suggest-item>a {
+	    display: inline-block;
+	    width: 100%;
+	    height: 100%;
+	    color: #999;
+    }
+    
+    .search-layer .suggest-item:hover{
+    	background: #f4f5f6;
+	}
+	
+	.search-layer .clear-history {
+    	font-size: 14px;
+   	 	color: #406599;
+    	cursor: pointer;
+    	text-align: center;
+    	line-height: 42px;
+    	border-top: 1px solid #e8e8e8;
+	}
+  </style>
 </head>
 <body>
 
@@ -87,8 +129,15 @@
     <div class="layui-col-md8" style="margin:0 100px;">
     	<div class="fly-panel-title fly-filter" >
     		 <input id="type" value="$!{type}" type="hidden">
-             <input type="text" id="q" name="q" value="$!{q}" style="display:inline;width:80%;" required lay-verify="required" autocomplete="off" class="layui-input">
-             <span class="fly-search" id="searchBtn"><i class="layui-icon"></i></span>
+             <input placeholder="搜索你想搜的" type="text" id="q" name="q" value="$!{q}" style="display:inline;width:80%;border: 1px solid #5FB878;" required lay-verify="required" autocomplete="off" class="layui-input">
+             <span class="fly-search" id="searchBtn">
+             	<i class="layui-icon">&#xe615;</i>
+             </span>
+        </div>
+        <div class="search-layer">
+	        <ul class="suggest-list" ga_event="sug_list_click">
+	        </ul>
+        	<div class="clear-history">清空搜索历史</div>
         </div>
     </div>
     <div class="layui-col-md8" style="margin:0 100px;">
@@ -174,8 +223,12 @@ layui.config({
 		}
 	});
 	
-	
 	$('.fly-panel-title a').click(function(){
+		var q=$('#q').val();
+		if(!q){
+			layer.alert('请输入搜索内容');
+			return;
+		}
 		$(this).addClass('selected').siblings('.selected').removeClass('selected');
 		var type=$(this).attr('type');
 		$('#type').val(type);
@@ -189,6 +242,24 @@ layui.config({
 			layer.alert('请输入搜索内容');
 			return;
 		}
+		var search_hisoty=localStorage.getItem("search_hisoty");
+		if(search_hisoty){
+			var arr=JSON.parse(search_hisoty);
+			var index = arr.indexOf(q);
+			if(index > -1){
+				arr.splice(index, 1);
+				arr.unshift(q);
+			}else{
+				if(arr.length==10){//最多存储10条记录，超过时删除最早加入的记录
+					arr.splice(9, 1);
+				}
+				arr.unshift(q);
+			}
+			localStorage.setItem("search_hisoty", JSON.stringify(arr));
+		}else{
+			var arr=[q];
+			localStorage.setItem("search_hisoty", JSON.stringify(arr));
+		}
 		var type=$('#type').val();
 		window.location.href='$!{rc.contextPath}/search?q='+q+'&type='+type;
 	});
@@ -198,6 +269,8 @@ layui.config({
 			$('#searchBtn').click();	
 		}
 	}
+	
+	getHistory();
 })
 
 function getArticle(articles){
@@ -251,6 +324,47 @@ function getUser(users){
 	}
 	return listArr;
 } 
+
+function bindHistoryEvent(){
+	$('#q').focus(function(){
+		if(!$(this).val()){			
+			$('.search-layer').show();
+		}
+	}).keyup(function(){
+		if(!$(this).val()){
+			$('.search-layer').show();
+		}else{
+			$('.search-layer').hide();
+		}
+	})
+	
+	$(document).click(function (e) {
+	    var target=e ? e.target : window.event.srcElement;
+	    if(target.id!="q"){	
+	        $('.search-layer').hide();
+		}
+	});
+
+	
+	$('.clear-history').mousedown(function(){
+		$('.search-layer').remove();
+		$('#q').unbind('focus focusout keyup');
+		localStorage.removeItem('search_hisoty');
+	});
+}
+
+function getHistory(){
+	var search_hisoty=localStorage.getItem("search_hisoty");
+	if(search_hisoty){
+		bindHistoryEvent();
+		var items=JSON.parse(search_hisoty);
+		for(var i=0;i<items.length;i++){
+			var item=items[i];
+			var li='<li class="suggest-item "><a href="/search?q='+item+'">'+item+'</a></li>';
+			$('.suggest-list').append(li);
+		}
+	}
+}
 </script>
 #parse("./html/common/common.html")
 </body>
