@@ -49,7 +49,7 @@ public class QueryArticle extends QueryBase {
     /**
      * 置顶系数
      */
-    private Integer stick;
+    private Integer top;
     /**
      * 是否是精品贴
      */

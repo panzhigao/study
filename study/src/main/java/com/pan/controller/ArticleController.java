@@ -219,7 +219,7 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String,Object> getArticleList(QueryArticle queryArticle){
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-		queryArticle.setOrderCondition("publish_time desc");
+		queryArticle.setOrderCondition(null);
 		if(queryArticle.getType()==null){
 			queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		}
@@ -250,8 +250,8 @@ public class ArticleController {
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
 	@RequiresPermissions("/user/article/set")
-	public ResultMsg set(Long articleId,Integer stick,Integer highQuality){
-		articleService.setArticle(articleId, stick, highQuality);
+	public ResultMsg set(Long articleId,Integer top,Integer highQuality){
+		articleService.setArticle(articleId, top, highQuality);
 		return ResultMsg.ok();
 	}
 	

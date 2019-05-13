@@ -229,7 +229,7 @@ layui.use(['table','jquery','form'], function(){
 	      {type: 'numbers',title:'序号', width:100},
 	      {field: 'categoryName', title: '分类名称', width:200},
 	      {field: 'sort', title: '排序', width:100,sort:true},
-	      {field: 'status', title: '是否启用', width:100,templet:function(d){
+	      {field: 'status', title: '是否首页展示', width:120,templet:function(d){
 	    	  var statusAuth='#hasPermission("/user/articleCategory/changeStatus") 1 #end';
     	  	  if(!statusAuth){
     	  		statusAuth='disabled';

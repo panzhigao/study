@@ -93,15 +93,15 @@ layui.define('fly', function(exports){
       var othis = $(this),type = othis.data('type');
       $.ajax({
     	  url:'/user/article/set',
-    	  data:{articleId: div.data('id'),stick: othis.attr('stick'),highQuality: othis.attr('highquality')},
+    	  data:{articleId: div.data('id'),top: othis.attr('top'),highQuality: othis.attr('highquality')},
     	  type:'post',
     	  success:function(res){
     		  if(res.code=='200'){
-    			if(othis.attr('stick')=='0'){
-    				othis.attr('stick', '1');
+    			if(othis.attr('top')=='0'){
+    				othis.attr('top', '1');
     				othis.html('置顶').removeClass('grey');
-    			}else  if(othis.attr('stick')=='1'){
-    				othis.attr('stick', '0');
+    			}else  if(othis.attr('top')=='1'){
+    				othis.attr('top', '0');
     				othis.html('取消置顶').addClass('grey');
     			}
     			if(othis.attr('highQuality')=='0'){

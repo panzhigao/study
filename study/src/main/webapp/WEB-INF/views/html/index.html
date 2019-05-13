@@ -99,8 +99,8 @@
           <a>置顶</a>
           <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin" style="color: #FF5722;">去签到</a>
         </div>
-        <ul class="fly-list" id="stick-list">
-          <li id="stick-none" class="notice-none">没有相关数据</li>
+        <ul class="fly-list" id="top-list">
+          <li id="top-none" class="notice-none">没有相关数据</li>
         </ul>
       </div>
 
@@ -223,7 +223,7 @@ layui.config({
 	//加载活跃用户
 	loadActiveUsers();
 	//加载置顶帖
-	getStickData();
+	getTopData();
 	//加载文章列表
 	getArticleList();
 	//加载热议文章列表
@@ -285,16 +285,16 @@ function loadActiveUsers(){
 }
 
 //加载置顶帖
-function getStickData(){
+function getTopData(){
 	$.ajax({
-		url:'$!{rc.contextPath}/api/getStickData',
+		url:'$!{rc.contextPath}/api/getTopData',
 		type:'post',
 		success:function(res){
 			if(res.code=='200'){
 				var articles=res.data;
 				var length=articles.length;
 				if(length>0){
-					$('#stick-none').hide();
+					$('#top-none').hide();
 				}
 				for(var i=0;i<length;i++){
 					var article=articles[i];
@@ -324,7 +324,7 @@ function getStickData(){
 	 	            '</div>'+
 	 	           	temp+
 	 	          '</li>';	
-					$('#stick-list').append(one);
+					$('#top-list').append(one);
 				}	     
 			}
 		}
@@ -336,7 +336,7 @@ function getArticleList(){
 	$.ajax({
 		url:'$!{rc.contextPath}/article/getPageData',
 		type:'post',
-		data:{pageNo:1,pageSize:15},
+		data:{pageNo:1,pageSize:15,top:0},
 		success:function(res){
 			if(res.code=='200'){
 				var articles=res.data;

@@ -182,12 +182,12 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 		if (ArticleCategoryStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
 			message = "下线文章分类成功";
 			articleCategoryMapper.updateByPrimaryKeySelective(updateArticleCategory);
-			String content="下线文章分类："+articleCategory.getCategoryName();
+			String content="下线文章分类--"+articleCategory.getCategoryName();
 			operateLogService.addOperateLog(content, OperateLogTypeEnum.ARTICLE_CATEGORY_DISABLE);
 		} else if (UserStatusEnum.STATUS_NORMAL.getCode().equals(status)) {
 			message = "上线文章分类成功";
 			articleCategoryMapper.updateByPrimaryKeySelective(updateArticleCategory);
-			String content="上线文章分类"+articleCategory.getCategoryName();
+			String content="上线文章分类--"+articleCategory.getCategoryName();
 			operateLogService.addOperateLog(content, OperateLogTypeEnum.ARTICLE_CATEGORY_ENABLE);
 		} else {
 			message = "操作错误，请稍后重试";

@@ -105,16 +105,16 @@
           #if($!article.status==2)<span class="layui-badge layui-bg-black">审核中</span>#end
           #if($!article.status==4)<span class="layui-badge layui-bg-black">下线</span>#end
           #if($article.type==2)<span class="layui-badge layui-bg-red">系统通知</span>#end
-          #if($article.stick>0)<span class="layui-badge layui-bg-black">置顶</span>#end
+          #if($article.top==1)<span class="layui-badge layui-bg-black">置顶</span>#end
           #if($article.highQuality==1)<span class="layui-badge layui-bg-red">精帖</span>#end
           
           #hasPermission('/user/article/set')
           <div class="fly-admin-box" data-id="$!{article.id}">
           	#if($article.status==3)
-	            #if($article.stick==0)
-	            <span class="layui-btn layui-btn-xs jie-admin" type="set" stick="1">置顶</span> 
+	            #if($article.top==0)
+	            <span class="layui-btn layui-btn-xs jie-admin" type="set" top="1">置顶</span> 
 	            #else
-	            <span class="layui-btn layui-btn-xs jie-admin grey" type="set" stick="0">取消置顶</span>
+	            <span class="layui-btn layui-btn-xs jie-admin grey" type="set" top="0">取消置顶</span>
 	            #end
 	            
 	            #if($article.highQuality==0)

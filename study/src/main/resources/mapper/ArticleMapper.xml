@@ -16,7 +16,7 @@
     <result column="comment_count"      property="commentCount"    jdbcType="INTEGER" />
     <result column="view_count"         property="viewCount"       jdbcType="INTEGER" />
     <result column="type"               property="type"            jdbcType="INTEGER" />
-    <result column="stick"              property="stick"           jdbcType="INTEGER" />
+    <result column="top"                property="top"           jdbcType="INTEGER" />
     <result column="high_quality"       property="highQuality"     jdbcType="INTEGER" />
     <result column="category_id"        property="categoryId"     jdbcType="BIGINT" />
   </resultMap>
@@ -32,7 +32,7 @@
   
   <sql id="Base_Column_List">
     id,user_id, status, create_time, update_time, publish_time, title, outline,
-    image, comment_count, view_count, type, stick, high_quality,category_id
+    image, comment_count, view_count, type, top, high_quality,category_id
   </sql>
   
   <sql id="Blob_Column_List">
@@ -42,7 +42,7 @@
   <!-- 不包括文章内容，减少数据返回量 -->
   <sql id="Simple_Column_List" >
     a.id,a.user_id,a.username,a.status,a.create_time,a.update_time,publish_time,title,outline,
-    image,comment_count,view_count,type,stick,high_quality,category_id
+    image,comment_count,view_count,type,top,high_quality,category_id
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -58,13 +58,13 @@
         <include refid="whereSql"/>
         <choose>
             <when  test="isHot !=null and isHot !=''">
-                order by stick desc,comment_count desc,view_count desc,publish_time desc
+                order by top desc,comment_count desc,view_count desc,publish_time desc
             </when >
             <when test="orderCondition !=null and orderCondition !=''">
                 order by ${orderCondition}
             </when>
             <otherwise>
-                order by stick desc,create_time desc
+                order by top desc,create_time desc
             </otherwise>
         </choose>
         <if test="offset!=null and row !=null">
@@ -78,13 +78,13 @@
   	<include refid="whereSql"/>
   	<choose>
   		<when  test="isHot !=null and isHot !=''">
-  			order by stick desc,comment_count desc,view_count desc,publish_time desc
+  			order by top desc,comment_count desc,view_count desc,publish_time desc
   		</when >
   		<when test="orderCondition !=null and orderCondition !=''">
   			order by ${orderCondition}
   		</when>
   		<otherwise>
-  			order by stick desc,create_time desc
+  			order by top desc,update_time desc,publish_time desc
   		</otherwise>
   	</choose>
   	<if test="offset!=null and row !=null">
@@ -109,6 +109,9 @@
   		</if>
   		<if test="type !=null and type !=''">
   			and a.type=#{type,jdbcType=INTEGER}
+  		</if>
+  		<if test="top !=null">
+  			and a.top=#{top,jdbcType=INTEGER}
   		</if>
         <if test="categoryId !=null">
             and a.category_id=#{categoryId,jdbcType=BIGINT}
@@ -171,8 +174,8 @@
       <if test="type != null">
         type,
       </if>
-      <if test="stick != null">
-        stick,
+      <if test="top != null">
+        top,
       </if>
       <if test="highQuality != null">
         high_quality,
@@ -224,8 +227,8 @@
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="stick != null">
-        #{stick,jdbcType=INTEGER},
+      <if test="top != null">
+        #{top,jdbcType=INTEGER},
       </if>
       <if test="highQuality != null">
         #{highQuality,jdbcType=INTEGER},
@@ -269,8 +272,8 @@
   		<if test="viewCount != null">
   			view_count=view_count+#{viewCount,jdbcType=INTEGER},
   		</if>
-  		<if test="stick != null">
-  			stick=#{stick,jdbcType=INTEGER},
+  		<if test="top != null">
+  			top=#{top,jdbcType=INTEGER},
   		</if>
   		<if test="highQuality != null">
   			high_quality=#{highQuality,jdbcType=INTEGER},
@@ -286,7 +289,4 @@
   	delete from t_article where user_id=#{userId} and id=#{articleId}
   </delete>
   
-  <select id="getMaxStick" resultType="int">
-  	select max(stick) from t_article
-  </select>
 </mapper>

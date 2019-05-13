@@ -74,14 +74,14 @@ public class IndexController {
 	 * 查询置顶帖，查询前4条
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST,value="/api/getStickData")
+	@RequestMapping(method=RequestMethod.POST,value="/api/getTopData")
 	@ResponseBody
-	public Map<String,Object> loadStickData(){
+	public Map<String,Object> loadTopData(){
 		QueryArticle queryArticle=new QueryArticle();
 		queryArticle.setPageNo(1);
 		queryArticle.setPageSize(4);
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
-		queryArticle.setWhereCondition("stick>0");
+		queryArticle.setTop(1);
 		Map<String, Object> dtoPageableMap = articleService.findDTOPageableMap(queryArticle);
 		return dtoPageableMap;
 	}

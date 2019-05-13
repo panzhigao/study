@@ -67,7 +67,7 @@ public class ArticleDTO implements Serializable{
 	/**
 	 * 置顶系数
 	 */
-	private Integer stick;
+	private Integer top;
 	/**
 	 * 是否是精品贴,0-否，1-是
 	 */

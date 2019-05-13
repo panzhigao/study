@@ -87,18 +87,13 @@ public interface ArticleService extends BaseService<Article>{
 	 */
 	List<ArticleDTO> searchArticleByTitle(String title);
 	/**
-	 * 获取文章最大置顶值
-	 * @return
-	 */
-	int getMaxStick();
-	/**
 	 * 设置文章置顶或加精
 	 * @param articleId
-	 * @param stick
+	 * @param top
 	 * @param highQuality
 	 * @return
 	 */
-	void setArticle(Long articleId,Integer stick,Integer highQuality);
+	void setArticle(Long articleId,Integer top,Integer highQuality);
 	/**
 	 * 查询并校验文章信息，判断是否有当前文章的权限
 	 * @param queryArticleVO

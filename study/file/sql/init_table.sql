@@ -17,7 +17,7 @@ CREATE TABLE `t_article` (
   `comment_count` int(11) DEFAULT '0' COMMENT '评论数',
   `view_count` int(11) DEFAULT '0' COMMENT '阅读数',
   `type` char(1) DEFAULT '1' COMMENT '1-文章 2系统消息',
-  `stick` int(11) NOT NULL DEFAULT '0' COMMENT '置顶系数',
+  `top` int(11) NOT NULL DEFAULT '0' COMMENT '置顶系数',
   `high_quality` char(1) NOT NULL DEFAULT '0' COMMENT '是否是精品贴，0-否，1-是',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_id` (`article_id`),

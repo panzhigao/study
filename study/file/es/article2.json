@@ -60,7 +60,7 @@
 						}
 					}
 				},
-				"stick": {
+				"top": {
 					"type": "long"
 				},
 				"title": {

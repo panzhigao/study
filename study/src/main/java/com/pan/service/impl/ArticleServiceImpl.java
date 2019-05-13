@@ -248,21 +248,36 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return articleMapper.countByParams(queryArticle);
 	}
 
-
+	/**
+	 * 更新文章评论数
+	 */
 	@Override
 	public int updateArticleCommentCount(Long articleId, Integer commentCount) {
 		Article article = new Article();
 		article.setId(articleId);
 		article.setCommentCount(commentCount);
-		return articleMapper.updateByPrimaryKeySelective(article);
+		int updateByPrimaryKeySelective = articleMapper.updateByPrimaryKeySelective(article);
+		if(updateByPrimaryKeySelective>0){
+			//同步文章es数据
+			syncArticleEs(article.getId());
+		}
+		return updateByPrimaryKeySelective;
 	}
-
+	
+	/**
+	 * 更新文章阅读数
+	 */
 	@Override
 	public int updateArticleViewCount(Long articleId, Integer viewCount) {
 		Article article = new Article();
 		article.setId(articleId);
 		article.setViewCount(viewCount);
-		return articleMapper.updateByPrimaryKeySelective(article);
+		int updateByPrimaryKeySelective = articleMapper.updateByPrimaryKeySelective(article);
+		if(updateByPrimaryKeySelective>0){
+			//同步文章es数据
+			syncArticleEs(article.getId());
+		}
+		return updateByPrimaryKeySelective;
 	}
 	
 	/**
@@ -321,20 +336,12 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		return queryFromEsByCondition(queryArticleVO);
 	}
 
-	/**
-	 * 获取文章最大置顶值
-	 * @return
-	 */
-	@Override
-	public int getMaxStick() {
-		return articleMapper.getMaxStick();
-	}
 		
 	/**
 	 * 文章置顶/加精
 	 */
 	@Override
-	public void setArticle(Long articleId, Integer stick, Integer highQuality) {
+	public void setArticle(Long articleId, Integer top, Integer highQuality) {
 		Article articleInDb = selectByPrimaryKey(articleId);
 		if(articleInDb==null){
 			throw new BusinessException("文章不存在");
@@ -343,14 +350,12 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		Article article=new Article();
 		article.setId(articleInDb.getId());
 		//取消置顶
-		if(ArticleOperateEnum.CANCEL_STICK.getCode().equals(stick)){
-			article.setStick(0);
+		if(ArticleOperateEnum.CANCEL_TOP.getCode().equals(top)){
+			article.setTop(0);
 			flag=true;
 		//置顶	
-		}else if(ArticleOperateEnum.STICK.getCode().equals(stick)){
-			int maxStick = getMaxStick();
-			maxStick++;
-			article.setStick(maxStick);
+		}else if(ArticleOperateEnum.TOP.getCode().equals(top)){
+			article.setTop(1);
 			flag=true;
 		}
 		//加精或取消加精
@@ -366,6 +371,8 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		articleMapper.updateByPrimaryKeySelective(article);
 		//文章缓存过期
 		JedisUtils.expire(MyConstant.ARTICLE_PREFIX+article.getId(), 10);
+		//同步文章es数据
+		syncArticleEs(article.getId());
 	}
 	
 	/**
@@ -534,8 +541,16 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		updateByPrimaryKeySelective(update);
 		//文章缓存过期
 		JedisUtils.expire(MyConstant.ARTICLE_PREFIX+article.getId(), 10);
+		//同步文章es数据
+		syncArticleEs(article.getId());
+	}
+	
+	/**
+	 * 同步文章es数据
+	 */
+	private void syncArticleEs(Long articleId){
 		//将文章id写入redis队列
-		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, article.getId().toString());
+		JedisUtils.rpush(MyConstant.ARTICLE_ES_REDIS_LIST, String.valueOf(articleId));
 		//发送通知，修改es状态
 		//通知redis消费
 		Publisher.sendMessage(RedisChannelEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName(), "");

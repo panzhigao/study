@@ -255,7 +255,7 @@ function getData(obj){
  				var article=articles[i];
  				//精帖
 				var temp='<div class="fly-list-badge">';
-				if(article.stick>0){
+				if(article.top==1){
 					temp+='<span class="layui-badge layui-bg-black">置顶</span>';
 				}
 				if(article.highQuality=='1'){

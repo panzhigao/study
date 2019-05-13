@@ -69,9 +69,9 @@ public class Article extends BaseEntity{
 	 */
 	private Integer type;
 	/**
-	 * 置顶系数
+	 * 置顶系数,0-未置顶，1-置顶
 	 */
-	private Integer stick;
+	private Integer top;
 	/**
 	 * 是否是精品贴,0-否，1-是
 	 */

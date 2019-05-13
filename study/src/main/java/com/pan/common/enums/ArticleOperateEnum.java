@@ -4,11 +4,11 @@ public enum ArticleOperateEnum {
 	/**
 	 * 取消置顶
 	 */
-	CANCEL_STICK(0,"取消置顶"),
+	CANCEL_TOP(0,"取消置顶"),
 	/**
 	 * 置顶
 	 */
-	STICK(1,"置顶"),
+	TOP(1,"置顶"),
 	/**
 	 * 取消加精
 	 */

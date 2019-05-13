@@ -27,11 +27,6 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	 */
 	int deleteByUserIdAndArticleId(@Param("userId")Long userId,@Param("articleId")Long articleId);
 	/**
-	 * 获取最大置顶值
-	 * @return
-	 */
-	int getMaxStick();
-	/**
 	 * 分页查询文章信息
 	 * @param queryArticle
 	 * @return

@@ -64,9 +64,9 @@ public class OperateCountTask {
 	private static final String KEY_COMMENT = "comment_count:";
 
 	/**
-	 * 每5分钟更新文章数据库评论数
+	 * 每2分钟更新文章数据库评论数
 	 */
-	@Scheduled(cron = "0 0/5 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateCommentCount() {
 		String value = UUID.randomUUID().toString().split("-")[0];
 		if (RedisLock.tryGetDistributedLock(LOCK_COMMENT_COUNT, value, EXPIRE_TIME)) {

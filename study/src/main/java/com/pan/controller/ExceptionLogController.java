@@ -58,7 +58,7 @@ public class ExceptionLogController {
         mav.setViewName("html/system/exceptionLogDetail");
         ExceptionLog exceptionLog = exceptionLogService.selectByPrimaryKey(id);
         //日志如果未读，则标记为已读
-        if(exceptionLog!=null&&MessageStatusEnum.MESSAGE_NOT_READED.equals(exceptionLog.getIsView())){
+        if(exceptionLog!=null&&MessageStatusEnum.MESSAGE_NOT_READED.getCode().equals(exceptionLog.getIsView())){
         	ExceptionLog update=new ExceptionLog();
             update.setId(id);
             update.setIsView(MessageStatusEnum.MESSAGE_READED.getCode());
