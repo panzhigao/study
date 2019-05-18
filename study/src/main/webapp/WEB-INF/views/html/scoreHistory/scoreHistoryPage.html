@@ -66,23 +66,26 @@ layui.config({
         						var history=list[i];
         						var scoreShow;
         						if(history.score>0){
-        	 						scoreShow='<span>+'+history.score+'积分</span>';
+        	 						scoreShow='<span style="color:orange;">+'+history.score+'</span>';
         	 					}else{
-        	 						scoreShow='<span>-'+history.score+'积分<span>';
+        	 						scoreShow='<span style="color:blue;>'+history.score+'<span>';
         	 					}
         						var icon;
         						switch(history.type){
-        							case "1":icon='&#xe609;';break;//登陆
-        							case "2":icon='&#xe6b2;';break;//发表文章成功
-        							case "3":icon='&#xe655;';break;//回帖
-        							case "4":icon='&#xe66c;';break;//签到
-        							case "5":icon='&#xe66f;';break;//注册
+        							case 1:icon='&#xe609;';break;//登陆
+        							case 2:icon='&#xe6b2;';break;//发表文章成功
+        							case 3:icon='&#xe655;';break;//回帖
+        							case 4:icon='&#xe66c;';break;//签到
+        							case 5:icon='&#xe66f;';break;//注册
         							default:icon='';
         						}
-        						one+='<p style="width:260px;height:30px;"><i class="layui-icon">'+icon+'</i>&nbsp;<span>'+history.typeName+'</span>'+
+        						one+='<p style="width:260px;height:30px;"><i class="layui-icon">'+icon+'</i><span style="font-size:18px;color:#000;">'+history.typeName+'</span>'+
         								'<span>'+scoreShow+'</span>'+
         								'<span style="float:right;">'+dateFormat('hh:mm',new Date(history.createTime))+'</span>'
         							 '</p>';
+        						one+='<p style="width:260px;height:30px;color:#000;font-size:14px;">'+
+        								'<span>总积分:'+history.totalScore+'</span>'+
+							 		'</p>';	 
         					}
         					one+='</div></li>';
         					listArr.push(one);

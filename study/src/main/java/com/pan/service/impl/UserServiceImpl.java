@@ -157,7 +157,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             UserExtension userExtension = new UserExtension();
             userExtension.setId(addScoreHistory.getUserId());
             userExtension.setUpdateTime(new Date());
-            userExtension.setScore(addScoreHistory.getScore());
+            userExtension.setTotalScore(addScoreHistory.getScore());
             userExtensionService.increaseCounts(userExtension);
             //为用户添加用户角色信息
             UserRole userRole = new UserRole(userId, defaultRoleId);
@@ -235,7 +235,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
                 UserExtension userExtension = new UserExtension();
                 userExtension.setId(addScoreHistory.getUserId());
                 userExtension.setUpdateTime(now);
-                userExtension.setScore(addScoreHistory.getScore());
+                userExtension.setTotalScore(addScoreHistory.getScore());
                 userExtension.setContinuousLoginDays(1);
                 userExtension.setTotalLoginDays(1);
                 userExtensionService.increaseCounts(userExtension);
@@ -513,7 +513,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         UserExtension userExtension = new UserExtension();
         userExtension.setId(addScoreHistory.getUserId());
         userExtension.setUpdateTime(new Date());
-        userExtension.setScore(addScoreHistory.getScore());
+        userExtension.setTotalScore(addScoreHistory.getScore());
         userExtension.setContinuousCheckInDays(1);
         userExtension.setTotalCheckInDays(1);
         userExtensionService.increaseCounts(userExtension);

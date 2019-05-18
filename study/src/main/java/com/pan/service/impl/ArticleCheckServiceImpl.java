@@ -137,7 +137,7 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 		UserExtension userExtension=new UserExtension();
 		userExtension.setId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
-		userExtension.setScore(addScoreHistory.getScore());
+		userExtension.setTotalScore(addScoreHistory.getScore());
 		userExtension.setArticleCounts(1);
 		userExtensionService.increaseCounts(userExtension);
 		//5.发送消息

@@ -11,7 +11,7 @@
     <result column="update_time"        property="updateTime"      jdbcType="TIMESTAMP" />
     <result column="article_counts"     property="articleCounts"   jdbcType="INTEGER" />
     <result column="comment_counts"     property="commentCounts"   jdbcType="INTEGER" />
-    <result column="score"              property="score"           jdbcType="INTEGER" />
+    <result column="total_score"         property="totalScore"           jdbcType="INTEGER" />
     <result column="continuous_login_days"  property="continuousLoginDays" jdbcType="INTEGER" />
     <result column="continuous_check_in_days"  property="continuousCheckInDays" jdbcType="INTEGER" />
     <result column="total_login_days"     property="totalLoginDays" jdbcType="INTEGER" />
@@ -19,7 +19,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,nickname,user_portrait,user_brief,create_time,update_time,article_counts,comment_counts,score,
+    id,nickname,user_portrait,user_brief,create_time,update_time,article_counts,comment_counts,total_score,
     continuous_login_days,continuous_check_in_days,total_login_days,total_check_in_days
   </sql>
   
@@ -57,8 +57,8 @@
   		<if test="commentCounts !=null">
   			comment_counts,
   		</if>
-  		<if test="score !=null">
-  			score,
+  		<if test="totalScore !=null">
+  			total_score,
   		</if>
   	</trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -86,8 +86,8 @@
   		<if test="commentCounts !=null and commentCounts !='' ">
   			#{commentCounts,jdbcType=INTEGER},
   		</if>
-  		<if test="score !=null and score !='' ">
-  			#{score,jdbcType=INTEGER},
+  		<if test="totalScore !=null and totalScore !='' ">
+  			#{totalScore,jdbcType=INTEGER},
   		</if>
   	</trim>
   </insert>
@@ -129,8 +129,8 @@
   		<if test="commentCounts !=null ">
   			comment_counts=comment_counts+#{commentCounts,jdbcType=INTEGER},
   		</if>
-  		<if test="score !=null ">
-  			score=score+#{score,jdbcType=INTEGER},
+  		<if test="totalScore !=null ">
+  			total_score=total_score+#{totalScore,jdbcType=INTEGER},
   		</if>
   		<if test="continuousLoginDays !=null ">
   			continuous_login_days=continuous_login_days+#{continuousLoginDays,jdbcType=INTEGER},

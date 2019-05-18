@@ -90,7 +90,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 		UserExtension userExtension=new UserExtension();
 		userExtension.setId(addScoreHistory.getUserId());
 		userExtension.setUpdateTime(new Date());
-		userExtension.setScore(addScoreHistory.getScore());
+		userExtension.setTotalScore(addScoreHistory.getScore());
 		userExtension.setCommentCounts(1);
 		userExtensionService.increaseCounts(userExtension);
 		

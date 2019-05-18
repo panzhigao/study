@@ -41,7 +41,7 @@ function dateFormat(fmt,date){
 //fromTime 为时间戳,format为时间格式化，默认为yyyy-MM-dd hh:mm:ss
 function tranTime(fromTime,format){
 	var nowTime=Math.round(new Date()/1000);    
-    var tempTime = nowTime - fromTime/1000;    
+    var tempTime = nowTime - Math.round(new Date(fromTime)/1000);    
     var str="";	
     if (tempTime < 60){
         str = '刚刚';
@@ -87,7 +87,7 @@ function websocketConnect(){
 	   ws.send("{}");
 	   interval=setInterval(function(){
 			ws.send("{}");
-	   },20000);
+	   },5000);
 	}
 	ws.onclose = function () {
 	   console.log("websocket连接断开");

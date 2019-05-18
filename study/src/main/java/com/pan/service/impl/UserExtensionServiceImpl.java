@@ -36,7 +36,7 @@ public class UserExtensionServiceImpl extends AbstractBaseService<UserExtension,
 	 */
 	@Override
 	public int increaseCounts(UserExtension userExtension) {
-		logger.debug("------增加用户拓展信息数据，用户id：{},新增积分：{}------",userExtension.getId(),userExtension.getScore());
+		logger.debug("------增加用户拓展信息数据，用户id：{},新增积分：{}------",userExtension.getId(),userExtension.getTotalScore());
 		if(userExtension.getArticleCounts()!=null){
 			logger.debug("新增文章数：{}",userExtension.getArticleCounts());
 		}

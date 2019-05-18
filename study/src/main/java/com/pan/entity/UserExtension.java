@@ -35,7 +35,7 @@ public class UserExtension extends BaseEntity{
 	/**
 	 * 积分
 	 */
-	private Integer score;
+	private Integer totalScore;
 	/**
 	 * 用户简介
 	 */

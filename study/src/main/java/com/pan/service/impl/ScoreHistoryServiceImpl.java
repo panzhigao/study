@@ -83,7 +83,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 		UserExtension userExtension=new UserExtension();
 		userExtension.setId(userId);
 		userExtension.setUpdateTime(new Date());
-		userExtension.setScore(ScoreTypeEnum.LOGIN.getScore());
+		userExtension.setTotalScore(ScoreTypeEnum.LOGIN.getScore());
 		userExtensionMapper.updateByPrimaryKeySelective(userExtension);
 	}
 	

@@ -106,7 +106,7 @@ public class AdminController {
 		queryCollection.setUserId(loginUserId);
 		int collectionCount = collectionService.countByParams(queryCollection);
 		UserExtension findByUserId = userExtensionService.selectByPrimaryKey(loginUserId);
-		Integer score = findByUserId.getScore();
+		Integer totalScore = findByUserId.getTotalScore();
 		QueryPraise queryPraise=new QueryPraise();
 		queryPraise.setUserId(loginUserId);
 		//我的点赞数
@@ -126,7 +126,7 @@ public class AdminController {
 		mav.addObject("unReadMessageCount", unReadMessageCount);
 		mav.addObject("articleTotalCount", articleTotalCount);
 		mav.addObject("collectionCount", collectionCount);
-		mav.addObject("score", score);
+		mav.addObject("totalScore", totalScore);
 		mav.addObject("praiseCount", praiseCount);
 		mav.addObject("lastLoginTime", lastLoginTime);
 		mav.addObject("pictureCount", pictureCount);

@@ -38,4 +38,8 @@ public class ScoreHistory extends BaseEntity {
      * 积分日期
      */
     private Date scoreDate;
+    /**
+     * 积分总计
+     */
+    private Integer totalScore;
 }

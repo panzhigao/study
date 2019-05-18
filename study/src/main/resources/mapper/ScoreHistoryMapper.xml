@@ -10,6 +10,7 @@
     <result column="type_name"          property="typeName"        jdbcType="VARCHAR" />
     <result column="score_date"         property="scoreDate"       jdbcType="DATE" />
     <result column="create_time"        property="createTime"      jdbcType="TIMESTAMP" />
+    <result column="total_score"        property="totalScore"     jdbcType="INTEGER" />
   </resultMap>
   
   <resultMap id="VOMap" type="com.pan.vo.ScoreHistoryVO" extends="BaseResultMap">
@@ -18,7 +19,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id,user_id,score,type,type_name,score_date,create_time
+    id,user_id,score,type,type_name,score_date,create_time,total_score
   </sql>
   
   <insert id="insertSelective" parameterType="com.pan.entity.ScoreHistory">
@@ -45,6 +46,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="totalScore != null">
+        total_score,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -67,6 +71,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalScore != null">
+        #{totalScore,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
