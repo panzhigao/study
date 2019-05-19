@@ -21,7 +21,7 @@
 	    <div class="layui-tab-item layui-show">
 
 	    <div class="layui-btn-group">
-	    	#hasPermission("/user/articleCategory/doAdd")
+	    	#hasPermission("articleCategory:doAdd")
 	     	<button class="layui-btn" id="btnAdd" data-toggle="modal" data-target="#myModal">新增分类</button>
 	     	#end
   		</div>
@@ -230,7 +230,7 @@ layui.use(['table','jquery','form'], function(){
 	      {field: 'categoryName', title: '分类名称', width:200},
 	      {field: 'sort', title: '排序', width:100,sort:true},
 	      {field: 'status', title: '是否首页展示', width:120,templet:function(d){
-	    	  var statusAuth='#hasPermission("/user/articleCategory/changeStatus") 1 #end';
+	    	  var statusAuth='#hasPermission("articleCategory:changeStatus") 1 #end';
     	  	  if(!statusAuth){
     	  		statusAuth='disabled';
     	  	  }
@@ -245,8 +245,8 @@ layui.use(['table','jquery','form'], function(){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/articleCategory/doEdit") 1 #end';
-        	  var p_delete='#hasPermission("/user/articleCategory/doDelete") 1 #end';
+	    	  var p_edit='#hasPermission("articleCategory:doEdit") 1 #end';
+        	  var p_delete='#hasPermission("articleCategory:doDelete") 1 #end';
 	    	  
 	    	  var btn_edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var btn_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';

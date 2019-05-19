@@ -56,7 +56,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 		//权限异常
 		}else if(ex instanceof AuthorizationException){
 			viewName="html/error/unauth";
-			businessException = new BusinessException("权限异常,没有当前权限");
+			businessException = new BusinessException("抱歉,您没有当前权限");
 		}else if(ex instanceof AuthenticationException){
 			businessException = new BusinessException("用户登陆失败");
 		}else {

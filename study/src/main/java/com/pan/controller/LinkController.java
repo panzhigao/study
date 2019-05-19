@@ -1,7 +1,5 @@
 package com.pan.controller;
 
-import java.util.Map;
-
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Link;
 import com.pan.query.QueryLink;
@@ -35,7 +34,7 @@ public class LinkController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/link/index")
-	@RequiresPermissions("/user/link/index")
+	@RequiresPermissions("link:load")
 	public ModelAndView toLinkIndex(){
 		ModelAndView mav=new ModelAndView("html/link/linkPage");
 		return mav;
@@ -48,10 +47,9 @@ public class LinkController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/link/getPageData")
 	@ResponseBody
-	@RequiresPermissions("/user/link/index")
-	public Map<String,Object> getLinkList(QueryLink queryLink){
-		Map<String,Object> pageData=linkService.findPageableMap(queryLink);
-		return pageData;
+	@RequiresPermissions("link:load")
+	public PageDataMsg getLinkList(QueryLink queryLink){
+		return linkService.findPageableMap(queryLink);
 	}
 	
 	/**
@@ -59,7 +57,7 @@ public class LinkController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value={"/user/link/addPage"})
-	@RequiresPermissions(value={"/user/link/doAdd","/user/link/doEdit"},logical=Logical.OR)
+	@RequiresPermissions(value={"link:doAdd","link:doEdit"},logical=Logical.OR)
 	public ModelAndView toLinkAddPage(Long id){
 		ModelAndView mav=new ModelAndView("html/link/linkAdd");
 		if(id!=null){
@@ -78,7 +76,7 @@ public class LinkController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/link/doAdd"})
 	@ResponseBody
-	@RequiresPermissions("/user/link/doAdd")
+	@RequiresPermissions("link:doAdd")
 	public ResultMsg addLink(Link link){
 		linkService.addLink(link);
 		return ResultMsg.ok("新增链接成功");
@@ -91,7 +89,7 @@ public class LinkController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/link/doEdit")
 	@ResponseBody
-	@RequiresPermissions("/user/link/doEdit")
+	@RequiresPermissions("link:doEdit")
 	public ResultMsg editLink(Link link){
 		linkService.editLink(link);
 		return ResultMsg.ok("编辑链接成功");
@@ -104,7 +102,7 @@ public class LinkController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/link/doDelete")
 	@ResponseBody
-	@RequiresPermissions("/user/link/doDelete")
+	@RequiresPermissions("link:doDelete")
 	public ResultMsg deleteLink(Long id){
 		linkService.deleteLink(id);
 		return ResultMsg.ok("删除链接成功");
@@ -117,7 +115,7 @@ public class LinkController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/link/changeStatus")
 	@ResponseBody
-	@RequiresPermissions("/user/link/changeStatus")
+	@RequiresPermissions("link:changeStatus")
 	public ResultMsg changeLinkStatus(Long id,Integer status){
 		logger.info("更新链接状态,id={},status={}",id,status);
 		String message = linkService.changeLinkStatus(id, status);

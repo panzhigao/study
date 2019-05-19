@@ -24,13 +24,13 @@
 				</div>
 				<button class="layui-btn" data-type="reload" id="search">搜索</button>
 				
-				#hasPermission('/user/systemConfig/doAdd')
+				#hasPermission('systemConfig:doAdd')
 				<div class="layui-btn-group">
 					<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i>新增变量</button>
 				</div>
 				#end
 				
-				#hasPermission('/user/article/syncEs')
+				#hasPermission('article:syncEs')
 				<div class="layui-btn-group">
 					<button class="layui-btn" id="btnSync">同步文章ES数据</button>
 				</div>
@@ -170,8 +170,8 @@
                 {field: 'createTime', title: '创建时间', width:200},
                 {field: 'remark', title: '变量备注', width:290},
                 {title:'操作',width:120,templet:function(row){
-                    var p_edit='#hasPermission("/user/systemConfig/doEdit") 1 #end';
-                    var p_delete='#hasPermission("/user/systemConfig/doDelete") 1 #end';
+                    var p_edit='#hasPermission("systemConfig:doEdit") 1 #end';
+                    var p_delete='#hasPermission("systemConfig:doDelete") 1 #end';
 
                     var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
                     var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';

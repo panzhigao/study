@@ -12,10 +12,10 @@ import com.pan.vo.ScoreHistoryVO;
  * @author panzhigao
  */
 public interface ScoreHistoryService extends BaseService<ScoreHistory>{
-    /**
-     * 登陆奖励积分
-     */
-    void addLoginScore(Long userId);
+//    /**
+//     * 登陆奖励积分
+//     */
+//    void addLoginScore(Long userId);
     /**
      * 签到
      * @param userId 用户id

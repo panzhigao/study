@@ -36,7 +36,7 @@ public class PictureController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/myPicturePage")
-	@RequiresPermissions("/user/myPicturePage")
+	@RequiresPermissions("myPicturePage:load")
 	public ModelAndView toMyPictures(){
 		logger.info("进入我的相册页...");
 		ModelAndView mav=new ModelAndView("html/picture/pictureManage");
@@ -49,7 +49,7 @@ public class PictureController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/getPictures")
 	@ResponseBody
-	@RequiresPermissions("/user/myPicturePage")
+	@RequiresPermissions("myPicturePage:load")
 	public ResultMsg getPictureList(Integer pageSize,Integer pageNo){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		QueryPicture queryPicture=new QueryPicture();
@@ -70,7 +70,7 @@ public class PictureController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/deletePicture")
 	@ResponseBody
-	@RequiresPermissions("/user/myPicturePage")
+	@RequiresPermissions("myPicturePage:load")
 	public ResultMsg deletePicture(String pictureIds){
 		logger.info("删除图片开始");
 		Long loginUserId = TokenUtils.getLoginUserId();

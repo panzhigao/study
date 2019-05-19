@@ -27,7 +27,7 @@
 	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    
 	    <div class="layui-btn-group">
-	    	#hasPermission("/user/role/doAdd")
+	    	#hasPermission("role:doAdd")
 	     	<button class="layui-btn" id="btnAdd">新增角色</button>
 	     	#end
   		</div>
@@ -158,9 +158,9 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'remark', title: '备注', width:500},
 	      {title:'操作',width:200,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/role/doEdit") 1 #end';
-        	  var p_allocate='#hasPermission("/user/role/allocatePermission") 1 #end';
-        	  var p_delete='#hasPermission("/user/role/doDelete") 1 #end';
+	    	  var p_edit='#hasPermission("role:doEdit") 1 #end';
+        	  var p_allocate='#hasPermission("role:allocatePermission") 1 #end';
+        	  var p_delete='#hasPermission("role:doDelete") 1 #end';
 	    	  
 	    	  var edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate">分配权限</a>';

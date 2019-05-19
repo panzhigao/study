@@ -1,12 +1,11 @@
 package com.pan.service;
 
+import com.pan.common.vo.PageDataMsg;
 import com.pan.entity.BaseEntity;
 import com.pan.mapper.BaseMapper;
 import com.pan.query.QueryBase;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 抽象
@@ -74,18 +73,13 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      * @return
      */
     @Override
-    public Map<String, Object> findPageableMap(QueryBase queryBase) {
-        Map<String, Object> pageData = new HashMap<>(4);
+    public PageDataMsg findPageableMap(QueryBase queryBase) {
         List<T> list = new ArrayList<>();
         int total=countByParams(queryBase);
         if(total>0){
             list=findPageable(queryBase);
         }
-        pageData.put("data", list);
-        pageData.put("total", total);
-        pageData.put("code", "200");
-        pageData.put("msg", "");
-        return pageData;
+        return new PageDataMsg(total,list);
     }
     /**
      * 查询数据条数

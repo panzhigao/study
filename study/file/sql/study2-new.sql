@@ -585,7 +585,8 @@ INSERT INTO `t_operate_log` VALUES ('316', '1523899', 'admin', 'ADMIN(admin)文�
 DROP TABLE IF EXISTS `t_permission`;
 CREATE TABLE `t_permission` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT,
-  `permission_name` varchar(64) NOT NULL COMMENT '权限名',
+  `permission_name` varchar(64) NOT NULL DEFAULT '' COMMENT '权限名',
+  `permission_point` varchar(64) NOT NULL DEFAULT '' COMMENT '权限点',
   `url` varchar(100) NOT NULL COMMENT 'url路径',
   `pid` bigint(20) NOT NULL DEFAULT '0' COMMENT '父级id',
   `level` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '层级数',
@@ -597,54 +598,59 @@ CREATE TABLE `t_permission` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='权限表';
 
 -- ----------------------------
 -- Records of t_permission
 -- ----------------------------
-INSERT INTO `t_permission` VALUES ('1', '权限管理', '  ', '0', '1', '100', 'layui-icon-app', '0', '2019-03-30 19:52:14', '1523899', '2019-03-30 21:45:33', '1523899');
-INSERT INTO `t_permission` VALUES ('2', '权限列表', '/user/permission', '1', '2', '50', 'layui-icon-spread-left', '1', '2019-03-30 19:53:13', '1523899', '2019-03-30 21:50:55', '1523899');
-INSERT INTO `t_permission` VALUES ('3', '新增权限', '/user/permission/doAdd', '2', '3', '100', 'layui-icon-app', '2', '2019-03-30 20:56:02', '1523899', '2019-03-30 21:46:19', '1523899');
-INSERT INTO `t_permission` VALUES ('4', '编辑权限', '/user/permission/doEdit', '2', '2', '100', 'layui-icon-note', '2', '2019-03-30 21:18:54', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('5', '权限删除', '/user/permission/doDelete', '2', '2', '100', 'layui-icon-delete', '2', '2019-03-30 21:31:42', '1523899', '2019-03-31 00:39:38', '1523899');
-INSERT INTO `t_permission` VALUES ('6', '基本设置', '/user/set', '0', '1', '2', 'layui-icon-rate-half', '1', '2019-03-30 21:35:11', '1523899', '2019-03-30 21:51:18', '1523899');
-INSERT INTO `t_permission` VALUES ('7', '我的文章', '/user/article/mine', '0', '1', '3', 'layui-icon-template-1', '1', '2019-03-30 21:38:25', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('8', '我的消息', '/user/message', '0', '1', '4', 'layui-icon-login-wechat', '1', '2019-03-30 21:52:39', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('9', '系统公告', '/user/systemNotice', '0', '1', '5', 'layui-icon-star-fill', '1', '2019-03-30 21:53:41', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('10', '审核文章', '/user/articleCheck', '0', '1', '6', 'layui-icon-face-surprised', '1', '2019-03-30 21:54:08', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('11', '文章编辑', '/user/article/doEdit', '7', '2', '100', 'layui-icon-rate-half', '2', '2019-03-30 21:54:59', '1523899', '2019-03-30 21:55:57', '1523899');
-INSERT INTO `t_permission` VALUES ('12', '发表新文章', '/user/article/doSave', '7', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:55:44', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('13', '角色管理', '/user/role', '1', '2', '100', 'layui-icon-group', '1', '2019-03-30 21:57:25', '1523899', '2019-03-31 00:37:55', '1523899');
-INSERT INTO `t_permission` VALUES ('14', '分配角色', '/user/role/allocateRole', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:57:53', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('15', '分配权限', '/user/role/allocatePermission', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:13', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('16', '编辑角色', '/user/role/doEdit', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:37', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('17', '删除角色', '/user/role/doDelete', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:57', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('18', '删除文章', '/user/article/doDelete', '7', '2', '100', 'layui-icon-delete', '2', '2019-03-30 21:59:23', '1523899', '2019-03-31 00:39:24', '1523899');
-INSERT INTO `t_permission` VALUES ('19', '文章置顶/加精', '/user/article/set', '0', '1', '200', 'layui-icon-rate', '2', '2019-03-30 22:00:40', '1523899', '2019-03-31 00:38:33', '1523899');
-INSERT INTO `t_permission` VALUES ('20', '积分历史', '/user/scoreHistory', '0', '1', '9', 'layui-icon-star-fill', '1', '2019-03-30 22:01:07', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('21', '我的图片', '/user/myPicturePage', '0', '1', '10', 'layui-icon-picture', '1', '2019-03-30 22:01:29', '1523899', '2019-03-31 00:38:22', '1523899');
-INSERT INTO `t_permission` VALUES ('22', '系统管理', '  ', '0', '1', '300', 'layui-icon-file', '0', '2019-03-30 22:01:51', '1523899', '2019-03-31 00:38:55', '1523899');
-INSERT INTO `t_permission` VALUES ('23', '操作日志', '/user/operateLog', '22', '2', '301', 'layui-icon-star-fill', '1', '2019-03-30 22:02:20', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('24', '系统配置', '/user/systemConfig', '22', '2', '100', 'layui-icon-fire', '1', '2019-03-30 22:02:40', '1523899', '2019-04-07 10:54:47', '1523899');
-INSERT INTO `t_permission` VALUES ('25', '链接管理', '/user/link/index', '22', '2', '300', 'layui-icon-next', '1', '2019-03-30 22:03:26', '1523899', '2019-03-31 00:37:22', '1523899');
-INSERT INTO `t_permission` VALUES ('26', '新增链接', '/user/link/doAdd', '25', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 22:03:47', '1523899', '2019-03-30 22:04:47', '1523899');
-INSERT INTO `t_permission` VALUES ('27', '编辑链接', '/user/link/doEdit', '25', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 22:04:07', '1523899', '2019-03-30 22:04:39', '1523899');
-INSERT INTO `t_permission` VALUES ('28', '删除链接', '/user/link/doDelete', '25', '2', '100', 'layui-icon-delete', '2', '2019-03-30 22:04:26', '1523899', '2019-03-31 00:39:55', '1523899');
-INSERT INTO `t_permission` VALUES ('29', '修改链接状态', '/user/link/changeStatus', '25', '2', '303', 'layui-icon-star-fill', '2', '2019-03-30 22:05:12', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('30', '用户管理', '/user/manage', '0', '1', '11', 'layui-icon-username', '1', '2019-03-30 22:06:38', '1523899', '2019-04-20 14:46:30', '1523899');
-INSERT INTO `t_permission` VALUES ('31', '修改用户状态', '/user/manage/changeStatus', '30', '2', '401', 'layui-icon-star-fill', '2', '2019-03-30 22:07:17', '1523899', '2019-03-30 22:08:22', '1523899');
-INSERT INTO `t_permission` VALUES ('32', '新增角色', '/user/role/doAdd', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-31 00:58:16', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('33', '分配角色', '/user/role/allocateRole', '30', '2', '100', 'layui-icon-star-fill', '2', '2019-03-31 12:31:44', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('34', '文章分类', '/user/articleCategory', '22', '2', '500', 'layui-icon-menu-fill', '1', '2019-04-07 10:47:02', '1523899', '2019-04-07 12:11:38', '1523899');
-INSERT INTO `t_permission` VALUES ('35', '新增文章分类', '/user/articleCategory/doAdd', '34', '2', '100', 'layui-icon-star-fill', '2', '2019-04-09 15:12:26', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('36', '编辑文章分类', '/user/articleCategory/doEdit', '34', '2', '100', 'layui-icon-star-fill', '2', '2019-04-09 15:12:50', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('37', '删除文章分类', '/user/articleCategory/doDelete', '34', '2', '100', 'layui-icon-star-fill', '2', '2019-04-09 15:13:10', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('38', '修改分类状态', '/user/articleCategory/changeStatus', '34', '2', '100', 'layui-icon-star-fill', '2', '2019-04-09 16:12:57', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('41', '异常日志', '/user/exceptionLog', '22', '2', '100', 'layui-icon-fonts-del', '1', '2019-04-16 16:44:40', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('42', '新增系统配置', '/user/systemConfig/doAdd', '24', '2', '100', 'layui-icon-ok', '2', '2019-04-20 14:32:06', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('43', '编辑系统配置', '/user/systemConfig/doEdit', '24', '2', '100', 'layui-icon-star-fill', '2', '2019-04-20 14:32:34', '1523899', null, '0');
-INSERT INTO `t_permission` VALUES ('44', '删除系统配置', '/user/systemConfig/doDelete', '24', '2', '100', 'layui-icon-star-fill', '2', '2019-04-20 14:33:04', '1523899', null, '0');
-
+INSERT INTO `t_permission` VALUES ('1', '权限管理', 'permission:manage', '  ', '0', '1', '100', 'layui-icon-app', '0', '2019-03-30 19:52:14', '1523899', '2019-05-19 17:46:00', '1523899');
+INSERT INTO `t_permission` VALUES ('2', '权限列表', 'permission:load', '/user/permission', '1', '2', '50', 'layui-icon-spread-left', '1', '2019-03-30 19:53:13', '1523899', '2019-05-19 17:46:11', '1523899');
+INSERT INTO `t_permission` VALUES ('3', '新增权限', 'permission:doAdd', '/user/permission/doAdd', '2', '3', '100', 'layui-icon-add-1', '2', '2019-03-30 20:56:02', '1523899', '2019-05-19 18:00:37', '1523899');
+INSERT INTO `t_permission` VALUES ('4', '编辑权限', 'permission:doEdit', '/user/permission/doEdit', '2', '2', '100', 'layui-icon-note', '2', '2019-03-30 21:18:54', '1523899', '2019-05-19 17:46:49', '1523899');
+INSERT INTO `t_permission` VALUES ('5', '权限删除', 'permission:doDelete', '/user/permission/doDelete', '2', '2', '100', 'layui-icon-delete', '2', '2019-03-30 21:31:42', '1523899', '2019-05-19 17:46:38', '1523899');
+INSERT INTO `t_permission` VALUES ('6', '基本设置', 'user:set', '/user/set', '0', '1', '2', 'layui-icon-rate-half', '1', '2019-03-30 21:35:11', '1523899', '2019-05-19 17:37:58', '1523899');
+INSERT INTO `t_permission` VALUES ('7', '我的文章', 'article:mine', '/user/article/mine', '0', '1', '3', 'layui-icon-template-1', '1', '2019-03-30 21:38:25', '1523899', '2019-05-19 17:38:30', '1523899');
+INSERT INTO `t_permission` VALUES ('8', '我的消息', 'message:load', '/user/message', '0', '1', '4', 'layui-icon-login-wechat', '1', '2019-03-30 21:52:39', '1523899', '2019-05-19 17:39:49', '1523899');
+INSERT INTO `t_permission` VALUES ('9', '系统公告', 'systemNotice:load', '/user/systemNotice', '0', '1', '5', 'layui-icon-star-fill', '1', '2019-03-30 21:53:41', '1523899', '2019-05-19 17:41:27', '1523899');
+INSERT INTO `t_permission` VALUES ('10', '审核文章', 'articleCheck:load', '/user/articleCheck', '0', '1', '6', 'layui-icon-face-surprised', '1', '2019-03-30 21:54:08', '1523899', '2019-05-19 17:41:52', '1523899');
+INSERT INTO `t_permission` VALUES ('11', '文章编辑', 'article:doEdit', '/user/article/doEdit', '7', '2', '100', 'layui-icon-edit', '2', '2019-03-30 21:54:59', '1523899', '2019-05-19 18:04:13', '1523899');
+INSERT INTO `t_permission` VALUES ('12', '发表新文章', 'article:doSave', '/user/article/doSave', '7', '2', '100', 'layui-icon-add-1', '2', '2019-03-30 21:55:44', '1523899', '2019-05-19 18:00:23', '1523899');
+INSERT INTO `t_permission` VALUES ('13', '角色管理', 'role:load', '/user/role', '1', '2', '100', 'layui-icon-group', '1', '2019-03-30 21:57:25', '1523899', '2019-05-19 17:47:11', '1523899');
+INSERT INTO `t_permission` VALUES ('14', '分配角色', 'role:allocateRole', '/user/role/allocateRole', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:57:53', '1523899', '2019-05-19 17:53:22', '1523899');
+INSERT INTO `t_permission` VALUES ('15', '分配权限', 'role:allocatePermission', '/user/role/allocatePermission', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:13', '1523899', '2019-05-19 17:47:45', '1523899');
+INSERT INTO `t_permission` VALUES ('16', '编辑角色', 'role:doEdit', '/user/role/doEdit', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:37', '1523899', '2019-05-19 17:53:34', '1523899');
+INSERT INTO `t_permission` VALUES ('17', '删除角色', 'role:doDelete', '/user/role/doDelete', '13', '2', '100', 'layui-icon-star-fill', '2', '2019-03-30 21:58:57', '1523899', '2019-05-19 17:53:50', '1523899');
+INSERT INTO `t_permission` VALUES ('18', '删除文章', 'article:doDelete', '/user/article/doDelete', '7', '2', '100', 'layui-icon-delete', '2', '2019-03-30 21:59:23', '1523899', '2019-05-19 17:39:12', '1523899');
+INSERT INTO `t_permission` VALUES ('19', '文章置顶/加精', 'article:set', '/user/article/set', '0', '1', '200', 'layui-icon-rate', '2', '2019-03-30 22:00:40', '1523899', '2019-05-19 17:54:10', '1523899');
+INSERT INTO `t_permission` VALUES ('20', '积分历史', 'scoreHistory:load', '/user/scoreHistory', '0', '1', '9', 'layui-icon-star-fill', '1', '2019-03-30 22:01:07', '1523899', '2019-05-19 17:42:00', '1523899');
+INSERT INTO `t_permission` VALUES ('21', '我的图片', 'myPicturePage:load', '/user/myPicturePage', '0', '1', '10', 'layui-icon-picture', '1', '2019-03-30 22:01:29', '1523899', '2019-05-19 17:42:58', '1523899');
+INSERT INTO `t_permission` VALUES ('22', '系统管理', 'system:manage', '  ', '0', '1', '300', 'layui-icon-file', '0', '2019-03-30 22:01:51', '1523899', '2019-05-19 17:56:00', '1523899');
+INSERT INTO `t_permission` VALUES ('23', '操作日志', 'operateLog:load', '/user/operateLog', '22', '2', '301', 'layui-icon-star-fill', '1', '2019-03-30 22:02:20', '1523899', '2019-05-19 17:55:07', '1523899');
+INSERT INTO `t_permission` VALUES ('24', '系统配置', 'systemConfig:load', '/user/systemConfig', '22', '2', '100', 'layui-icon-fire', '1', '2019-03-30 22:02:40', '1523899', '2019-05-19 17:58:43', '1523899');
+INSERT INTO `t_permission` VALUES ('25', '链接管理', 'link:load', '/user/link/index', '22', '2', '300', 'layui-icon-next', '1', '2019-03-30 22:03:26', '1523899', '2019-05-19 18:01:02', '1523899');
+INSERT INTO `t_permission` VALUES ('26', '新增链接', 'link:doAdd', '/user/link/doAdd', '25', '2', '100', 'layui-icon-add-1', '2', '2019-03-30 22:03:47', '1523899', '2019-05-19 18:02:10', '1523899');
+INSERT INTO `t_permission` VALUES ('27', '编辑链接', 'link:doEdit', '/user/link/doEdit', '25', '2', '100', 'layui-icon-edit', '2', '2019-03-30 22:04:07', '1523899', '2019-05-19 18:01:54', '1523899');
+INSERT INTO `t_permission` VALUES ('28', '删除链接', 'link:doDelete', '/user/link/doDelete', '25', '2', '100', 'layui-icon-delete', '2', '2019-03-30 22:04:26', '1523899', '2019-05-19 18:01:13', '1523899');
+INSERT INTO `t_permission` VALUES ('29', '修改链接状态', 'link:changeStatus', '/user/link/changeStatus', '25', '2', '303', 'layui-icon-edit', '2', '2019-03-30 22:05:12', '1523899', '2019-05-19 18:03:45', '1523899');
+INSERT INTO `t_permission` VALUES ('30', '用户管理', 'user:manage', '/user/manage', '0', '1', '11', 'layui-icon-username', '1', '2019-03-30 22:06:38', '1523899', '2019-05-19 17:43:12', '1523899');
+INSERT INTO `t_permission` VALUES ('31', '修改用户状态', 'user:manage:changeStatus', '/user/manage/changeStatus', '30', '2', '401', 'layui-icon-star-fill', '2', '2019-03-30 22:07:17', '1523899', '2019-05-19 17:44:01', '1523899');
+INSERT INTO `t_permission` VALUES ('32', '新增角色', 'role:doAdd', '/user/role/doAdd', '13', '2', '100', 'layui-icon-ok', '2', '2019-03-31 00:58:16', '1523899', '2019-05-19 17:59:25', '1523899');
+INSERT INTO `t_permission` VALUES ('33', '分配角色', 'user:role:allocateRole', '/user/role/allocateRole', '30', '2', '100', 'layui-icon-star-fill', '2', '2019-03-31 12:31:44', '1523899', '2019-05-19 17:43:26', '1523899');
+INSERT INTO `t_permission` VALUES ('34', '文章分类', 'articleCategory:load', '/user/articleCategory', '22', '2', '500', 'layui-icon-menu-fill', '1', '2019-04-07 10:47:02', '1523899', '2019-05-19 17:54:59', '1523899');
+INSERT INTO `t_permission` VALUES ('35', '新增文章分类', 'articleCategory:doAdd', '/user/articleCategory/doAdd', '34', '2', '100', 'layui-icon-add-1', '2', '2019-04-09 15:12:26', '1523899', '2019-05-19 18:02:20', '1523899');
+INSERT INTO `t_permission` VALUES ('36', '编辑文章分类', 'articleCategory:doEdit', '/user/articleCategory/doEdit', '34', '2', '100', 'layui-icon-edit', '2', '2019-04-09 15:12:50', '1523899', '2019-05-19 18:02:46', '1523899');
+INSERT INTO `t_permission` VALUES ('37', '删除文章分类', 'articleCategory:doDelete', '/user/articleCategory/doDelete', '34', '2', '100', 'layui-icon-delete', '2', '2019-04-09 15:13:10', '1523899', '2019-05-19 18:03:06', '1523899');
+INSERT INTO `t_permission` VALUES ('38', '修改分类状态', 'articleCategory:changeStatus', '/user/articleCategory/changeStatus', '34', '2', '100', 'layui-icon-edit', '2', '2019-04-09 16:12:57', '1523899', '2019-05-19 18:03:35', '1523899');
+INSERT INTO `t_permission` VALUES ('41', '异常日志', 'exceptionLog:load', '/user/exceptionLog', '22', '2', '100', 'layui-icon-fonts-del', '1', '2019-04-16 16:44:40', '1523899', '2019-05-19 17:58:15', '1523899');
+INSERT INTO `t_permission` VALUES ('42', '新增系统配置', 'systemConfig:doAdd', '/user/systemConfig/doAdd', '24', '2', '100', 'layui-icon-ok', '2', '2019-04-20 14:32:06', '1523899', '2019-05-19 17:59:03', '1523899');
+INSERT INTO `t_permission` VALUES ('43', '编辑系统配置', 'systemConfig:doEdit', '/user/systemConfig/doEdit', '24', '2', '100', 'layui-icon-star-fill', '2', '2019-04-20 14:32:34', '1523899', '2019-05-19 17:58:53', '1523899');
+INSERT INTO `t_permission` VALUES ('44', '删除系统配置', 'systemConfig:doDelete', '/user/systemConfig/doDelete', '24', '2', '100', 'layui-icon-delete', '2', '2019-04-20 14:33:04', '1523899', '2019-05-19 18:03:54', '1523899');
+INSERT INTO `t_permission` VALUES ('45', '文章下线', 'article:offline', '/user/article/offline', '7', '2', '100', 'layui-icon-face-cry', '2', '2019-05-02 21:56:46', '1523899', '2019-05-19 18:04:31', '1523899');
+INSERT INTO `t_permission` VALUES ('46', '文章es数据同步', 'article:syncEs', '/user/article/syncEs', '24', '2', '100', 'layui-icon-star-fill', '1', '2019-05-03 22:13:21', '1523899', '2019-05-19 17:54:00', '1523899');
+INSERT INTO `t_permission` VALUES ('47', '同步es数据', 'user:data:syncEs', '/user/data/syncEs', '30', '2', '100', 'layui-icon-star-fill', '2', '2019-05-11 00:49:35', '1523899', '2019-05-19 17:43:43', '1523899');
+INSERT INTO `t_permission` VALUES ('48', '库存管理', 'repertory:load', '/user/repertory/index', '0', '1', '100', 'layui-icon-diamond', '1', '2019-05-19 12:32:22', '1523899', '2019-05-19 17:44:49', '1523899');
+INSERT INTO `t_permission` VALUES ('49', '新增库存', 'repertory:doAdd', '/user/repertory/doAdd', '48', '2', '100', 'layui-icon-star-fill', '2', '2019-05-19 13:04:14', '1523899', '2019-05-19 19:41:39', '1523899');
+INSERT INTO `t_permission` VALUES ('50', '删除库存', 'repertory:doDelete', '/user/repertory/doDelete', '48', '2', '100', 'layui-icon-delete', '2', '2019-05-19 20:14:13', '1523899', null, '0');
 -- ----------------------------
 -- Table structure for `t_picture`
 -- ----------------------------
@@ -894,10 +900,11 @@ CREATE TABLE `t_score_history` (
   `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
   `score_date` date NOT NULL COMMENT '积分获取日期',
   `create_time` datetime NOT NULL COMMENT '创建时间',
+  `total_score` int(11) NOT NULL DEFAULT '0' COMMENT '积分总计',
   PRIMARY KEY (`id`),
   KEY `idex_user_id_type_score_date` (`user_id`,`type`,`score_date`) USING BTREE,
   KEY `idx_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=utf8 COMMENT='积分历史表';
+) ENGINE=InnoDB AUTO_INCREMENT=483 DEFAULT CHARSET=utf8 COMMENT='积分历史表';
 
 -- ----------------------------
 -- Records of t_score_history
@@ -1073,13 +1080,13 @@ CREATE TABLE `t_user_extension` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `article_counts` int(11) NOT NULL DEFAULT '0' COMMENT '文章数',
   `comment_counts` int(11) NOT NULL DEFAULT '0' COMMENT '评论数',
-  `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
+  `total_score` int(11) NOT NULL DEFAULT '0' COMMENT '总积分数',
   `continuous_login_days` int(11) NOT NULL DEFAULT '0' COMMENT '连续登陆天数',
   `continuous_check_in_days` int(11) NOT NULL DEFAULT '0' COMMENT '连续签到天数',
   `total_login_days` int(11) NOT NULL DEFAULT '0' COMMENT '总共登陆天数',
   `total_check_in_days` int(11) NOT NULL DEFAULT '0' COMMENT '总共签到天数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1525056 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
+) ENGINE=InnoDB AUTO_INCREMENT=1585892 DEFAULT CHARSET=utf8 COMMENT='用户拓展表';
 
 -- ----------------------------
 -- Records of t_user_extension

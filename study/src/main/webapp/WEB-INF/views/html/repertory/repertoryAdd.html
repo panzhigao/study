@@ -1,0 +1,83 @@
+<style>
+	.layui-form-label{
+		width: 90px;
+	}
+</style>
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">规格型号</label>
+			<div class="layui-input-block">
+				<input lay-verify="" type="text" name="specification" placeholder="请输入规格型号" autocomplete="off" class="layui-input" maxlength="64">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">单位</label>
+			<div class="layui-input-block">
+				<input type="text" lay-verify="required"  name="unit" placeholder="请输入单位" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">数量</label>
+			<div class="layui-input-block">
+				<input type="number" lay-verify="required" id="quantity" name="quantity"  placeholder="请输入数量" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" id="pointDiv">
+			<label class="layui-form-label">单价</label>
+			<div class="layui-input-block">
+				<input type="number" lay-verify="required" id="unitPrice" name="unitPrice"  placeholder="请输入单价" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">金额</label>
+			<div class="layui-input-block">
+				<input type="number"  id="amount" name="amount" placeholder="请输入金额" autocomplete="off" class="layui-input" disabled>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">税额</label>
+			<div class="layui-input-block">
+				<input type="number"  id="tax" name="tax" placeholder="请输入税额" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">总价</label>
+			<div class="layui-input-block">
+				<input type="number"  id="totalAmount" name="totalAmount"  autocomplete="off" class="layui-input" disabled>
+			</div>
+		</div>
+		<button lay-filter="add" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script>
+	$('#quantity,#unitPrice').bind('input propertychange',function(){
+		var quantity=$('#quantity').val();
+		var unitPrice=$('#unitPrice').val();
+		if(isNaN(quantity)||isNaN(unitPrice)){
+			return;
+		}
+		var amount=quantity*unitPrice;
+		$('#amount').val(amount);
+		
+		var tax=$('#tax').val();
+		if(isNaN(tax)){
+			return;
+		}
+		var totalAmount=amount-tax;
+		$('#totalAmount').val(totalAmount);
+	});
+	
+	$('#tax').bind('input propertychange',function(){
+		var amount=$('#amount').val();
+		if(isNaN(amount)){
+			return;
+		}
+		var tax=$('#tax').val();
+		if(isNaN(tax)){
+			return;
+		}
+		var totalAmount=amount-tax;
+		$('#totalAmount').val(totalAmount);
+	});
+</script>

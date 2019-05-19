@@ -1,9 +1,9 @@
 package com.pan.service;
 
+import com.pan.common.vo.PageDataMsg;
 import com.pan.entity.BaseEntity;
 import com.pan.query.QueryBase;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author panzhigao
@@ -51,7 +51,7 @@ public interface BaseService<T extends BaseEntity> {
      * @param queryBase
      * @return
      */
-    Map<String, Object> findPageableMap(QueryBase queryBase);
+    PageDataMsg findPageableMap(QueryBase queryBase);
     /**
      * 查询记录数
      * @param queryBase

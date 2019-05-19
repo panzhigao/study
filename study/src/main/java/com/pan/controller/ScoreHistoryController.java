@@ -19,7 +19,7 @@ import com.pan.util.TokenUtils;
 /**
  * @author 作者
  * @version 创建时间：2018年6月15日 下午2:37:33
- * 类说明
+ * 积分历史
  */
 @Controller
 public class ScoreHistoryController {
@@ -32,7 +32,7 @@ public class ScoreHistoryController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/scoreHistory")
-	@RequiresPermissions("/user/scoreHistory")
+	@RequiresPermissions("scoreHistory:load")
 	public ModelAndView scoreHistoryPage(){
 		ModelAndView mav=new ModelAndView("html/scoreHistory/scoreHistoryPage");
 		return mav;
@@ -44,7 +44,7 @@ public class ScoreHistoryController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/scoreHistory/getPageData")
 	@ResponseBody
-	@RequiresPermissions("/user/scoreHistory")
+	@RequiresPermissions("scoreHistory:load")
 	public ResultMsg getScoreHistory(QueryScoreHistory queryScoreHistory){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		queryScoreHistory.setUserId(loginUserId);

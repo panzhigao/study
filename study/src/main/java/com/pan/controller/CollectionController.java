@@ -1,11 +1,11 @@
 package com.pan.controller;
 
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
 import com.pan.query.QueryCollection;
@@ -70,10 +70,9 @@ public class CollectionController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/collection/get_collections")
 	@ResponseBody
-	public Map<String,Object> getUserCollectionList(QueryCollection collection){
+	public PageDataMsg getUserCollectionList(QueryCollection collection){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		collection.setUserId(loginUserId);
-		Map<String,Object> pageData=collectionService.findPageableMap(collection);
-		return pageData;
+		return collectionService.findPageableMap(collection);
 	}
 }

@@ -108,7 +108,7 @@
           #if($article.top==1)<span class="layui-badge layui-bg-black">置顶</span>#end
           #if($article.highQuality==1)<span class="layui-badge layui-bg-red">精帖</span>#end
           
-          #hasPermission('/user/article/set')
+          #hasPermission('article:set')
           <div class="fly-admin-box" data-id="$!{article.id}">
           	#if($article.status==3)
 	            #if($article.top==0)

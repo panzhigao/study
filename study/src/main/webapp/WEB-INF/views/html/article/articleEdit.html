@@ -47,7 +47,7 @@
                   <textarea id="L_content" name="content" required lay-verify="content" placeholder="详细描述"  style="height: 260px;">$!{article.content}</textarea>
                 </div>
               </div>
-              #hasPermission("/user/article/doEdit")
+              #hasPermission("article:doEdit")
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="editPublish" lay-submit>修改发布</button>
                 <button class="layui-btn" lay-filter="editSave" lay-submit>保存草稿</button>

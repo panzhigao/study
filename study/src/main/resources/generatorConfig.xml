@@ -7,7 +7,7 @@
     <!--导入属性配置 -->
     <properties resource="generator.properties"></properties>
 
-    <classPathEntry location="C:/Users/panzhigao/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" />
+    <classPathEntry location="G:/repository/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar" />
 
     <context id="mysql" defaultModelType="flat" targetRuntime="MyBatis3">
         <commentGenerator>
@@ -76,9 +76,9 @@
 
         </javaClientGenerator>
 
-
+		<!-- mvn mybatis-generator:generate -->
         <!-- 表生成映射 -->
-		<table tableName="t_system_config"  domainObjectName="SystemConfig"
+		<table tableName="t_repertory"  domainObjectName="Repertory"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

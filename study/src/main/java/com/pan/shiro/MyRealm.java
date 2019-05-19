@@ -66,8 +66,8 @@ public class MyRealm extends AuthorizingRealm {
 		Set<String> permissions = new HashSet<>();
 		for (Permission permission : permissionList) {
 			//非菜单权限点
-			if (StringUtils.isNotBlank(permission.getUrl())) {
-				permissions.add(permission.getUrl());
+			if (StringUtils.isNotBlank(permission.getPermissionPoint())) {
+				permissions.add(permission.getPermissionPoint());
 			}
 			//按钮
 			if (PermissionTypeEnum.BUTTON.getCode().equals(permission.getType())) {

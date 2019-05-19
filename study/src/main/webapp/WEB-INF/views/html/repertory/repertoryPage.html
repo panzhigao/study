@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>链接管理</title>
+  <title>库存管理</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="#config('keywords')#end">
   <meta name="description" content="#config('description')#end">
@@ -11,28 +11,20 @@
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/layui/css/layui.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
   <link rel="stylesheet" href="$!{rc.contextPath}/static/css/bootstrap.css" >
-<!--   <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script> -->
-<!--   <script type="text/javascript" src="$!{rc.contextPath}/static/js/bootstrap.min.js"></script> -->
 </head>
 <body class="childrenBody">
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user"> 	
       <div class="layui-tab-content" style="padding:0;">
 	    <div class="layui-tab-item layui-show">
-		   链接名称：
-	    <div class="layui-inline">
-	    	<input placeholder="请输入链接名称" class="layui-input" name="linkName" id="linkNameInput" autocomplete="off">
-	    </div>
 	    
-	    <button class="layui-btn" data-type="reload" id="search">搜索</button>
-	    
+	    #hasPermission('repertory:doAdd')
 	    <div class="layui-btn-group">
-	    	#hasPermission('link:doAdd')
-	     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i>新增链接</button>
-	     	#end
+	     	<button class="layui-btn" id="btnAdd"><i class="layui-icon">&#xe608;</i>新增库存</button>
   		</div>
+  		#end
   		
-	    <table id="linkTable" lay-filter="linkTab"></table>
+	    <table id="repertoryTable" lay-filter="linkTab"></table>
 	        
 	    </div>
       </div>
@@ -41,6 +33,7 @@
 
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
 <script src="$!{rc.contextPath}/static/js/util.js"></script>
+<script src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -61,29 +54,15 @@ layui.config({
 layui.use(['table','jquery','form'], function(){
 	  var table = layui.table;
 	  var form=layui.form;
-	  var $ = layui.$ , active = {
-	    reload: function(){
-	        var linkNameInput = $('#linkNameInput');
-	        //执行重载
-	        table.reload('tab', {
-	          page: {
-	            curr: 1 //重新从第 1 页开始
-	          }
-	          ,where: {
-	        	  linkName: linkNameInput.val()
-	          }
-	        });
-	      }
-	    };
 	  
 	  //监听工具条
 	  table.on('tool(linkTab)', function(obj){
 	    var data = obj.data;
 	     if(obj.event === 'del'){
-	      layer.confirm('确定删除该链接么', function(index){
+	      layer.confirm('确定删除该库存么', function(index){
 	        layer.close(index);
 	    	$.ajax({
-	    		url:"$!{rc.contextPath}/user/link/doDelete",
+	    		url:"$!{rc.contextPath}/user/repertory/doDelete",
 	    		type:"post",
 	    		data:{id:data.id},
 	    		success:function(data){
@@ -96,56 +75,15 @@ layui.use(['table','jquery','form'], function(){
 	    		}
 	    	});  
 	      });
-	    }else if(obj.event==='edit'){
-	    	showAddTab('编辑链接','$!{rc.contextPath}/user/link/addPage?id='+data.id,'$!{rc.contextPath}/user/link/doEdit');
 	    }
 	  });
 	  
-	  form.on('switch(linkStatus)', function(data){
-		  var id=$(data.elem).attr('id');
-		  var new_status =this.checked ? '1' : '0';
-		  var tipText = '确定下线改链接？';
-          if(data.elem.checked){
-              tipText = '确定上线该链接？'
-          }
-          layer.confirm(tipText,{
-              icon: 3,
-              title:'系统提示',
-              cancel : function(index){
-                  data.elem.checked = !data.elem.checked;
-                  form.render();
-                  layer.close(index);
-              }
-          },function(index){//确认
-    		  $.ajax({
-    			  url:'$!{rc.contextPath}/user/link/changeStatus',
-    			  data:{id:id,status:new_status},
-    			  dataType:'json',
-    			  type:'post',
-    			  success:function(res){
-    				  if(res.code=='200'){
-    					  layer.alert(res.msg);
-    				  }else{
-    					  data.elem.checked = !data.elem.checked;
-    		              form.render();
-    					  layer.alert(res.msg);
-    				  }
-    				  layer.close(index);
-    			  }
-    		  });
-          
-          },function(index){//取消
-              data.elem.checked = !data.elem.checked;
-              form.render();
-              layer.close(index);
-          });
-	  });
 	  
 	  //第一个实例
-	  var linkTable=table.render({
+	  var repertoryTable=table.render({
 		id: 'tab',  
 	    method: 'post',  
-	    elem: '#linkTable',
+	    elem: '#repertoryTable',
 	    height: 500,
 	    request: {
 	    	pageName: 'pageNo', //页码的参数名称，默认：page
@@ -156,41 +94,26 @@ layui.use(['table','jquery','form'], function(){
 	        countName: 'total', //数据总数的字段名称，默认：count
 	        dataName: 'data' //数据列表的字段名称，默认：data
 	    },
-	    url: '$!{rc.contextPath}/user/link/getPageData', //数据接口
+	    url: '$!{rc.contextPath}/user/repertory/getPageData', //数据接口
 	    page: true ,//开启分页
 	    cols: [[ //表头
 	      {title: '序号', width:50,fixed: 'left',type:'numbers'},
 	      {field: 'id', title: 'ID', width:100,fixed: 'left'},
-	      {field: 'linkName', title: '链接名称', width:100},
-	      {field: 'linkUrl', title: '链接地址', width:450},
-	      {field: 'sort', title: '排序', width:80},
-	      {field: 'status', title: '状态', width:100,templet:
-	    	  function(d){
-	    	  	  var statusAuth='#hasPermission("link:changeStatus") 1 #end';
-	    	  	  if(!statusAuth){
-	    	  		statusAuth='disabled';
-	    	  	  }
-		    	  var checked='';
-		    	  if(d.status=='1'){
-		    		  checked='checked';
-		    	  }
-		    	  var s='<input value="1" id="'+d.id+'" lay-filter="linkStatus" type="checkbox" name="status" lay-skin="switch" lay-text="上线|下线" '+statusAuth+' '+checked+'>';
-		    	  return s;
-	      	  }
-	       },
+	      {field: 'id', title: '产品名称', width:100,fixed: 'left'},
+	      {field: 'specification', title: '规格型号', width:200},
+	      {field: 'unit', title: '单位', width:80},
+	      {field: 'quantity', title: '数量', width:80},
+	      {field: 'unitPrice', title: '单价', width:80},
+	      {field: 'amount', title: '金额', width:80},
+	      {field: 'tax', title: '税额', width:80},
+	      {field: 'totalAmount', title: '总价', width:80},
 	      {field: 'createTime', title: '创建时间', width:200,templet:function(d){
 	    	  return dateFormat('yyyy-MM-dd hh:mm:ss',new Date(d.createTime));
 	      }},
 	      {title:'操作',width:200,templet:function(row){
-	    	  var p_edit='#hasPermission("link:doEdit") 1 #end';
-        	  var p_delete='#hasPermission("link:doDelete") 1 #end';
-	    	  
-	    	  var t_edit='<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>';
+	    	  var p_delete='#hasPermission("link:doDelete") 1 #end';
 	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
 	    	  var show='';
-	    	  if(p_edit){
-	    		  show+=t_edit;
-	    	  }
 	    	  if(p_delete){
 	    		  show+=t_delete;
 	    	  }
@@ -198,12 +121,7 @@ layui.use(['table','jquery','form'], function(){
 	      }}
 	    ]]
 	  });
-	  
-	  $('#search').on('click', function(){
-		   var type = $(this).data('type');
-		   active[type] ? active[type].call(this) : '';
-	  });
-	  
+	  	  
   	  //打开新增链接tab页
 	  function showAddTab(title,pageUrl,doUrl){
 			layer.closeAll();
@@ -223,7 +141,7 @@ layui.use(['table','jquery','form'], function(){
 					area: ['800px', '300px'],
 				yes: function(index) {
 					//触发表单的提交事件
-					$('form.layui-form').find('button[lay-filter=edit]').click();
+					$('form.layui-form').find('button[lay-filter=add]').click();
 				},
 				full: function(elem) {
 					var win = window.top === window.self ? window : parent.window;
@@ -240,7 +158,7 @@ layui.use(['table','jquery','form'], function(){
 					//弹出窗口成功后渲染表单
 					var form = layui.form;
 					form.render();
-					form.on('submit(edit)', function(data) {
+					form.on('submit(add)', function(data) {
 						console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
 						console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
 						console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
@@ -252,7 +170,7 @@ layui.use(['table','jquery','form'], function(){
 								 if(res.code=='200'){
 									 layer.msg(res.msg);
 									 layer.close(index);
-									 linkTable.reload();
+									 repertoryTable.reload();
 								 }else{
 									 layer.msg(res.msg);
 								 }
@@ -266,15 +184,13 @@ layui.use(['table','jquery','form'], function(){
 					addBoxIndex = -1;
 				}
 				});
+				layer.full(index);
 			});
 		}
 	  
 	  $('#btnAdd').on('click', function() {
-		  showAddTab('添加链接','$!{rc.contextPath}/user/link/addPage','$!{rc.contextPath}/user/link/doAdd');
+		  showAddTab('添加库存','$!{rc.contextPath}/user/repertory/addPage','$!{rc.contextPath}/user/repertory/doAdd');
 	  });
-      
-	  
-	  
 });
 
 

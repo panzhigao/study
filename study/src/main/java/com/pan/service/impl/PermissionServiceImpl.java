@@ -22,6 +22,7 @@ import com.pan.entity.Role;
 import com.pan.entity.RolePermission;
 import com.pan.entity.User;
 import com.pan.mapper.PermissionMapper;
+import com.pan.query.QueryPermission;
 import com.pan.query.QueryRole;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -51,7 +52,21 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 
 	@Autowired
 	private OperateLogService operateLogService;
-
+	
+	/**
+	 * 校验权限点
+	 * @param permissionPoint
+	 */
+	private void checkPointUnique(String permissionPoint){
+		QueryPermission queryPermission=new QueryPermission();
+		queryPermission.setPermissionPoint(permissionPoint);
+		int countByParams = permissionMapper.countByParams(queryPermission);
+		if(countByParams>0){
+			logger.error("改权限点已存在，不能添加,permissionPoint={}",permissionPoint);
+			throw new BusinessException("改权限点已存在，不能添加");
+		}
+	}
+	
 	/**
 	 * 新增权限，同时为自动为超级管理员添加该权限
 	 * 记录日志
@@ -60,6 +75,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	public void addPermission(Permission permission) {
 		logger.info("新增权限：{}",permission);
 		ValidationUtils.validateEntity(permission);
+		checkPointUnique(permission.getPermissionPoint());
 		if(!PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
 			if(StringUtils.isBlank(permission.getUrl())){
 				throw new BusinessException("url不能为空");
@@ -156,6 +172,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 			treeNode.setId(permission.getId()+"");
 			treeNode.setpId(permission.getPid()+"");
 			treeNode.setName(permission.getPermissionName());
+			treeNode.setPoint(permission.getPermissionPoint());
 			treeNode.setUrl(permission.getUrl());
 			treeNode.setIcon(permission.getIcon());
 			treeNode.setSort(permission.getSort());
@@ -203,7 +220,12 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		if(permission.getId()==null){
 			throw new BusinessException("参数有误，权限id为空");
 		}
+		ValidationUtils.validateEntity(permission);
 		Permission permissionInDb = getAndCheck(permission.getId());
+		//如果修改了权限点，校验新权限点是不是重复
+		if(!StringUtils.equals(permissionInDb.getPermissionPoint(),permission.getPermissionPoint())){
+			checkPointUnique(permission.getPermissionPoint());
+		}
 		permission.setId(permissionInDb.getId());
 		if(PermissionTypeEnum.MENU.getCode().equals(permission.getType())){
 			permission.setUrl("  ");
@@ -212,7 +234,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 		permission.setUpdateUserId(loginUserId);
 		permission.setUpdateTime(new Date());
 		Long permissionId=permission.getId();
-		String changedFields = ValidationUtils.getChangedFields(permission, permissionInDb);
+		String changedFields = ValidationUtils.getChangedFields(permissionInDb,permission);
 		permissionMapper.updateByPrimaryKeySelective(permission);
 		//记录操作日志
 		operateLogService.addOperateLog(String.format("权限id：%s，编辑内容：%s",permissionId,changedFields),OperateLogTypeEnum.PERMISSION_EDIT);

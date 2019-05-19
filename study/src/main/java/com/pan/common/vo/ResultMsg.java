@@ -4,14 +4,22 @@ import com.pan.common.enums.ResultCodeEnum;
 
 
 /**
- * 返回消息
+ * 返回结果
  * @author Administrator
  *
  */
 public class ResultMsg {
-	
+	/**
+	 * 消息吗码
+	 */
 	private String code;
+	/**
+	 * 返回消息
+	 */
 	private Object msg;
+	/**
+	 * 返回消息数据
+	 */
 	private Object data;
 	
 	/**

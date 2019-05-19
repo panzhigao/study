@@ -29,7 +29,7 @@ public class ExceptionLogController {
      * 跳转操作异常日志列表
      */
     @RequestMapping(method= RequestMethod.GET,value="")
-    @RequiresPermissions("/user/exceptionLog")
+    @RequiresPermissions("exceptionLog:load")
     public ModelAndView toLogList(){
         ModelAndView mav=new ModelAndView("html/system/exceptionLog");
         mav.addObject("types", OperateLogTypeEnum.getEnums());
@@ -42,7 +42,7 @@ public class ExceptionLogController {
      */
     @RequestMapping(method=RequestMethod.POST,value="getPageData")
     @ResponseBody
-    @RequiresPermissions("/user/exceptionLog")
+    @RequiresPermissions("exceptionLog:load")
     public Map<String,Object> getUserArticleList(QueryExceptionLog queryExceptionLog){
         return exceptionLogService.findByParams(queryExceptionLog);
     }
@@ -52,7 +52,7 @@ public class ExceptionLogController {
      * @return
      */
     @RequestMapping(method=RequestMethod.GET,value="detail")
-    @RequiresPermissions(value="/user/exceptionLog")
+    @RequiresPermissions(value="exceptionLog:load")
     public ModelAndView exceptionMsgDetail(Long id){
         ModelAndView mav=new ModelAndView();
         mav.setViewName("html/system/exceptionLogDetail");

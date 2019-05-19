@@ -1,7 +1,5 @@
 package com.pan.controller;
 
-import java.util.Map;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
 import com.pan.query.QueryRole;
@@ -32,7 +30,7 @@ public class RoleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/role")
-	@RequiresPermissions("/user/role")
+	@RequiresPermissions("role:load")
 	public String toRolePage(){
 		return "html/role/rolePage";
 	}
@@ -42,7 +40,7 @@ public class RoleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/role/tab")
-	@RequiresPermissions({"/user/role/doAdd","/user/role/doEdit"})
+	@RequiresPermissions({"role:doAdd","role:doEdit"})
 	public ModelAndView getRoleTab(@RequestParam(name="roleId",defaultValue="0") Long roleId){
 		ModelAndView mav=new ModelAndView("html/role/roleTab");
 		if(roleId>0){
@@ -59,7 +57,7 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doAdd")
 	@ResponseBody
-	@RequiresPermissions("/user/role/doAdd")
+	@RequiresPermissions("role:doAdd")
 	public ResultMsg addRole(Role role){
 		roleService.addRole(role);
 		return ResultMsg.ok("新增权限成功");
@@ -72,10 +70,9 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/getPageData")
 	@ResponseBody
-	@RequiresPermissions(value="/user/role")
-	public Map<String,Object> loadRoles(QueryRole queryRole){
-		Map<String,Object> pageData=roleService.findPageableMap(queryRole);
-		return pageData;
+	@RequiresPermissions(value="role:load")
+	public PageDataMsg loadRoles(QueryRole queryRole){
+		return roleService.findPageableMap(queryRole);
 	}
 	
 	/**
@@ -85,7 +82,7 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doDelete")
 	@ResponseBody
-	@RequiresPermissions("/user/role/doDelete")
+	@RequiresPermissions("role:doDelete")
 	public ResultMsg deleteRole(@RequestParam(defaultValue = "0")Long roleId){
 		roleService.deleteRole(roleId);
 		return ResultMsg.ok("删除角色成功");
@@ -97,7 +94,7 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocatePermission")
 	@ResponseBody
-	@RequiresPermissions("/user/role/allocatePermission")
+	@RequiresPermissions("role:allocatePermission")
 	public ResultMsg allocatePermission(Long roleId,@RequestParam(value = "permissions[]",required=false)Long[] permissions){
 		roleService.allocatePermissionToRole(roleId, permissions);
 		return ResultMsg.ok("分配角色权限成功");
@@ -109,7 +106,7 @@ public class RoleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/doEdit")
 	@ResponseBody
-	@RequiresPermissions("/user/role/doEdit")
+	@RequiresPermissions("role:doEdit")
 	public ResultMsg editRole(Role role){
 		roleService.updateRole(role);
 		return ResultMsg.ok();

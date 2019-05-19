@@ -11,6 +11,10 @@ public class TreeNode {
     private String id;
     private String pId;
     private String name;
+    /**
+     * 权限点
+     */
+    private String point;
     private Object data;
     private String url;
     private String icon;
@@ -89,8 +93,16 @@ public class TreeNode {
     public void setType(Integer type) {
         this.type = type;
     }
+    
+    public String getPoint() {
+		return point;
+	}
 
-    @Override
+	public void setPoint(String point) {
+		this.point = point;
+	}
+
+	@Override
     public String toString() {
         return "TreeNode [id=" + id + ", pId=" + pId + ", name=" + name
                 + ", data=" + data + ", url=" + url + ", icon=" + icon

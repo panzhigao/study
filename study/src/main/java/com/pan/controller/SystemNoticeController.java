@@ -3,6 +3,7 @@ package com.pan.controller;
 
 import com.pan.common.enums.ArticleStatusEnum;
 import com.pan.common.enums.ArticleTypeEnum;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.query.QueryArticle;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import java.util.Map;
 
 /**
  * 系统公告
@@ -65,10 +65,9 @@ public class SystemNoticeController {
     @RequestMapping(method=RequestMethod.POST,value="/user/systemNotice/getPageData")
     @ResponseBody
     @RequiresPermissions(value="/user/systemNotice")
-    public Map<String,Object> getArticleList(QueryArticle queryArticle){
+    public PageDataMsg getArticleList(QueryArticle queryArticle){
         queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
         queryArticle.setType(ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode());
-        Map<String,Object> pageData=articleService.findPageableMap(queryArticle);
-        return pageData;
+        return articleService.findPageableMap(queryArticle);
     }
 }

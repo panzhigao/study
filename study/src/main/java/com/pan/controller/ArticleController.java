@@ -45,7 +45,7 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/addPage")
-	@RequiresPermissions("/user/article/doSave")
+	@RequiresPermissions("article:doSave")
 	public ModelAndView toAddPage(){
 		ModelAndView mav=new ModelAndView("html/article/articleAdd");
 		List<ArticleCategory> allThroughCache = ArticleCategoryServiceImpl.getAllThroughCache();
@@ -59,7 +59,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(value={"/user/article/doSave"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/doSave")
+	@RequiresPermissions("article:doSave")
 	public ResultMsg saveArticle(Article article){
 		logger.info("新建文章信息");
 		ResultMsg resultMsg=null;
@@ -77,7 +77,7 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/mine")
-	@RequiresPermissions("/user/article/mine")
+	@RequiresPermissions("article:mine")
 	public ModelAndView toArticleList(@RequestParam(defaultValue = "") String status){
 		ModelAndView mav=new ModelAndView("html/article/articleManage");
 		mav.addObject("status", status);
@@ -90,7 +90,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(value="/user/article/getPageData")
 	@ResponseBody
-	@RequiresPermissions("/user/article/mine")
+	@RequiresPermissions("article:mine")
 	public Map<String,Object> getUserArticleList(QueryArticle queryArticle){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		queryArticle.setUserId(loginUserId);
@@ -145,7 +145,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/article/edit/{articleId:^\\d+}")
 	@ResponseBody
-	@RequiresPermissions("/user/article/doEdit")
+	@RequiresPermissions("article:doEdit")
 	public ModelAndView toArticlePage(@PathVariable("articleId")Long articleId){
 		ModelAndView mav=new ModelAndView("html/article/articleEdit");
 		Long loginUserId = TokenUtils.getLoginUserId();
@@ -163,7 +163,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doEdit"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/doEdit")
+	@RequiresPermissions("article:doEdit")
 	public ResultMsg updateArticle(Article article){
 		logger.info("编辑文章信息",article);
 		ResultMsg resultMsg=null;
@@ -182,7 +182,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/doDelete"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/doDelete")
+	@RequiresPermissions("article:doDelete")
 	public ResultMsg deleteArticle(Long articleId){
 		logger.info("删除的文章id:{}",articleId);
 		Long userId=TokenUtils.getLoginUserId();
@@ -249,7 +249,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/article/set")
 	@ResponseBody
-	@RequiresPermissions("/user/article/set")
+	@RequiresPermissions("article:set")
 	public ResultMsg set(Long articleId,Integer top,Integer highQuality){
 		articleService.setArticle(articleId, top, highQuality);
 		return ResultMsg.ok();
@@ -261,7 +261,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/offline"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/offline")
+	@RequiresPermissions("article:offline")
 	public ResultMsg offlineArticle(Long articleId){
 		logger.info("下线的文章id:{}",articleId);
 		Long userId=TokenUtils.getLoginUserId();
@@ -275,7 +275,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/article/syncEs"})
 	@ResponseBody
-	@RequiresPermissions("/user/article/syncEs")
+	@RequiresPermissions("article:syncEs")
 	public ResultMsg syncArticleEs(){
 		int syncArticleEsData = articleService.syncArticleEsData();
 		return ResultMsg.ok("同步文章es数据成功"+syncArticleEsData+"条数据");

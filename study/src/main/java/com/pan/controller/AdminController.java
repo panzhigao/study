@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.constant.PageConstant;
+import com.pan.common.constant.PermissionConstant;
 import com.pan.common.enums.ArticleTypeEnum;
 import com.pan.common.enums.CompleteFlagEnum;
 import com.pan.common.enums.MessageStatusEnum;
@@ -66,8 +67,6 @@ public class AdminController {
 	@Autowired
 	private ArticleCheckService articleCheckService;
 
-	private static final String ARTICLE_CHECK_PERMISSION="/user/articleCheck";
-
 	/**
 	 * 跳转用户后台
 	 * @return
@@ -95,7 +94,7 @@ public class AdminController {
 		queryArticle.setType(ArticleTypeEnum.TYPE_ARTICLE.getCode());
 		int articleTotalCount = articleService.getCount(queryArticle);
 		//如果有审核文章的权限，查询待审核文章数
-		if(SecurityUtils.getSubject().isPermitted(ARTICLE_CHECK_PERMISSION)){
+		if(SecurityUtils.getSubject().isPermitted(PermissionConstant.ARTICLE_CHECK_PERMISSION)){
 			QueryArticleCheck queryArticleCheck=new QueryArticleCheck();
 			queryArticleCheck.setCompleteFlag(CompleteFlagEnum.NOT_COMPLETE.getCode());
 			int articleWaitCheckCount = articleCheckService.countByParams(queryArticleCheck);

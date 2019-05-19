@@ -1,7 +1,14 @@
 package com.pan.common.vo;
 
+import com.pan.common.enums.ResultCodeEnum;
+
 import lombok.Data;
 
+/**
+ * 分页数据
+ * @author Administrator
+ *
+ */
 @Data
 public class PageDataMsg {
 	/**
@@ -13,6 +20,10 @@ public class PageDataMsg {
 	 */
 	private Object data;
 	
+	private String code;
+	
+	private String msg;
+	
 	public PageDataMsg(){
 		
 	}
@@ -21,6 +32,8 @@ public class PageDataMsg {
 		super();
 		this.total = total;
 		this.data = data;
+		this.code=ResultCodeEnum.OK.getCode();
+		this.msg=ResultCodeEnum.OK.getMsg();
 	}
 	
 }

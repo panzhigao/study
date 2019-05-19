@@ -1,6 +1,5 @@
 package com.pan.controller;
 
-import java.util.Map;
 import com.pan.query.QuerySystemConfig;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.SystemConfig;
 import com.pan.service.SystemConfigService;
@@ -30,7 +31,7 @@ public class SystemConfigController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemConfig")
-	@RequiresPermissions("/user/systemConfig")
+	@RequiresPermissions("systemConfig:load")
 	public ModelAndView toSystemConfigPage(){
 		ModelAndView mav=new ModelAndView("html/system/systemConfig");
 		return mav;
@@ -43,15 +44,14 @@ public class SystemConfigController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/getPageData")
 	@ResponseBody
-	@RequiresPermissions(value="/user/systemConfig")
-	public Map<String,Object> getConfigList(QuerySystemConfig querySystemConfig){
-		Map<String,Object> pageData=systemConfigService.findPageableMap(querySystemConfig);
-		return pageData;
+	@RequiresPermissions(value="systemConfig:load")
+	public PageDataMsg getConfigList(QuerySystemConfig querySystemConfig){
+		return systemConfigService.findPageableMap(querySystemConfig);
 	}
 
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/doAdd")
 	@ResponseBody
-	@RequiresPermissions("/user/systemConfig/doAdd")
+	@RequiresPermissions("systemConfig:doAdd")
 	public ResultMsg addSystemConfig(SystemConfig systemConfig){
 		systemConfigService.addSystemConfig(systemConfig);
 		return ResultMsg.ok("新增系统配置成功");
@@ -62,7 +62,7 @@ public class SystemConfigController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/systemConfig/tab")
-	@RequiresPermissions({"/user/systemConfig/doAdd","/user/systemConfig/doEdit"})
+	@RequiresPermissions({"systemConfig:doAdd","systemConfig:doEdit"})
 	public ModelAndView getConfigTab(@RequestParam(name="configId",defaultValue="0") Long configId){
 		ModelAndView mav=new ModelAndView("html/system/systemConfigTab");
 		if(configId>0){
@@ -80,7 +80,7 @@ public class SystemConfigController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/doEdit")
 	@ResponseBody
-	@RequiresPermissions("/user/systemConfig/doEdit")
+	@RequiresPermissions("systemConfig:doEdit")
 	public ResultMsg editSystemConfig(SystemConfig systemConfig,String paramName){
 		systemConfigService.updateSystemConfig(systemConfig);
 		return ResultMsg.ok("编辑系统配置成功");	
@@ -93,7 +93,7 @@ public class SystemConfigController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/systemConfig/doDelete")
 	@ResponseBody
-	@RequiresPermissions("/user/systemConfig/doDelete")
+	@RequiresPermissions("systemConfig:doDelete")
 	public ResultMsg deleteSystemConfig(@RequestParam(defaultValue = "0") Long configId){
 		systemConfigService.deleteSystemConfig(configId);
 		return ResultMsg.ok("删除系统配置成功");

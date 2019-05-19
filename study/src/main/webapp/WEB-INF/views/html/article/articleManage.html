@@ -15,7 +15,7 @@
 	<div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
     	<div class="layui-btn-group">
-    		#hasPermission("/user/article/doSave")
+    		#hasPermission("article:doSave")
 	     	<button class="layui-btn" onclick="location.href='$!{rc.contextPath}/user/article/addPage'" >发表新帖</button>
 	     	#end
   		</div>
@@ -187,8 +187,8 @@ layui.use(['table','jquery'], function(){
 			  return d.publishTime;
 		  }},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var p_edit='#hasPermission("/user/article/doEdit") 1 #end';
-        	  var p_delete='#hasPermission("/user/article/doDelete") 1 #end';
+	    	  var p_edit='#hasPermission("article:doEdit") 1 #end';
+        	  var p_delete='#hasPermission("article:doDelete") 1 #end';
 	    	  
 	    	  var detail='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" >查看</a>';
 	    	  var show='';
@@ -203,7 +203,7 @@ layui.use(['table','jquery'], function(){
 		    	  }
 	    	  }
 	    	  if(row.status==3){
-	    		  var p_offline='#hasPermission("/user/article/offline") 1 #end';
+	    		  var p_offline='#hasPermission("article:offline") 1 #end';
 	    		  if(p_offline){
 	    			  var t_offline='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="offline">下线</a>';
 		    		  show+=t_offline;

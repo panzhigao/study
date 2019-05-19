@@ -1,6 +1,5 @@
 package com.pan.controller;
 
-import java.util.Map;
 import com.pan.query.QueryMessage;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.enums.MessageStatusEnum;
+import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.service.MessageService;
 import com.pan.util.TokenUtils;
@@ -31,7 +31,7 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/message")
-	@RequiresPermissions("/user/message")
+	@RequiresPermissions("message:load")
 	public ModelAndView toIndex(){
 		ModelAndView mav=new ModelAndView("html//message/messagePage");
 		Long loginUserId = TokenUtils.getLoginUserId();
@@ -47,12 +47,12 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/load")
 	@ResponseBody
-	@RequiresPermissions(value="/user/message")
+	@RequiresPermissions(value="message:load")
 	public ResultMsg loadMessages(QueryMessage queryMessage){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		queryMessage.setReceiverUserId(loginUserId);
-		Map<String, Object> result = messageService.findPageableMap(queryMessage);
-		return ResultMsg.ok("加载消息成功", result);
+		PageDataMsg findPageableMap = messageService.findPageableMap(queryMessage);
+		return ResultMsg.ok("加载消息成功", findPageableMap);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/count")
 	@ResponseBody
-	@RequiresPermissions(value="/user/message")
+	@RequiresPermissions(value="message:load")
 	public ResultMsg getUnreadMessageCount(){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.countMessage(loginUserId, MessageStatusEnum.MESSAGE_NOT_READED.getCode());
@@ -75,7 +75,7 @@ public class MessageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/message/clean")
 	@ResponseBody
-	@RequiresPermissions(value="/user/message")
+	@RequiresPermissions(value="message:load")
 	public ResultMsg cleanMessage(Long messageId){
 		Long loginUserId = TokenUtils.getLoginUserId();
 		int count=messageService.updateMessageReaded(loginUserId, messageId);

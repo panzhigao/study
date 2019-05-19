@@ -35,7 +35,7 @@ public class UserManageController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/manage")
-	@RequiresPermissions(value="/user/manage")
+	@RequiresPermissions(value="user:manage")
 	public ModelAndView toUserEditPage(){
 		ModelAndView mav=new ModelAndView("html/userManage/userManagePage");
 		return mav;
@@ -47,7 +47,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/userList"})
 	@ResponseBody
-	@RequiresPermissions(value="/user/manage")
+	@RequiresPermissions(value="user:manage")
 	public Map<String,Object> getUserList(QueryUser queryUser){
 		Map<String,Object> pageData=userService.findPageData(queryUser);
 		return pageData;
@@ -59,7 +59,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method={RequestMethod.POST,RequestMethod.GET},value="/user/role/getRoleTree")
 	@ResponseBody
-	@RequiresPermissions(value="/user/manage")
+	@RequiresPermissions(value="user:manage")
 	public List<Tree> loadRoleTree(Long userId){
 		return roleService.getRoleTreeData(userId);
 	}
@@ -70,7 +70,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/role/allocateRole")
 	@ResponseBody
-	@RequiresPermissions("/user/role/allocateRole")
+	@RequiresPermissions("user:role:allocateRole")
 	public ResultMsg allocatePermission(Long userId,@RequestParam(value = "roles[]",required=false)Long[] roleIds){
 		userService.allocateRoleToUser(userId, roleIds);
 		return ResultMsg.ok("分配用户角色成功");
@@ -83,7 +83,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/manage/changeStatus")
 	@ResponseBody
-	@RequiresPermissions("/user/manage/changeStatus")
+	@RequiresPermissions("user:manage:changeStatus")
 	public ResultMsg changeUserStatus(Long userId,Integer status){
 		String message = userService.changeUserStatus(userId, status);
 		return ResultMsg.ok(message);
@@ -95,7 +95,7 @@ public class UserManageController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value={"/user/data/syncEs"})
 	@ResponseBody
-	@RequiresPermissions("/user/data/syncEs")
+	@RequiresPermissions("user:data:syncEs")
 	public ResultMsg syncArticleEs(){
 		int syncArticleEsData = userService.syncUserEsData();
 		return ResultMsg.ok("同步用户es数据成功"+syncArticleEsData+"条数据");

@@ -28,7 +28,7 @@ public class OperateLogController {
 	 * 跳转操作日志列表
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/operateLog")
-	@RequiresPermissions("/user/operateLog")
+	@RequiresPermissions("operateLog:load")
 	public ModelAndView toLogList(){
 		ModelAndView mav=new ModelAndView("html/system/operateLog");
 		mav.addObject("types", OperateLogTypeEnum.getEnums());
@@ -41,7 +41,7 @@ public class OperateLogController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/operateLog/getPageData")
 	@ResponseBody
-	@RequiresPermissions("/user/operateLog")
+	@RequiresPermissions("operateLog:load")
 	public Map<String,Object> getUserArticleList(QueryOperateLog queryOperateLog){
 		return operateLogService.findByParams(queryOperateLog);
 	}

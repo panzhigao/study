@@ -19,78 +19,84 @@
 </head>
 <body class="childrenBody">
 	<div class="panel_box row">
-		#hasPermission('/user/message')
+		#hasPermission('user:message')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/message">
 				<div class="panel_icon">
 					<i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
 				</div>
 				<div class="panel_word newMessage">
-					<span>$!{unReadMessageCount}</span> <cite>未读消息</cite> <input
-						type="hidden" value="我的消息">
+					<span>$!{unReadMessageCount}</span>
+					<cite>未读消息</cite>
+					<input type="hidden" value="我的消息">
 				</div>
 			</a>
 		</div>
 		#end
-		#hasPermission('/user/article/mine')
+		#hasPermission('article:mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#index">
 				<div class="panel_icon" style="background-color: #FF5722;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word newMessage">
-					<span>$!{articleTotalCount}</span> <cite>文章数</cite> <input
-						type="hidden" value="我的文章">
+					<span>$!{articleTotalCount}</span>
+					<cite>文章数</cite>
+					<input type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
 		#end
-		#hasPermission('/user/articleCheck')
+		#hasPermission('articleCheck:load')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/articleCheck">
 				<div class="panel_icon" style="background-color: #F7B824;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>$!{articleWaitCheckCount}</span> <cite>待审核文章数</cite> <input
-						type="hidden" value="审核文章">
+					<span>$!{articleWaitCheckCount}</span>
+					<cite>待审核文章数</cite>
+					<input type="hidden" value="审核文章">
 				</div>
 			</a>
 		</div>
 		#end
-		#hasPermission('/user/article/mine')
+		#hasPermission('article:mine')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/article/mine#collection">
 				<div class="panel_icon" style="background-color: #2F4056;">
 					<i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span>$!{collectionCount}</span> <cite>收藏文章数</cite> <input
-						type="hidden" value="我的文章">
+					<span>$!{collectionCount}</span>
+					<cite>收藏文章数</cite>
+					<input type="hidden" value="我的文章">
 				</div>
 			</a>
 		</div>
 		#end
-		#hasPermission('/user/scoreHistory')
+		#hasPermission('scoreHistory:load')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/scoreHistory">
 				<div class="panel_icon" style="background-color: #009688;">
 					<i class="layui-icon" data-icon="&#xe600;">&#xe600;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{totalScore}</span> <cite>我的积分</cite>
+					<span>$!{totalScore}</span>
+					<cite>我的积分</cite>
 				</div>
 			</a>
 		</div>
 		#end
-		#hasPermission('/user/myPicturePage')
+		#hasPermission('myPicturePage:load')
 		<div class="panel col">
 			<a href="javascript:;" data-url="/user/myPicturePage">
 				<div class="panel_icon" style="background-color: #5FB878;">
 					<i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
 				</div>
 				<div class="panel_word imgAll">
-					<span>$!{pictureCount}</span> <cite>我的图片</cite>
+					<span>$!{pictureCount}</span>
+					<cite>我的图片</cite>
 				</div>
 			</a>
 		</div>
@@ -101,7 +107,8 @@
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{praiseCount}</span> <cite>我的点赞数</cite>
+					<span>$!{praiseCount}</span>
+					<cite>我的点赞数</cite>
 				</div>
 			</a>
 		</div>
@@ -111,7 +118,8 @@
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{extension.totalLoginDays}</span> <cite>总共登陆天数</cite>
+					<span>$!{extension.totalLoginDays}</span>
+					<cite>总共登陆天数</cite>
 				</div>
 			</a>
 		</div>
@@ -121,7 +129,8 @@
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{extension.continuousLoginDays}</span> <cite>连续登陆天数</cite>
+					<span>$!{extension.continuousLoginDays}</span>
+					<cite>连续登陆天数</cite>
 				</div>
 			</a>
 		</div>
@@ -131,7 +140,8 @@
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{extension.totalCheckInDays}</span> <cite>总共签到天数</cite>
+					<span>$!{extension.totalCheckInDays}</span>
+					<cite>总共签到天数</cite>
 				</div>
 			</a>
 		</div>
@@ -141,7 +151,8 @@
 					<i class="layui-icon" data-icon="&#xe6c6;">&#xe6c6;</i>
 				</div>
 				<div class="panel_word userAll">
-					<span>$!{extension.continuousCheckInDays}</span> <cite>连续签到天数</cite>
+					<span>$!{extension.continuousCheckInDays}</span>
+					<cite>连续签到天数</cite>
 				</div>
 			</a>
 		</div>
@@ -151,7 +162,8 @@
 					<i class="layui-icon" data-icon="&#xe60e;">&#xe60e;</i>
 				</div>
 				<div class="panel_word waitNews">
-					<span style="font-size: 1em;">$!dateTool.format('yyyy-MM-dd HH:mm',${lastLoginTime})</span> <cite>最近登录时间</cite>
+					<span style="font-size: 1em;">$!dateTool.format('yyyy-MM-dd HH:mm',${lastLoginTime})</span>
+					<cite>最近登录时间</cite>
 				</div>
 			</a>
 		</div>

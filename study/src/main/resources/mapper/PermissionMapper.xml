@@ -5,6 +5,7 @@
 	<resultMap id="BaseResultMap" type="com.pan.entity.Permission">
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+		<result column="permission_point" jdbcType="VARCHAR" property="permissionPoint" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
 		<result column="pid" jdbcType="BIGINT" property="pid" />
 		<result column="level" jdbcType="INTEGER" property="level" />
@@ -18,7 +19,7 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, permission_name, url, pid,level, sort,
+		id, permission_name,permission_point, url, pid,level, sort,
 		icon, type,create_time,create_user_id, update_time, update_user_id
 	</sql>
 
@@ -29,16 +30,28 @@
 		from t_permission
 		where id = #{id,jdbcType=BIGINT}
 	</select>
-
-	<select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPermission">
-		select
-		<include refid="Base_Column_List" />
-		from t_permission
+	
+	<sql id="whereSql">
 		<where>
 			<if test="permissionName !=null and permissionName !=''">
 				and permission_name like CONCAT('%',#{permissionName},'%')
 			</if>
+			<if test="permissionPoint !=null and permissionPoint !=''">
+				and permission_point =#{permissionPoint,jdbcType=VARCHAR}
+			</if>
 		</where>
+	</sql>
+	
+	<select id="countByParams" resultType="int">
+		select count(0) from t_permission
+		<include refid="whereSql"/>
+	</select>
+	
+	<select id="findPageable" resultMap="BaseResultMap" parameterType="com.pan.query.QueryPermission">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission
+		<include refid="whereSql"/>
 		order by create_time asc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
@@ -53,6 +66,9 @@
 			</if>
 			<if test="permissionName != null">
 				permission_name,
+			</if>
+			<if test="permissionPoint != null">
+				permission_point,
 			</if>
 			<if test="url != null">
 				url,
@@ -91,6 +107,9 @@
 			</if>
 			<if test="permissionName != null">
 				#{permissionName,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionPoint != null">
+				#{permissionPoint,jdbcType=VARCHAR},
 			</if>
 			<if test="url != null">
 				#{url,jdbcType=VARCHAR},
@@ -138,7 +157,7 @@
 
 	<select id="getPermissionSelectedByRoleId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.permission_name,tp.url,max(ifnull(tr.id,0))marker,tp.pid,tp.sort
+		tp.id,tp.permission_name,permission_point,tp.url,max(ifnull(tr.id,0))marker,tp.pid,tp.sort
 		from t_permission tp
 		left join t_role_permission trp on
 		trp.permission_id=tp.id
@@ -151,7 +170,7 @@
 
 	<select id="getPermissionByRoleId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.pid,tp.permission_name,tp.url,tp.icon,tp.sort,tp.type
+		tp.id,tp.pid,tp.permission_name,permission_point,tp.url,tp.icon,tp.sort,tp.type
 		from t_role_permission trp join t_permission tp on
 		trp.permission_id=tp.id
 		where trp.role_id=#{roleId}
@@ -162,6 +181,9 @@
 		<set>
 			<if test="permissionName != null">
 				permission_name = #{permissionName,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionPoint != null">
+				permission_point = #{permissionPoint,jdbcType=VARCHAR},
 			</if>
 			<if test="url != null">
 				url = #{url,jdbcType=VARCHAR},
@@ -199,7 +221,7 @@
 
 	<select id="findPermissionsByUserId" resultMap="BaseResultMap">
 		select
-		tp.id,tp.id,tp.permission_name,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user_id
+		tp.id,tp.id,tp.permission_name,tp.permission_point,tp.url,tp.create_time,tp.pid,tp.level,tp.sort,tp.icon,tp.type,tp.create_user_id
 		from t_user tu left
 		join t_user_role tur on tu.id=tur.user_id
 		join
@@ -219,4 +241,5 @@
 		select count(0) from t_permission
 		where pid=#{parentId}
 	</select>
+	
 </mapper>

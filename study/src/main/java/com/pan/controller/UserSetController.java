@@ -47,7 +47,7 @@ public class UserSetController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/user/set")
-	@RequiresPermissions("/user/set")
+	@RequiresPermissions("user:set")
 	public ModelAndView toSetPage() {
 		ModelAndView mav = new ModelAndView("html/user/set");
 		User loginUser = TokenUtils.getLoginUser();
@@ -64,7 +64,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/user/doSet")
 	@ResponseBody
-	@RequiresPermissions("/user/set")
+	@RequiresPermissions("user:set")
 	public ResultMsg userEdit(User user, UserExtension userExtension) {
 		userService.updateUserInfo(user, userExtension);
 		return ResultMsg.ok("修改用户信息成功");
@@ -78,7 +78,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/user/resetPassword")
 	@ResponseBody
-	@RequiresPermissions("/user/set")
+	@RequiresPermissions("user:set")
 	public ResultMsg resetPassword(PasswordDTO passwordDTO) throws Exception {
 		// 获取私钥
 		String privateKey = (String) TokenUtils.getAttribute(MyConstant.PRIVATE_KEY);
@@ -111,7 +111,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/user/sendValidationCode")
 	@ResponseBody
-	@RequiresPermissions(value = "/user/set")
+	@RequiresPermissions(value = "user:set")
 	public ResultMsg sendValidationCode(String telephone) {
 		User user = new User();
 		user.setTelephone(telephone);
@@ -126,7 +126,7 @@ public class UserSetController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/user/confirmBind")
 	@ResponseBody
-	@RequiresPermissions(value = "/user/set")
+	@RequiresPermissions(value = "user:set")
 	public ResultMsg confirmBind(String telephone, String code) {
 		Long loginUserId = TokenUtils.getLoginUserId();
 		User user = new User();

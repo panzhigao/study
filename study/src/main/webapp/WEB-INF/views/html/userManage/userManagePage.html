@@ -31,7 +31,7 @@
 	    
 	    	<button class="layui-btn" data-type="reload" id="search">搜索</button>
 	    	
-	    	#hasPermission('/user/data/syncEs')
+	    	#hasPermission('user:data:syncEs')
 			<div class="layui-btn-group">
 				<button class="layui-btn" id="btnSync">同步用户ES数据</button>
 			</div>
@@ -231,7 +231,7 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'status', title: '状态', width:100,templet:
 	    	  function(d){
-	    	  	  var statusAuth='#hasPermission("/user/manage/changeStatus") 1 #end';
+	    	  	  var statusAuth='#hasPermission("user:manage:changeStatus") 1 #end';
 	    	  	  if(!statusAuth){
 	    	  		statusAuth='disabled';
 	    	  	  }
@@ -257,7 +257,7 @@ layui.use(['table','jquery','form'], function(){
 	      }},
 	      {field: 'roleNames', title: '拥有角色', width:200},
 	      {title:'操作',width:160,templet:function(row){
-	    	  var p_allocate='#hasPermission("/user/role/allocateRole") 1 #end';
+	    	  var p_allocate='#hasPermission("user:role:allocateRole") 1 #end';
 	    	  var allocate='<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allocate" >分配角色</a>';
 	    	  var show='';
 	    	  if(p_allocate){

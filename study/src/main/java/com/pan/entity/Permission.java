@@ -29,6 +29,13 @@ public class Permission extends BaseEntity {
     @LogMeta(fieldDesc = "权限名称")
     private String permissionName;
     /**
+     * 权限点
+     */
+    @NotEmpty(message = "权限点不能为空")
+    @Size(max=64,message="权限点不能超过64个字符")
+    @LogMeta(fieldDesc = "权限点")
+    private String permissionPoint;
+    /**
      * 权限路径
      */
     @LogMeta(fieldDesc = "权限路径")

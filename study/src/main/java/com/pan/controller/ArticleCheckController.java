@@ -30,7 +30,7 @@ public class ArticleCheckController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/articleCheck")
-	@RequiresPermissions("/user/articleCheck")
+	@RequiresPermissions("articleCheck:load")
 	public ModelAndView toIndex(HttpServletRequest request){
 		ModelAndView mav=new ModelAndView("html/articleCheck/articleCheck");
 		return mav;
@@ -42,7 +42,7 @@ public class ArticleCheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/getPageData")
 	@ResponseBody
-	@RequiresPermissions(value="/user/articleCheck")
+	@RequiresPermissions(value="articleCheck:load")
 	public Map<String,Object> getArticleCheckList(QueryArticleCheck queryArticleCheck){
 		if(StringUtils.isNotBlank(queryArticleCheck.getOrderCondition())){
 			queryArticleCheck.setOrderCondition(com.pan.util.StringUtils.camelToUnderline(queryArticleCheck.getOrderCondition()));
@@ -59,7 +59,7 @@ public class ArticleCheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/pass")
 	@ResponseBody
-	@RequiresPermissions(value="/user/articleCheck")
+	@RequiresPermissions(value="articleCheck:load")
 	public ResultMsg articlePass(Long id){
 		articleCheckService.passArticleCheck(id);
 		return ResultMsg.ok("文章通过审核");
@@ -71,7 +71,7 @@ public class ArticleCheckController {
 	 */
 	@RequestMapping(method=RequestMethod.POST,value="/user/articleCheck/notPass")
 	@ResponseBody
-	@RequiresPermissions(value="/user/articleCheck")
+	@RequiresPermissions(value="articleCheck:load")
 	public ResultMsg articleNotPass(Long id,String reason){
 		articleCheckService.notPassArticle(id, reason);
 		return ResultMsg.ok("文章未通过审核");
@@ -82,7 +82,7 @@ public class ArticleCheckController {
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/articleCheck/detail")
-	@RequiresPermissions(value="/user/articleCheck")
+	@RequiresPermissions(value="articleCheck:load")
 	public ModelAndView articleCheckDetail(Long id){
 		ModelAndView mav=new ModelAndView();
 		mav.setViewName("html/articleCheck/articleCheckDetail");

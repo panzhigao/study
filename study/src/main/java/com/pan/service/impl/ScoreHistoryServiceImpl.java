@@ -8,7 +8,6 @@ import java.util.Map;
 import com.pan.common.enums.ScoreTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.common.exception.BusinessException;
@@ -63,29 +62,29 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 		scoreHistoryMapper.insertSelective(scoreHistory);
 	}
 
-	@Override
-	public void addLoginScore(Long userId) {
-		QueryScoreHistory vo=new QueryScoreHistory();
-		vo.setUserId(userId);
-		vo.setType(ScoreTypeEnum.LOGIN.getCode());
-		vo.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
-		int counts = scoreHistoryMapper.countByParams(vo);
-		if(counts>0){
-			logger.debug("{}今日已获取过登陆积分",userId);
-			return;
-		}
-		ScoreHistory history=new ScoreHistory();
-		BeanUtils.copyProperties(vo, history);
-		history.setCreateTime(new Date());
-		history.setScore(ScoreTypeEnum.LOGIN.getScore());
-		scoreHistoryMapper.insertSelective(history);
-		//登录加5分
-		UserExtension userExtension=new UserExtension();
-		userExtension.setId(userId);
-		userExtension.setUpdateTime(new Date());
-		userExtension.setTotalScore(ScoreTypeEnum.LOGIN.getScore());
-		userExtensionMapper.updateByPrimaryKeySelective(userExtension);
-	}
+//	@Override
+//	public void addLoginScore(Long userId) {
+//		QueryScoreHistory vo=new QueryScoreHistory();
+//		vo.setUserId(userId);
+//		vo.setType(ScoreTypeEnum.LOGIN.getCode());
+//		vo.setScoreDate(new java.sql.Date(System.currentTimeMillis()));
+//		int counts = scoreHistoryMapper.countByParams(vo);
+//		if(counts>0){
+//			logger.debug("{}今日已获取过登陆积分",userId);
+//			return;
+//		}
+//		ScoreHistory history=new ScoreHistory();
+//		BeanUtils.copyProperties(vo, history);
+//		history.setCreateTime(new Date());
+//		history.setScore(ScoreTypeEnum.LOGIN.getScore());
+//		scoreHistoryMapper.insertSelective(history);
+//		//登录加5分
+//		UserExtension userExtension=new UserExtension();
+//		userExtension.setId(userId);
+//		userExtension.setUpdateTime(new Date());
+//		userExtension.setTotalScore(ScoreTypeEnum.LOGIN.getScore());
+//		userExtensionMapper.updateByPrimaryKeySelective(userExtension);
+//	}
 	
 	/**
 	 * 保存积分
@@ -96,6 +95,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	public ScoreHistory addScoreHistory(Long userId, ScoreTypeEnum scoreType) {
 		//签到积分
 		Integer score=scoreType.getScore();
+		UserExtension userExtension = userExtensionMapper.selectByPrimaryKey(userId);
 		//签到积分
 		if(ScoreTypeEnum.CHECK_IN==scoreType){
 			QueryScoreHistory vo=new QueryScoreHistory();
@@ -113,7 +113,6 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 			int lastDayCount = scoreHistoryMapper.countByParams(vo);
 			//昨日没有签到过，按5积分算,用户连续签到天数置为0
 			if(lastDayCount>0){
-				UserExtension userExtension = userExtensionMapper.selectByPrimaryKey(userId);
 				Integer continuousCheckInDays = userExtension.getContinuousCheckInDays();
 				continuousCheckInDays=continuousCheckInDays==null?0:continuousCheckInDays;
 				score=getTodayCheckInScore(continuousCheckInDays);	
@@ -138,6 +137,7 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 		history.setCreateTime(new Date());
 		history.setScoreDate(new Date());
 		history.setScore(score);
+		history.setTotalScore(score+userExtension.getTotalScore());
 		//保存积分历史
 		scoreHistoryMapper.insertSelective(history);
 		return history;
