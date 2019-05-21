@@ -32,7 +32,10 @@ public class UserEsProcessor implements SubProcessor{
     	String id = JedisUtils.brpoplpush(MyConstant.USER_ES_REDIS_LIST, MyConstant.USER_ES_REDIS_LIST_BAK);
     	if(StringUtils.isNumeric(id)){
     		logger.info("用户文章es数据,id={}",id);
-    		userService.updateUserEs(Long.parseLong(id));
+    		boolean updateUserEs = userService.updateUserEs(Long.parseLong(id));
+    		if(updateUserEs){
+    			JedisUtils.lrem(MyConstant.USER_ES_REDIS_LIST_BAK, 0, id);
+    		}
     	}
 	}
 

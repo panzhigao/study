@@ -33,7 +33,11 @@ public class ArticleEsProcessor implements SubProcessor{
     	String id = JedisUtils.brpoplpush(MyConstant.ARTICLE_ES_REDIS_LIST, MyConstant.ARTICLE_ES_REDIS_LIST_BAK);
     	if(StringUtils.isNumeric(id)){
     		logger.info("更新文章es数据,id={}",id);
-    		articleService.updateArticleEs(Long.parseLong(id));
+    		boolean updateArticleEs = articleService.updateArticleEs(Long.parseLong(id));
+    		//更新成功，删除备份数据
+    		if(updateArticleEs){
+    			JedisUtils.lrem(MyConstant.ARTICLE_ES_REDIS_LIST_BAK, 0, id);
+    		}
     	}
 	}
 

@@ -7,6 +7,7 @@ import redis.clients.jedis.JedisPubSub;
 
 /**
  * @author panzhigao
+ * redis消息订阅
  */
 public class RedisSubscriber extends JedisPubSub{
 
@@ -33,37 +34,6 @@ public class RedisSubscriber extends JedisPubSub{
         		s.handel(message);
         	}
         });
-//        if(RedisChannelConstant.CHANNEL_CACHE_SYNC.equals(channel)){
-//            String[] split = message.split(":");
-//            int length=2;
-//            if(split.length==length){
-//                String type=split[0];
-//                //文章分类
-//                if(RedisChannelEnum.RECACHE_ARTICLE_CATEGORY.getName().equals(type)){
-//                    logger.info("同步文章分类缓存...");
-//                    String id=split[1];
-//                    ArticleCategoryServiceImpl.refreshCache(Long.valueOf(id));
-//                //系统配置
-//                }else if(RedisChannelEnum.RECACHE_SYSTEM_CONFIG.getName().equals(type)){
-//                    logger.info("同步系统配置缓存...");
-//                    String paramName=split[1];
-//                    SystemConfigUtils.refreshSystemConfig(paramName);
-//                //链接
-//                }else if(RedisChannelEnum.RECACHE_LINK.getName().equals(type)){
-//                	logger.info("同步链接缓存...");
-//                    LinkServiceImpl.onlineLinkCache.refresh(MyConstant.DEFAULT_KEY);
-//                //文章es更新	
-//                }else if(RedisChannelEnum.ARTICLE_ES_CREATE_OR_UPDATE.getName().equals(type)){
-//                	logger.info("文章es更新... ");
-//                	ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
-//                	String id = JedisUtils.brpoplpush(MyConstant.ARTICLE_ES_REDIS_LIST, MyConstant.ARTICLE_ES_REDIS_LIST_BAK);
-//                	if(StringUtils.isNumeric(id)){
-//                		logger.info("更新文章es数据,id={}",id);
-//                		articleService.updateArticleEs(Long.parseLong(id));
-//                	}
-//                }
-//            }
-//        }
     }
 
     @Override

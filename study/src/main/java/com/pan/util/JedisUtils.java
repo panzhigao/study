@@ -586,7 +586,6 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			length = jedis.rpush(key, value);
 		} catch (Exception e) {
-			jedis.close();
 			logger.error("rpush key={},value={}失败",key,value,e);
 		} finally {
 			jedis.close();
@@ -610,7 +609,6 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			list = jedis.blpop(new String[]{key,String.valueOf(timeOut)});
 		} catch (Exception e) {
-			jedis.close();
 			logger.error("rpush key={}",key,e);
 		} finally {
 			jedis.close();
@@ -629,7 +627,6 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			res=jedis.brpoplpush(srckey, dstkey,timeout);
 		} catch (Exception e) {
-			jedis.close();
 			logger.error("rpoplpush srckey={},dstkey={} error",srckey,dstkey,e);
 		} finally {
 			jedis.close();
@@ -637,4 +634,17 @@ public class JedisUtils {
 		return res;
 	}
 	
+	public static long lrem(String listKey,long count,String value){
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			Long result = jedis.lrem(listKey, count, value);
+			return result;
+		} catch (Exception e) {
+			logger.error("lrem listKey={},count={} value={} error",listKey,count,value,e);
+		}finally {
+			jedis.close();
+		}
+		return 0L;
+	}
 }
