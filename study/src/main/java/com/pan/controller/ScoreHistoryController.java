@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ScoreHistory;
 import com.pan.query.QueryScoreHistory;
-import com.pan.service.ScoreHistoryService;
+import com.pan.service.IScoreHistoryService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -25,7 +25,7 @@ import com.pan.util.TokenUtils;
 public class ScoreHistoryController {
 	
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private IScoreHistoryService scoreHistoryService;
 	
 	/**
 	 * 跳转积分历史页面

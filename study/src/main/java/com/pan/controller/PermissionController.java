@@ -13,7 +13,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.dto.TreeNode;
 import com.pan.entity.Permission;
-import com.pan.service.PermissionService;
+import com.pan.service.IPermissionService;
 
 /**
  * 权限管理
@@ -25,7 +25,7 @@ import com.pan.service.PermissionService;
 public class PermissionController {
 	
 	@Autowired
-	private PermissionService permissionService;
+	private IPermissionService permissionService;
 	
 	/**
 	 * 跳转权限管理页面

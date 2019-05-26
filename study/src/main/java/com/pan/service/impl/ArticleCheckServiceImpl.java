@@ -35,12 +35,12 @@ import com.pan.util.ValidationUtils;
  * @author panzhigao
  */
 @Service
-public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,ArticleCheckMapper> implements ArticleCheckService{
+public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,ArticleCheckMapper> implements IArticleCheckService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 		
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
 	private ArticleCheckMapper articleCheckMapper;
@@ -49,13 +49,13 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	private ArticleMapper articleMapper;
 	
 	@Autowired
-	private MessageService messageService;
+	private IMessageService messageService;
 		
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private IScoreHistoryService scoreHistoryService;
 	
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 
 	@Override
 	protected ArticleCheckMapper getBaseMapper() {

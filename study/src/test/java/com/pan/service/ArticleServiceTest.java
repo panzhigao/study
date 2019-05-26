@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ArticleServiceTest extends BaseTest {
 
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 
 	@Test
 	public void saveArticle() throws Exception {

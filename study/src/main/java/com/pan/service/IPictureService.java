@@ -7,7 +7,7 @@ import com.pan.entity.Picture;
  * @author Administrator
  *
  */
-public interface PictureService extends BaseService<Picture>{
+public interface IPictureService extends BaseService<Picture>{
 	/**
 	 * 批量删除用户下的图片
 	 * @param userId

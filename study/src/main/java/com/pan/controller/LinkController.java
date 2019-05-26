@@ -14,7 +14,7 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Link;
 import com.pan.query.QueryLink;
-import com.pan.service.LinkService;
+import com.pan.service.ILinkService;
 
 /**
  * 链接管理
@@ -27,7 +27,7 @@ public class LinkController {
 	private static final Logger logger=LoggerFactory.getLogger(LinkController.class);
 	
 	@Autowired
-	private LinkService linkService;
+	private ILinkService linkService;
 	
 	/**
 	 * 跳转链接管理主页

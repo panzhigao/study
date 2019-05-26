@@ -7,7 +7,7 @@ import com.pan.entity.Collection;
  * @author Administrator
  *
  */
-public interface CollectionService extends BaseService<Collection>{
+public interface ICollectionService extends BaseService<Collection>{
 	/**
 	 * 添加收藏
 	 * @param collection

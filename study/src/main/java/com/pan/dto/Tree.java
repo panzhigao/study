@@ -41,8 +41,6 @@ public class Tree implements Serializable {
      */
     private Integer sort;
 
-    private boolean isStu;
-
     public static List<Tree> buildTree(List<Tree> nodes, boolean sortFlag) {
         List<Tree> list = new ArrayList<Tree>();
         if (sortFlag) {
@@ -101,7 +99,6 @@ public class Tree implements Serializable {
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((icon == null) ? 0 : icon.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isStu ? 1231 : 1237);
 		result = prime * result + ((pId == null) ? 0 : pId.hashCode());
 		result = prime * result + ((sort == null) ? 0 : sort.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.SystemConfig;
-import com.pan.service.SystemConfigService;
+import com.pan.service.ISystemConfigService;
 
 /**
  * 系统配置
@@ -24,7 +24,7 @@ import com.pan.service.SystemConfigService;
 public class SystemConfigController {
 	
 	@Autowired
-	private SystemConfigService systemConfigService;
+	private ISystemConfigService systemConfigService;
 	
 	/**
 	 * 跳转用户系统配置管理页

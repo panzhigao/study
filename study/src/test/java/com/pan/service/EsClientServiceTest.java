@@ -26,10 +26,10 @@ public class EsClientServiceTest extends BaseTest{
 	private RestHighLevelClient client;
 	
 	@Autowired
-	private EsClientService esClientService;
+	private IEsClientService esClientService;
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Test
 	public void testCreateIndex() {

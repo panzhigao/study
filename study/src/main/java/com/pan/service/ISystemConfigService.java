@@ -5,7 +5,7 @@ import com.pan.entity.SystemConfig;
 /**
  * @author panzhigao
  */
-public interface SystemConfigService extends BaseService<SystemConfig>{
+public interface ISystemConfigService extends BaseService<SystemConfig>{
 	/**
 	 * 根据变量名获取唯一变量
 	 * @return

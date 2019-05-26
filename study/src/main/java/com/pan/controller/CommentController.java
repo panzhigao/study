@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Comment;
 import com.pan.entity.User;
-import com.pan.service.CommentService;
+import com.pan.service.ICommentService;
 import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
 import com.pan.vo.CommentVO;
@@ -27,7 +27,7 @@ import com.pan.vo.CommentVO;
 public class CommentController {
 	
 	@Autowired
-	private CommentService commentService;
+	private ICommentService commentService;
 	
 	/**
 	 * 评论

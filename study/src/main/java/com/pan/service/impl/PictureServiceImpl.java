@@ -11,7 +11,7 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.Picture;
 import com.pan.mapper.PictureMapper;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.PictureService;
+import com.pan.service.IPictureService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -20,7 +20,7 @@ import com.pan.util.TokenUtils;
  *
  */
 @Service
-public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapper> implements PictureService{
+public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapper> implements IPictureService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 	

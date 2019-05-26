@@ -11,7 +11,7 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.SwitchEnum;
 import com.pan.entity.ExceptionLog;
-import com.pan.service.ExceptionLogService;
+import com.pan.service.IExceptionLogService;
 import com.pan.util.*;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
@@ -39,7 +39,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 	private static final Logger logger = LoggerFactory.getLogger(BusinessExceptionResolver.class);
 
 	@Autowired
-	private ExceptionLogService exceptionLogService;
+	private IExceptionLogService exceptionLogService;
 
 	public static boolean isAjax(HttpServletRequest request) {  
 		return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));  

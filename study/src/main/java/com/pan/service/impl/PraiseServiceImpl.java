@@ -16,8 +16,8 @@ import com.pan.mapper.CommentMapper;
 import com.pan.mapper.PraiseMapper;
 import com.pan.query.QueryPraise;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.MessageService;
-import com.pan.service.PraiseService;
+import com.pan.service.IMessageService;
+import com.pan.service.IPraiseService;
 import com.pan.util.IdUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -28,7 +28,7 @@ import com.pan.util.ValidationUtils;
  *
  */
 @Service
-public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper> implements PraiseService{
+public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper> implements IPraiseService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(PraiseServiceImpl.class);
 	
@@ -39,7 +39,7 @@ public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper>
 	private PraiseMapper praiseMapper;
 	
 	@Autowired
-	private MessageService messageService;
+	private IMessageService messageService;
 	
 	@Override
 	protected PraiseMapper getBaseMapper() {

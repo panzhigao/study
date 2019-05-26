@@ -11,14 +11,14 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ArticleCategory;
 import com.pan.query.QueryArticleCategory;
-import com.pan.service.ArticleCategoryService;
+import com.pan.service.IArticleCategoryService;
 
 @Controller
 @RequestMapping("/user/articleCategory")
 public class ArticleCategoryController {
 	
 	@Autowired
-	private ArticleCategoryService articleCategoryService;
+	private IArticleCategoryService articleCategoryService;
 	
 	/**
 	 * 跳转文章分类管理页

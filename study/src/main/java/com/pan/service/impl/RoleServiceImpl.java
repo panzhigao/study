@@ -27,7 +27,7 @@ import com.pan.util.ValidationUtils;
  * @author panzhigao
  */
 @Service
-public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implements RoleService{
+public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implements IRoleService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
 
@@ -35,16 +35,16 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 	private RoleMapper roleMapper;
 	
 	@Autowired
-	private RolePermissionService rolePermissionService;
+	private IRolePermissionService rolePermissionService;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	@Autowired
-	private UserRoleService userRoleService;
+	private IUserRoleService userRoleService;
 
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 
 	/**
 	 * 新增角色信息，角色名称不能重复，并记录日志

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Praise;
-import com.pan.service.PraiseService;
+import com.pan.service.IPraiseService;
 import com.pan.util.TokenUtils;
 
 @Controller
@@ -15,7 +15,7 @@ import com.pan.util.TokenUtils;
 public class PraiseController {
 	
 	@Autowired
-	private PraiseService praiseService;
+	private IPraiseService praiseService;
 	
 	/**
 	 * 点赞

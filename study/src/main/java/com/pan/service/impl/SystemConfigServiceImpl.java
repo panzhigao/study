@@ -17,8 +17,8 @@ import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.SystemConfig;
 import com.pan.mapper.SystemConfigMapper;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.OperateLogService;
-import com.pan.service.SystemConfigService;
+import com.pan.service.IOperateLogService;
+import com.pan.service.ISystemConfigService;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -26,7 +26,7 @@ import com.pan.util.ValidationUtils;
  * @author panzhigao
  */
 @Service
-public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,SystemConfigMapper> implements SystemConfigService{
+public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,SystemConfigMapper> implements ISystemConfigService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(SystemConfigServiceImpl.class);
 	
@@ -34,7 +34,7 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 	private SystemConfigMapper systemConfigMapper;
 	
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 	
 	@Override
 	protected SystemConfigMapper getBaseMapper() {

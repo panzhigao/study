@@ -14,7 +14,7 @@ import com.pan.entity.User;
 import com.pan.mapper.MessageMapper;
 import com.pan.query.QueryMessage;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.MessageService;
+import com.pan.service.IMessageService;
 import com.pan.util.JsonUtils;
 import com.pan.util.MessageUtils;
 import com.pan.util.TokenUtils;
@@ -26,7 +26,7 @@ import com.pan.util.TokenUtils;
  * 
  */
 @Service
-public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapper> implements MessageService {
+public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapper> implements IMessageService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	

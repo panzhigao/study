@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class UserServiceTest extends BaseTest {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     org.apache.shiro.mgt.SecurityManager securityManager;

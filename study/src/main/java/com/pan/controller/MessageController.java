@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
-import com.pan.service.MessageService;
+import com.pan.service.IMessageService;
 import com.pan.util.TokenUtils;
 
 
@@ -24,7 +24,7 @@ public class MessageController {
 
 	
 	@Autowired
-	private MessageService messageService;
+	private IMessageService messageService;
 
 	/**
 	 * 跳转系统消息页

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.pan.entity.RolePermission;
 import com.pan.mapper.RolePermissionMapper;
-import com.pan.service.RolePermissionService;
+import com.pan.service.IRolePermissionService;
 
 /**
  * @author 作者
@@ -16,7 +16,7 @@ import com.pan.service.RolePermissionService;
  * 类说明
  */
 @Service
-public class RolePermissionServiceImpl implements RolePermissionService{
+public class RolePermissionServiceImpl implements IRolePermissionService{
 	
 	@Autowired
 	private RolePermissionMapper rolePermissionMapper;

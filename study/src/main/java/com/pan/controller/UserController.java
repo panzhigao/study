@@ -1,7 +1,7 @@
 package com.pan.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import com.pan.service.UserExtensionService;
+import com.pan.service.IUserExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.exception.BusinessException;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 
 /**
  * 
@@ -22,10 +22,10 @@ import com.pan.service.UserService;
 public class UserController {
 		
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 
 	/**
 	 * 跳转用户主页

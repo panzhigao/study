@@ -26,7 +26,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
-import com.pan.service.PictureService;
+import com.pan.service.IPictureService;
 import com.pan.util.DateUtils;
 import com.pan.util.SystemConfigUtils;
 import com.pan.util.SystemUtils;
@@ -45,7 +45,7 @@ public class FileUploadController {
 	private static final Logger logger=LoggerFactory.getLogger(FileUploadController.class);
 	
 	@Autowired
-	private PictureService pictureService;
+	private IPictureService pictureService;
 		
 	/**
 	 * 图片访问路径

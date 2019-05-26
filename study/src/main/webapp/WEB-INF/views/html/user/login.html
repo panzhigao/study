@@ -92,14 +92,6 @@
 <script src="$!{rc.contextPath}/static/js/jquery.min.js"></script>
 <script src="$!{rc.contextPath}/static/js/jsencrypt.min.js"></script>
 <script>
-layui.cache.page = 'user';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
 layui.config({
   version: "3.0.0"
   ,base: '$!{rc.contextPath}/static/res/mods/'
@@ -157,20 +149,29 @@ function login(params){
 			url:"$!{rc.contextPath}/doLogin",
 			type:"post",
 			data:params,
+			async:true,
+			beforeSend:function(){
+				layer.msg('登陆中', {
+					  icon: 16
+					  ,shade: 0.01
+				});
+			},
 			success:function(res){
-				if(res.code=='200'){
-					layer.msg(res.msg);
-					setTimeout(function(){
-						location.href='$!{rc.contextPath}/u/'+res.data;
-					},1000);
-				}else if(res.code=='300'){
-					layer.msg(res.msg);
-					setTimeout(function(){
-						location.href=res.data;
-					},1000);
-				}else{
-					layer.msg(res.msg);
-				}
+				setTimeout(function(){
+					if(res.code=='200'){
+						layer.msg(res.msg);
+						setTimeout(function(){
+							location.href='$!{rc.contextPath}/u/'+res.data;
+						},1000);
+					}else if(res.code=='300'){
+						layer.msg(res.msg);
+						setTimeout(function(){
+							location.href=res.data;
+						},1000);
+					}else{
+						layer.msg(res.msg);
+					}
+				}, 1000);
 			}
 	});
 }

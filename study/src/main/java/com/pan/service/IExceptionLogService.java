@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author panzhigao
  */
-public interface ExceptionLogService extends BaseService<ExceptionLog>{
+public interface IExceptionLogService extends BaseService<ExceptionLog>{
     /**
      * 多条件查询，支持分页
      * @param queryExceptionLog

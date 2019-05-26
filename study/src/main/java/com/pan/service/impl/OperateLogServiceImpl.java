@@ -6,7 +6,7 @@ import com.pan.entity.User;
 import com.pan.mapper.OperateLogMapper;
 import com.pan.query.QueryOperateLog;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.OperateLogService;
+import com.pan.service.IOperateLogService;
 import com.pan.util.BeanUtils;
 import com.pan.util.IPUtils;
 import com.pan.util.JsonUtils;
@@ -27,7 +27,7 @@ import java.util.Map;
  * @author panzhigao
  */
 @Service
-public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,OperateLogMapper> implements OperateLogService {
+public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,OperateLogMapper> implements IOperateLogService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	

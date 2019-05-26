@@ -10,7 +10,7 @@ import com.pan.vo.CommentVO;
  * @author Administrator
  *
  */
-public interface CommentService extends BaseService<Comment>{
+public interface ICommentService extends BaseService<Comment>{
 	/**
 	 * 添加评论
 	 */

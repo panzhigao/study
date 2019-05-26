@@ -9,7 +9,7 @@ import com.pan.entity.Role;
  * @author Administrator
  *
  */
-public interface RoleService extends BaseService<Role>{
+public interface IRoleService extends BaseService<Role>{
 	/**
 	 * 新增角色
 	 * @param role

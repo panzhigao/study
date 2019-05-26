@@ -26,7 +26,8 @@ layui.define(["element","jquery"],function(exports){
 			dataType:'json',
 			async:false,
 			success:function(data){
-				$(".navBar").html(navBar(data)).height($(window).height()-230);
+				var d=buildTree(data);
+				$(".navBar").html(navBar(d)).height($(window).height()-230);
 				element.init();  //初始化页面元素
 				$(window).resize(function(){
 					$(".navBar").height($(window).height()-230);
@@ -34,7 +35,33 @@ layui.define(["element","jquery"],function(exports){
 			}
 		});
 	}
-
+	
+	function addSearchContent(node){
+		var title=node.title;
+		var opt='<option value="'+title+'">'+title+'</option>';
+		$('#search-option').append(opt);
+	}
+	
+	function buildTree(data){
+		var arr=[];
+		for (var i=0;i<data.length;i++) {
+			var treeNode=data[i];
+			addSearchContent(treeNode);
+            if (treeNode.pid == null || "0"==treeNode.pid) {
+            	arr.push(treeNode);
+            } else {
+                for (var j=0;j<data.length;j++) {
+                	var parentNode=data[j];
+                    if (treeNode.pid==parentNode.id) {
+                    	parentNode.data.push(treeNode);
+                        break;
+                    }
+                }
+            }
+        }
+        return arr;
+	}
+	
 	//参数设置
 	Tab.prototype.set = function(option) {
 		var _this = this;

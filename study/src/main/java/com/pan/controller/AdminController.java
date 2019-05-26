@@ -24,14 +24,14 @@ import com.pan.query.QueryCollection;
 import com.pan.query.QueryLoginHistory;
 import com.pan.query.QueryPicture;
 import com.pan.query.QueryPraise;
-import com.pan.service.ArticleCheckService;
-import com.pan.service.ArticleService;
-import com.pan.service.CollectionService;
-import com.pan.service.LoginHistoryService;
-import com.pan.service.MessageService;
-import com.pan.service.PictureService;
-import com.pan.service.PraiseService;
-import com.pan.service.UserExtensionService;
+import com.pan.service.IArticleCheckService;
+import com.pan.service.IArticleService;
+import com.pan.service.ICollectionService;
+import com.pan.service.ILoginHistoryService;
+import com.pan.service.IMessageService;
+import com.pan.service.IPictureService;
+import com.pan.service.IPraiseService;
+import com.pan.service.IUserExtensionService;
 import com.pan.util.TokenUtils;
 import com.pan.vo.LoginHistoryVO;
 
@@ -44,28 +44,28 @@ import com.pan.vo.LoginHistoryVO;
 public class AdminController {
 	
 	@Autowired
-	private MessageService messageService;
+	private IMessageService messageService;
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
-	private CollectionService collectionService;
+	private ICollectionService collectionService;
 	
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 	
 	@Autowired
-	private PraiseService praiseService;
+	private IPraiseService praiseService;
 	
 	@Autowired
-	private PictureService pictureService;
+	private IPictureService pictureService;
 	
 	@Autowired
-	private LoginHistoryService loginHistoryService;
+	private ILoginHistoryService loginHistoryService;
 	
 	@Autowired
-	private ArticleCheckService articleCheckService;
+	private IArticleCheckService articleCheckService;
 
 	/**
 	 * 跳转用户后台

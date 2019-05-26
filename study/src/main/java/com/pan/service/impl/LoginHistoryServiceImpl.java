@@ -4,7 +4,7 @@ import com.pan.entity.LoginHistory;
 import com.pan.mapper.LoginHistoryMapper;
 import com.pan.query.QueryLoginHistory;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.LoginHistoryService;
+import com.pan.service.ILoginHistoryService;
 import com.pan.util.BeanUtils;
 import com.pan.util.IPUtils;
 import com.pan.vo.LoginHistoryVO;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @author panzhigao
  */
 @Service
-public class LoginHistoryServiceImpl extends AbstractBaseService<LoginHistory,LoginHistoryMapper> implements LoginHistoryService{
+public class LoginHistoryServiceImpl extends AbstractBaseService<LoginHistory,LoginHistoryMapper> implements ILoginHistoryService{
 
     @Autowired
     private LoginHistoryMapper loginHistoryMapper;

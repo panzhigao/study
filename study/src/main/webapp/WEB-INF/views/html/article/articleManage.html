@@ -159,7 +159,7 @@ layui.use(['table','jquery'], function(){
 	    where:{status:'$!{status}'},
 	    cols: [[ //表头
 	      {field: 'id', title: '文章ID', width:100,fixed: 'left'},
-	      {field: 'title', title: '文章标题', width:240,templet:function(d){
+	      {field: 'title', title: '文章标题', width:240,fixed: 'left',templet:function(d){
 	    	  return "<a target='_blank' href='$!{rc.contextPath}/article/"+d.id+"'>"+d.title+"</a>";
 	      }},
           {field: 'categoryName', title: '文章分类', width:90},
@@ -179,6 +179,12 @@ layui.use(['table','jquery'], function(){
 	       },
 		  {field: 'commentCount', title: '评论数', width:90, sort: true},
 		  {field: 'viewCount', title: '阅读数', width:90, sort: true},
+		  {field:'top', title: '置顶', width:90, sort: true,templet:function(d){
+			  return d.top==1?'是':'否';
+		  }},
+		  {field:'highQuality',title: '精品', width:90, sort: true,templet:function(d){
+			  return d.highQuality==1?'是':'否';
+		  }},
 	      {field: 'createTime', title: '创建时间', width:180, sort: true},
           {field: 'publishTime', title: '发布时间', width:180, sort: true,templet:function(d){
 			  if(!d.publishTime){

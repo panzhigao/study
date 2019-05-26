@@ -52,7 +52,7 @@ import com.pan.query.QueryUser;
  * @author Administrator
  */
 @Service
-public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implements UserService {
+public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implements IUserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
         
@@ -90,25 +90,25 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
     private RoleMapper roleMapper;
     
     @Autowired
-    private UserRoleService userRoleService;
+    private IUserRoleService userRoleService;
 
     @Autowired
-    private UserExtensionService userExtensionService;
+    private IUserExtensionService userExtensionService;
 
     @Autowired
-    private ScoreHistoryService scoreHistoryService;
+    private IScoreHistoryService scoreHistoryService;
 
     @Autowired
-    private LoginHistoryService loginHistoryService;
+    private ILoginHistoryService loginHistoryService;
     
     @Autowired
-    private OperateLogService operateLogService;
+    private IOperateLogService operateLogService;
     
     @Autowired
-    private PictureService pictureService;
+    private IPictureService pictureService;
     
 	@Autowired
-	private EsClientService esClientService;
+	private IEsClientService esClientService;
     
     /**
      * 用户注册,默认新增用户拥有普通用户权限

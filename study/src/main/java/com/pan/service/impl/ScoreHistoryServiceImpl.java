@@ -17,7 +17,7 @@ import com.pan.mapper.ScoreHistoryMapper;
 import com.pan.mapper.UserExtensionMapper;
 import com.pan.query.QueryScoreHistory;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.ScoreHistoryService;
+import com.pan.service.IScoreHistoryService;
 import com.pan.util.DateUtils;
 import com.pan.vo.ScoreHistoryVO;
 
@@ -25,7 +25,7 @@ import com.pan.vo.ScoreHistoryVO;
  * @author panzhigao
  */
 @Service
-public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, ScoreHistoryMapper> implements ScoreHistoryService{
+public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, ScoreHistoryMapper> implements IScoreHistoryService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(ScoreHistoryServiceImpl.class);
 	

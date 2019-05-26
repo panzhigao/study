@@ -16,7 +16,7 @@ import com.pan.query.QueryArticle;
  * @author Administrator
  *
  */
-public interface ArticleService extends BaseService<Article>{
+public interface IArticleService extends BaseService<Article>{
 	/**
 	 * 保存文章
 	 * @param article

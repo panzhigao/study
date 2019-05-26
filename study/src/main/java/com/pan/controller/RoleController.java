@@ -12,7 +12,7 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Role;
 import com.pan.query.QueryRole;
-import com.pan.service.RoleService;
+import com.pan.service.IRoleService;
 
 /**
  * 角色管理
@@ -23,7 +23,7 @@ import com.pan.service.RoleService;
 public class RoleController {
 	
 	@Autowired
-	private RoleService roleService;
+	private IRoleService roleService;
 	
 	/**
 	 * 跳转角色页

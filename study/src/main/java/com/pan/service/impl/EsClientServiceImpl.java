@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
 import com.pan.common.annotation.QueryEsParam;
 import com.pan.common.enums.QueryTypeEnum;
 import com.pan.query.QueryBase;
-import com.pan.service.EsClientService;
+import com.pan.service.IEsClientService;
 import com.pan.util.BeanUtils;
 import com.pan.util.ClassUtils;
 import com.pan.util.JsonUtils;
@@ -50,7 +50,7 @@ import com.pan.util.JsonUtils;
  * @version 创建时间：2018年4月3日 下午12:22:11 类说明
  */
 @Service
-public class EsClientServiceImpl implements EsClientService {
+public class EsClientServiceImpl implements IEsClientService {
 
 	private static final Logger logger = LoggerFactory.getLogger(EsClientServiceImpl.class);
 

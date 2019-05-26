@@ -29,9 +29,9 @@ import com.pan.common.enums.PermissionTypeEnum;
 import com.pan.dto.Tree;
 import com.pan.entity.Permission;
 import com.pan.entity.User;
-import com.pan.service.PermissionService;
-import com.pan.service.RoleService;
-import com.pan.service.UserService;
+import com.pan.service.IPermissionService;
+import com.pan.service.IRoleService;
+import com.pan.service.IUserService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -42,13 +42,13 @@ public class MyRealm extends AuthorizingRealm {
 	private static final Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	@Autowired
-	private RoleService roleService;
+	private IRoleService roleService;
 
 	@Autowired
-	private PermissionService permissionService;
+	private IPermissionService permissionService;
 	
 	@Autowired
 	private RedisSessionDAO redisSessionDAO;
@@ -85,8 +85,8 @@ public class MyRealm extends AuthorizingRealm {
 		}
 		List<Tree> nodeList = nodes.stream().distinct().collect(Collectors.toList());
 		//构建用户中心左侧菜单栏
-		List<Tree> buildTree = Tree.buildTree(nodeList, true);
-		TokenUtils.setAttribute("menus", buildTree);
+		//List<Tree> buildTree = Tree.buildTree(nodeList, true);
+		TokenUtils.setAttribute("menus", nodeList);
 		return permissions;
 	}
 	

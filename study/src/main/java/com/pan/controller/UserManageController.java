@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.dto.Tree;
 import com.pan.query.QueryUser;
-import com.pan.service.RoleService;
-import com.pan.service.UserService;
+import com.pan.service.IRoleService;
+import com.pan.service.IUserService;
 
 /**
  * 
@@ -25,10 +25,10 @@ import com.pan.service.UserService;
 public class UserManageController {
 		
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	@Autowired
-	private RoleService roleService;
+	private IRoleService roleService;
 	
 	/**
 	 * 跳转用户管理

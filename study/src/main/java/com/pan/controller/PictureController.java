@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Picture;
 import com.pan.query.QueryPicture;
-import com.pan.service.PictureService;
+import com.pan.service.IPictureService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -29,7 +29,7 @@ public class PictureController {
 	private static final Logger logger=LoggerFactory.getLogger(PictureController.class);
 	
 	@Autowired
-	private PictureService pictureService;
+	private IPictureService pictureService;
 	
 	/**
 	 * 跳转用户相册

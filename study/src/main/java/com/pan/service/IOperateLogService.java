@@ -8,7 +8,7 @@ import com.pan.query.QueryOperateLog;
 /**
  * @author panzhigao
  */
-public interface OperateLogService extends BaseService<OperateLog>{
+public interface IOperateLogService extends BaseService<OperateLog>{
     /**
      * 新增操作日志
      * @param content

@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 import com.pan.entity.UserExtension;
 import com.pan.query.QueryScoreHistory;
 import com.pan.query.QueryUserExtension;
-import com.pan.service.ArticleService;
-import com.pan.service.ScoreHistoryService;
-import com.pan.service.UserExtensionService;
+import com.pan.service.IArticleService;
+import com.pan.service.IScoreHistoryService;
+import com.pan.service.IUserExtensionService;
 import com.pan.util.DateUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.RedisLock;
@@ -32,13 +32,13 @@ public class OperateCountTask {
 	private static final Logger logger = LoggerFactory.getLogger(OperateCountTask.class);
 
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private IScoreHistoryService scoreHistoryService;
 
 	/**
 	 * 文章评论数锁

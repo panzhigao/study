@@ -15,7 +15,7 @@ import com.pan.query.QueryBase;
  * @version 创建时间：2018年4月3日 下午12:21:51
  * 类说明
  */
-public interface EsClientService {
+public interface IEsClientService {
 	/**
 	 * 创建索引
 	 * @param index

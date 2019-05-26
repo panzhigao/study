@@ -7,7 +7,7 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.query.QueryArticle;
-import com.pan.service.ArticleService;
+import com.pan.service.IArticleService;
 import com.pan.util.TokenUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -29,14 +29,14 @@ public class SystemNoticeController {
     private static final Logger logger= LoggerFactory.getLogger(SystemNoticeController.class);
 
     @Autowired
-    private ArticleService articleService;
+    private IArticleService articleService;
 
     /**
      * 跳转发送系统公告页面
      * @return
      */
     @RequestMapping(method= RequestMethod.GET,value="/user/systemNotice")
-    @RequiresPermissions("/user/systemNotice")
+    @RequiresPermissions("systemNotice:load")
     public ModelAndView toSendMessageIndex(){
         ModelAndView mav=new ModelAndView("html/systemNotice/systemNoticePage");
         return mav;
@@ -49,7 +49,7 @@ public class SystemNoticeController {
      */
     @RequestMapping(method=RequestMethod.POST,value="/user/systemNotice/send")
     @ResponseBody
-    @RequiresPermissions(value="/user/systemNotice")
+    @RequiresPermissions(value="systemNotice:load")
     public ResultMsg sendMessage(Article article){
         logger.info("发布系统公告开始");
         Long userId= TokenUtils.getLoginUserId();
@@ -64,7 +64,7 @@ public class SystemNoticeController {
      */
     @RequestMapping(method=RequestMethod.POST,value="/user/systemNotice/getPageData")
     @ResponseBody
-    @RequiresPermissions(value="/user/systemNotice")
+    @RequiresPermissions(value="systemNotice:load")
     public PageDataMsg getArticleList(QueryArticle queryArticle){
         queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
         queryArticle.setType(ArticleTypeEnum.TYPE_SYSTEM_NOTICE.getCode());

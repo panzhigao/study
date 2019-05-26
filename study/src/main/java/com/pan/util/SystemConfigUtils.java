@@ -10,7 +10,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.pan.entity.SystemConfig;
-import com.pan.service.SystemConfigService;
+import com.pan.service.ISystemConfigService;
 
 /**
  * 系统配置
@@ -24,7 +24,7 @@ public class SystemConfigUtils {
 	public static LoadingCache<String, SystemConfig> systemConfigCache;
 	
 	@Autowired
-	private SystemConfigService systemConfigService;
+	private ISystemConfigService systemConfigService;
 		
 	/**
 	 * 初始化配置

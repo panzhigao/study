@@ -5,7 +5,7 @@ import com.pan.common.enums.MessageStatusEnum;
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.entity.ExceptionLog;
 import com.pan.query.QueryExceptionLog;
-import com.pan.service.ExceptionLogService;
+import com.pan.service.IExceptionLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class ExceptionLogController {
 
     @Autowired
-    private ExceptionLogService exceptionLogService;
+    private IExceptionLogService exceptionLogService;
 
     /**
      * 跳转操作异常日志列表

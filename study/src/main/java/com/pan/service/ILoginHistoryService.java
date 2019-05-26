@@ -9,7 +9,7 @@ import com.pan.vo.LoginHistoryVO;
 /**
  * @author panzhigao
  */
-public interface LoginHistoryService extends BaseService<LoginHistory>{
+public interface ILoginHistoryService extends BaseService<LoginHistory>{
 	
 	List<LoginHistoryVO> findVOPageable(QueryLoginHistory queryLoginHistory);
 	

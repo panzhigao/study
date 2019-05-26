@@ -9,7 +9,7 @@ import com.pan.entity.Message;
  * @author Administrator
  *
  */
-public interface MessageService extends BaseService<Message>{
+public interface IMessageService extends BaseService<Message>{
 	/**
 	 * 发送消息到指定用户
 	 * @param message 消息内容

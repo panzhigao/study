@@ -4,7 +4,7 @@ import com.pan.entity.UserRole;
 import com.pan.mapper.UserRoleMapper;
 import com.pan.query.QueryUserRole;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.UserRoleService;
+import com.pan.service.IUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author panzhigao
  */
 @Service
-public class UserRoleServiceImpl extends AbstractBaseService<UserRole,UserRoleMapper> implements UserRoleService{
+public class UserRoleServiceImpl extends AbstractBaseService<UserRole,UserRoleMapper> implements IUserRoleService{
 
     @Autowired
     private UserRoleMapper userRoleMapper;

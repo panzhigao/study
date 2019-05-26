@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.pan.common.enums.OperateLogTypeEnum;
 import com.pan.query.QueryOperateLog;
-import com.pan.service.OperateLogService;
+import com.pan.service.IOperateLogService;
 
 /**
  * 操作日志
@@ -22,7 +22,7 @@ import com.pan.service.OperateLogService;
 public class OperateLogController {
 	
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 	
 	/**
 	 * 跳转操作日志列表

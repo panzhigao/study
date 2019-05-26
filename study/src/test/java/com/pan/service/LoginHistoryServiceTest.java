@@ -16,7 +16,7 @@ import com.pan.vo.LoginHistoryVO;
 public class LoginHistoryServiceTest extends BaseTest{
 	
 	@Autowired
-	private LoginHistoryService loginHistoryService;
+	private ILoginHistoryService loginHistoryService;
 	
 	@Test
 	public void testFindVOPageable() {

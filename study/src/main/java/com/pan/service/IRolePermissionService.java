@@ -9,7 +9,7 @@ import com.pan.entity.RolePermission;
  * @version 创建时间：2018年3月30日 上午9:23:16
  * 类说明
  */
-public interface RolePermissionService {
+public interface IRolePermissionService {
 	/**
 	 * 根据权限删除角色权限信息
 	 * @param permissionId 权限id

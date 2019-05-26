@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ArticleCheck;
 import com.pan.query.QueryArticleCheck;
-import com.pan.service.ArticleCheckService;
+import com.pan.service.IArticleCheckService;
 import com.pan.util.TransFieldUtils;
 
 /**
@@ -23,7 +23,7 @@ import com.pan.util.TransFieldUtils;
 public class ArticleCheckController {
 	
 	@Autowired
-	private ArticleCheckService articleCheckService;
+	private IArticleCheckService articleCheckService;
 	
 	/**
 	 * 跳转文章审核页

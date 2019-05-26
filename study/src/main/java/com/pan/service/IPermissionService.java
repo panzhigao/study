@@ -10,7 +10,7 @@ import com.pan.entity.Permission;
  * @author Administrator
  *
  */
-public interface PermissionService extends BaseService<Permission>{
+public interface IPermissionService extends BaseService<Permission>{
 	/**
 	 * 添加权限
 	 */

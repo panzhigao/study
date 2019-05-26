@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.pan.entity.Link;
 import com.pan.entity.User;
-import com.pan.service.LinkService;
+import com.pan.service.ILinkService;
 import com.pan.util.IPUtils;
 import com.pan.util.SpringContextUtils;
 import com.pan.util.TokenUtils;
@@ -56,7 +56,7 @@ public class SessionInterceptor implements HandlerInterceptor{
 				modelAndView.addObject(MyConstant.USER,loginUser);
 			}
 			modelAndView.addObject(MyConstant.SYSTEM_CONFIG,new SystemConfig());
-			LinkService linkService = SpringContextUtils.getBean(LinkService.class);
+			ILinkService linkService = SpringContextUtils.getBean(ILinkService.class);
 			List<Link> onlineLinkList = linkService.getOnlineLinkList();
 			modelAndView.addObject(MyConstant.ONLINE_LINK_LIST,onlineLinkList);
 			modelAndView.addObject(MyConstant.ONLINE_ARTICLE_CATEGORY_LIST, ArticleCategoryServiceImpl.getOnlineCategoryThroughCache());

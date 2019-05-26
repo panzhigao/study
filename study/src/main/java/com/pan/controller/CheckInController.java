@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.ScoreHistory;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -20,7 +20,7 @@ import com.pan.util.TokenUtils;
 public class CheckInController {
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	/**
 	 * 用户签到

@@ -1,6 +1,6 @@
 package com.pan.controller;
 
-import com.pan.service.UserExtensionService;
+import com.pan.service.IUserExtensionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.dto.PasswordDTO;
 import com.pan.entity.User;
 import com.pan.entity.UserExtension;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 import com.pan.util.PasswordUtils;
 import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
@@ -33,10 +33,10 @@ import java.util.Date;
 public class UserSetController {
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 
 	@Value("${cookie.maxAge}")
 	private int cookieMaxage;

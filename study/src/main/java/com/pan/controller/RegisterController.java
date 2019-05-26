@@ -17,7 +17,7 @@ import com.pan.common.constant.MyConstant;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 import com.pan.util.RSAUtil;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -36,7 +36,7 @@ public class RegisterController {
 	private int cookieMaxage;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	/**
 	 * 跳转注册页

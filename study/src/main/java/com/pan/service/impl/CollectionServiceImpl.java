@@ -12,8 +12,8 @@ import com.pan.entity.Article;
 import com.pan.entity.Collection;
 import com.pan.mapper.CollectionMapper;
 import com.pan.query.QueryCollection;
-import com.pan.service.ArticleService;
-import com.pan.service.CollectionService;
+import com.pan.service.IArticleService;
+import com.pan.service.ICollectionService;
 
 
 /**
@@ -22,12 +22,12 @@ import com.pan.service.CollectionService;
  * 
  */
 @Service
-public class CollectionServiceImpl extends AbstractBaseService<Collection,CollectionMapper> implements CollectionService {
+public class CollectionServiceImpl extends AbstractBaseService<Collection,CollectionMapper> implements ICollectionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CollectionServiceImpl.class);
 
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
 	private CollectionMapper collectionMapper;

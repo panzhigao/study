@@ -22,8 +22,8 @@ import com.pan.common.exception.BusinessException;
 import com.pan.entity.ArticleCategory;
 import com.pan.mapper.ArticleCategoryMapper;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.ArticleCategoryService;
-import com.pan.service.OperateLogService;
+import com.pan.service.IArticleCategoryService;
+import com.pan.service.IOperateLogService;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
 
@@ -34,7 +34,7 @@ import javax.annotation.PostConstruct;
  * @author panzhigao
  */
 @Service
-public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCategory, ArticleCategoryMapper> implements ArticleCategoryService{
+public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCategory, ArticleCategoryMapper> implements IArticleCategoryService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ArticleCategoryServiceImpl.class);
 
@@ -46,7 +46,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 	private ArticleCategoryMapper articleCategoryMapper;
 	
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 	
 	@Override
 	protected ArticleCategoryMapper getBaseMapper() {

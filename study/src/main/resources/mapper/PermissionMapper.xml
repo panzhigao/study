@@ -52,7 +52,7 @@
 		<include refid="Base_Column_List" />
 		from t_permission
 		<include refid="whereSql"/>
-		order by create_time asc
+		order by sort asc,create_time asc
 		<if test="offset!=null and row !=null">
 			limit #{offset},#{row}
 		</if>
@@ -229,6 +229,7 @@
 		join t_permission tp
 		on tp.id=trp.permission_id where
 		tu.id=#{userId}
+		order by tp.sort asc,tp.create_time asc
 	</select>
 	
 	<select id="findByParentId" resultMap="BaseResultMap">

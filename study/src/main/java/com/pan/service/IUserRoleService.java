@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author panzhigao
  */
-public interface UserRoleService extends BaseService<UserRole>{
+public interface IUserRoleService extends BaseService<UserRole>{
     /**
      * 批量添加加用户角色
      * @param list

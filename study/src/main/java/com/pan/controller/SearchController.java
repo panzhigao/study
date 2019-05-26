@@ -13,8 +13,8 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.query.QueryArticle;
 import com.pan.query.QueryUser;
-import com.pan.service.ArticleService;
-import com.pan.service.UserService;
+import com.pan.service.IArticleService;
+import com.pan.service.IUserService;
 
 /**
  * @author 作者
@@ -25,10 +25,10 @@ import com.pan.service.UserService;
 public class SearchController {
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 		
 	@RequestMapping(method=RequestMethod.GET,value="/search")
 	public ModelAndView getSearchContent(String q,String type){

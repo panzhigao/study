@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.pan.common.constant.MyConstant;
 import com.pan.common.enums.RedisChannelEnum;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 import com.pan.util.JedisUtils;
 import com.pan.util.SpringContextUtils;
 
@@ -28,7 +28,7 @@ public class UserEsProcessor implements SubProcessor{
 	@Override
 	public void handel(String message) {
 		logger.info("用户es更新,message={}",message);
-		UserService userService = SpringContextUtils.getBean(UserService.class);
+		IUserService userService = SpringContextUtils.getBean(IUserService.class);
     	String id = JedisUtils.brpoplpush(MyConstant.USER_ES_REDIS_LIST, MyConstant.USER_ES_REDIS_LIST_BAK);
     	if(StringUtils.isNumeric(id)){
     		logger.info("用户文章es数据,id={}",id);

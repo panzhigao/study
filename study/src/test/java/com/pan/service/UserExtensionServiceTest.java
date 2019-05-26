@@ -10,10 +10,10 @@ import static org.junit.Assert.*;
 public class UserExtensionServiceTest extends BaseTest {
 
     @Autowired
-    private UserExtensionService userExtensionService;
+    private IUserExtensionService userExtensionService;
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Test
     public void increaseCounts() throws Exception {

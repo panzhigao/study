@@ -18,8 +18,8 @@ import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Article;
 import com.pan.entity.User;
 import com.pan.query.QueryArticle;
-import com.pan.service.ArticleService;
-import com.pan.service.UserService;
+import com.pan.service.IArticleService;
+import com.pan.service.IUserService;
 import com.pan.util.JedisUtils;
 import com.pan.util.TokenUtils;
 import com.pan.util.TransFieldUtils;
@@ -35,10 +35,10 @@ public class ArticleController {
 	private static final Logger logger=LoggerFactory.getLogger(ArticleController.class);
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	/**
 	 * 跳转发文页面

@@ -14,7 +14,7 @@ import com.pan.vo.UserVO;
  * @author Administrator
  *
  */
-public interface UserService extends BaseService<User>{
+public interface IUserService extends BaseService<User>{
 	/**
 	 * 注册用户信息
 	 * @param user

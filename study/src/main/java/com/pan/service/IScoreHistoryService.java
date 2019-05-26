@@ -11,7 +11,7 @@ import com.pan.vo.ScoreHistoryVO;
 /**
  * @author panzhigao
  */
-public interface ScoreHistoryService extends BaseService<ScoreHistory>{
+public interface IScoreHistoryService extends BaseService<ScoreHistory>{
 //    /**
 //     * 登陆奖励积分
 //     */

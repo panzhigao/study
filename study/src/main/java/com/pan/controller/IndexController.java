@@ -17,9 +17,9 @@ import com.pan.entity.UserExtension;
 import com.pan.query.QueryArticle;
 import com.pan.query.QueryScoreHistory;
 import com.pan.query.QueryUserExtension;
-import com.pan.service.ArticleService;
-import com.pan.service.ScoreHistoryService;
-import com.pan.service.UserExtensionService;
+import com.pan.service.IArticleService;
+import com.pan.service.IScoreHistoryService;
+import com.pan.service.IUserExtensionService;
 import com.pan.util.TokenUtils;
 import com.pan.vo.ScoreHistoryVO;
 
@@ -32,13 +32,13 @@ import com.pan.vo.ScoreHistoryVO;
 public class IndexController {
 	
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private IScoreHistoryService scoreHistoryService;
 	
 	/**
 	 * 跳转网站主页

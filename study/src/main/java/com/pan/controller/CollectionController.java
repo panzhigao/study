@@ -9,7 +9,7 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.Collection;
 import com.pan.query.QueryCollection;
-import com.pan.service.CollectionService;
+import com.pan.service.ICollectionService;
 import com.pan.util.TokenUtils;
 
 /**
@@ -19,7 +19,7 @@ import com.pan.util.TokenUtils;
 public class CollectionController {
 	
 	@Autowired
-	private CollectionService collectionService;
+	private ICollectionService collectionService;
 	
 	
 	/**

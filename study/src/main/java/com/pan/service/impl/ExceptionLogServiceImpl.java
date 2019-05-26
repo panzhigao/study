@@ -4,7 +4,7 @@ import com.pan.entity.ExceptionLog;
 import com.pan.mapper.ExceptionLogMapper;
 import com.pan.query.QueryExceptionLog;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.ExceptionLogService;
+import com.pan.service.IExceptionLogService;
 import com.pan.util.BeanUtils;
 import com.pan.util.IPUtils;
 import com.pan.util.JsonUtils;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @author panzhigao
  */
 @Service
-public class ExceptionLogServiceImpl extends AbstractBaseService<ExceptionLog, ExceptionLogMapper> implements ExceptionLogService {
+public class ExceptionLogServiceImpl extends AbstractBaseService<ExceptionLog, ExceptionLogMapper> implements IExceptionLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionLogServiceImpl.class);
 

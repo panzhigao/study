@@ -18,12 +18,12 @@ import com.pan.entity.User;
 import com.pan.mapper.CommentMapper;
 import com.pan.query.QueryComment;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.ArticleService;
-import com.pan.service.CommentService;
-import com.pan.service.MessageService;
-import com.pan.service.ScoreHistoryService;
-import com.pan.service.UserExtensionService;
-import com.pan.service.UserService;
+import com.pan.service.IArticleService;
+import com.pan.service.ICommentService;
+import com.pan.service.IMessageService;
+import com.pan.service.IScoreHistoryService;
+import com.pan.service.IUserExtensionService;
+import com.pan.service.IUserService;
 import com.pan.util.IdUtils;
 import com.pan.util.JedisUtils;
 import com.pan.util.TokenUtils;
@@ -36,7 +36,7 @@ import com.pan.vo.CommentVO;
  *
  */
 @Service
-public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMapper> implements CommentService{
+public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMapper> implements ICommentService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(CommentServiceImpl.class);
 	
@@ -44,19 +44,19 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	private CommentMapper commentMapper;
 	
 	@Autowired
-	private MessageService messageService;
+	private IMessageService messageService;
 	
 	@Autowired
-	private ArticleService articleService;
+	private IArticleService articleService;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	@Autowired
-	private ScoreHistoryService scoreHistoryService;
+	private IScoreHistoryService scoreHistoryService;
 	
 	@Autowired
-	private UserExtensionService userExtensionService;
+	private IUserExtensionService userExtensionService;
 	
 	@Override
 	protected CommentMapper getBaseMapper() {

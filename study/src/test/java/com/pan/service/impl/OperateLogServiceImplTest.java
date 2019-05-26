@@ -1,7 +1,7 @@
 package com.pan.service.impl;
 
 import com.pan.entity.OperateLog;
-import com.pan.service.OperateLogService;
+import com.pan.service.IOperateLogService;
 import com.pan.test.base.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import java.util.Date;
 public class OperateLogServiceImplTest extends BaseTest{
 
     @Autowired
-    private OperateLogService operateLogService;
+    private IOperateLogService operateLogService;
 
     @Test
     public void selectByPrimaryKey() throws Exception {

@@ -7,7 +7,7 @@ import com.pan.entity.Link;
 /**
  * @author panzhigao
  */
-public interface LinkService extends BaseService<Link>{
+public interface ILinkService extends BaseService<Link>{
 	/**
 	 * 新增链接
 	 * @param link

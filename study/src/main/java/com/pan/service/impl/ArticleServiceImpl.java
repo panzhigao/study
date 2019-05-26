@@ -55,7 +55,7 @@ import com.pan.util.ValidationUtils;
  * 
  */
 @Service
-public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapper> implements ArticleService {
+public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapper> implements IArticleService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	/**
@@ -64,16 +64,16 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	private static final int CACHE_SECONDS=1800;
 	
 	@Autowired
-	private EsClientService esClientService;
+	private IEsClientService esClientService;
 
 	@Autowired
 	private ArticleMapper articleMapper;
 
 	@Autowired
-	private ArticleCheckService articleCheckService;
+	private IArticleCheckService articleCheckService;
 	
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 	
 	@Override
 	protected ArticleMapper getBaseMapper() {

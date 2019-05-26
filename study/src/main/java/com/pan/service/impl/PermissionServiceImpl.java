@@ -34,7 +34,7 @@ import com.pan.util.ValidationUtils;
  * 
  */
 @Service
-public class PermissionServiceImpl extends AbstractBaseService<Permission,PermissionMapper> implements  PermissionService {
+public class PermissionServiceImpl extends AbstractBaseService<Permission,PermissionMapper> implements  IPermissionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(PermissionServiceImpl.class);
 	
@@ -42,16 +42,16 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	private PermissionMapper permissionMapper;
 	
 	@Autowired
-	private RoleService roleService;
+	private IRoleService roleService;
 	
 	@Autowired
-	private RolePermissionService rolePermissionService;
+	private IRolePermissionService rolePermissionService;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 	
 	/**
 	 * 校验权限点

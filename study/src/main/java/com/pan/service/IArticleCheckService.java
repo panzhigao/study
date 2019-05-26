@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author panzhigao
  */
-public interface ArticleCheckService extends BaseService<ArticleCheck>{
+public interface IArticleCheckService extends BaseService<ArticleCheck>{
 	/**
 	 * 新增文章审核记录
 	 * @param articleCheck

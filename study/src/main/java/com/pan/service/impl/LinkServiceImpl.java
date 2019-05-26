@@ -24,8 +24,8 @@ import com.pan.entity.User;
 import com.pan.mapper.LinkMapper;
 import com.pan.query.QueryLink;
 import com.pan.service.AbstractBaseService;
-import com.pan.service.LinkService;
-import com.pan.service.OperateLogService;
+import com.pan.service.ILinkService;
+import com.pan.service.IOperateLogService;
 import com.pan.util.Publisher;
 import com.pan.util.TokenUtils;
 import com.pan.util.ValidationUtils;
@@ -35,7 +35,7 @@ import com.pan.util.ValidationUtils;
  * @author panzhigao
  */
 @Service
-public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> implements LinkService {
+public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> implements ILinkService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkServiceImpl.class);
 
@@ -48,7 +48,7 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	private LinkMapper linkMapper;
 
 	@Autowired
-	private OperateLogService operateLogService;
+	private IOperateLogService operateLogService;
 
 	@Override
 	protected LinkMapper getBaseMapper() {

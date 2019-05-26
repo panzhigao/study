@@ -6,7 +6,7 @@ import com.pan.entity.ArticleCategory;
 /**
  * @author panzhigao
  */
-public interface ArticleCategoryService extends BaseService<ArticleCategory>{
+public interface IArticleCategoryService extends BaseService<ArticleCategory>{
 	/**
 	 * 新增文章分类
 	 * @param articleCategory

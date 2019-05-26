@@ -24,7 +24,7 @@ import com.pan.common.enums.ResultCodeEnum;
 import com.pan.common.exception.BusinessException;
 import com.pan.common.vo.ResultMsg;
 import com.pan.entity.User;
-import com.pan.service.UserService;
+import com.pan.service.IUserService;
 import com.pan.util.RSAUtil;
 import com.pan.util.RegexUtils;
 import com.pan.util.TokenUtils;
@@ -44,7 +44,7 @@ public class LoginController{
 	private int cookieMaxage;
 	
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	/**
 	 * 跳转登录页

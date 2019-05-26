@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pan.entity.UserExtension;
 import com.pan.mapper.UserExtensionMapper;
-import com.pan.service.UserExtensionService;
+import com.pan.service.IUserExtensionService;
 
 /**
  * @author 作者
@@ -16,7 +16,7 @@ import com.pan.service.UserExtensionService;
  * 类说明
  */
 @Service
-public class UserExtensionServiceImpl extends AbstractBaseService<UserExtension,UserExtensionMapper> implements UserExtensionService{
+public class UserExtensionServiceImpl extends AbstractBaseService<UserExtension,UserExtensionMapper> implements IUserExtensionService{
 	
 	private static final Logger logger=LoggerFactory.getLogger(UserExtensionServiceImpl.class);
 	
