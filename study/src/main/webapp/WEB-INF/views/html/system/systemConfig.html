@@ -30,12 +30,6 @@
 				</div>
 				#end
 				
-				#hasPermission('article:syncEs')
-				<div class="layui-btn-group">
-					<button class="layui-btn" id="btnSync">同步文章ES数据</button>
-				</div>
-				#end
-
 				<table id="configTable" lay-filter="configTab"></table>
 
 			</div>
@@ -84,28 +78,7 @@
             showTab('新增变量','');
         });
         
-        $('#btnSync').on('click', function() {
-            $.ajax({
-            	url:'/user/article/syncEs',
-            	type:'post',
-            	dataType:'json',
-            	beforeSend:function(){
-            		var index = layer.load(1, {
-            			  shade: [0.1,'#fff'] //0.1透明度的白色背景
-            		});
-            	},
-            	success:function(res){
-            		layer.closeAll('loading');
-            		if(res.code==200){
-            			layer.alert(res.msg);
-            		}else{
-            			layer.alert(res.msg);
-            		}
-            	}
-            	
-            })
-        });
-
+       
         //监听工具条
         table.on('tool(configTab)', function(obj){
             var data = obj.data;

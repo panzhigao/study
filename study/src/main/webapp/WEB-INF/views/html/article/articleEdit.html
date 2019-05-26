@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>发表问题 编辑问题 公用</title>
+  <title>编辑文章</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="#config('keywords')#end">
   <meta name="description" content="#config('description')#end">
@@ -62,16 +62,9 @@
   </div>
 </div>
 <script src="$!{rc.contextPath}/static/res/layui/layui.js"></script>
+<script src="$!{rc.contextPath}/static/ace/ace.js"></script>
 <script type="text/javascript" src="$!{rc.contextPath}/static/js/jquery.js"></script>
 <script>
-layui.cache.page = 'jie';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '$!{rc.contextPath}/static/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
 layui.config({
   version: "3.0.0"
   ,base: '$!{rc.contextPath}/static/res/mods/'
@@ -80,12 +73,17 @@ layui.config({
 }).use('fly');
 
 layui.use(['form','layedit'], function(){
-	  var layedit = layui.layedit;
+	var layedit = layui.layedit;
 	  layedit.set({
 		  uploadImage: {
-		    url: '$!{rc.contextPath}/file/upload' //接口url
-		    ,type: 'post' //默认post
-		  }
+		    url: '$!{rc.contextPath}/api/user/upload', //接口url
+		    type: 'post', //默认post
+		    multiple: true
+		  },tool: [
+                'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
+                , '|', 'left', 'center', 'right', '|', 'link', 'unlink','images', 'image_alt', 'video', 'anchors'
+                , '|','table', 'fullScreen'
+            ]
 	   });
 	  var index=layedit.build('L_content'); //建立编辑器
 	  var form = layui.form;

@@ -12,9 +12,16 @@
   <link rel="stylesheet" href="$!{rc.contextPath}/static/res/css/global.css">
 </head>
 <body class="childrenBody">
+
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
-    
+      <div class="layui-btn-group">
+   		#hasPermission('article:syncEs')
+		<div class="layui-btn-group">
+			<button class="layui-btn" id="btnSync">同步文章ES数据</button>
+		</div>
+		#end
+  	  </div>
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="notComplete" lay-id="index" class="layui-this" >待审核的帖（<span id='notCompleteCount'></span>）</li>
         <li data-type="complete" lay-id="index" >已审核的帖（<span id='completeCount'></span>）</li>
@@ -279,6 +286,29 @@ layui.use(['table','jquery'], function(){
 	      }}
 	    ]]
 	  });
+	  
+	  $('#btnSync').on('click', function() {
+          $.ajax({
+          	url:'/user/article/syncEs',
+          	type:'post',
+          	dataType:'json',
+          	beforeSend:function(){
+          		var index = layer.load(1, {
+          			  shade: [0.1,'#fff'] //0.1透明度的白色背景
+          		});
+          	},
+          	success:function(res){
+          		layer.closeAll('loading');
+          		if(res.code==200){
+          			layer.alert(res.msg);
+          		}else{
+          			layer.alert(res.msg);
+          		}
+          	}
+          	
+          })
+      });
+	  
 });
 
 function view(id){
