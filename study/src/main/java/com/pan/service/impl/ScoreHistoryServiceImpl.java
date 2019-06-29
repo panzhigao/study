@@ -2,10 +2,13 @@ package com.pan.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import com.pan.common.constant.PageConstant;
 import com.pan.common.enums.ScoreTypeEnum;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,19 +175,38 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	 * @return
 	 */
 	@Override
-	public Map<String,List<ScoreHistory>> findShowData(QueryScoreHistory historyVO) {
-		List<ScoreHistory> list = scoreHistoryMapper.findPageable(historyVO);
-		Map<String,List<ScoreHistory>> resultMap=new LinkedHashMap<String, List<ScoreHistory>>(list.size());
+	public Map<String,Object> findShowData(QueryScoreHistory query) {
+		Map<String,Object> resultMap=new HashMap<>(4);
+		Map<String,List<ScoreHistory>> dataMap=new LinkedHashMap<String, List<ScoreHistory>>();
+		resultMap.put("data",dataMap);
+		
+		//查询5天记录
+		query.setPageSize(PageConstant.PAGE_SIZE_5);
+		List<ScoreHistory> selectByScoreDate = scoreHistoryMapper.selectByScoreDate(query);
+		if(CollectionUtils.isEmpty(selectByScoreDate)){
+			resultMap.put("hasData",false);
+			return resultMap;
+		}else{
+			resultMap.put("hasData",true);
+		}
+		
+		QueryScoreHistory query2=new QueryScoreHistory();
+		query2.setOrderCondition("create_time desc");
+		query2.setUserId(query.getUserId());
+		query2.setScoreDateStart(new java.sql.Date(selectByScoreDate.get(selectByScoreDate.size()-1).getScoreDate().getTime()));
+		query2.setScoreDateEnd(new java.sql.Date(selectByScoreDate.get(0).getScoreDate().getTime()));
+		List<ScoreHistory> list = scoreHistoryMapper.findPageable(query2);
+		
 		for (ScoreHistory scoreHistory : list) {
 			Date scoreDate = scoreHistory.getScoreDate();
 			String dateStr = DateUtils.getDateStr(scoreDate,DateUtils.FORMAT_DATE);
-			if(resultMap.get(dateStr)!=null){
-				List<ScoreHistory> histories=resultMap.get(dateStr);
+			if(dataMap.get(dateStr)!=null){
+				List<ScoreHistory> histories=dataMap.get(dateStr);
 				histories.add(scoreHistory);
 			}else{
 				List<ScoreHistory> list2=new ArrayList<>();
 				list2.add(scoreHistory);
-				resultMap.put(dateStr,list2);
+				dataMap.put(dateStr,list2);
 			}	
 		}
 		return resultMap;

@@ -47,13 +47,13 @@ layui.config({
         	$.ajax({
         		url:'$!{rc.contextPath}/user/scoreHistory/getPageData',
         		type:'post',
-        		data:{scoreDateStart:scoreDateStart,scoreDateEnd:scoreDateEnd},
+        		data:{pageNo:pageNo},
         		dataType:'json',
         		success:function(result){
         			if(result.code=='200'){
         				var data=result.data.data;
-        				scoreDateEnd=scoreDateStart;
-        				scoreDateStart=minusDays(new Date(scoreDateEnd),5);
+//         				scoreDateEnd=scoreDateStart;
+//         				scoreDateStart=minusDays(new Date(scoreDateEnd),5);
         				var listArr = [];
         				for(var key in data){
         					var list=data[key];
@@ -91,7 +91,6 @@ layui.config({
         					listArr.push(one);
         				}
         				next(listArr.join(''), result.data.hasData);
-                        //form.render();
         			}else{
         				layer.msg("加载积分历史失败");
         			}

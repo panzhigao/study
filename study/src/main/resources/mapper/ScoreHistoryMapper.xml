@@ -125,5 +125,12 @@
   		</if>
   	</where>
   </sql>
- 
+ 	
+ <select id="selectByScoreDate" resultMap="BaseResultMap" parameterType="com.pan.query.QueryScoreHistory">
+ 	select user_id,score_date from t_score_history where user_id=#{userId,jdbcType=BIGINT} 
+ 	group by score_date order by score_date desc
+ 	<if test="offset!=null and row !=null">
+  		limit #{offset},#{row}
+  	</if>
+ </select>
 </mapper>

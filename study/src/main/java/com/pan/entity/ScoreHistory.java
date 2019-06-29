@@ -2,8 +2,8 @@ package com.pan.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 积分历史
@@ -37,6 +37,7 @@ public class ScoreHistory extends BaseEntity {
     /**
      * 积分日期
      */
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date scoreDate;
     /**
      * 积分总计

@@ -12,10 +12,6 @@ import com.pan.vo.ScoreHistoryVO;
  * @author panzhigao
  */
 public interface IScoreHistoryService extends BaseService<ScoreHistory>{
-//    /**
-//     * 登陆奖励积分
-//     */
-//    void addLoginScore(Long userId);
     /**
      * 签到
      * @param userId 用户id
@@ -47,5 +43,5 @@ public interface IScoreHistoryService extends BaseService<ScoreHistory>{
      * @param queryScoreHistory
      * @return
      */
-    Map<String, List<ScoreHistory>> findShowData(QueryScoreHistory queryScoreHistory);
+    Map<String,Object> findShowData(QueryScoreHistory queryScoreHistory);
 }

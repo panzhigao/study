@@ -23,6 +23,10 @@ public class PageConstant {
      */
     public static final int PAGE_SIZE_5=5;
     /**
+     * 分页10
+     */
+    public static final int PAGE_SIZE_10=10;
+    /**
      * 分页20
      */
     public static final int PAGE_SIZE_20=20;

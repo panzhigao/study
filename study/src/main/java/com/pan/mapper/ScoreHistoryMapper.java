@@ -16,5 +16,7 @@ public interface ScoreHistoryMapper extends BaseMapper<ScoreHistory>{
 	 * @param queryScoreHistoryVO
 	 * @return
 	 */
-	public List<ScoreHistoryVO> findVOPageable(QueryScoreHistory queryScoreHistoryVO);
+	List<ScoreHistoryVO> findVOPageable(QueryScoreHistory queryScoreHistoryVO);
+	
+	List<ScoreHistory> selectByScoreDate(QueryScoreHistory queryScoreHistoryVO);
 }
