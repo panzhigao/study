@@ -73,6 +73,7 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 			public List<ArticleCategory> load(Long key) throws Exception {
 				logger.info("从数据库加载所有文章分类，key={}",key);
 				QueryArticleCategory queryArticleCategory=new QueryArticleCategory();
+				queryArticleCategory.toggleLimit(false);
 				queryArticleCategory.setOrderCondition("sort asc");
 				List<ArticleCategory> all = articleCategoryMapper.findPageable(queryArticleCategory);
 				return all;

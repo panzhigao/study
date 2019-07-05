@@ -74,7 +74,7 @@ public class QueryBase {
         this.endDate = endDate;
     }
 
-    protected void changeLimit(boolean limitPage){
+    public void toggleLimit(boolean limitPage){
         this.limitPage=limitPage;
     }
 
@@ -117,10 +117,10 @@ public class QueryBase {
 
     public Integer getPageSize() {
         if (pageSize == null) {
-            return PageConstant.PAGE_SIZE_10;
+            return PageConstant.PAGE_SIZE_20;
         }
         if(pageSize<PageConstant.PAGE_SIZE_0){
-            return PageConstant.PAGE_SIZE_10;
+            return PageConstant.PAGE_SIZE_20;
         }
         if(limitPage && pageSize>PageConstant.PAGE_SIZE_100){
             return PageConstant.PAGE_SIZE_100;
