@@ -21,6 +21,7 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+				/druid/**=anno
 			    /login=anon
 				/=anon
 				/index=anon
