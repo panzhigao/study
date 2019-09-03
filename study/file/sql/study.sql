@@ -804,9 +804,6 @@ CREATE TABLE `t_user` (
 INSERT INTO `t_user` VALUES ('1523899', '1', 'admin', '大哥大', '6FA456619C9CD1E640134D615945CBA05D5F26DC32003EF3E59DA2A5', '2019-03-30 18:41:28', '2019-05-26 18:11:05', '1', '18911536627', '2019-05-11 17:16:28', 'http://www.panzhigao.vip/myimage/20190511171628096.jpg', '0', '1', '北京', '好好学习天天向上');
 INSERT INTO `t_user` VALUES ('1524965', '1', 'gangtiexia', '钢铁侠', 'D2D5F45EA8D6F5D54EDE7A768BF1A3625F93B61F428B71539F7D9B7A', '2019-03-31 12:16:08', '2019-05-02 00:13:52', '1', '', '2019-05-02 00:14:22', 'http://www.panzhigao.vip/myimage/20190502001422523.jpg', '0', '0', '', '');
 INSERT INTO `t_user` VALUES ('1525055', '1', 'lvdengxia', '绿灯侠', '0701BC65DCF322E5A6304ED34D683AEE3F80DD262C26C8043BCB14B9', '2019-03-31 13:38:25', '2019-05-12 17:08:16', '1', '', '2019-05-12 17:10:19', 'http://www.panzhigao.vip/myimage/20190512171019678.jpg', '0', '0', '美国', '');
-INSERT INTO `t_user` VALUES ('1573184', '2', 'songdaofeng', '松岛枫', 'A443968668B2571ACD9086312469143F8CAD1ADCA271D5B543E696C3', '2019-05-03 22:42:58', '2019-05-17 23:14:21', '1', '', '2019-05-17 23:17:08', 'http://www.panzhigao.vip/myimage/20190503224320159.jpg', '0', '0', '', '大家好');
-INSERT INTO `t_user` VALUES ('1574355', '2', 'jizemingbu', '吉泽明步', 'E9B73F0F9193AE8B49CB0B07010109C05E90DEDF882D0612E5DD2B0E', '2019-05-04 18:09:36', '2019-05-04 18:09:36', '1', '', '2019-05-04 18:11:15', 'http://www.panzhigao.vip/myimage/20190504181115952.jpg', '0', '0', '', '');
-INSERT INTO `t_user` VALUES ('1584177', '2', 'daqiao', '大乔未久', '572CA616240FCEAAFB1F681B4FBF78889FCB48A43E1CB8B2F7369F5C', '2019-05-11 13:39:46', '2019-05-11 13:39:46', '1', '', '2019-05-11 13:58:27', 'http://www.panzhigao.vip/myimage/20190511135827621.jpg', '0', '0', '东京666', '78900');
 INSERT INTO `t_user` VALUES ('1584522', '1', 'meidui', '美国队长', 'BE39BAF79005F5D84328AA4E484EA1861165E96C40D62543C1D0B099', '2019-05-11 19:20:57', '2019-05-11 19:20:57', '1', '', '2019-05-11 19:21:48', 'http://www.panzhigao.vip/myimage/20190511192148846.jpg', '0', '0', '纽约', '我是美队，大家支持我');
 INSERT INTO `t_user` VALUES ('1584712', '0', 'wenzhang', '文章', 'FAB558B4184D2AB9531D67DA8C48F0269883EF9BF1C002238A61CEBF', '2019-05-11 22:21:36', '2019-05-11 22:21:36', '1', '', '2019-05-11 22:22:07', 'http://www.panzhigao.vip/myimage/20190511222207301.jpg', '0', '0', '北京', '大家好，我是文章');
 INSERT INTO `t_user` VALUES ('1584728', '1', 'zhizhuxia', '蜘蛛侠', '95C491DB6D6909159446D3634D90710F6DD48DB32BD0EDBD97CCDF71', '2019-05-11 22:32:24', '2019-05-11 22:32:24', '1', '', '2019-05-11 22:32:51', 'http://www.panzhigao.vip/myimage/20190511223251153.jpg', '0', '0', '纽约', '我是蜘蛛侠');
@@ -815,7 +812,6 @@ INSERT INTO `t_user` VALUES ('1585770', '1', 'liubei', '刘备', 'BB0AFF2D023865
 INSERT INTO `t_user` VALUES ('1585815', '1', 'guanyu', '关羽', 'E897F6C09B5F88BAE09C97F83A9270CE60B17C6B9CFD803DF8D2F81C', '2019-05-12 16:18:27', '2019-05-12 16:18:27', '1', '', '2019-05-12 16:19:24', 'http://www.panzhigao.vip/myimage/20190512161924113.jpg', '0', '0', '荆州', '观尔乃插标卖首');
 INSERT INTO `t_user` VALUES ('1585881', '1', 'caocao', '曹操', 'BEC744D2AC825C0EEB786902EDBAE790A14BB51622451AD5DF8EF626', '2019-05-12 17:17:03', '2019-05-17 23:18:44', '1', '', '2019-05-12 17:17:57', 'http://www.panzhigao.vip/myimage/20190512171721805.jpg', '0', '0', '魏国', '宁教我负天下人，不教天下人负我');
 INSERT INTO `t_user` VALUES ('1585888', '1', 'chenhe', '陈赫', 'FFBEBEA90DE7FEDFE91BC28B3768C3D32A5E9B960E53DD3FF8C93324', '2019-05-12 17:20:23', '2019-05-12 17:20:23', '1', '', '2019-05-12 17:20:46', 'http://www.panzhigao.vip/myimage/20190512172046676.jpg', '0', '0', '', '好男人就是我');
-INSERT INTO `t_user` VALUES ('1585891', '2', 'xingjingxiao', '星井笑', '483E63DEF4A2351B0E7B6039C7F1A57714E4745A8B54A7A28D6C8E24', '2019-05-12 17:22:06', '2019-05-12 17:22:06', '1', '', '2019-05-12 17:22:55', 'http://www.panzhigao.vip/myimage/20190512172255660.jpg', '0', '0', '北京', '');
 
 -- ----------------------------
 -- Table structure for `t_user_extension`
@@ -844,9 +840,6 @@ CREATE TABLE `t_user_extension` (
 INSERT INTO `t_user_extension` VALUES ('1523899', '大哥大', 'http://www.panzhigao.vip/myimage/20190511171628096.jpg', '好好学习天天向上', '2019-03-30 18:41:28', '2019-05-26 17:39:48', '71', '26', '722', '30', '21', '30', '21');
 INSERT INTO `t_user_extension` VALUES ('1524965', '钢铁侠', 'http://www.panzhigao.vip/myimage/20190502001422523.jpg', '', '2019-03-31 12:16:08', '2019-05-02 00:26:23', '3', '3', '66', '3', '2', '3', '2');
 INSERT INTO `t_user_extension` VALUES ('1525055', '绿灯侠', 'http://www.panzhigao.vip/myimage/20190512171019678.jpg', '', '2019-03-31 13:38:25', '2019-05-12 17:26:52', '2', '1', '47', '2', '1', '2', '1');
-INSERT INTO `t_user_extension` VALUES ('1573184', '松岛枫', 'http://www.panzhigao.vip/myimage/20190503224320159.jpg', '大家好', '2019-05-03 22:42:58', '2019-05-17 23:23:17', '2', '4', '48', '2', '0', '2', '0');
-INSERT INTO `t_user_extension` VALUES ('1574355', '吉泽明步', 'http://www.panzhigao.vip/myimage/20190504181115952.jpg', '', '2019-05-04 18:09:36', '2019-05-04 18:19:46', '3', '0', '45', '1', '1', '1', '1');
-INSERT INTO `t_user_extension` VALUES ('1584177', '大乔未久', 'http://www.panzhigao.vip/myimage/20190511135827621.jpg', '78900', '2019-05-11 13:39:46', '2019-05-11 13:58:27', '0', '0', '25', '1', '0', '1', '0');
 INSERT INTO `t_user_extension` VALUES ('1584522', '美国队长', 'http://www.panzhigao.vip/myimage/20190511192148846.jpg', '我是美队，大家支持我', '2019-05-11 19:20:57', '2019-05-11 19:35:48', '1', '1', '37', '1', '1', '1', '1');
 INSERT INTO `t_user_extension` VALUES ('1584712', '文章', 'http://www.panzhigao.vip/myimage/20190511222207301.jpg', '大家好，我是文章', '2019-05-11 22:21:36', '2019-05-11 22:55:42', '4', '0', '45', '1', '0', '1', '0');
 INSERT INTO `t_user_extension` VALUES ('1584728', '蜘蛛侠', 'http://www.panzhigao.vip/myimage/20190511223251153.jpg', '我是蜘蛛侠', '2019-05-11 22:32:24', '2019-05-11 22:55:36', '4', '0', '45', '1', '0', '1', '0');
@@ -855,7 +848,6 @@ INSERT INTO `t_user_extension` VALUES ('1585770', '刘备', 'http://www.panzhiga
 INSERT INTO `t_user_extension` VALUES ('1585815', '关羽', 'http://www.panzhigao.vip/myimage/20190512161924113.jpg', '观尔乃插标卖首', '2019-05-12 16:18:27', '2019-05-12 16:25:06', '2', '0', '35', '1', '0', '1', '0');
 INSERT INTO `t_user_extension` VALUES ('1585881', '曹操', 'http://www.panzhigao.vip/myimage/20190512171721805.jpg', '宁教我负天下人，不教天下人负我', '2019-05-12 17:17:03', '2019-05-17 23:23:03', '4', '1', '57', '2', '1', '2', '1');
 INSERT INTO `t_user_extension` VALUES ('1585888', '陈赫', 'http://www.panzhigao.vip/myimage/20190512172046676.jpg', '好男人就是我', '2019-05-12 17:20:23', '2019-05-12 17:30:14', '1', '2', '39', '1', '1', '1', '1');
-INSERT INTO `t_user_extension` VALUES ('1585891', '星井笑', 'http://www.panzhigao.vip/myimage/20190512172255660.jpg', '', '2019-05-12 17:22:06', '2019-05-12 17:27:37', '1', '1', '32', '1', '0', '1', '0');
 
 -- ----------------------------
 -- Table structure for `t_user_role`
