@@ -33,10 +33,10 @@ public class MessageServiceImpl extends AbstractBaseService<Message, MessageMapp
 	@Autowired
 	private MessageMapper messageMapper;
 	
-	@Override
-	protected MessageMapper getBaseMapper() {
-		return messageMapper;
-	}
+//	@Override
+//	protected MessageMapper getBaseMapper() {
+//		return messageMapper;
+//	}
 	
 
 	@Override

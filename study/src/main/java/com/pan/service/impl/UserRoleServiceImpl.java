@@ -21,11 +21,6 @@ public class UserRoleServiceImpl extends AbstractBaseService<UserRole,UserRoleMa
     private UserRoleMapper userRoleMapper;
 
     @Override
-    protected UserRoleMapper getBaseMapper() {
-        return userRoleMapper;
-    }
-
-    @Override
     public int batchAddUserRole(List<UserRole> list) {
         return userRoleMapper.batchAddUserRole(list);
     }

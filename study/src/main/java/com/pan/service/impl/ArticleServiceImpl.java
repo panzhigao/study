@@ -74,12 +74,7 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 	
 	@Autowired
 	private IOperateLogService operateLogService;
-	
-	@Override
-	protected ArticleMapper getBaseMapper() {
-		return articleMapper;
-	}
-	
+
 	/**
 	 * 校验当前操作码状态是否正常 1-草稿，2-审核中
 	 * 

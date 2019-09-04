@@ -4,6 +4,8 @@ import com.pan.common.vo.PageDataMsg;
 import com.pan.entity.BaseEntity;
 import com.pan.mapper.BaseMapper;
 import com.pan.query.QueryBase;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      * @param
      * @return
      */
-	protected abstract M getBaseMapper();
+    @Autowired
+	protected M baseMapper;
     /**
      * 根据id获取唯一一条数据
      *
@@ -26,7 +29,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
     @Override
     public T selectByPrimaryKey(Long id){
-        return getBaseMapper().selectByPrimaryKey(id);
+        return baseMapper.selectByPrimaryKey(id);
     }
     /**
      * 根据主键删除
@@ -36,7 +39,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
     @Override
     public int deleteByPrimaryKey(Long id) {
-        return getBaseMapper().deleteByPrimaryKey(id);
+        return baseMapper.deleteByPrimaryKey(id);
     }
     /**
      * 新增记录
@@ -46,7 +49,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
     @Override
     public int insertSelective(T t){
-        return getBaseMapper().insertSelective(t);
+        return baseMapper.insertSelective(t);
     }
     /**
      * 根据主键更新非空字段
@@ -55,7 +58,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
     @Override
     public int updateByPrimaryKeySelective(T t){
-        return getBaseMapper().updateByPrimaryKeySelective(t);
+        return baseMapper.updateByPrimaryKeySelective(t);
     }
     /**
      * 分页查询
@@ -64,7 +67,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
     @Override
     public List<T> findPageable(QueryBase queryBase) {
-        return getBaseMapper().findPageable(queryBase);
+        return baseMapper.findPageable(queryBase);
     }
 
     /**
@@ -88,7 +91,7 @@ public abstract class AbstractBaseService<T extends BaseEntity,M extends BaseMap
      */
 	@Override
 	public int countByParams(QueryBase queryBase) {
-		return getBaseMapper().countByParams(queryBase);
+		return baseMapper.countByParams(queryBase);
 	}
     
 }

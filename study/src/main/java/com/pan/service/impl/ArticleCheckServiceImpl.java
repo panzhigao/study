@@ -57,11 +57,6 @@ public class ArticleCheckServiceImpl  extends AbstractBaseService<ArticleCheck,A
 	@Autowired
 	private IUserExtensionService userExtensionService;
 
-	@Override
-	protected ArticleCheckMapper getBaseMapper() {
-		return articleCheckMapper;
-	}
-
 	/**
 	 * 新增文章审核记录
 	 * @param articleCheck

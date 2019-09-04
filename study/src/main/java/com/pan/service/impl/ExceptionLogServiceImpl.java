@@ -29,10 +29,6 @@ public class ExceptionLogServiceImpl extends AbstractBaseService<ExceptionLog, E
     @Autowired
     private ExceptionLogMapper exceptionLogMapper;
 
-    @Override
-    protected ExceptionLogMapper getBaseMapper() {
-        return exceptionLogMapper;
-    }
 
     @Override
     public Map<String, Object> findByParams(QueryExceptionLog queryExceptionLog) {

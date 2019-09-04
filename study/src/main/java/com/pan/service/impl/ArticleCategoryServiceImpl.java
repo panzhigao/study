@@ -47,11 +47,6 @@ public class ArticleCategoryServiceImpl extends AbstractBaseService<ArticleCateg
 	
 	@Autowired
 	private IOperateLogService operateLogService;
-	
-	@Override
-	protected ArticleCategoryMapper getBaseMapper() {
-		return articleCategoryMapper;
-	}
 
 	@PostConstruct
 	public void init(){

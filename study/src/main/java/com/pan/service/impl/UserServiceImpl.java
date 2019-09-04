@@ -520,10 +520,6 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         return addScoreHistory;
     }
 
-    @Override
-    protected UserMapper getBaseMapper() {
-        return userMapper;
-    }
     
 	private DocWriteRequest<?> buildRequest(User user){
 		User userEs = esClientService.getById(EsConstant.ES_INDEX_NAME, EsConstant.ES_TYPE_NAME, user.getId()+"", User.class);

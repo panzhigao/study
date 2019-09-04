@@ -58,11 +58,7 @@ public class CommentServiceImpl extends AbstractBaseService<Comment,CommentMappe
 	@Autowired
 	private IUserExtensionService userExtensionService;
 	
-	@Override
-	protected CommentMapper getBaseMapper() {
-		return commentMapper;
-	}
-	
+
 	/**
 	 * 添加评论
 	 * 1.新增评论记录

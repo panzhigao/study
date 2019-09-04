@@ -34,11 +34,7 @@ public class OperateLogServiceImpl extends AbstractBaseService<OperateLog,Operat
     @Autowired
     private OperateLogMapper operateLogMapper;
 
-    @Override
-    protected OperateLogMapper getBaseMapper() {
-        return operateLogMapper;
-    }
-    
+
     /**
      * 新增操作日志
      */

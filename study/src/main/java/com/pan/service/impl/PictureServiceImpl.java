@@ -26,12 +26,7 @@ public class PictureServiceImpl extends AbstractBaseService<Picture, PictureMapp
 	
 	@Autowired
 	private PictureMapper pictureMapper;
-		
-	@Override
-	protected PictureMapper getBaseMapper() {
-		return pictureMapper;
-	}
-		
+
 	@Override
 	public void deleteByPictureIds(Long userId,String pictureIds) {
 		logger.info("删除的图片ids为{}",pictureIds);

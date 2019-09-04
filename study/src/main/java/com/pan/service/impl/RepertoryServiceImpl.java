@@ -15,11 +15,6 @@ public class RepertoryServiceImpl extends AbstractBaseService<Repertory,Repertor
 	
 	@Autowired
 	private RepertoryMapper repertoryMapper;
-	
-	@Override
-	protected RepertoryMapper getBaseMapper() {
-		return repertoryMapper;
-	}
 
 	@Override
 	public void addRepertory(Repertory repertory) {

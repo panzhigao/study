@@ -205,10 +205,4 @@ public class RoleServiceImpl extends AbstractBaseService<Role,RoleMapper> implem
 		String different=String.format("角色id：%s，编辑内容：%s",role.getId(),changedFields);
 		operateLogService.addOperateLog(different,OperateLogTypeEnum.ROLE_EDIT);
 	}
-
-
-	@Override
-	protected RoleMapper getBaseMapper() {
-		return roleMapper;
-	}
 }

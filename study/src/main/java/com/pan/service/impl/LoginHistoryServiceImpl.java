@@ -24,11 +24,6 @@ public class LoginHistoryServiceImpl extends AbstractBaseService<LoginHistory,Lo
     @Autowired
     private LoginHistoryMapper loginHistoryMapper;
 
-    @Override
-    protected LoginHistoryMapper getBaseMapper() {
-        return loginHistoryMapper;
-    }
-
 	@Override
 	public List<LoginHistoryVO> findVOPageable(QueryLoginHistory queryLoginHistory) {
 		List<LoginHistory> historyList = loginHistoryMapper.findPageable(queryLoginHistory);

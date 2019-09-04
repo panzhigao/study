@@ -250,10 +250,4 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission,Permis
 	public List<Permission> findPermissionsByUserId(Long userId) {
 		return permissionMapper.findPermissionsByUserId(userId);
 	}
-
-
-	@Override
-	protected PermissionMapper getBaseMapper() {
-		return permissionMapper;
-	}
 }

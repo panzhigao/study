@@ -37,11 +37,6 @@ public class ScoreHistoryServiceImpl extends AbstractBaseService<ScoreHistory, S
 	
 	@Autowired
 	private UserExtensionMapper userExtensionMapper;
-	
-	@Override
-	protected ScoreHistoryMapper getBaseMapper() {
-		return scoreHistoryMapper;
-	}
 		
 	/**
 	 * 签到，可得5分

@@ -35,11 +35,6 @@ public class SystemConfigServiceImpl extends AbstractBaseService<SystemConfig,Sy
 	
 	@Autowired
 	private IOperateLogService operateLogService;
-	
-	@Override
-	protected SystemConfigMapper getBaseMapper() {
-		return systemConfigMapper;
-	}
 
 	/**
 	 * 根据变量名获取唯一变量

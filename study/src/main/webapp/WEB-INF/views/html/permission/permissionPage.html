@@ -87,9 +87,9 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
               {field:'type', width:'80', title: '类型',templet:function(row){
             	  var show='';
             	  switch(row.type){
-	            	  case 0:show='<a class="layui-btn layui-btn-xs ">菜单</a>';break;
-	            	  case 1:show='<a class="layui-btn layui-btn-xs layui-bg-blue">链接</a>';break;
-	            	  case 2:show='<a class="layui-btn layui-btn-xs layui-btn-danger">按钮</a>';break;
+	            	  case 0:show='<a class="layui-btn layui-btn-xs"><i class="layui-icon layui-icon-spread-left"/>菜单</a>';break;
+	            	  case 1:show='<a class="layui-btn layui-btn-xs"><i class="layui-icon layui-icon-link"/>链接</a>';break;
+	            	  case 2:show='<a class="layui-btn layui-btn-xs"><i class="layui-icon layui-icon-note"/>按钮</a>';break;
 	            	  default :break;
             	  }
             	  return show;
@@ -101,9 +101,9 @@ layui.use(['table','jquery','treeGrid','form','layer'], function(){
             	  var p_add='#hasPermission("permission:doAdd") 1 #end';
             	  var p_delete='#hasPermission("permission:doDelete") 1 #end';
             	  
-            	  var edit='<a class="layui-btn layui-btn-xs" onclick="edit(\''+row.id+'\')">编辑</a>';
-            	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="addSub('+row.id+',\''+row.name+'\')">新增子权限</a>';
-    	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteNode(\''+row.id+'\')">删除</a>';
+            	  var edit='<a class="layui-btn layui-btn-xs layui-icon layui-icon-edit" onclick="edit(\''+row.id+'\')">编辑</a>';
+            	  var add='<a class="layui-btn layui-btn-normal layui-btn-xs layui-icon-add-circle-fine layui-icon" onclick="addSub('+row.id+',\''+row.name+'\')">新增子权限</a>';
+    	    	  var t_delete='<a class="layui-btn layui-btn-danger layui-btn-xs layui-icon-close layui-icon" onclick="deleteNode(\''+row.id+'\')">删除</a>';
     	    	  var show='';
     	    	  if(p_edit){
     	    		  show+=edit;

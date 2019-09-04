@@ -41,11 +41,6 @@ public class PraiseServiceImpl extends AbstractBaseService<Praise, PraiseMapper>
 	@Autowired
 	private IMessageService messageService;
 	
-	@Override
-	protected PraiseMapper getBaseMapper() {
-		return praiseMapper;
-	}
-	
 	/**
 	 * 给评论点赞
 	 * 假如用户点赞的不是自己的评论，发送消息通知

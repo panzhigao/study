@@ -32,11 +32,6 @@ public class CollectionServiceImpl extends AbstractBaseService<Collection,Collec
 	@Autowired
 	private CollectionMapper collectionMapper;
 
-	@Override
-	protected CollectionMapper getBaseMapper() {
-		return collectionMapper;
-	}
-
 
 	@Override
 	public void addCollection(Collection collection) {

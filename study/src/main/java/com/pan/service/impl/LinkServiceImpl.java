@@ -50,11 +50,6 @@ public class LinkServiceImpl extends AbstractBaseService<Link, LinkMapper> imple
 	@Autowired
 	private IOperateLogService operateLogService;
 
-	@Override
-	protected LinkMapper getBaseMapper() {
-		return linkMapper;
-	}
-
 	@PostConstruct
 	public void initCache() {
 		logger.info("初始化上线链接系统配置。。。");
