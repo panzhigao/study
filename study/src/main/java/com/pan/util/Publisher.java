@@ -1,15 +1,14 @@
 package com.pan.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
 /**
+ * redis消息发送
  * @author panzhigao
  */
+@Slf4j
 public class Publisher {
-
-    private static final Logger logger = LoggerFactory.getLogger(Publisher.class);
 
     /**
      * 发送redis订阅消息
@@ -22,10 +21,10 @@ public class Publisher {
         try {
             jedis= JedisUtils.getJedis();
             Long successCount = jedis.publish(channel, message);
-            logger.info("----->>>redis发送消息成功，channel={},message={},接收成功客户端数={}",channel,message,successCount);
+            log.info("----->>>redis发送消息成功，channel={},message={},接收成功客户端数={}",channel,message,successCount);
             return true;
         }catch (Exception e){
-            logger.error("----->>>redis发布消息失败，channel={},message={}",channel,message,e);
+            log.error("----->>>redis发布消息失败，channel={},message={}",channel,message,e);
         }finally {
             JedisUtils.closeJedis(jedis);
         }

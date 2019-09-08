@@ -32,7 +32,7 @@ import com.pan.common.vo.ResultMsg;
  */
 public class BusinessExceptionResolver implements HandlerExceptionResolver {
 	
-	private static final String DEFAULT_MESSAGE="不好意思，出错了";
+	private static final String DEFAULT_MESSAGE="不好意思，系统出错了";
 	
 	private String viewName="html/error/500";
 	
@@ -86,7 +86,7 @@ public class BusinessExceptionResolver implements HandlerExceptionResolver {
 				}
 				exceptionLogService.insertSelective(exceptionLog);
 				if(SwitchEnum.ENABLED.getValue().equals(SystemConfigUtils.getParamValue("mail_enabled"))){					
-					EmailUtils.sendMail("网站发生问题，请尽快处理",sw.toString(), SystemConfigUtils.getParamValue("email_receviers"),true);
+					EmailUtils.sendMail("网站发生系统错误，请尽快处理",sw.toString(), SystemConfigUtils.getParamValue("email_receviers"),true);
 				}
 			}
 			businessException = new BusinessException(DEFAULT_MESSAGE);

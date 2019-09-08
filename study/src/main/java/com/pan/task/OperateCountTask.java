@@ -78,8 +78,8 @@ public class OperateCountTask {
 					String countStr = JedisUtils.getString(string);
 					Long articleId=Long.valueOf(articleIdStr);
 					Integer commentCount = Integer.valueOf(countStr);
-					int updateArticleCommentCoumts = articleService.updateArticleCommentCount(articleId, commentCount);
-					if (updateArticleCommentCoumts == 1) {
+					int updateArticleCommentCounts = articleService.updateArticleCommentCount(articleId, commentCount);
+					if (updateArticleCommentCounts == 1) {
 						JedisUtils.delete(string);
 					}
 				}

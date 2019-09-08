@@ -31,7 +31,7 @@ public class ArticleCheckController {
 	 */
 	@RequestMapping(method=RequestMethod.GET,value="/user/articleCheck")
 	@RequiresPermissions("articleCheck:load")
-	public ModelAndView toIndex(HttpServletRequest request){
+	public ModelAndView toIndex(){
 		ModelAndView mav=new ModelAndView("html/articleCheck/articleCheck");
 		return mav;
 	}

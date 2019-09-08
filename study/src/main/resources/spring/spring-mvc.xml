@@ -15,7 +15,7 @@
 	<!-- 自动扫描(自动注入) -->
 	<context:component-scan base-package="com.pan.controller" />
 
-	<bean class="com.pan.init.InitTheContext">
+	<bean class="com.pan.common.listener.RedisSubListener">
 		<property name="redisSubscriber" ref="redisSubscriber"></property>
 	</bean>
 

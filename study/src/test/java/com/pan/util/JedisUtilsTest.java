@@ -29,5 +29,11 @@ public class JedisUtilsTest extends BaseTest{
         List<String> blpop = JedisUtils.blpop(MyConstant.ARTICLE_ES_REDIS_LIST);
         System.out.println(blpop);
     }
+
+    @Test
+    public void getString() throws Exception {
+        String global_system_id = JedisUtils.getString("global_system_id");
+        System.out.println(global_system_id);
+    }
     
 }

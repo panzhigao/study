@@ -1,9 +1,9 @@
 package com.pan.util;
 
 import java.util.*;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.pan.common.exception.BusinessException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -16,9 +16,8 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * @author Administrator
  *
  */
+@Slf4j
 public class JedisUtils {
-
-	private static final Logger logger = LoggerFactory.getLogger(JedisUtils.class);
 
 	private JedisUtils() {
 
@@ -45,8 +44,8 @@ public class JedisUtils {
 		} catch (JedisConnectionException e) {
 			String message = StringUtils.trim(e.getMessage());
 			if (REDIS_ERROR.equalsIgnoreCase(message)) {
-				logger.error("++++++++++reids服务启动失败++++++++");
-				logger.error("++++++++++请检查你的redis服务++++++++");
+				log.error("++++++++++reids服务启动失败++++++++");
+				log.error("++++++++++请检查你的redis服务++++++++");
 				// 停止项目
 				System.exit(0);
 			}
@@ -65,10 +64,9 @@ public class JedisUtils {
 	}
 
 	public static String getString(String key) {
-		Jedis jedis = jedisPool.getResource();
-		String string = jedis.get(key);
-		jedis.close();
-		return string;
+		return  act((Jedis jedis)-> {
+			return jedis.get(key);
+		});
 	}
 
 	public static void setString(String key, String value) {
@@ -523,7 +521,7 @@ public class JedisUtils {
 			} while (!ScanParams.SCAN_POINTER_START.equals(cursor));
 			return list;
 		} catch (Exception e) {
-			logger.error("redis扫描数据报错,pattern={}",pattern, e);
+			log.error("redis扫描数据报错,pattern={}",pattern, e);
 			return list;
 		} finally {
 			closeJedis(jedis);
@@ -553,7 +551,7 @@ public class JedisUtils {
 			} while (!Objects.deepEquals(ScanParams.SCAN_POINTER_START_BINARY,cursor));
 			return list;
 		} catch (Exception e) {
-			logger.error("redis扫描数据报错,pattern={}",key, e);
+			log.error("redis扫描数据报错,pattern={}",key, e);
 			return list;
 		} finally {
 			closeJedis(jedis);
@@ -572,7 +570,7 @@ public class JedisUtils {
 			jedis=jedisPool.getResource();
 			result= jedis.mget(keys);
 		}catch (Exception e){
-			logger.error("redis mget失败",e);
+			log.error("redis mget失败",e);
 		}finally {
 			closeJedis(jedis);
 		}
@@ -586,7 +584,7 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			length = jedis.rpush(key, value);
 		} catch (Exception e) {
-			logger.error("rpush key={},value={}失败",key,value,e);
+			log.error("rpush key={},value={}失败",key,value,e);
 		} finally {
 			jedis.close();
 		}
@@ -609,7 +607,7 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			list = jedis.blpop(new String[]{key,String.valueOf(timeOut)});
 		} catch (Exception e) {
-			logger.error("rpush key={}",key,e);
+			log.error("rpush key={}",key,e);
 		} finally {
 			jedis.close();
 		}
@@ -627,7 +625,7 @@ public class JedisUtils {
 			jedis = jedisPool.getResource();
 			res=jedis.brpoplpush(srckey, dstkey,timeout);
 		} catch (Exception e) {
-			logger.error("rpoplpush srckey={},dstkey={} error",srckey,dstkey,e);
+			log.error("rpoplpush srckey={},dstkey={} error",srckey,dstkey,e);
 		} finally {
 			jedis.close();
 		}
@@ -641,10 +639,25 @@ public class JedisUtils {
 			Long result = jedis.lrem(listKey, count, value);
 			return result;
 		} catch (Exception e) {
-			logger.error("lrem listKey={},count={} value={} error",listKey,count,value,e);
+			log.error("lrem listKey={},count={} value={} error",listKey,count,value,e);
 		}finally {
 			jedis.close();
 		}
 		return 0L;
+	}
+
+	public static<T> T act(JedisAction<T> jedisAction){
+		Jedis jedis = null;
+		try {
+			//todo 用aop,监听jedis里的方法，记录日志
+			jedis = jedisPool.getResource();
+			T obj = jedisAction.exec(jedis);
+			return obj;
+		}catch (Exception e){
+			log.error("执行jedis方法出错",e);
+		}finally {
+			closeJedis(jedis);
+		}
+		return null;
 	}
 }
