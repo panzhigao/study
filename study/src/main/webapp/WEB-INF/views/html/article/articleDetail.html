@@ -386,7 +386,7 @@ function getHotArticleList(){
 						temp='<div class="fly-list-badge"> <span class="layui-badge layui-bg-red">精帖</span></div>';
 					}
 					var one='<dd>'+
-			          '<a href="$!{rc.contextPath}/article/'+article.articleId+'">'+article.title+'</a>'+
+			          '<a target="_blank" href="$!{rc.contextPath}/article/'+article.id+'">'+article.title+'</a>'+
 			          '<span><i class="iconfont icon-pinglun1"></i> '+article.commentCount+'</span>'+
 			          '</dd>';
 			        $('#hotList').append(one);
