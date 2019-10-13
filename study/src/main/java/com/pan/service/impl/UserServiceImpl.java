@@ -471,6 +471,7 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
             throw new BusinessException("用户不存在");
         }
         User user = new User();
+        user.setId(userInDb.getId());
         user.setStatus(status);
         Long loginUserId = TokenUtils.getLoginUserId();
         if (loginUserId.equals(userId)) {
@@ -481,14 +482,14 @@ public class UserServiceImpl extends AbstractBaseService<User,UserMapper> implem
         if (UserStatusEnum.STATUS_BLOCKED.getCode().equals(status)) {
             message = "禁用账号成功";
             userMapper.updateByPrimaryKeySelective(user);
-            String content="禁用"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
+            String content="禁用:"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
             operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_DISABLE);
             //清空用户授权信息
             TokenUtils.clearAuth(userId);
         } else if (UserStatusEnum.STATUS_NORMAL.getCode().equals(status)) {
             message = "启用账号成功";
             userMapper.updateByPrimaryKeySelective(user);
-            String content="开启"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
+            String content="开启:"+userInDb.getNickname()+"("+userInDb.getUsername()+")";
             operateLogService.addOperateLog(content, OperateLogTypeEnum.USER_ENABLE);
         } else {
             message = "操作错误，请稍后重试";

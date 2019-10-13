@@ -41,7 +41,8 @@
 
 <!-- 模态框-权限树 -->
 <div  class="modal fade" style="margin-top:10px" id="myTree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <input type="hidden" id="selectedRoleId">
+	<div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -105,6 +106,7 @@ layui.use(['table','jquery','form'], function(){
 	  
 	  //监听工具条
 	  table.on('tool(roleTab)', function(obj){
+		  debugger
 	    var data = obj.data;
 	     if(obj.event === 'del'){
 	      layer.confirm('确定删除该角色么', function(index){

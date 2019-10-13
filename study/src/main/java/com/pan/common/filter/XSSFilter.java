@@ -1,5 +1,7 @@
 package com.pan.common.filter;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -13,11 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author panzhigao
  */
+@Slf4j
 public class XSSFilter implements Filter{
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		
+		log.info("XSS Filter init...");
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class XSSFilter implements Filter{
 
 	@Override
 	public void destroy() {
-		
+		log.info("XSS Filter destroy...");
 	}
 
 }

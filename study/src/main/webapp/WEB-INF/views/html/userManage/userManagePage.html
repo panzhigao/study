@@ -152,7 +152,8 @@ layui.use(['table','jquery','form'], function(){
       });
 	  
 	  form.on('switch(userStatus)', function(data){
-		  var userId=$(data.elem).attr('id');
+		  debugger
+		  var userId=$(data.elem).attr('userid');
 		  var new_status =this.checked ? '1' : '0';
 		  var tipText = '确定封禁该用户？';
           if(data.elem.checked){

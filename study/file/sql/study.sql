@@ -50,14 +50,14 @@ CREATE TABLE `t_article` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_article_category`;
 CREATE TABLE `t_article_category` (
-  `id` bigint(32) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `category_name` varchar(32) NOT NULL DEFAULT '' COMMENT '分类名称',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
   `status` tinyint(11) NOT NULL DEFAULT '0' COMMENT '状态，0-首页不展示，1-首页展示',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user_id` bigint(32) NOT NULL COMMENT '创建人id',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建人id',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `update_user_id` bigint(32) NOT NULL DEFAULT '0' COMMENT '更新人id',
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新人id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
 
@@ -112,9 +112,9 @@ CREATE TABLE `t_article_check` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_collection`;
 CREATE TABLE `t_collection` (
-  `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_id` bigint(64) NOT NULL DEFAULT '0' COMMENT '用户id',
-  `article_id` bigint(64) NOT NULL DEFAULT '0' COMMENT '文章id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `article_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '文章id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `title` varchar(128) NOT NULL DEFAULT '' COMMENT '标题',
   PRIMARY KEY (`id`),
@@ -409,9 +409,9 @@ INSERT INTO `t_role` VALUES ('2', '注册用户', '2019-03-31 12:20:02', '152389
 -- ----------------------------
 DROP TABLE IF EXISTS `t_role_permission`;
 CREATE TABLE `t_role_permission` (
-  `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `role_id` bigint(10) NOT NULL DEFAULT '0' COMMENT '角色id',
-  `permission_id` bigint(10) NOT NULL DEFAULT '0' COMMENT '权限id',
+  `permission_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '权限id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建人id',
   PRIMARY KEY (`id`),
@@ -790,7 +790,7 @@ CREATE TABLE `t_user` (
   `telephone` varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
   `update_time` datetime NOT NULL COMMENT '修改时间',
   `user_portrait` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
-  `update_user` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新人id',
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新人id',
   `admin_flag` int(1) NOT NULL DEFAULT '0' COMMENT '管理员标志，0-否，1-是',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '地址',
   `user_brief` varchar(1024) NOT NULL DEFAULT '' COMMENT '用户简介',
@@ -854,9 +854,9 @@ INSERT INTO `t_user_extension` VALUES ('1585888', '陈赫', 'http://www.panzhiga
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user_role`;
 CREATE TABLE `t_user_role` (
-  `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
-  `role_id` bigint(10) NOT NULL DEFAULT '0' COMMENT '角色id',
+  `role_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '角色id',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建人id',
   PRIMARY KEY (`id`)

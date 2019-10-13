@@ -26,7 +26,7 @@
               	<div class="layui-col-md3">
                   <label class="layui-form-label">文章分类</label>
                   <div class="layui-input-block">
-                    <select lay-verify="required" name="categoryId" lay-filter="column"> 
+                    <select lay-verify="required" name="categoryId" lay-filter="column" lay-search>
                     	<option></option>
                       	#foreach($item in $categoryList)
                         <option value="$item.id">$item.categoryName</option>
