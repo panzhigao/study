@@ -44,7 +44,7 @@ public class JedisUtils {
 		} catch (JedisConnectionException e) {
 			String message = StringUtils.trim(e.getMessage());
 			if (REDIS_ERROR.equalsIgnoreCase(message)) {
-				log.error("++++++++++reids服务启动失败++++++++");
+				log.error("++++++++++reids服务连接失败++++++++");
 				log.error("++++++++++请检查你的redis服务++++++++");
 				// 停止项目
 				System.exit(0);

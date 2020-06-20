@@ -60,7 +60,7 @@ public interface IEsClientService {
 	 * 创建更新索引
 	 * @param index
 	 * @param type
-	 * @param obj
+	 * @param id
 	 * @return
 	 */
 	UpdateRequest buildUpdateRequest(String index,String type,String id,Map<String, Object> mapContent);

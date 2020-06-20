@@ -1,3 +1,4 @@
+//http://localhost:9200/es_data/ POST
 {
 	"settings": {
 		"analysis": {
