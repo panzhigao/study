@@ -112,8 +112,7 @@ public class MyRealm extends AuthorizingRealm {
 	 * 验证,校验用户名和密码是否正确，同时加载菜单到session
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(
-			AuthenticationToken token)  {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)  {
 		String username = (String) token.getPrincipal();
 		String inputPassword = new String((char[]) token.getCredentials());
 		User inputUser=new User();

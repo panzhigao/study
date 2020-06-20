@@ -1,11 +1,17 @@
 package com.pan.util;
 
+import com.pan.common.constant.MyConstant;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author panzhigao
+ */
 public class IPUtils {
 
     public static  final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
@@ -15,6 +21,9 @@ public class IPUtils {
      * 
      */
     public static int ip2Integer(String ipv4Addr) {
+        if(StringUtils.equals(ipv4Addr, MyConstant.LOCALHOST_IPV6)){
+            ipv4Addr=MyConstant.LOCALHOST_IPV4;
+        }
         // 判断是否是ip格式的
         if (!isIPv4Address(ipv4Addr)){
             throw new RuntimeException("Invalid ip address");

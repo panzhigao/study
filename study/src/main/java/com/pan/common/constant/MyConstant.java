@@ -90,4 +90,8 @@ public class MyConstant {
     public static final String USER_ES_REDIS_LIST="user_es_list";
     
     public static final String USER_ES_REDIS_LIST_BAK="user_es_list_bak";
+
+    public static final String LOCALHOST_IPV6="0:0:0:0:0:0:0:1";
+
+    public static final String LOCALHOST_IPV4="127.0.0.1";
 }
