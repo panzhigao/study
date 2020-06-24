@@ -98,15 +98,15 @@
   		<if test="id !=null">
   			and a.id=#{id,jdbcType=BIGINT}
   		</if>    
-  		<if test="status !=null">
-  			and a.status=#{status,jdbcType=INTEGER}
-  		</if>
   		<if test="userId !=null">
   			and a.user_id=#{userId,jdbcType=BIGINT}
   		</if>
   		<if test="username !=null and username !=''">
   			and a.username=#{username,jdbcType=VARCHAR}
   		</if>
+        <if test="status !=null">
+            and a.status=#{status,jdbcType=INTEGER}
+        </if>
   		<if test="type !=null and type !=''">
   			and a.type=#{type,jdbcType=INTEGER}
   		</if>

@@ -563,11 +563,11 @@ public class ArticleServiceImpl extends AbstractBaseService<Article, ArticleMapp
 		queryArticle.setStatus(ArticleStatusEnum.PUBLIC_SUCCESS.getCode());
 		int total = countByParams(queryArticle);
 		//计算要循环的次数
-		int circleNum= total/PageConstant.MAX_PAGE_SIZE;
-		queryArticle.setPageSize(PageConstant.MAX_PAGE_SIZE);
+		int circleNum= total%PageConstant.PAGE_SIZE_100==0 ? total/PageConstant.PAGE_SIZE_100 : total/PageConstant.PAGE_SIZE_100+1;
+		queryArticle.setPageSize(PageConstant.PAGE_SIZE_100);
 		BulkRequest bulkRequest=new BulkRequest();
-		for(int i=0;i<=circleNum;i++){
-			queryArticle.setPageNo(i+1);
+		for(int i=1;i<=circleNum;i++){
+			queryArticle.setPageNo(i);
 			List<Article> findPageable = findPageable(queryArticle);
 			for(Article a:findPageable){
 				DocWriteRequest<?> request = buildRequest(a);
